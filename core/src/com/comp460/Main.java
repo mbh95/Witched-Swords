@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.comp460.screens.TacticsScreen;
 
 public class Main extends Game {
-	SpriteBatch batch;
+	public SpriteBatch batch;
 
 	@Override
 	public void create () {
@@ -18,7 +18,7 @@ public class Main extends Game {
 		Settings.load();
 		Assets.load();
 
-		this.setScreen(new TacticsScreen(this));
+		this.setScreen(new TacticsScreen(this, Assets.testMap));
 	}
 
 	@Override

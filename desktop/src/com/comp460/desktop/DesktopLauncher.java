@@ -7,6 +7,9 @@ import com.comp460.Main;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title = "Tactics460";
+		config.width = 1280;
+		config.height = 720;
 		new LwjglApplication(new Main(), config);
 	}
 }

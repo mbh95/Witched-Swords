@@ -6,11 +6,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.comp460.Assets;
 import com.comp460.Main;
 import com.comp460.Settings;
@@ -29,6 +32,10 @@ public class TacticsScreen extends ScreenAdapter {
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer mapRenderer;
 
+    private Rectangle bulba;
+    private int cursorDelay = 10;
+    private int cursorRow, cursorCol;
+
     private boolean[][] collisionMask;
     private Entity[][] mapContents;
 
@@ -45,6 +52,7 @@ public class TacticsScreen extends ScreenAdapter {
         this.collisionMask = new boolean[height][width];
         this.mapContents = new Entity[height][width];
 
+        // does stuff <3 <3 <3
         for (MapLayer ml : Assets.testMap.getLayers()) {
             TiledMapTileLayer tl = (TiledMapTileLayer)ml;
 
@@ -58,17 +66,50 @@ public class TacticsScreen extends ScreenAdapter {
                 }
             }
         }
+
+        // make things! <3
+        bulba = new Rectangle();
+        bulba.x = 0;//1280 / 2 - 16 / 2;
+        bulba.y = 0;
+        bulba.width = 16;
+        bulba.height = 16;
+
+        cursorRow = 0;
+        cursorCol = 0;
     }
 
     private void update(float delta) {
 
+        // move camera and cursor
         float cameraSpeed = 3.0f;
         this.camera.translate(cameraSpeed * ((Gdx.input.isKeyPressed(Input.Keys.RIGHT)? 1.0f : 0.0f) +
                                 (Gdx.input.isKeyPressed(Input.Keys.LEFT)? -1.0f : 0.0f)),
                                 cameraSpeed * ((Gdx.input.isKeyPressed(Input.Keys.UP)? 1.0f : 0.0f) +
                                 (Gdx.input.isKeyPressed(Input.Keys.DOWN)? -1.0f : 0.0f)));
-        this.camera.update();
 
+
+        if (cursorDelay == 0) {
+            int oldRow = cursorRow;
+            int oldCol = cursorCol;
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) cursorCol--;
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) cursorCol++;
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) cursorRow++;
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) cursorRow--;
+            if (cursorRow != oldRow || cursorCol != oldCol) {
+                cursorDelay = 8;
+            }
+        }
+        if (cursorDelay > 0)
+        cursorDelay--;
+
+        if(cursorRow < 0) cursorRow = 0;
+        if(cursorRow >= 30) cursorRow = 29;
+        if(cursorCol < 0) cursorCol = 0;
+        if(cursorCol >= 30) cursorCol = 29;
+
+        this.camera.position.slerp(new Vector3(cursorCol * 16 + 8, cursorRow * 16 + 8, 0), 0.1f);
+
+        this.camera.update();
     }
 
     private void drawMap() {
@@ -93,6 +134,12 @@ public class TacticsScreen extends ScreenAdapter {
     public void render(float delta) {
         update(delta);
         drawMap();
+
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
+        game.batch.draw(Assets.bulbaImage, bulba.x, bulba.y);
+        game.batch.draw(Assets.cursor, cursorCol * 16, cursorRow * 16);
+        game.batch.end();
         //this.game.batch.begin();
     }
 }

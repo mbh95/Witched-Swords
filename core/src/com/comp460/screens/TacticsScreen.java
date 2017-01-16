@@ -33,7 +33,7 @@ public class TacticsScreen extends ScreenAdapter {
 
         this.camera = new OrthographicCamera(this.screenWidth, this.screenHeight);
 
-        this.map = new TacticsMap(map);
+        this.map = new TacticsMap(map, null);
 
         this.cursor = new Cursor(this.map);
     }
@@ -50,8 +50,7 @@ public class TacticsScreen extends ScreenAdapter {
                         (Gdx.input.isKeyPressed(Input.Keys.LEFT)? -1.0f : 0.0f)),
                 cameraSpeed * ((Gdx.input.isKeyPressed(Input.Keys.UP)? 1.0f : 0.0f) +
                         (Gdx.input.isKeyPressed(Input.Keys.DOWN)? -1.0f : 0.0f)));
-        this.camera.position.slerp(new Vector3(cursor.getCol() * 16 + 8, (map.getHeight() - 1 -  cursor.getRow()) * 16 + 8, 0), 0.1f);
-
+        this.camera.position.slerp(new Vector3(cursor.getCol() * 16 + 8, (map.getHeight() - 1 - cursor.getRow()) * 16 + 8, 0), 0.1f);
         this.camera.update();
     }
 

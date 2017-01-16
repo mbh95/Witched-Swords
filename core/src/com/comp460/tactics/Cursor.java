@@ -1,5 +1,6 @@
 package com.comp460.tactics;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
@@ -9,7 +10,7 @@ import com.comp460.Assets;
 /**
  * Created by matthewhammond on 1/15/17.
  */
-public class Cursor {
+public class Cursor extends Entity{
 
     private TacticsMap map;
 

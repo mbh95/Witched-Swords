@@ -1457,6 +1457,16 @@
  </tileset>
  <tileset firstgid="289" name="bw" tilewidth="16" tileheight="16" tilecount="2" columns="1">
   <image source="bw.png" width="16" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="team" type="int" value="1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="team" type="int" value="0"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="base" width="30" height="30">
   <data encoding="csv">

@@ -12,7 +12,6 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.Assets;
 import com.comp460.Main;
@@ -24,9 +23,13 @@ public class TacticsScreenOLD extends ScreenAdapter {
 
     private int DISP_WIDTH = 400;
     private int DISP_HEIGHT = 240;
+    private final int CAMERA_STATE = 1; // before you select stuff <3
+    private final int MOVEMENT_STATE = 2; // choose where your unit is going <3
+    private final int ACTION_STATE = 3; // choose what action to take! :)
 
     private Main game;
     private OrthographicCamera camera;
+    private int state = CAMERA_STATE;
 
     private int mapWidth;
     private int mapHeight;
@@ -37,8 +40,10 @@ public class TacticsScreenOLD extends ScreenAdapter {
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer mapRenderer;
 
-    private Rectangle bulba;
+    private int bulbaRow, bulbaCol;
     private int cursorDelay = 10;
+    private int selectionDelay = 10;
+    private int selectionRow;
     private int cursorRow, cursorCol;
 
     private boolean[][] traversableMask;
@@ -47,6 +52,7 @@ public class TacticsScreenOLD extends ScreenAdapter {
     public TacticsScreenOLD(Main parentGame, TiledMap tiledMap) {
         this.game = parentGame;
         this.camera = new OrthographicCamera(DISP_WIDTH, DISP_HEIGHT);
+        //this.camera = new OrthographicCamera(Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT);
 
         this.tiledMap = tiledMap;
         this.mapRenderer = new OrthogonalTiledMapRenderer(Assets.testMap);
@@ -69,30 +75,29 @@ public class TacticsScreenOLD extends ScreenAdapter {
                     if (cell == null || cell.getTile() == null) {
                         continue;
                     }
+
                     this.traversableMask[r][c] = cell.getTile().getProperties().get("traversable", Boolean.class);
                 }
             }
         }
 
         // make things! <3
-        bulba = new Rectangle();
-        bulba.x = 0;//1280 / 2 - 16 / 2;
-        bulba.y = 0;
-        bulba.width = 16;
-        bulba.height = 16;
+        bulbaRow  = 0;
+        bulbaCol  = 0;
 
         cursorRow = 0;
         cursorCol = 0;
+
+        selectionRow = 0;
     }
 
-    private void update(float delta) {
-
+    private void moveCamera() {
         // move camera and cursor
         float cameraSpeed = 3.0f;
         this.camera.translate(cameraSpeed * ((Gdx.input.isKeyPressed(Input.Keys.RIGHT)? 1.0f : 0.0f) +
-                                (Gdx.input.isKeyPressed(Input.Keys.LEFT)? -1.0f : 0.0f)),
-                                cameraSpeed * ((Gdx.input.isKeyPressed(Input.Keys.UP)? 1.0f : 0.0f) +
-                                (Gdx.input.isKeyPressed(Input.Keys.DOWN)? -1.0f : 0.0f)));
+                        (Gdx.input.isKeyPressed(Input.Keys.LEFT)? -1.0f : 0.0f)),
+                cameraSpeed * ((Gdx.input.isKeyPressed(Input.Keys.UP)? 1.0f : 0.0f) +
+                        (Gdx.input.isKeyPressed(Input.Keys.DOWN)? -1.0f : 0.0f)));
 
 
         if (cursorDelay == 0) {
@@ -110,13 +115,65 @@ public class TacticsScreenOLD extends ScreenAdapter {
             cursorDelay--;
 
         if(cursorRow < 0) cursorRow = 0;
-        if(cursorRow >= 30) cursorRow = 29;
+        if(cursorRow >= mapWidth) cursorRow = mapWidth-1;
         if(cursorCol < 0) cursorCol = 0;
-        if(cursorCol >= 30) cursorCol = 29;
+        if(cursorCol >= mapWidth) cursorCol = mapWidth-1;
 
         this.camera.position.slerp(new Vector3(cursorCol * 16 + 8, cursorRow * 16 + 8, 0), 0.1f);
 
         this.camera.update();
+    }
+
+    private void update(float delta) {
+
+        switch (state) {
+
+            case CAMERA_STATE:
+                // move camera and cursor
+                moveCamera();
+                if (Gdx.input.isKeyJustPressed(Input.Keys.Z) &&
+                        cursorCol == bulbaCol && cursorRow == bulbaRow) {
+                    state = MOVEMENT_STATE;
+                    System.out.println("chaged to movement state");
+                }
+                break;
+            case MOVEMENT_STATE:
+                // move camera and cursor
+                moveCamera();
+                if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+                    state = CAMERA_STATE;
+                    System.out.println("changed to camera state");
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+                    bulbaCol = cursorCol;
+                    bulbaRow = cursorRow;
+                    selectionRow = 0;
+                    state = ACTION_STATE;
+                    System.out.println("changed to action state");
+                }
+                break;
+            case ACTION_STATE:
+                if (selectionDelay == 0) {
+                    int oldRow = selectionRow;
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) selectionRow--;
+                    else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) selectionRow++;
+                    else if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+                        state = MOVEMENT_STATE;
+                        System.out.println("changed to movement state");
+                    }
+                    if (selectionRow != oldRow) {
+                        selectionDelay = 8;
+                    }
+                }
+                if (selectionDelay > 0)
+                    selectionDelay--;
+
+                if(selectionRow < 0) selectionRow = 0;
+                if(selectionRow >= 1) selectionRow = 1;
+
+                break;
+        }
+
+
     }
 
     private void drawMap() {
@@ -134,7 +191,6 @@ public class TacticsScreenOLD extends ScreenAdapter {
         for(int y = 0; y < mapHeight * tileHeight; y += tileHeight)
             sr.line(0, y, mapWidth * tileWidth, y);
         sr.end();
-        sr.dispose();
     }
 
     private void drawCollisionMask() {
@@ -153,21 +209,37 @@ public class TacticsScreenOLD extends ScreenAdapter {
                 sr.rect(c * tileWidth, r * tileHeight, tileWidth, tileHeight);
             }
         }
-        sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+        sr.end();
     }
 
     @Override
     public void render(float delta) {
         update(delta);
         drawMap();
-        drawCollisionMask();
+        //drawCollisionMask();
         drawGridLines();
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(Assets.bulbaImage, bulba.x, bulba.y);
-        game.batch.draw(Assets.cursor, cursorCol * 16, cursorRow * 16);
+        switch (state) {
+            case CAMERA_STATE:
+                game.batch.draw(Assets.cursor, cursorCol * 16, cursorRow * 16);
+                game.batch.draw(Assets.bulbaMicro, bulbaCol * 16, bulbaRow * 16);
+                break;
+            case MOVEMENT_STATE:
+                game.batch.draw(Assets.cursor, cursorCol * 16, cursorRow * 16);
+                game.batch.draw(Assets.bulbaMicro, bulbaCol * 16, bulbaRow * 16);
+                break;
+            case ACTION_STATE:
+                game.batch.draw(Assets.cursor, cursorCol * 16, cursorRow * 16);
+                game.batch.draw(Assets.bulbaMicro, bulbaCol * 16, bulbaRow * 16);
+                game.batch.draw(Assets.actionMenu, 0, mapHeight-16, 0, 0, 48, 16);
+                game.batch.draw(Assets.actionMenu, 0, mapHeight-32, 0, 0, 48, 16);
+                game.batch.draw(Assets.actionMenu, 0, mapHeight-16*selectionRow-16, 0, 16, 48, 16);
+                break;
+        }
+
         game.batch.end();
         //this.game.batch.begin();
     }

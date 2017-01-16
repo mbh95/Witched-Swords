@@ -12,13 +12,18 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 public class Assets {
 
     public static TiledMap testMap;
-    public static Texture bulbaImage;
+    public static Texture bulbaMicro;
+    public static Texture bulbaMacro;
     public static Texture cursor;
-    public static TextureAtlas menu;
+    public static Texture actionMenu;
+    public static Texture battleTile;
     public static void load() {
         testMap = new TmxMapLoader().load("testmap.tmx");
-        bulbaImage = new Texture(Gdx.files.internal("bulba_micro.png"));
+        bulbaMicro = new Texture(Gdx.files.internal("bulba_micro.png"));
+        bulbaMacro = new Texture(Gdx.files.internal("bulba_macro.png"));
         cursor = new Texture(Gdx.files.internal("cursor.png"));
+        actionMenu = new Texture(Gdx.files.internal("action_menu.png"));
+        battleTile = new Texture(Gdx.files.internal("battle_tile.png"));
     }
 
     public static void dispose() {

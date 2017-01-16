@@ -23,8 +23,6 @@ public class TacticsScreenECS extends ScreenAdapter {
     enum TacticsState {NOTHING_SELECTED, FRIENDLY_SELECTED, ENEMY_SELECTED, MOVE_SELECTED, EMPTY_SPACE_SELECTED};
     int curTeam = 0;
 
-
-
     TacticsState curState = TacticsState.NOTHING_SELECTED;
 
     private SpriteBatch batch;
@@ -35,6 +33,7 @@ public class TacticsScreenECS extends ScreenAdapter {
 
     private Entity cursor;
     private Entity selection = null;
+    //private List<>
 
 
     ComponentMapper<MapPositionComponent> mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
@@ -115,8 +114,13 @@ public class TacticsScreenECS extends ScreenAdapter {
                                     curState = TacticsState.ENEMY_SELECTED;
                                 }
                             } else {
-                                curState = TacticsState.MOVE_SELECTED;
-                                cursor.remove(KeyboardMapMovementComponent.class);
+                                //curState = TacticsState.MOVE_SELECTED;
+
+                                //cursor.remove(KeyboardMapMovementComponent.class);
+
+                                map.moveTo(selection, cursorPos.row, cursorPos.col);
+                                curState = TacticsState.NOTHING_SELECTED;
+
                             }
                         }
                     }
@@ -125,7 +129,7 @@ public class TacticsScreenECS extends ScreenAdapter {
                     map.render(camera);
                     map.renderGridLines(camera);
                     map.renderLegalMoves(selection, camera, 0.0f, 0.0f, 1.0f, 0.3f);
-
+                    break;
                 case ENEMY_SELECTED:
                     map.render(camera);
                     map.renderGridLines(camera);
@@ -147,5 +151,9 @@ public class TacticsScreenECS extends ScreenAdapter {
         }
         engine.update(deltaTime);
         camera.update();
+    }
+
+    private class MenuAction {
+
     }
 }

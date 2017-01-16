@@ -2,11 +2,8 @@ package com.comp460;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.comp460.screens.TacticsScreen;
 
 public class Main extends Game {
@@ -19,7 +16,10 @@ public class Main extends Game {
 		Settings.load();
 		Assets.load();
 
-		this.setScreen(new TacticsScreen(this, Assets.testMap));
+		this.setScreen(new TacticsScreen(batch,
+											Settings.INTERNAL_WIDTH,
+											Settings.INTERNAL_HEIGHT,
+											Assets.testMap));
 	}
 
 	@Override

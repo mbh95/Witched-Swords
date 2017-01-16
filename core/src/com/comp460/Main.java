@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.comp460.screens.BattleScreen;
 import com.comp460.screens.TacticsScreen;
 import com.comp460.screens.TacticsScreenECS;
 

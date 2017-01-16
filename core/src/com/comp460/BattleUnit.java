@@ -8,10 +8,11 @@ import com.badlogic.gdx.graphics.Texture;
 public class BattleUnit {
     public int col, row;
     public Texture sprite;
-    public int animationDelay;
+    public int maxHP, currHP;
+    public boolean player;
 
     public BattleUnit(Texture sprite) {
         this.sprite = sprite;
-        animationDelay = 120;
+        player = false;
     }
 }

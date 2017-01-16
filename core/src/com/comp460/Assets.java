@@ -17,6 +17,9 @@ public class Assets {
     public static Texture cursor;
     public static Texture actionMenu;
     public static Texture battleTile;
+    public static Texture hpBar;
+    public static Texture mega;
+    public static Texture scratch;
     public static void load() {
         testMap = new TmxMapLoader().load("testmap.tmx");
         bulbaMicro = new Texture(Gdx.files.internal("bulba_micro.png"));
@@ -24,6 +27,9 @@ public class Assets {
         cursor = new Texture(Gdx.files.internal("cursor.png"));
         actionMenu = new Texture(Gdx.files.internal("action_menu.png"));
         battleTile = new Texture(Gdx.files.internal("battle_tile.png"));
+        hpBar = new Texture(Gdx.files.internal("hp_bar.png"));
+        mega = new Texture(Gdx.files.internal("megadude.png"));
+        scratch = new Texture(Gdx.files.internal("scratch.png"));
     }
 
     public static void dispose() {

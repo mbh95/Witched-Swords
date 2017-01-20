@@ -2,21 +2,19 @@ package com.comp460.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.comp460.Assets;
-import com.comp460.components.*;
-import com.comp460.systems.*;
-import com.comp460.systems.input.KeyboardMapMovementSystem;
-import com.comp460.systems.input.KeyboardMapSelectionSystem;
-import com.comp460.systems.rendering.MapRenderingSystem;
-import com.comp460.systems.rendering.MovesRenderingSystem;
-import com.comp460.systems.rendering.SpriteRenderingSystem;
+import com.comp460.tactics.map.components.*;
+import com.comp460.tactics.map.systems.*;
+import com.comp460.tactics.map.systems.input.KeyboardMapMovementSystem;
+import com.comp460.tactics.map.systems.input.KeyboardMapSelectionSystem;
+import com.comp460.tactics.map.systems.rendering.MapRenderingSystem;
+import com.comp460.tactics.map.systems.rendering.MovesRenderingSystem;
+import com.comp460.tactics.map.systems.rendering.SpriteRenderingSystem;
 import com.comp460.tactics.map.TacticsMap;
 
 /**

@@ -1,14 +1,13 @@
-package com.comp460.systems.rendering;
+package com.comp460.tactics.map.systems.rendering;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.comp460.Mappers;
-import com.comp460.components.TransformComponent;
-import com.comp460.components.TextureComponent;
+import com.comp460.tactics.map.components.TransformComponent;
+import com.comp460.tactics.map.components.TextureComponent;
 import com.comp460.tactics.map.TacticsMap;
 
 import java.util.PriorityQueue;

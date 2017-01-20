@@ -1,9 +1,6 @@
-package com.comp460.components;
+package com.comp460.tactics.map.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
-
-import java.util.Set;
 
 /**
  * Created by matthewhammond on 1/15/17.

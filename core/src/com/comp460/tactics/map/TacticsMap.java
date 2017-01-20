@@ -1,16 +1,15 @@
 package com.comp460.tactics.map;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.comp460.components.MapPositionComponent;
-import com.comp460.components.TextureComponent;
-import com.comp460.components.TransformComponent;
-import com.comp460.components.units.UnitStatsComponent;
-import com.comp460.components.units.ValidMovesComponent;
+import com.comp460.tactics.map.components.MapPositionComponent;
+import com.comp460.tactics.map.components.TextureComponent;
+import com.comp460.tactics.map.components.TransformComponent;
+import com.comp460.tactics.map.components.units.UnitStatsComponent;
+import com.comp460.tactics.map.components.units.ValidMovesComponent;
 
 import java.util.Arrays;
 import java.util.HashSet;

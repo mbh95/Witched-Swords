@@ -22,6 +22,7 @@ public class Assets {
         public static Texture HP_BAR;
         public static Texture MEGA;
         public static Texture SCRATCH;
+        public static Texture LAZER;
     }
 
     public static class Maps {
@@ -39,6 +40,7 @@ public class Assets {
         Textures.HP_BAR = new Texture(Gdx.files.internal("hp_bar.png"));
         Textures.MEGA = new Texture(Gdx.files.internal("megadude.png"));
         Textures.SCRATCH = new Texture(Gdx.files.internal("scratch.png"));
+        Textures.LAZER = new Texture(Gdx.files.internal("lazer.png"));
         Maps.TEST = new TmxMapLoader().load("testmap.tmx");
     }
 

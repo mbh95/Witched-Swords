@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.comp460.screens.BattleScreen;
-import com.comp460.screens.TacticsScreen;
 import com.comp460.screens.TacticsScreenECS;
 
 public class Main extends Game {
@@ -22,6 +21,8 @@ public class Main extends Game {
 											Settings.INTERNAL_HEIGHT,
 											batch,
                                             Assets.Maps.TEST));
+
+		this.setScreen(new BattleScreen(this));
 	}
 
 	@Override

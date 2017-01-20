@@ -1,4 +1,4 @@
-package com.comp460;
+package com.comp460.battle;
 
 import com.badlogic.gdx.graphics.Texture;
 
@@ -8,17 +8,18 @@ import com.badlogic.gdx.graphics.Texture;
 public class BattleAttack {
     public int row, col;
     public int duration;
-    public int damage;
     public Texture sprite;
+    public BattleEffect effect;
 
-    public BattleAttack(int row, int col, int duration, int damage, Texture sprite) {
+    public BattleAttack(int row, int col, int duration, Texture sprite, BattleEffect effect) {
         this.row = row;
         this.col = col;
         this.duration = duration;
-        this.damage = damage;
+        this.effect = effect;
         this.sprite = sprite;
     }
     public void update(){
+        this.effect.tick(this);
         duration--;
     }
 }

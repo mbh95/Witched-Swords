@@ -1,13 +1,12 @@
-package com.comp460.systems;
+package com.comp460.tactics.map.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.Mappers;
-import com.comp460.components.CameraTargetComponent;
-import com.comp460.components.TransformComponent;
+import com.comp460.tactics.map.components.CameraTargetComponent;
+import com.comp460.tactics.map.components.TransformComponent;
 
 /**
  * Created by matthewhammond on 1/15/17.

@@ -1,12 +1,12 @@
-package com.comp460.systems.rendering;
+package com.comp460.tactics.map.systems.rendering;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.Mappers;
-import com.comp460.components.ShowValidMovesComponent;
-import com.comp460.components.units.UnitStatsComponent;
-import com.comp460.components.units.ValidMovesComponent;
+import com.comp460.tactics.map.components.ShowValidMovesComponent;
+import com.comp460.tactics.map.components.units.UnitStatsComponent;
+import com.comp460.tactics.map.components.units.ValidMovesComponent;
 import com.comp460.tactics.map.MapPosition;
 import com.comp460.tactics.map.TacticsMap;
 

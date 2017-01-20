@@ -1,4 +1,4 @@
-package com.comp460.systems.input;
+package com.comp460.tactics.map.systems.input;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -6,7 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.comp460.Mappers;
-import com.comp460.components.*;
+import com.comp460.tactics.map.components.*;
 import com.comp460.tactics.map.MapPosition;
 
 /**

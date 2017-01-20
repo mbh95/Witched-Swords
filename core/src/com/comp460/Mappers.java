@@ -1,9 +1,9 @@
 package com.comp460;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.comp460.components.*;
-import com.comp460.components.units.UnitStatsComponent;
-import com.comp460.components.units.ValidMovesComponent;
+import com.comp460.tactics.map.components.*;
+import com.comp460.tactics.map.components.units.UnitStatsComponent;
+import com.comp460.tactics.map.components.units.ValidMovesComponent;
 
 /**
  * Created by matthewhammond on 1/19/17.

@@ -1,4 +1,4 @@
-package com.comp460.components.units;
+package com.comp460.tactics.map.components.units;
 
 import com.badlogic.ashley.core.Component;
 import com.comp460.tactics.map.MapPosition;

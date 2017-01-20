@@ -13,8 +13,15 @@ public class Assets {
 
     public static class Textures {
         public static Texture CURSOR;
-        public static Texture BULBA;
-        public static TextureAtlas MENU;
+
+        public static Texture BULBA_MICRO;
+        public static Texture BULBA_MACRO;
+
+        public static Texture ACTION_MENU;
+        public static Texture BATTLE_TILE;
+        public static Texture HP_BAR;
+        public static Texture MEGA;
+        public static Texture SCRATCH;
     }
 
     public static class Maps {
@@ -23,15 +30,18 @@ public class Assets {
 
     public static void load() {
         Textures.CURSOR = new Texture(Gdx.files.internal("cursor.png"));
-        Textures.BULBA = new Texture(Gdx.files.internal("bulba_micro.png"));
+        Textures.BULBA_MICRO = new Texture(Gdx.files.internal("bulba_micro.png"));
 
+        Textures.BULBA_MACRO = new Texture(Gdx.files.internal("bulba_macro.png"));
+        Textures.CURSOR = new Texture(Gdx.files.internal("cursor.png"));
+        Textures.ACTION_MENU = new Texture(Gdx.files.internal("action_menu.png"));
+        Textures.BATTLE_TILE = new Texture(Gdx.files.internal("battle_tile.png"));
+        Textures.HP_BAR = new Texture(Gdx.files.internal("hp_bar.png"));
+        Textures.MEGA = new Texture(Gdx.files.internal("megadude.png"));
+        Textures.SCRATCH = new Texture(Gdx.files.internal("scratch.png"));
         Maps.TEST = new TmxMapLoader().load("testmap.tmx");
     }
 
     public static void dispose() {
-        Textures.CURSOR.dispose();
-        Textures.BULBA.dispose();
-
-        Maps.TEST.dispose();
     }
 }

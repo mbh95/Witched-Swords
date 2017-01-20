@@ -1,4 +1,4 @@
-package com.comp460.components;
+package com.comp460.components.units;
 
 import com.badlogic.ashley.core.Component;
 

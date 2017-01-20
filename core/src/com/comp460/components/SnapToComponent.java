@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Entity;
  */
 public class SnapToComponent implements Component {
     public Entity other;
+
     public SnapToComponent populate(Entity other) {
         this.other = other;
         return this;

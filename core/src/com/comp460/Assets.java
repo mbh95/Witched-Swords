@@ -11,17 +11,27 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
  */
 public class Assets {
 
-    public static TiledMap testMap;
-    public static Texture bulbaImage;
-    public static Texture cursor;
-    public static TextureAtlas menu;
+    public static class Textures {
+        public static Texture CURSOR;
+        public static Texture BULBA;
+        public static TextureAtlas MENU;
+    }
+
+    public static class Maps {
+        public static TiledMap TEST;
+    }
+
     public static void load() {
-        testMap = new TmxMapLoader().load("testmap.tmx");
-        bulbaImage = new Texture(Gdx.files.internal("bulba_micro.png"));
-        cursor = new Texture(Gdx.files.internal("cursor.png"));
+        Textures.CURSOR = new Texture(Gdx.files.internal("cursor.png"));
+        Textures.BULBA = new Texture(Gdx.files.internal("bulba_micro.png"));
+
+        Maps.TEST = new TmxMapLoader().load("testmap.tmx");
     }
 
     public static void dispose() {
+        Textures.CURSOR.dispose();
+        Textures.BULBA.dispose();
 
+        Maps.TEST.dispose();
     }
 }

@@ -1,4 +1,4 @@
-package com.comp460.systems;
+package com.comp460.systems.input;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -6,30 +6,27 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.comp460.Mappers;
 import com.comp460.components.KeyboardMapMovementComponent;
+import com.comp460.components.TacticsCursorComponent;
 import com.comp460.components.MapPositionComponent;
-import com.comp460.tactics.TacticsMap;
+import com.comp460.tactics.map.MapPosition;
 
 /**
  * Created by matthewhammond on 1/15/17.
  */
 public class KeyboardMapMovementSystem extends IteratingSystem {
 
-    private ComponentMapper<KeyboardMapMovementComponent> kbdM;
-    private ComponentMapper<MapPositionComponent> mapPosM;
-
     public KeyboardMapMovementSystem() {
         super(Family.all(KeyboardMapMovementComponent.class, MapPositionComponent.class).get());
-        kbdM = ComponentMapper.getFor(KeyboardMapMovementComponent.class);
-        mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        KeyboardMapMovementComponent kbd = kbdM.get(entity);
-        MapPositionComponent mapPos = mapPosM.get(entity);
+        KeyboardMapMovementComponent kbd = Mappers.kbdMapMovementM.get(entity);
+        MapPosition mapPos = Mappers.mapPosM.get(entity).mapPos;
 
-        if (kbd.delay == 0) {
+        if (kbd.countdown == 0) {
             int oldRow = mapPos.row;
             int oldCol = mapPos.col;
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) mapPos.col--;
@@ -41,9 +38,9 @@ public class KeyboardMapMovementSystem extends IteratingSystem {
             if(mapPos.col < 0) mapPos.col = 0;
             else if(mapPos.col >= mapPos.map.getWidth()) mapPos.col = mapPos.map.getWidth() - 1;
             if (mapPos.row != oldRow || mapPos.col != oldCol) {
-                kbd.delay = kbd.maxDelay;
+                kbd.countdown = kbd.delay;
             }
-        } else if (kbd.delay > 0)
-            kbd.delay--;
+        } else if (kbd.countdown > 0)
+            kbd.countdown--;
     }
 }

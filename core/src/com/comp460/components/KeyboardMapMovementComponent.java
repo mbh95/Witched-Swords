@@ -1,16 +1,19 @@
 package com.comp460.components;
 
 import com.badlogic.ashley.core.Component;
-import com.comp460.tactics.TacticsMap;
 
 /**
- * Created by matthewhammond on 1/15/17.
+ * Created by matthewhammond on 1/19/17.
  */
 public class KeyboardMapMovementComponent implements Component {
-    public int delay, maxDelay;
+    public int countdown, delay;
 
-    public KeyboardMapMovementComponent populate(int maxDelay) {
-        this.maxDelay = maxDelay;
+    public KeyboardMapMovementComponent populate(int delay) {
+        this.delay = delay;
+        if (this.countdown > this.delay) {
+            this.countdown = this.delay;
+        }
         return this;
     }
+
 }

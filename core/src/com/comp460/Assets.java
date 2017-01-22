@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 public class Assets {
 
     public static class Textures {
+        public static Texture BATTLE_BG;
         public static Texture CURSOR;
 
         public static Texture BULBA_MICRO;
@@ -43,6 +44,7 @@ public class Assets {
         Textures.CURSOR = new Texture(Gdx.files.internal("cursor.png"));
         Textures.ACTION_MENU = new Texture(Gdx.files.internal("action_menu.png"));
         Textures.BATTLE_TILE = new Texture(Gdx.files.internal("battle_tile.png"));
+        Textures.BATTLE_BG = new Texture(Gdx.files.internal("GRASS.png"));
         Textures.HP_BAR = new Texture(Gdx.files.internal("hp_bar.png"));
         Textures.MEGA = new Texture(Gdx.files.internal("megadude.png"));
         Textures.SCRATCH = new Texture(Gdx.files.internal("scratch.png"));

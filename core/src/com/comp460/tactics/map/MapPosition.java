@@ -7,6 +7,16 @@ public class MapPosition {
     public TacticsMap map;
     public int row, col;
 
+    public MapPosition() {
+
+    }
+
+    public MapPosition(TacticsMap map, int row, int col) {
+        this.map = map;
+        this.row = row;
+        this.col = col;
+    }
+
     @Override
     public int hashCode() {
         return (map.getWidth() * row + col);

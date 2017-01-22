@@ -1,18 +1,15 @@
 package com.comp460.tactics.map;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.comp460.tactics.map.components.MapPositionComponent;
-import com.comp460.tactics.map.components.TextureComponent;
-import com.comp460.tactics.map.components.TransformComponent;
-import com.comp460.tactics.map.components.units.UnitStatsComponent;
-import com.comp460.tactics.map.components.units.ValidMovesComponent;
+import com.comp460.Mappers;
+import com.comp460.tactics.map.components.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,8 +18,8 @@ import java.util.Set;
  */
 public class TacticsMap {
 
+    Family mapUnits = Family.all(UnitStatsComponent.class, MapPositionComponent.class).get();
     private TiledMap tiledMap;
-    public int[] visibleLayers;
 
     private int width, height; // width and height of the map in tiles
     private int tileWidth, tileHeight; // width and height of one tile in pixels
@@ -31,8 +28,6 @@ public class TacticsMap {
     private Entity[][] units;
 
     private Map<Integer, Set<Entity>> teamToUnits;
-
-    //Family unit =
 
     public TacticsMap(TiledMap tiledMap) {
         this.tiledMap = tiledMap;
@@ -43,14 +38,11 @@ public class TacticsMap {
         tileWidth = tiledMap.getProperties().get("tilewidth", Integer.class);
         tileHeight = tiledMap.getProperties().get("tileheight", Integer.class);
 
-        this.tiles = new MapTile[this.width][this.height];
-        this.units = new Entity[this.width][this.height];
+        this.tiles = new MapTile[this.height][this.width];
+        this.units = new Entity[this.height][this.width];
 
-        int layer = 0;
-        Set<Integer> visible = new HashSet<>();
         for (MapLayer ml : tiledMap.getLayers()) {
             if (!ml.getName().equals("units")) {
-                visible.add(layer);
                 // Process terrain
                 TiledMapTileLayer tl = (TiledMapTileLayer) ml;
                 for (int r = 0; r < height; r++) {
@@ -62,16 +54,10 @@ public class TacticsMap {
                         this.tiles[r][c] = new MapTile(cell.getTile().getProperties().get("traversable", Boolean.class));
                     }
                 }
+            } else {
+                ml.setVisible(false);
             }
-            layer++;
         }
-        this.visibleLayers = new int[visible.size()];
-        int i = 0;
-        for (int l : visible) {
-            this.visibleLayers[i] = l;
-            i++;
-        }
-        System.out.println(Arrays.toString(visibleLayers));
     }
 
     public void populate(PooledEngine engine) {
@@ -93,13 +79,11 @@ public class TacticsMap {
                         TransformComponent transformComponent = engine.createComponent(TransformComponent.class)
                                 .populate(tileWidth * c, tileHeight*r, 0);
                         UnitStatsComponent stats = engine.createComponent(UnitStatsComponent.class).populate(cell.getTile().getProperties().get("team", Integer.class), 5);
-                        ValidMovesComponent validMoves = engine.createComponent(ValidMovesComponent.class);
 
                         unit.add(mapPos);
                         unit.add(texture);
                         unit.add(transformComponent);
                         unit.add(stats);
-                        unit.add(validMoves);
                         engine.addEntity(unit);
 
                         this.units[r][c] = unit;
@@ -136,7 +120,46 @@ public class TacticsMap {
         return this.units[row][col];
     }
 
-//    public Set<MapPosition> computeValidMoves(Entity e) {
-//
-//    }
+    public Set<MapPosition> computeValidMoves(Entity e) {
+        if (!mapUnits.matches(e)) {
+            return null;
+        }
+        Map<MapPosition, Integer> validMoves = new HashMap<>();
+        validMovesHelper(e, validMoves, Mappers.mapPosM.get(e).mapPos.row, Mappers.mapPosM.get(e).mapPos.col, Mappers.statsM.get(e).moveDist);
+        return validMoves.keySet();
+    }
+
+    private void validMovesHelper(Entity e, Map<MapPosition, Integer> bestSoFar, int r, int c, int countdown) {
+        if (countdown < 0 || r < 0 || r >= this.height || c < 0 || c >= this.width || (this.units[r][c] != null && this.units[r][c] != e) || !this.tiles[r][c].isTraversable()) {
+            return;
+        }
+        MapPosition newPos = new MapPosition(this, r, c);
+        if (bestSoFar.containsKey(newPos)) {
+            if (bestSoFar.get(newPos) >= countdown) {
+                return;
+            }
+        }
+        bestSoFar.put(new MapPosition(this, r, c), countdown);
+
+        validMovesHelper(e, bestSoFar, r + 1, c, countdown - 1);
+        validMovesHelper(e, bestSoFar, r - 1, c, countdown - 1);
+        validMovesHelper(e, bestSoFar, r, c + 1, countdown - 1);
+        validMovesHelper(e, bestSoFar, r, c - 1, countdown - 1);
+    }
+
+    public void move(Entity selection, int row, int col) {
+        if (row < 0 || row >= this.height || col < 0 || col >= this.width) {
+            return;
+        }
+        if (!computeValidMoves(selection).contains(new MapPosition(this, row, col))) {
+            return;
+        }
+        MapPosition selectionPos = Mappers.mapPosM.get(selection).mapPos;
+        if (selection == this.units[selectionPos.row][selectionPos.col]) {
+            this.units[selectionPos.row][selectionPos.col] = null;
+        }
+        selectionPos.row = row;
+        selectionPos.col = col;
+        this.units[row][col] = selection;
+    }
 }

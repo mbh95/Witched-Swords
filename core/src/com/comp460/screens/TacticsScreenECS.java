@@ -14,6 +14,7 @@ import com.comp460.tactics.map.systems.input.KeyboardMapMovementSystem;
 import com.comp460.tactics.map.systems.input.KeyboardMapSelectionSystem;
 import com.comp460.tactics.map.systems.rendering.MapRenderingSystem;
 import com.comp460.tactics.map.systems.rendering.MovesRenderingSystem;
+import com.comp460.tactics.map.systems.rendering.SelectionRenderingSystem;
 import com.comp460.tactics.map.systems.rendering.SpriteRenderingSystem;
 import com.comp460.tactics.map.TacticsMap;
 
@@ -47,6 +48,7 @@ public class TacticsScreenECS extends ScreenAdapter {
         engine.addSystem(new MapRenderingSystem(map, camera));
         engine.addSystem(new MovesRenderingSystem(map, camera));
         engine.addSystem(new SpriteRenderingSystem(batch, map, camera));
+        engine.addSystem(new SelectionRenderingSystem(camera));
 
         engine.addSystem(new CameraTrackingSystem());
         engine.addSystem(new MapToScreenSystem());
@@ -66,7 +68,7 @@ public class TacticsScreenECS extends ScreenAdapter {
                 .populate(map, 0, 0);
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class)
                 .populate(0,0,0);
-        TacticsCursorComponent cursorComponent = engine.createComponent(TacticsCursorComponent.class);
+        CursorComponent cursorComponent = engine.createComponent(CursorComponent.class);
         KeyboardMapMovementComponent movement = engine.createComponent(KeyboardMapMovementComponent.class)
                 .populate(8);
         cursor.add(texture);

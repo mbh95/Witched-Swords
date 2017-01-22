@@ -29,7 +29,7 @@ public class MapRenderingSystem extends EntitySystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
         renderer.setView(camera);
-        renderer.render(map.visibleLayers);
+        renderer.render();
 
         if (gridLinesVisible) {
             renderGridLines();

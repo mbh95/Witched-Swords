@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.comp460.Assets;
 import com.comp460.battle.BattleAttack;
 import com.comp460.battle.BattleUnit;
@@ -167,6 +168,7 @@ public class BattleScreen extends ScreenAdapter {
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+        game.batch.draw(Assets.Textures.BATTLE_BG, 0f, 0f, 400, 240);
         drawMap();
         game.batch.end();
         drawMask();

@@ -1,12 +1,13 @@
 package com.comp460.tactics.map.systems.rendering;
 
 import com.badlogic.ashley.core.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.Mappers;
 import com.comp460.tactics.map.components.ShowValidMovesComponent;
-import com.comp460.tactics.map.components.units.UnitStatsComponent;
-import com.comp460.tactics.map.components.units.ValidMovesComponent;
+import com.comp460.tactics.map.components.UnitStatsComponent;
 import com.comp460.tactics.map.MapPosition;
 import com.comp460.tactics.map.TacticsMap;
 
@@ -25,7 +26,7 @@ public class MovesRenderingSystem  extends EntitySystem implements EntityListene
 
     private Map<Integer, Set<MapPosition>> teamToValidMoves;
 
-    Family visible = Family.all(ShowValidMovesComponent.class, ValidMovesComponent.class, UnitStatsComponent.class).get();
+    Family visible = Family.all(ShowValidMovesComponent.class, UnitStatsComponent.class).get();
 
     public MovesRenderingSystem(TacticsMap map, OrthographicCamera camera) {
         this.teamToValidMoves = new HashMap<>(2);
@@ -42,6 +43,8 @@ public class MovesRenderingSystem  extends EntitySystem implements EntityListene
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         ShapeRenderer sr = new ShapeRenderer();
         sr.setProjectionMatrix(camera.combined);
         for (int team : teamToValidMoves.keySet()) {
@@ -57,6 +60,7 @@ public class MovesRenderingSystem  extends EntitySystem implements EntityListene
             sr.end();
         }
         sr.dispose();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     @Override
@@ -74,9 +78,10 @@ public class MovesRenderingSystem  extends EntitySystem implements EntityListene
             this.teamToValidMoves.put(team, new HashSet<>());
         }
         this.teamToValidMoves.get(team).clear();
+
         this.getEngine().getEntitiesFor(visible).forEach(e -> {
             if (Mappers.statsM.get(e).team == team) {
-                teamToValidMoves.get(team).addAll(Mappers.movesM.get(e).validMoves);
+                teamToValidMoves.get(team).addAll(map.computeValidMoves(e));
             }
         });
     }

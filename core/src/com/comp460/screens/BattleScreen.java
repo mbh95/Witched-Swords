@@ -6,6 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.Assets;
 import com.comp460.battle.BattleAttack;
@@ -28,7 +29,7 @@ public class BattleScreen extends ScreenAdapter {
     private OrthographicCamera camera;
 
     private BattleUnit bulba;
-    private BattleUnit mega;
+    private BattleUnit rogue;
 
     private int bounceDelay = 120;
     private int cursorDelay = 10;
@@ -42,34 +43,37 @@ public class BattleScreen extends ScreenAdapter {
         this.camera = new OrthographicCamera(DISP_WIDTH, DISP_HEIGHT);
         this.camera.position.set(DISP_WIDTH/2, DISP_HEIGHT/2, 0);
 
-        bulba = new BattleUnit(Assets.Textures.BULBA_MACRO);
+        bulba = new BattleUnit(new Texture[] {
+            Assets.Textures.BULBA_IDLE1_BATTLE,
+                Assets.Textures.BULBA_IDLE2_BATTLE,
+                Assets.Textures.BULBA_IDLE3_BATTLE,
+                Assets.Textures.BULBA_IDLE4_BATTLE}, null,null,null,null);
         bulba.col = 3; bulba.row = 0;
         bulba.maxHP = 100;
         bulba.currHP = 100;
 
-        mega = new BattleUnit(Assets.Textures.MEGA);
-        mega.player = true;
-        mega.col = 0; mega.row = 0;
-        mega.maxHP = 10;
-        mega.currHP = 10;
+        rogue = new BattleUnit(new Texture[] {Assets.Textures.ROGUE}, null,null,null,null);
+        rogue.player = true;
+        rogue.col = 0; rogue.row = 0;
+        rogue.maxHP = 10;
+        rogue.currHP = 10;
     }
 
     private void update(float delta) {
         camera.update();
 
-        // move/attack with mega! <3
+        // move/attack with rogue! <3
         if (cursorDelay == 0) {
-            int oldRow = mega.row;
-            int oldCol = mega.col;
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) mega.col--;
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) mega.col++;
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) mega.row++;
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) mega.row--;
+            int oldRow = rogue.row;
+            int oldCol = rogue.col;
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) rogue.col--;
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) rogue.col++;
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) rogue.row++;
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) rogue.row--;
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-                // ATTACK WAAAAAAAAAA
                 for (int i = 0; i < 3; i++)
-                    attacks.add(new BattleAttack(mega.row, mega.col + 1 + i, 10, Assets.Textures.LAZER,
+                    attacks.add(new BattleAttack(rogue.row, rogue.col + 1 + i, 10, Assets.Textures.LAZER,
                     (att) -> {
                         if (att.row == bulba.row && att.col == bulba.col) {
                             bulba.currHP -= 1;
@@ -77,7 +81,7 @@ public class BattleScreen extends ScreenAdapter {
                     }));
             }
 
-            if (mega.row != oldRow || mega.col != oldCol) {
+            if (rogue.row != oldRow || rogue.col != oldCol) {
                 cursorDelay = 8;
             }
         }
@@ -86,10 +90,10 @@ public class BattleScreen extends ScreenAdapter {
 
         updateAI(delta);
 
-        if(mega.row < 0) mega.row = 0;
-        if(mega.row >= 2) mega.row = 3-1;
-        if(mega.col < 0) mega.col = 0;
-        if(mega.col >= 2) mega.col = 3-1;
+        if(rogue.row < 0) rogue.row = 0;
+        if(rogue.row >= 2) rogue.row = 3-1;
+        if(rogue.col < 0) rogue.col = 0;
+        if(rogue.col >= 2) rogue.col = 3-1;
 
         if(bulba.row  < 0) bulba.row = 0;
         if(bulba.row  >= 2) bulba.row = 3-1;
@@ -176,15 +180,16 @@ public class BattleScreen extends ScreenAdapter {
 
         // bounce bulba! <3
         float bulbaHeight = bulba.row*40 + 29;
-        float megaHeight = mega.row*40 + 29;
+        float rogueHeight = rogue.row*40 + 29;
 //        if (bounceDelay <= 60) {
             bulbaHeight += 2f*Math.sin(t) + 2;
-            megaHeight += 2f*Math.sin(t) + 2;
+            rogueHeight += 2f*Math.sin(t) + 2;
 //        }
         if (bounceDelay == 0) bounceDelay = 120;
         bounceDelay--;
-        game.batch.draw(bulba.sprite, DISP_WIDTH/2 + (bulba.col - 3)*40, bulbaHeight);
-        game.batch.draw(mega.sprite, DISP_WIDTH/2 - 40*3 + mega.col*40, megaHeight);
+        bulba.updateSprite();
+        game.batch.draw(bulba.getSprite(), DISP_WIDTH/2 + (bulba.col - 3)*40, bulbaHeight);
+        game.batch.draw(rogue.getSprite(), DISP_WIDTH/2 - 40*3 + rogue.col*40, rogueHeight);
 
         for (BattleAttack attack : attacks) {
             game.batch.draw(attack.sprite, DISP_WIDTH/2 + (attack.col - 3)*40, attack.row*40 + 29);
@@ -193,7 +198,7 @@ public class BattleScreen extends ScreenAdapter {
 
         drawHP(bulba);
 
-        drawHP(mega);
+        drawHP(rogue);
         t+=0.05f;
     }
 
@@ -210,17 +215,17 @@ public class BattleScreen extends ScreenAdapter {
                     if (rng.nextDouble() < .05) {
                         curAiState = AiState.DEFENSE;
                     }
-                    if (mega.col != 2 && rng.nextDouble() < .2) {
+                    if (rogue.col != 2 && rng.nextDouble() < .2) {
                         curAiState = AiState.DEFENSE;
                     }
-                    if (bulba.row != mega.row) {
-                        bulba.row += (int)((1.0*mega.row - bulba.row) / 2.0);
+                    if (bulba.row != rogue.row) {
+                        bulba.row += (int)((1.0*rogue.row - bulba.row) / 2.0);
                     } else {
                         if (rng.nextDouble() < .7) {
 
                             attacks.add(new BattleAttack(bulba.row, bulba.col - 1, 20, Assets.Textures.SCRATCH, (e) -> {
-                                if (e.row == mega.row && e.col == mega.col) {
-                                    mega.currHP -= 2;
+                                if (e.row == rogue.row && e.col == rogue.col) {
+                                    rogue.currHP -= 2;
                                 }
                                 e.effect = (ent)->{};
                             }));
@@ -232,11 +237,11 @@ public class BattleScreen extends ScreenAdapter {
                     if (rng.nextDouble() < .05) {
                         curAiState = AiState.OFFENSE;
                     }
-                    if (mega.col == 2 && rng.nextDouble() < .2) {
+                    if (rogue.col == 2 && rng.nextDouble() < .2) {
                         curAiState = AiState.OFFENSE;
                     }
                     bulba.col++;
-                    if (bulba.row == mega.row) {
+                    if (bulba.row == rogue.row) {
                         bulba.row += rng.nextBoolean()?1:-1;
                         if (bulba.row < 0) {
                             bulba.row += 2;

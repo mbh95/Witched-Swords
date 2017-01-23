@@ -53,7 +53,11 @@ public class BattleScreen extends ScreenAdapter {
         bulba.maxHP = 100;
         bulba.currHP = 100;
 
-        rogue = new BattleUnit(new Texture[] {Assets.Textures.ROGUE}, null,null,null,null);
+        rogue = new BattleUnit(new Texture[] {
+            Assets.Textures.ROGUE,
+                Assets.Textures.ROGUE1,
+                Assets.Textures.ROGUE2
+        }, null,null,null,null);
         rogue.player = true;
         rogue.col = 0; rogue.row = 0;
         rogue.maxHP = 10;
@@ -191,6 +195,7 @@ public class BattleScreen extends ScreenAdapter {
         bounceDelay--;
         bulba.updateSprite();
         game.batch.draw(bulba.getSprite(), DISP_WIDTH/2 + (bulba.col - 3)*40, bulbaHeight);
+        rogue.updateSprite();
         game.batch.draw(rogue.getSprite(), DISP_WIDTH/2 - 40*3 + rogue.col*40, rogueHeight);
 
         for (BattleAttack attack : attacks) {

@@ -33,10 +33,12 @@ public class Assets {
         public static Texture MEGA;
         public static Texture SCRATCH;
         public static Texture LAZER;
-        public static Texture ROGUE;
 
         public static Texture ROGUE_MICRO_1;
         public static Texture ROGUE_MICRO_2;
+        public static Texture ROGUE; // pls rename later
+        public static Texture ROGUE1;
+        public static Texture ROGUE2;
     }
 
     public static class Maps {
@@ -69,6 +71,8 @@ public class Assets {
         Textures.SCRATCH = new Texture(Gdx.files.internal("scratch.png"));
         Textures.LAZER = new Texture(Gdx.files.internal("lazer.png"));
         Textures.ROGUE = new Texture(Gdx.files.internal("ruby_macro.png"));
+        Textures.ROGUE1 = new Texture(Gdx.files.internal("ruby_macro2.png"));
+        Textures.ROGUE2 = new Texture(Gdx.files.internal("ruby_macro3.png"));
         Maps.TEST = new TmxMapLoader().load("testmap.tmx");
     }
 

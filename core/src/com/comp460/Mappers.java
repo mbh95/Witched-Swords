@@ -7,6 +7,7 @@ import com.comp460.tactics.map.components.*;
  * Created by matthewhammond on 1/19/17.
  */
 public class Mappers {
+    public static final ComponentMapper<AnimationComponent> animationM = ComponentMapper.getFor(AnimationComponent.class);
     public static final ComponentMapper<CameraTargetComponent> cameraTargetM = ComponentMapper.getFor(CameraTargetComponent.class);
     public static final ComponentMapper<KeyboardMapMovementComponent> kbdMapMovementM = ComponentMapper.getFor(KeyboardMapMovementComponent.class);
     public static final ComponentMapper<CursorSelectionComponent> selectionM = ComponentMapper.getFor(CursorSelectionComponent.class);

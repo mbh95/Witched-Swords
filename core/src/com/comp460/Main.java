@@ -22,7 +22,7 @@ public class Main extends Game {
 											batch,
                                             Assets.Maps.TEST));
 
-//		this.setScreen(new BattleScreen(this));
+		this.setScreen(new BattleScreen(this));
 	}
 
 	@Override

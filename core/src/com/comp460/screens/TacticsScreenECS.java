@@ -53,6 +53,7 @@ public class TacticsScreenECS extends ScreenAdapter {
         engine.addSystem(new CameraTrackingSystem());
         engine.addSystem(new MapToScreenSystem());
         engine.addSystem(new SnapToEntitySystem());
+        engine.addSystem(new AnimationSystem());
 
         map.populate(engine);
         makeCursor();

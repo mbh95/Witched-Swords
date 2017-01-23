@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.comp460.Assets;
 import com.comp460.Mappers;
 import com.comp460.tactics.map.components.*;
 
@@ -74,8 +75,19 @@ public class TacticsMap {
                         Entity unit = engine.createEntity();
                         MapPositionComponent mapPos = engine.createComponent(MapPositionComponent.class)
                                 .populate(this, r, c);
-                        TextureComponent texture = engine.createComponent(TextureComponent.class)
-                                .populate(cell.getTile().getTextureRegion());
+                        TextureComponent texture = engine.createComponent(TextureComponent.class);
+
+                        String animName = "";
+                        if (cell.getTile().getProperties().containsKey("sprite")) {
+                            animName = cell.getTile().getProperties().get("sprite", String.class);
+                        }
+                        if (Assets.animLookup.containsKey(animName)) {
+                            AnimationComponent anim = new AnimationComponent().populate(Assets.animLookup.get(animName), 30);
+                            texture.populate(anim.frames[anim.currentFrame]);
+                            unit.add(anim);
+                        } else {
+                            texture.populate(cell.getTile().getTextureRegion());
+                        }
                         TransformComponent transformComponent = engine.createComponent(TransformComponent.class)
                                 .populate(tileWidth * c, tileHeight*r, 0);
                         UnitStatsComponent stats = engine.createComponent(UnitStatsComponent.class).populate(cell.getTile().getProperties().get("team", Integer.class), 5);

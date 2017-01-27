@@ -2,6 +2,7 @@ package com.comp460;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.comp460.screens.BattleScreen;
@@ -17,12 +18,14 @@ public class Main extends Game {
 		Settings.load();
 		Assets.load();
 
-		this.setScreen(new TacticsScreenECS(Settings.INTERNAL_WIDTH,
-											Settings.INTERNAL_HEIGHT,
-											batch,
-                                            Assets.Maps.TEST));
+        ScreenAdapter tacticsScreen = new TacticsScreenECS(Settings.INTERNAL_WIDTH,
+                Settings.INTERNAL_HEIGHT,
+                batch,
+                Assets.Maps.TEST);
 
-		this.setScreen(new BattleScreen(this));
+		this.setScreen(tacticsScreen);
+
+		this.setScreen(new BattleScreen(this, tacticsScreen));
 	}
 
 	@Override

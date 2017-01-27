@@ -15,7 +15,7 @@ public class BattleUnit {
     private Texture[] currentAnimation;
     private int currentAnimationIndex;
 
-    public int maxHP, currHP;
+    public int maxHP, currHP, currNRG;
     public boolean player;
     public int moveDelay, castDelay, spriteDelay;
 
@@ -38,6 +38,7 @@ public class BattleUnit {
         moveDelay = 15;
         castDelay = 0;
         spriteDelay = 10;
+        currNRG = 5;
     }
 
     public void startIdleAnimation() {
@@ -56,7 +57,7 @@ public class BattleUnit {
     public void updateSprite() {
         spriteDelay--;
         if (spriteDelay == 0) {
-            spriteDelay = 15;
+            spriteDelay = 10;
 
             // switch to idle change sprites if enough cycles pass
             // switch to idle sprites after one cycle of idle change sprites

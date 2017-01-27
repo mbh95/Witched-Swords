@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.comp460.Assets;
 import com.comp460.battle.BattleAttack;
 import com.comp460.battle.BattleUnit;
@@ -44,24 +43,36 @@ public class BattleScreen extends ScreenAdapter {
         this.camera = new OrthographicCamera(DISP_WIDTH, DISP_HEIGHT);
         this.camera.position.set(DISP_WIDTH/2, DISP_HEIGHT/2, 0);
 
-        bulba = new BattleUnit(new Texture[] {
-            Assets.Textures.BULBA_IDLE1_BATTLE,
+        bulba = new BattleUnit(
+            new Texture[] {
+                Assets.Textures.BULBA_IDLE0_BATTLE, Assets.Textures.BULBA_IDLE1_BATTLE
+            },
+            new Texture[] {
+                Assets.Textures.BULBA_IDLE1_BATTLE,
                 Assets.Textures.BULBA_IDLE2_BATTLE,
                 Assets.Textures.BULBA_IDLE3_BATTLE,
-                Assets.Textures.BULBA_IDLE4_BATTLE}, null,null,null,null);
+                Assets.Textures.BULBA_IDLE4_BATTLE},
+            null,null,null);
         bulba.col = 3; bulba.row = 0;
         bulba.maxHP = 100;
         bulba.currHP = 100;
+        bulba.startIdleAnimation();
 
-        rogue = new BattleUnit(new Texture[] {
-            Assets.Textures.ROGUE,
+        rogue = new BattleUnit(
+            new Texture[] {
+                Assets.Textures.ROGUE,
                 Assets.Textures.ROGUE1,
                 Assets.Textures.ROGUE2
-        }, null,null,null,null);
+            },
+            new Texture[] {
+                    Assets.Textures.ROGUE
+            },
+            null,null,null);
         rogue.player = true;
         rogue.col = 0; rogue.row = 0;
         rogue.maxHP = 10;
         rogue.currHP = 10;
+        rogue.startIdleAnimation();
     }
 
     private void update(float delta) {
@@ -94,6 +105,8 @@ public class BattleScreen extends ScreenAdapter {
             cursorDelay--;
 
         updateAI(delta);
+        bulba.updateSprite();
+        rogue.updateSprite();
 
         if(rogue.row < 0) rogue.row = 0;
         if(rogue.row >= 2) rogue.row = 3-1;
@@ -193,9 +206,8 @@ public class BattleScreen extends ScreenAdapter {
 //        }
         if (bounceDelay == 0) bounceDelay = 120;
         bounceDelay--;
-        bulba.updateSprite();
+
         game.batch.draw(bulba.getSprite(), DISP_WIDTH/2 + (bulba.col - 3)*40, bulbaHeight);
-        rogue.updateSprite();
         game.batch.draw(rogue.getSprite(), DISP_WIDTH/2 - 40*3 + rogue.col*40, rogueHeight);
 
         for (BattleAttack attack : attacks) {
@@ -204,7 +216,6 @@ public class BattleScreen extends ScreenAdapter {
         game.batch.end();
 
         drawHP(bulba);
-
         drawHP(rogue);
         t+=0.05f;
     }

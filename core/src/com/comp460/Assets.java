@@ -22,6 +22,7 @@ public class Assets {
 
         public static Texture BULBA_MICRO_1;
         public static Texture BULBA_MICRO_2;
+        public static Texture BULBA_IDLE0_BATTLE;
         public static Texture BULBA_IDLE1_BATTLE;
         public static Texture BULBA_IDLE2_BATTLE;
         public static Texture BULBA_IDLE3_BATTLE;
@@ -58,6 +59,7 @@ public class Assets {
         TextureRegion[] ROGUE_MICRO_ANIM = new TextureRegion[] {new TextureRegion(Textures.ROGUE_MICRO_1), new TextureRegion(Textures.ROGUE_MICRO_2)};
         animLookup.put("rogue_micro", ROGUE_MICRO_ANIM);
 
+        Textures.BULBA_IDLE0_BATTLE = new Texture(Gdx.files.internal("bulba/bulba1_idle.png"));
         Textures.BULBA_IDLE1_BATTLE = new Texture(Gdx.files.internal("bulba/bulba1_battle.png"));
         Textures.BULBA_IDLE2_BATTLE = new Texture(Gdx.files.internal("bulba/bulba2_battle.png"));
         Textures.BULBA_IDLE3_BATTLE = new Texture(Gdx.files.internal("bulba/bulba3_battle.png"));

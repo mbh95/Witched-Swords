@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class BattleAttack {
     public int row, col;
     public int duration;
+    public int warning;
     public Texture sprite;
     public BattleEffect effect;
     public BattleUnit attacker;
@@ -19,8 +20,13 @@ public class BattleAttack {
         this.effect = effect;
         this.sprite = sprite;
         this.attacker = attacker;
+        warning = 20;
     }
     public void update(){
+        if (warning > 0) {
+            warning--;
+            return;
+        }
         this.effect.tick(this);
         duration--;
     }

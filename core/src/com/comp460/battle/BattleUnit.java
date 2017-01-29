@@ -38,7 +38,7 @@ public class BattleUnit {
         moveDelay = 15;
         castDelay = 0;
         spriteDelay = 10;
-        currNRG = 5;
+        currNRG = 50;
     }
 
     public void startIdleAnimation() {

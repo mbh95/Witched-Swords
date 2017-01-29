@@ -4,17 +4,21 @@ package com.comp460.tactics.map;
  * Created by matthewhammond on 1/19/17.
  */
 public class MapPosition {
-    public TacticsMap map;
-    public int row, col;
-
-    public MapPosition() {
-
-    }
+    private final TacticsMap map;
+    private final int row, col;
 
     public MapPosition(TacticsMap map, int row, int col) {
         this.map = map;
         this.row = row;
         this.col = col;
+    }
+
+    public int getRow() {
+        return this.row;
+    }
+
+    public int getCol() {
+        return this.col;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.comp460.tactics.map;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
@@ -7,8 +8,11 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.comp460.Assets;
-import com.comp460.Mappers;
-import com.comp460.tactics.map.components.*;
+import com.comp460.common.components.AnimationComponent;
+import com.comp460.common.components.TextureComponent;
+import com.comp460.common.components.TransformComponent;
+import com.comp460.tactics.components.*;
+import com.comp460.tactics.components.UnitStatsComponent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +23,12 @@ import java.util.Set;
  */
 public class TacticsMap {
 
-    Family mapUnits = Family.all(UnitStatsComponent.class, MapPositionComponent.class).get();
+    private static final Family mapUnitsFamily = Family.all(UnitStatsComponent.class, MapPositionComponent.class).get();
+    private static final Family readyFamily = Family.all(ReadyToMoveComponent.class).get();
+
+    private static final ComponentMapper<MapPositionComponent> mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
+    private static final ComponentMapper<UnitStatsComponent> statsM = ComponentMapper.getFor(UnitStatsComponent.class);
+
     private TiledMap tiledMap;
 
     private int width, height; // width and height of the map in tiles
@@ -74,7 +83,7 @@ public class TacticsMap {
                         }
                         Entity unit = engine.createEntity();
                         MapPositionComponent mapPos = engine.createComponent(MapPositionComponent.class)
-                                .populate(this, r, c);
+                                .populate(r, c);
                         TextureComponent texture = engine.createComponent(TextureComponent.class);
 
                         String animName = "";
@@ -92,10 +101,17 @@ public class TacticsMap {
                                 .populate(tileWidth * c, tileHeight*r, 0);
                         UnitStatsComponent stats = engine.createComponent(UnitStatsComponent.class).populate(cell.getTile().getProperties().get("team", Integer.class), 5);
 
+                        if (stats.team == 0) {
+                            unit.add(new PlayerControlledComponent());
+                            unit.add(new ReadyToMoveComponent());
+                        } else {
+                            unit.add(new AIControlledComponent());
+                        }
                         unit.add(mapPos);
                         unit.add(texture);
                         unit.add(transformComponent);
                         unit.add(stats);
+
                         engine.addEntity(unit);
 
                         this.units[r][c] = unit;
@@ -132,17 +148,29 @@ public class TacticsMap {
         return this.units[row][col];
     }
 
+    public boolean canMoveTo(Entity unit, int row, int col) {
+        if (row < 0 || row >= this.height || col < 0 || col >= this.width) {
+            return false;
+        }
+        return computeValidMoves(unit).contains(new MapPosition(this, row, col));
+    }
+
     public Set<MapPosition> computeValidMoves(Entity e) {
-        if (!mapUnits.matches(e)) {
+        if (!mapUnitsFamily.matches(e)) {
             return null;
         }
         Map<MapPosition, Integer> validMoves = new HashMap<>();
-        validMovesHelper(e, validMoves, Mappers.mapPosM.get(e).mapPos.row, Mappers.mapPosM.get(e).mapPos.col, Mappers.statsM.get(e).moveDist);
-        return validMoves.keySet();
+        validMovesHelper(e, validMoves, mapPosM.get(e).row, mapPosM.get(e).col, statsM.get(e).moveDist);
+        Set<MapPosition> finalMoves = validMoves.keySet();
+        finalMoves.removeIf(pos->units[pos.getRow()][pos.getCol()] != null);
+        return finalMoves;
     }
 
     private void validMovesHelper(Entity e, Map<MapPosition, Integer> bestSoFar, int r, int c, int countdown) {
-        if (countdown < 0 || r < 0 || r >= this.height || c < 0 || c >= this.width || (this.units[r][c] != null && this.units[r][c] != e) || !this.tiles[r][c].isTraversable()) {
+        if (countdown < 0 || r < 0 || r >= this.height || c < 0 || c >= this.width || !this.tiles[r][c].isTraversable()) {
+            return;
+        }
+        if (this.units[r][c] != null && statsM.get(this.units[r][c]).team != statsM.get(e).team) {
             return;
         }
         MapPosition newPos = new MapPosition(this, r, c);
@@ -166,7 +194,12 @@ public class TacticsMap {
         if (!computeValidMoves(selection).contains(new MapPosition(this, row, col))) {
             return;
         }
-        MapPosition selectionPos = Mappers.mapPosM.get(selection).mapPos;
+        if (readyFamily.matches(selection)) {
+            selection.remove(ReadyToMoveComponent.class);
+        } else {
+            return;
+        }
+        MapPositionComponent selectionPos = mapPosM.get(selection);
         if (selection == this.units[selectionPos.row][selectionPos.col]) {
             this.units[selectionPos.row][selectionPos.col] = null;
         }

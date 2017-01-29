@@ -26,6 +26,8 @@ public class BattleScreen extends ScreenAdapter {
     private int DISP_WIDTH = 400;
     private int DISP_HEIGHT = 240;
 
+    private float totalTime = 1100;
+
     private Main game;
     private ScreenAdapter tacticsScreen;
     private OrthographicCamera camera;
@@ -35,7 +37,6 @@ public class BattleScreen extends ScreenAdapter {
     private BattleUnit rogue;
 
     private int bounceDelay = 120;
-    private int cursorDelay = 10;
 
     private float t = 0f;
 
@@ -87,40 +88,30 @@ public class BattleScreen extends ScreenAdapter {
 
     private void update(float delta) {
         // check if battle should end!!
-        // check if both have no energy or either has no hp left
+        // check if both have no energy or either has no hp left or time is over
         // (later should check if no more energy can be spent)
-        if ((rogue.currNRG == 0 && bulba.currNRG == 0) || rogue.currHP <= 0 || bulba.currHP <= 0)
+        if ((rogue.currNRG == 0 && bulba.currNRG == 0) || rogue.currHP <= 0 || bulba.currHP <= 0 || totalTime < 0)
             game.setScreen(tacticsScreen);
 
         camera.update();
 
         // move/attack with rogue! <3
-        if (cursorDelay == 0) {
-            int oldRow = rogue.row;
-            int oldCol = rogue.col;
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) rogue.col--;
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) rogue.col++;
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) rogue.row++;
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) rogue.row--;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) rogue.col--;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) rogue.col++;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) rogue.row++;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) rogue.row--;
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.Z) && rogue.currNRG != 0) {
-                rogue.startAttackAnimation();
-                rogue.currNRG--;
-                for (int i = 0; i < 3; i++)
-                    attacks.add(new BattleAttack(rogue.row, rogue.col + 1 + i, 10, rogue, Assets.Textures.LAZER,
-                    (att) -> {
-                        if (att.row == bulba.row && att.col == bulba.col) {
-                            bulba.currHP -= 1;
-                        }
-                    }));
-            }
-
-            if (rogue.row != oldRow || rogue.col != oldCol) {
-                cursorDelay = 8;
-            }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Z) && rogue.currNRG != 0) {
+            rogue.startAttackAnimation();
+            rogue.currNRG--;
+            for (int i = 0; i < 3; i++)
+                attacks.add(new BattleAttack(rogue.row, rogue.col + 1 + i, 10, rogue, Assets.Textures.LAZER,
+                (att) -> {
+                    if (att.row == bulba.row && att.col == bulba.col) {
+                        bulba.currHP -= 1;
+                    }
+                }));
         }
-        if (cursorDelay > 0)
-            cursorDelay--;
 
         updateAI(delta);
         bulba.updateSprite();
@@ -171,6 +162,16 @@ public class BattleScreen extends ScreenAdapter {
         sr.rect(DISP_WIDTH/2 - 40*3, 20, 40*3, 40*3+9);
         sr.setColor(1.0f, 0.0f, 0.0f, 0.1f);
         sr.rect(DISP_WIDTH/2, 20, 40*3, 40*3+9);
+
+        // draw attack warning
+        for (BattleAttack attack : attacks) {
+            if (attack.attacker == rogue)
+                sr.setColor(0.0f, 0.0f, 1.0f, 0.5f);
+            else if (attack.attacker == bulba)
+                sr.setColor(1.0f, 0.0f, 0.0f, 0.5f);
+            sr.rect(DISP_WIDTH/2 + (attack.col - 3)*40, attack.row*40 + 29, 40, 40);
+        }
+
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
@@ -207,6 +208,13 @@ public class BattleScreen extends ScreenAdapter {
         game.batch.end();
     }
 
+    private void countdown() {
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        totalTime -= deltaTime;
+        int seconds = ((int)totalTime) % 60;
+        font.draw(game.batch, ""+seconds, DISP_WIDTH/2 - font.getSpaceWidth()*(seconds/10), DISP_HEIGHT-10);
+    }
+
     @Override
     public void render(float delta) {
         update(delta);
@@ -220,6 +228,8 @@ public class BattleScreen extends ScreenAdapter {
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+
+        countdown();
 
         // bounce bulba! <3
         float bulbaHeight = bulba.row*40 + 29;
@@ -235,10 +245,9 @@ public class BattleScreen extends ScreenAdapter {
         game.batch.draw(rogue.getSprite(), DISP_WIDTH/2 - 40*3 + rogue.col*40, rogueHeight);
 
         for (BattleAttack attack : attacks) {
-            game.batch.draw(attack.sprite, DISP_WIDTH/2 + (attack.col - 3)*40, attack.row*40 + 29);
+            if (attack.warning <= 0)
+                game.batch.draw(attack.sprite, DISP_WIDTH/2 + (attack.col - 3)*40, attack.row*40 + 29);
         }
-
-//        font.draw(game.batch, "Hello World!", 100, 100);
 
         game.batch.end();
 
@@ -249,7 +258,7 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     public enum AiState {OFFENSE, DEFENSE};
-    public AiState curAiState = AiState.DEFENSE;
+    public AiState curAiState = AiState.OFFENSE;
     public int aiDelay = 30;
     public Random rng = new Random();
 
@@ -261,30 +270,36 @@ public class BattleScreen extends ScreenAdapter {
                     if (rng.nextDouble() < .05) {
                         curAiState = AiState.DEFENSE;
                     }
-                    if (rogue.col != 2 && rng.nextDouble() < .2) {
+                    if (rogue.currNRG > bulba.currNRG && rng.nextDouble() < .4) {
                         curAiState = AiState.DEFENSE;
                     }
-                    if (bulba.row != rogue.row) {
-                        bulba.row += (int)((1.0*rogue.row - bulba.row) / 2.0);
-                    } else {
+                    if (bulba.currNRG <= 0) {
+                        curAiState = AiState.DEFENSE;
+                    }
+//                    if (bulba.row != rogue.row) {
+//                        bulba.row += (int)((1.0*rogue.row - bulba.row) / 2.0);
+//                    } else {
                         if (bulba.col == 3 && rng.nextDouble() < .7 && bulba.currNRG != 0) {
                             bulba.startAttackAnimation();
                             bulba.currNRG--;
-                            attacks.add(new BattleAttack(bulba.row, bulba.col - 1, 20, bulba, Assets.Textures.SCRATCH, (e) -> {
-                                if (e.row == rogue.row && e.col == rogue.col) {
-                                    rogue.currHP -= 2;
-                                }
-                                e.effect = (ent)->{};
-                            }));
+                            for (int i = 0; i < 3; i++) {
+                                attacks.add(new BattleAttack(i, bulba.col - rng.nextInt(3)-1, 20, bulba, Assets.Textures.SCRATCH, (e) -> {
+                                    if (e.row == rogue.row && e.col == rogue.col) {
+                                        rogue.currHP -= 2;
+                                    }
+                                    e.effect = (ent)->{};
+                                }));
+                            }
+
                         }
-                    }
+//                    }
                     bulba.col--;
                     break;
                 case DEFENSE:
                     if (rng.nextDouble() < .05) {
                         curAiState = AiState.OFFENSE;
                     }
-                    if (rogue.col == 2 && rng.nextDouble() < .2) {
+                    if (rogue.currNRG < bulba.currNRG && rng.nextDouble() < .5) {
                         curAiState = AiState.OFFENSE;
                     }
                     bulba.col++;

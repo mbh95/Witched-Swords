@@ -31,7 +31,7 @@ public class BattleScreen extends ScreenAdapter {
     private Main game;
     private ScreenAdapter tacticsScreen;
     private OrthographicCamera camera;
-    private BitmapFont font = new BitmapFont(Gdx.files.internal("impact.fnt"));
+    private BitmapFont font = new BitmapFont(Gdx.files.internal("common/fonts/impact.fnt"));
 
     private BattleUnit bulba;
     private BattleUnit rogue;

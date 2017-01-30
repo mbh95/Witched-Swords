@@ -1,0 +1,9 @@
+{
+"id": "bulba",
+"name": "Baddie",
+"maxHP": 100,
+"curHP": 100,
+"moveDist": 5,
+"action1": 1,
+"action2": -1
+}

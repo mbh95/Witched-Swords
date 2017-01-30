@@ -4,13 +4,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.comp460.Assets;
-import com.comp460.GameDriver;
-import com.comp460.common.GameScreen;
 import com.comp460.common.components.CameraTargetComponent;
 import com.comp460.common.components.TextureComponent;
 import com.comp460.common.components.TransformComponent;
@@ -29,7 +28,7 @@ import com.comp460.tactics.systems.rendering.SelectionRenderingSystem;
 /**
  * Created by matthewhammond on 1/15/17.
  */
-public class TacticsScreen extends GameScreen {
+public class TacticsScreen extends ScreenAdapter {
 
     private static final Family readyPlayerUnitsFamily = Family.all(PlayerControlledComponent.class, ReadyToMoveComponent.class).get();
     private static final Family waitingPlayerUnitsFamily = Family.all(PlayerControlledComponent.class).exclude(ReadyToMoveComponent.class).get();
@@ -43,8 +42,7 @@ public class TacticsScreen extends GameScreen {
 
     private TacticsMap map;
 
-    public TacticsScreen(int width, int height, TiledMap tiledMap, GameDriver driver) {
-        super(driver);
+    public TacticsScreen(int width, int height, TiledMap tiledMap) {
 
         this.batch = new SpriteBatch();
         this.engine = new PooledEngine();

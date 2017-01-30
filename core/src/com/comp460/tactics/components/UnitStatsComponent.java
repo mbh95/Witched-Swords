@@ -8,6 +8,10 @@ import com.badlogic.ashley.core.Component;
 public class UnitStatsComponent implements Component {
     public int team;
     public int moveDist;
+    public int maxHp;
+    public int curHp;
+    public int moveA;
+    public int moveB;
 
     public UnitStatsComponent populate(int team, int moveDist) {
         this.team = team;

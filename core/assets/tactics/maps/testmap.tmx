@@ -1456,7 +1456,7 @@
   </tile>
  </tileset>
  <tileset firstgid="289" name="bw" tilewidth="16" tileheight="16" tilecount="2" columns="1">
-  <image source="bw.png" width="16" height="32"/>
+  <image source="../sprites/units/bw.png" width="16" height="32"/>
   <tile id="0">
    <properties>
     <property name="team" type="int" value="1"/>
@@ -1469,19 +1469,19 @@
   </tile>
  </tileset>
  <tileset firstgid="291" name="bulba_micro" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="bulba_micro.png" width="16" height="16"/>
+  <image source="../sprites/units/bulba_idle_1.png" width="16" height="16"/>
   <tile id="0">
    <properties>
-    <property name="sprite" value="bulba_micro"/>
+    <property name="id" value="bulba"/>
     <property name="team" type="int" value="1"/>
    </properties>
   </tile>
  </tileset>
  <tileset firstgid="292" name="ruby" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="ruby.png" width="16" height="16"/>
+  <image source="../sprites/units/ruby_idle_1.png" width="16" height="16"/>
   <tile id="0">
    <properties>
-    <property name="sprite" value="rogue_micro"/>
+    <property name="id" value="ruby"/>
     <property name="team" type="int" value="0"/>
    </properties>
   </tile>

@@ -1,4 +1,4 @@
-package com.comp460.experimental.battle;
+package com.comp460.battle;
 
 /**
  * Created by matthewhammond on 1/30/17.

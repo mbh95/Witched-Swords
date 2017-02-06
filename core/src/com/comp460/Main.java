@@ -4,11 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.comp460.experimental.AssetManager;
-import com.comp460.experimental.GameUnit;
-//import com.comp460.experimental.battle.BattleScreen;
-import com.comp460.screens.BattleScreen;
-import com.comp460.tactics.TacticsScreen;
+
+import com.comp460.common.GameUnit;
+import com.comp460.battle.BattleScreen;
+import com.comp460.launcher.MainMenu;
+//import com.comp460.archive.battle.BattleScreen;
+
 
 public class Main extends Game {
 	public SpriteBatch batch;
@@ -18,13 +19,16 @@ public class Main extends Game {
 		batch = new SpriteBatch();
 
 		Settings.load();
-		Assets.load();
+//		Assets.load();
 		AssetManager.load();
 
-		TacticsScreen ts = new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST);
-		this.setScreen(new BattleScreen(this, ts));
+//		TacticsScreen ts = new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST);
+//		this.setScreen(new BattleScreen(this, ts));
+
 //		this.setScreen(new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST));
-//		this.setScreen(new BattleScreen(GameUnit.loadFromJSON("common/units/ruby.json"), GameUnit.loadFromJSON("common/units/bulba.json")));
+//		this.setScreen(new BattleScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, GameUnit.loadFromJSON("common/units/shieldman.json"), GameUnit.loadFromJSON("common/units/bulba.json")));
+
+		this.setScreen(new MainMenu(this));
 	}
 
 	@Override

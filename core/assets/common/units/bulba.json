@@ -4,6 +4,6 @@
 "maxHP": 100,
 "curHP": 100,
 "moveDist": 5,
-"action1": 1,
+"action1": 3,
 "action2": -1
 }

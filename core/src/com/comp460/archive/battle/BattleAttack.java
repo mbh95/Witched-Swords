@@ -1,4 +1,4 @@
-package com.comp460.battle;
+package com.comp460.archive.battle;
 
 import com.badlogic.gdx.graphics.Texture;
 

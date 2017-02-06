@@ -1,4 +1,4 @@
-package com.comp460.experimental.battle;
+package com.comp460.battle;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,8 +13,8 @@ public interface IRenderable {
     float getScreenY();
 
     default void render(SpriteBatch batch) {
-        if (batch.isDrawing()) {
-            batch.draw(getSprite(), getScreenX(), getScreenY());
-        }
+        batch.begin();
+        batch.draw(getSprite(), getScreenX(), getScreenY());
+        batch.end();
     }
 }

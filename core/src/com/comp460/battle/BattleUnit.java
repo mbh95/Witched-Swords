@@ -1,78 +1,254 @@
 package com.comp460.battle;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.comp460.Assets;
+import com.badlogic.gdx.math.Vector3;
+import com.comp460.AssetManager;
+import com.comp460.common.GameUnit;
+
+import java.util.*;
 
 /**
- * Created by Belinda on 1/16/17.
+ * Created by matthewhammond on 1/29/17.
  */
-public class BattleUnit {
-    public int col, row;
-    private Texture idleSprites[], idleChangeSprites[], attackSprites[], hurtSprites[], fallenSprites[];
-    private int idleIndex, idleChangeIndex, idleCycles, attackIndex, hurtIndex, fallenIndex;
-    private Texture defaultSprite = Assets.Textures.LAZER;
-    private Texture[] currentAnimation;
-    private int currentAnimationIndex;
+public class BattleUnit implements IRenderable {
 
-    public int maxHP, currHP, currNRG;
-    public boolean player;
-    public int moveDelay, castDelay, spriteDelay;
+    private BattleGrid grid;
+    private GameUnit base;
 
-    public BattleUnit(Texture idleSprites[],
-                      Texture idleChangeSprites[],
-                      Texture attackSprites[],
-                      Texture hurtSprites[],
-                      Texture fallenSprites[]) {
+    private int gridRow, gridCol;
+    private Vector3 transform;
 
-        this.idleSprites = idleSprites;
-        this.idleChangeSprites = idleChangeSprites;
-        this.attackSprites = attackSprites;
-        this.hurtSprites = hurtSprites;
-        this.fallenSprites = fallenSprites;
+    private int energy = 50;
 
-        this.idleIndex = 0;
-        this.idleChangeIndex = 0;
-        this.idleCycles = 0;
-        player = false;
-        moveDelay = 15;
-        castDelay = 0;
-        spriteDelay = 10;
-        currNRG = 50;
+    private Animation<TextureRegion> animIdle;
+    private Animation<TextureRegion> animAttack;
+    private Animation<TextureRegion> animHurt;
+    private Animation<TextureRegion> animFallen;
+
+    private Animation<TextureRegion> currentAnim;
+    private float animTimer;
+
+    private boolean invlunerable;
+
+    private BattleAction action1;
+    private BattleAction action2;
+
+    private List<FloatingText> floatingTexts = new ArrayList<>();
+
+
+    public BattleUnit( BattleGrid grid, GameUnit base, int row, int col) {
+        this.grid = grid;
+        this.base = base;
+
+        animIdle = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.IDLE);
+        animIdle.setPlayMode(Animation.PlayMode.LOOP);
+
+        animAttack = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.ATTACK);
+        animAttack.setPlayMode(Animation.PlayMode.NORMAL);
+
+        animHurt = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.HURT);
+        animHurt.setPlayMode(Animation.PlayMode.NORMAL);
+
+        animFallen = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.FALLEN);
+        animFallen.setPlayMode(Animation.PlayMode.NORMAL);
+
+        this.currentAnim = animIdle;
+        this.animTimer = 0.0f;
+        this.gridRow = row;
+        this.gridCol = col;
+        this.transform = new Vector3(this.getTileX(), this.getTileY(), 0.0f);
+        this.invlunerable = false;
+
+        this.action1 = ActionFactory.buildAction(this.base.getAction1());
+        this.action2 = ActionFactory.buildAction(this.base.getAction2());
+
+        this.grid.addUnit(this);
     }
 
-    public void startIdleAnimation() {
-        this.currentAnimation = idleSprites;
-        this.currentAnimationIndex = 0;
-    }
-    private void startIdleChangeAnimation() {
-        this.currentAnimation = idleChangeSprites;
-        this.currentAnimationIndex = 0;
-    }
-    public void startAttackAnimation() {
-        this.currentAnimation = attackSprites;
-        this.currentAnimationIndex = 0;
-    }
+    public void update(float delta) {
+        animTimer += delta;
+        if (this.currentAnim.isAnimationFinished(animTimer) && currentAnim != animFallen) {
+            setAnimIdle();
+        }
+        this.transform.slerp(new Vector3(this.getTileX(), this.getTileY(), 0.0f), 0.4f);
 
-    public void updateSprite() {
-        spriteDelay--;
-        if (spriteDelay == 0) {
-            spriteDelay = 10;
-
-            // switch to idle change sprites if enough cycles pass
-            // switch to idle sprites after one cycle of idle change sprites
-            if (currentAnimation == idleSprites) {
-                if (currentAnimationIndex == currentAnimation.length-1) {idleCycles++;} // done with 1 cycle
-                if (idleCycles == 4) {startIdleChangeAnimation(); idleCycles = 0;}
-            } else if (currentAnimation == idleChangeSprites) {
-                if (currentAnimationIndex == currentAnimation.length-1) {idleCycles++;} // done with 1 cycle
-                if (idleCycles == 1) {startIdleAnimation(); idleCycles = 0;}
+        Iterator<FloatingText> iter = this.floatingTexts.iterator();
+        while (iter.hasNext()) {
+            FloatingText ft = iter.next();
+            if (!ft.update(delta)) {
+                iter.remove();
             }
-            currentAnimationIndex = (currentAnimationIndex+1) % currentAnimation.length;
         }
     }
 
-    public Texture getSprite() {
-        return currentAnimation[currentAnimationIndex];
+    public void setAnimIdle() {
+        this.currentAnim = animIdle;
+        this.animTimer = 0.0f;
+        this.invlunerable = false;
+
+    }
+
+    public void setAnimAttack() {
+        this.currentAnim = animAttack;
+        this.animTimer = 0.0f;
+        this.invlunerable = false;
+
+    }
+
+    public void setAnimHurt() {
+        this.currentAnim = animHurt;
+        this.animTimer = 0.0f;
+        this.invlunerable = true;
+    }
+
+    public void setAnimFallen() {
+        this.currentAnim = animFallen;
+        this.animTimer = 0.0f;
+        this.invlunerable = true;
+    }
+
+    @Override
+    public TextureRegion getSprite() {
+        return this.currentAnim.getKeyFrame(animTimer);
+    }
+
+    @Override
+    public float getScreenX() {
+        return this.transform.x;
+    }
+
+    @Override
+    public float getScreenY() {
+        return this.transform.y;
+    }
+
+    public BattleGrid getGrid() {
+        return this.grid;
+    }
+
+    public int getGridRow() {
+        return this.gridRow;
+    }
+
+    public int getGridCol() {
+        return this.gridCol;
+    }
+
+    public void setGridRow(int newRow) {
+        if (this.grid.isOnLHS(gridRow, gridCol) && !this.grid.isOnLHS(newRow, gridCol)) {
+            return;
+        }
+        if (this.grid.isOnRHS(gridRow, gridCol) && !this.grid.isOnRHS(newRow, gridCol)) {
+            return;
+        }
+        this.gridRow = newRow;
+    }
+
+    public void setGridCol(int newCol) {
+        if (this.grid.isOnLHS(gridRow, gridCol) && !this.grid.isOnLHS(gridRow, newCol)) {
+            return;
+        }
+        if (this.grid.isOnRHS(gridRow, gridCol) && !this.grid.isOnRHS(gridRow, newCol)) {
+            return;
+        }
+        this.gridCol = newCol;
+    }
+
+    public void move(int dr, int dc) {
+        setGridRow(gridRow+dr);
+        setGridCol(gridCol+dc);
+    }
+
+    public void action1() {
+        action1.perform(this);
+    }
+
+    public void action2() {
+        action2.perform(this);
+    }
+
+    private float getTileX() {
+        return grid.getTile(gridRow, gridCol).getScreenX();
+    }
+
+    private float getTileY() {
+        return grid.getTile(gridRow, gridCol).getScreenY();// + grid.getTile(gridRow, gridCol).getSprite().getRegionHeight()/3;
+    }
+
+    public void hurt(int amt) {
+        this.setAnimHurt();
+        amt = Math.min(amt, base.getCurHP());
+        this.base.setCurHP(this.base.getCurHP() - amt);
+        this.addFloatingText("-"+amt);
+        if (this.getCurHP() == 0) {
+            setAnimFallen();
+        }
+    }
+
+    public int getCurHP() {
+        return this.base.getCurHP();
+    }
+
+    public int getMaxHP() {
+        return this.base.getMaxHP();
+    }
+
+    public int getEnergy() {
+        return this.energy;
+    }
+
+    public void setEnergy(int newEnergy) {
+        this.energy = newEnergy;
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        batch.begin();
+        batch.draw(this.getSprite(), this.getScreenX(), this.getScreenY());
+        floatingTexts.forEach(ft->ft.render(batch));
+        batch.end();
+    }
+
+    public void addFloatingText(String text) {
+        FloatingText f = new FloatingText(text, 1.0f, AssetManager.Fonts.PIXELATED_SMALL, this.getScreenX(), this.getScreenY() + this.getSprite().getRegionHeight());
+        this.floatingTexts.add(f);
+    }
+
+    private class FloatingText {
+        private String text;
+        private float duration;
+        private BitmapFont font;
+        private float x;
+        private float y;
+        private float dy;
+
+        public FloatingText(String text, float duration, BitmapFont font, float x, float y) {
+            this.text = text;
+            this.duration = duration;
+            this.font = font;
+            this.x = x;
+            this.y = y;
+            this.dy = 32f;
+
+        }
+
+        public boolean update(float delta) {
+            this.y += delta * dy;
+            dy /= 1.2f;
+            duration -= delta;
+            if (duration <= 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        public void render(SpriteBatch batch) {
+            font.draw(batch, text, x, y);
+        }
+
     }
 }

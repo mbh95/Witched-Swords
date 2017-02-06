@@ -77,7 +77,7 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
                     }
                 }
             } else {
-                if (readyPlayerControlledFamily.matches(cursor.selection)) {
+                if (cursor.selection != null && readyPlayerControlledFamily.matches(cursor.selection)) {
                     MapPositionComponent selectionPos = mapPosM.get(cursor.selection);
                     if (parentScreen.getMap().computeValidMoves(cursor.selection).contains(new MapPosition(parentScreen.getMap(), cursorPos.row, cursorPos.col))) {
                         parentScreen.getMap().move(cursor.selection, cursorPos.row, cursorPos.col);

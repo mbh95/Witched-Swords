@@ -1,4 +1,4 @@
-package com.comp460.experimental;
+package com.comp460.common;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;

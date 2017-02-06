@@ -1,12 +1,13 @@
-package com.comp460.experimental.battle;
+package com.comp460.battle;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.comp460.experimental.AssetManager;
-import com.sun.scenario.effect.Effect;
+import com.comp460.AssetManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * Created by matthewhammond on 1/29/17.
@@ -18,10 +19,9 @@ public class BattleGrid {
 
     private BattleTile[][] grid;
 
-    private List<BattleUnit> units;
-    private List<BattleEffect> effects;
-    private List<BattleEffect> deadEffects;
-    private List<BattleEffect> newEffects;
+    private List<BattleUnit> units = new ArrayList<>();
+    private Queue<BattleEffect> effects = new PriorityQueue<>();
+    private Queue<BattleEffect> nextEffects = new PriorityQueue<>();
 
     public BattleGrid(int screenWidth, int screenHeight, int numRows, int halfNumCols) {
         this.numRows = numRows;
@@ -32,15 +32,14 @@ public class BattleGrid {
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < numCols; c++) {
                 float x = (screenWidth/2) + (c - halfNumCols) * tile.getRegionWidth();
-                float y = tile.getRegionHeight() * r;
-                grid[r][c] = new BattleTile(x, y, c < numCols/2?AssetManager.Textures.BATTLE_TILE_BLUE:AssetManager.Textures.BATTLE_TILE_RED);
+                float y = tile.getRegionHeight() * (r + 1);
+                if (c < numCols / 2) {
+                    grid[r][c] = new BattleTile(x, y, AssetManager.Textures.BATTLE_TILE_BLUE, AssetManager.Textures.BATTLE_TILE_BLUE_SIDE);
+                } else {
+                    grid[r][c] = new BattleTile(x, y, AssetManager.Textures.BATTLE_TILE_RED, AssetManager.Textures.BATTLE_TILE_RED_SIDE);
+                }
             }
         }
-
-        units = new ArrayList<>();
-        effects = new ArrayList<>();
-        deadEffects = new ArrayList<>();
-        newEffects = new ArrayList<>();
     }
 
     public BattleTile getTile(int row, int col) {
@@ -52,7 +51,7 @@ public class BattleGrid {
 
     public void render(SpriteBatch batch) {
 
-       for (int r = 0; r < numRows; r++) {
+       for (int r = numRows - 1; r >= 0; r--) {
            for (int c = 0; c < numCols; c++) {
                grid[r][c].render(batch);
            }
@@ -79,28 +78,36 @@ public class BattleGrid {
         return isOnGrid(row, col) && col >= numCols / 2;
     }
 
+    public Queue<BattleEffect> getEffects() {
+        return this.effects;
+    }
+
     public void update(float delta) {
         for (BattleUnit unit : units) {
             unit.update(delta);
         }
 
-        effects.addAll(newEffects);
-        newEffects.clear();
-        for (BattleEffect effect : effects) {
-            effect.update();
+        while (!effects.isEmpty()) {
+            BattleEffect e;
+            if ((e = effects.poll()).update()) {
+                nextEffects.add(e);
+            }
         }
-        effects.removeAll(deadEffects);
-        deadEffects.clear();
+
+        Queue<BattleEffect> temp = effects;
+        effects = nextEffects;
+        nextEffects = temp;
     }
 
     public void addEffect(BattleEffect effect) {
         if (effect != null && isOnGrid(effect.row, effect.col)) {
-            this.newEffects.add(effect);
+            this.nextEffects.add(effect);
         }
     }
 
     public void removeEffect(BattleEffect effect) {
-        this.deadEffects.add(effect);
+        this.nextEffects.remove(effect);
+        this.effects.remove(effect);
     }
 
     public void addUnit(BattleUnit battleUnit) {

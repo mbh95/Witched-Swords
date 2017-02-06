@@ -1,4 +1,4 @@
-package com.comp460.screens;
+package com.comp460.archive.battle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,11 +8,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.Assets;
-import com.comp460.battle.BattleAttack;
-import com.comp460.battle.BattleUnit;
+import com.comp460.archive.battle.BattleAttack;
+import com.comp460.archive.battle.BattleUnit;
 import com.comp460.Main;
+import com.sun.javafx.binding.StringFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +33,14 @@ public class BattleScreen extends ScreenAdapter {
     private Main game;
     private ScreenAdapter tacticsScreen;
     private OrthographicCamera camera;
-    private BitmapFont font = new BitmapFont(Gdx.files.internal("common/fonts/impact.fnt"));
+    private BitmapFont font = new BitmapFont(Gdx.files.internal("common/fonts/boss.fnt"));
 
     private BattleUnit bulba;
     private BattleUnit rogue;
 
     private int bounceDelay = 120;
+    private boolean freeze = false;
+    private int freezeDelay = 180;
 
     private float t = 0f;
 
@@ -58,9 +62,13 @@ public class BattleScreen extends ScreenAdapter {
                 Assets.Textures.BULBA_IDLE3_BATTLE,
                 Assets.Textures.BULBA_IDLE4_BATTLE},
             new Texture[] {
-                Assets.Textures.BULBA_ATTACK1_BATTLE
-            }
-            ,null,null);
+                Assets.Textures.BULBA_ATTACK0_BATTLE
+            }, new Texture[] {
+                Assets.Textures.BULBA_HURT0_BATTLE
+        }, new Texture[] {
+                Assets.Textures.BULBA_FALLEN0_BATTLE,
+                Assets.Textures.BULBA_FALLEN1_BATTLE
+        });
         bulba.col = 5; bulba.row = 0;
         bulba.maxHP = 100;
         bulba.currHP = 100;
@@ -90,30 +98,46 @@ public class BattleScreen extends ScreenAdapter {
         // check if battle should end!!
         // check if both have no energy or either has no hp left or time is over
         // (later should check if no more energy can be spent)
-        if ((rogue.currNRG == 0 && bulba.currNRG == 0) || rogue.currHP <= 0 || bulba.currHP <= 0 || totalTime < 0)
-            game.setScreen(tacticsScreen);
+
+        if (freeze) {
+            if (freezeDelay < 0 && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))
+                game.setScreen(tacticsScreen);
+
+            if (freezeDelay >= 0)
+                freezeDelay--;
+        }
+
+        if ((rogue.currNRG == 0 && bulba.currNRG == 0) || rogue.currHP <= 0 || bulba.currHP <= 0 || totalTime < 0) {
+            freeze = true;
+        }
 
         camera.update();
 
-        // move/attack with rogue! <3
-        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) rogue.col--;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) rogue.col++;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) rogue.row++;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) rogue.row--;
+        if (!freeze) {
+            // move/attack with rogue! <3
+            if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) rogue.col--;
+            if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) rogue.col++;
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) rogue.row++;
+            if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) rogue.row--;
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Z) && rogue.currNRG != 0) {
-            rogue.startAttackAnimation();
-            rogue.currNRG--;
-            for (int i = 0; i < 3; i++)
-                attacks.add(new BattleAttack(rogue.row, rogue.col + 1 + i, 10, rogue, Assets.Textures.LAZER,
-                (att) -> {
-                    if (att.row == bulba.row && att.col == bulba.col) {
-                        bulba.currHP -= 1;
-                    }
-                }));
+            if (Gdx.input.isKeyJustPressed(Input.Keys.Z) && rogue.currNRG != 0) {
+                rogue.startAttackAnimation();
+                rogue.currNRG--;
+                for (int i = 0; i < 3; i++)
+                    attacks.add(new BattleAttack(rogue.row, rogue.col + 1 + i, 10, rogue, Assets.Textures.LAZER,
+                            (att) -> {
+                                if (att.row == bulba.row && att.col == bulba.col) {
+                                    bulba.currHP -= 1;
+                                    if (bulba.currHP <= 0)
+                                        bulba.startFallenAnimation();
+                                    else
+                                        bulba.startHurtAnimation();
+                                }
+                            }));
+            }
+            updateAI(delta);
         }
 
-        updateAI(delta);
         bulba.updateSprite();
         rogue.updateSprite();
 
@@ -144,8 +168,8 @@ public class BattleScreen extends ScreenAdapter {
         // draw battle tiles
         for (int i = 2; i >= 0; i--) {
             for (int j = 2; j >= 0; j--) {
-                game.batch.draw(Assets.Textures.BATTLE_TILE, DISP_WIDTH/2 - (i+1)*40, j*40 + 20);
-                game.batch.draw(Assets.Textures.BATTLE_TILE, DISP_WIDTH/2 + i*40, j*40 + 20);
+                game.batch.draw(Assets.Textures.BATTLE_TILE_BLUE, DISP_WIDTH/2 - (i+1)*40, j*40 + 20);
+                game.batch.draw(Assets.Textures.BATTLE_TILE_RED, DISP_WIDTH/2 + i*40, j*40 + 20);
             }
         }
     }
@@ -158,10 +182,10 @@ public class BattleScreen extends ScreenAdapter {
         sr.setProjectionMatrix(camera.combined);
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        sr.setColor(0.0f, 0.0f, 1.0f, 0.1f);
-        sr.rect(DISP_WIDTH/2 - 40*3, 20, 40*3, 40*3+9);
-        sr.setColor(1.0f, 0.0f, 0.0f, 0.1f);
-        sr.rect(DISP_WIDTH/2, 20, 40*3, 40*3+9);
+//        sr.setColor(0.0f, 0.0f, 1.0f, 0.1f);
+//        sr.rect(DISP_WIDTH/2 - 40*3, 20, 40*3, 40*3+9);
+//        sr.setColor(1.0f, 0.0f, 0.0f, 0.1f);
+//        sr.rect(DISP_WIDTH/2, 20, 40*3, 40*3+9);
 
         // draw attack warning
         for (BattleAttack attack : attacks) {
@@ -179,9 +203,11 @@ public class BattleScreen extends ScreenAdapter {
     private void drawHP(BattleUnit unit) {
         int x, y;
         if (unit.player) {
-            x = 4; y = DISP_HEIGHT-25;
+            x = DISP_WIDTH/2 - 64 - 10;
+            y = 3;
         } else {
-            x = DISP_WIDTH-64-4; y = DISP_HEIGHT-25;
+            x = DISP_WIDTH/2 + 10;
+            y = 3;
         }
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
@@ -209,10 +235,13 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void countdown() {
-        float deltaTime = Gdx.graphics.getDeltaTime();
-        totalTime -= deltaTime;
-        int seconds = ((int)totalTime) % 60;
-        font.draw(game.batch, ""+seconds, DISP_WIDTH/2 - font.getSpaceWidth()*(seconds/10), DISP_HEIGHT-10);
+        if (!freeze) {
+            float deltaTime = Gdx.graphics.getDeltaTime();
+            totalTime -= deltaTime;
+        }
+        int seconds = ((int) totalTime) % 60;
+        String timerString = StringFormatter.format("%02d", seconds).getValue();
+        font.draw(game.batch, timerString, DISP_WIDTH/2 - font.getSpaceWidth()*2, DISP_HEIGHT-55);
     }
 
     @Override
@@ -254,7 +283,49 @@ public class BattleScreen extends ScreenAdapter {
         drawHP(bulba);
         drawHP(rogue);
 
+        if (freeze) {
+            drawResults();
+        }
         t+=0.05f;
+    }
+
+    private void drawResults() {
+        /*
+        if ((rogue.currNRG == 0 && bulba.currNRG == 0) || rogue.currHP <= 0 || bulba.currHP <= 0 || totalTime < 0) {
+            freeze = true;
+        }
+         */
+
+        game.batch.begin();
+        if (rogue.currHP <= 0 && bulba.currHP <= 0) {
+            // DRAW
+            GlyphLayout layout = new GlyphLayout(font, "YOU BOTH DIED");
+            font.draw(game.batch, "YOU BOTH DIED", DISP_WIDTH/2 - layout.width/2, 100);
+        } else if (rogue.currHP <= 0) {
+            // YOU LOSE
+            GlyphLayout layout = new GlyphLayout(font, "YOU DIED");
+            font.draw(game.batch, "YOU DIED", DISP_WIDTH/2 - layout.width/2, 100);
+
+        } else if (bulba.currHP <= 0) {
+            // YOU WIN
+            GlyphLayout layout = new GlyphLayout(font, "ENEMY DIED");
+            font.draw(game.batch, "ENEMY DIED", DISP_WIDTH/2 - layout.width/2, 100);
+
+        } else if (rogue.currNRG == 0 && bulba.currNRG == 0) {
+            // ENERGY DRAW
+            GlyphLayout layout = new GlyphLayout(font, "OUT OF ENERGY");
+            font.draw(game.batch, "OUT OF ENERGY", DISP_WIDTH/2 - layout.width/2, 100);
+
+        } else if(totalTime < 0) {
+            // TIME DRAW
+            GlyphLayout layout = new GlyphLayout(font, "OUT OF TIME");
+            font.draw(game.batch, "OUT OF TIME", DISP_WIDTH/2 - layout.width/2, 100);
+        }
+        if (freezeDelay < 0) {
+            GlyphLayout layout = new GlyphLayout(font, "any key to continue");
+            font.draw(game.batch, "any key to continue", DISP_WIDTH/2 - layout.width/2, 50);
+        }
+        game.batch.end();
     }
 
     public enum AiState {OFFENSE, DEFENSE};
@@ -265,17 +336,31 @@ public class BattleScreen extends ScreenAdapter {
     public void updateAI(float delta) {
         if (aiDelay == 0) {
             aiDelay = 30;
+            if (rng.nextDouble() < .1) {
+                if (curAiState == AiState.DEFENSE) {
+                    curAiState = AiState.OFFENSE;
+                } else {
+                    curAiState = AiState.DEFENSE;
+                }
+            }
+            if (rogue.currNRG < bulba.currNRG && rng.nextDouble() < .4) {
+                curAiState = AiState.OFFENSE;
+            }
+            if (bulba.currNRG <= 0) {
+                curAiState = AiState.DEFENSE;
+            }
+            boolean isEnemyAttacking = false;
+            for (BattleAttack att : attacks) {
+                if (att.attacker == rogue) {
+                    isEnemyAttacking = true;
+                }
+            }
+            if (isEnemyAttacking && rng.nextDouble() < 0.2) {
+                curAiState = AiState.DEFENSE;
+            }
+
             switch(curAiState) {
                 case OFFENSE:
-                    if (rng.nextDouble() < .05) {
-                        curAiState = AiState.DEFENSE;
-                    }
-                    if (rogue.currNRG > bulba.currNRG && rng.nextDouble() < .4) {
-                        curAiState = AiState.DEFENSE;
-                    }
-                    if (bulba.currNRG <= 0) {
-                        curAiState = AiState.DEFENSE;
-                    }
 //                    if (bulba.row != rogue.row) {
 //                        bulba.row += (int)((1.0*rogue.row - bulba.row) / 2.0);
 //                    } else {
@@ -296,12 +381,6 @@ public class BattleScreen extends ScreenAdapter {
                     bulba.col--;
                     break;
                 case DEFENSE:
-                    if (rng.nextDouble() < .05) {
-                        curAiState = AiState.OFFENSE;
-                    }
-                    if (rogue.currNRG < bulba.currNRG && rng.nextDouble() < .5) {
-                        curAiState = AiState.OFFENSE;
-                    }
                     bulba.col++;
                     if (bulba.row == rogue.row) {
                         bulba.row += rng.nextBoolean()?1:-1;
@@ -311,7 +390,6 @@ public class BattleScreen extends ScreenAdapter {
                             bulba.row -= 2;
                         }
                     }
-
                     break;
             }
         } else {

@@ -17,6 +17,8 @@ public class Assets {
     public static Map<String, TextureRegion[]> animLookup = new HashMap<>();
 
     public static class Textures {
+        public static TextureRegion BATTLE_TILE_RED;
+        public static TextureRegion BATTLE_TILE_BLUE;
         public static Texture BATTLE_BG;
         public static Texture CURSOR;
 
@@ -27,7 +29,10 @@ public class Assets {
         public static Texture BULBA_IDLE2_BATTLE;
         public static Texture BULBA_IDLE3_BATTLE;
         public static Texture BULBA_IDLE4_BATTLE;
-        public static Texture BULBA_ATTACK1_BATTLE;
+        public static Texture BULBA_ATTACK0_BATTLE;
+        public static Texture BULBA_HURT0_BATTLE;
+        public static Texture BULBA_FALLEN0_BATTLE;
+        public static Texture BULBA_FALLEN1_BATTLE;
 
         public static Texture ACTION_MENU;
         public static Texture BATTLE_TILE;
@@ -66,9 +71,16 @@ public class Assets {
         Textures.BULBA_IDLE2_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_1.png"));
         Textures.BULBA_IDLE3_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_2.png"));
         Textures.BULBA_IDLE4_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_3.png"));
-        Textures.BULBA_ATTACK1_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_attack_0.png"));
+        Textures.BULBA_ATTACK0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_attack_0.png"));
+        Textures.BULBA_HURT0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_hurt_0.png"));
+        Textures.BULBA_FALLEN0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_fallen_0.png"));
+        Textures.BULBA_FALLEN1_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_fallen_1.png"));
+
         Textures.ACTION_MENU = new Texture(Gdx.files.internal("tactics/sprites/ui/action_menu.png"));
+        Texture tempTiles = new Texture(Gdx.files.internal("battle/sprites/ui/battle_tiles_plains.png"));
         Textures.BATTLE_TILE = new Texture(Gdx.files.internal("battle/sprites/ui/battle_tile.png"));
+        Textures.BATTLE_TILE_BLUE = new TextureRegion(tempTiles, 0,0,tempTiles.getWidth()/2, tempTiles.getHeight());
+        Textures.BATTLE_TILE_RED = new TextureRegion(tempTiles, tempTiles.getWidth()/2, 0, tempTiles.getWidth()/2, tempTiles.getHeight());
         Textures.BATTLE_BG = new Texture(Gdx.files.internal("battle/sprites/backgrounds/plains.png"));
         Textures.HP_BAR = new Texture(Gdx.files.internal("battle/sprites/ui/hp_bar.png"));
         Textures.ENERGY = new Texture(Gdx.files.internal("battle/sprites/ui/energy.png"));

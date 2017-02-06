@@ -1,5 +1,6 @@
-package com.comp460.experimental.battle;
+package com.comp460.battle;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -8,12 +9,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class BattleTile implements IRenderable {
     private float screenX, screenY;
     private TextureRegion sprite;
+    private TextureRegion sideSprite;
     private int width, height;
 
-    public BattleTile(float screenX, float screenY, TextureRegion sprite) {
+    public BattleTile(float screenX, float screenY, TextureRegion sprite, TextureRegion sideSprite) {
         this.screenX = screenX;
         this.screenY = screenY;
         this.sprite = sprite;
+        this.sideSprite = sideSprite;
         this.width = sprite.getRegionWidth();
         this.height = sprite.getRegionHeight();
     }
@@ -39,5 +42,13 @@ public class BattleTile implements IRenderable {
 
     public int getHeight() {
         return this.height;
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        batch.begin();
+        batch.draw(getSprite(), getScreenX(), getScreenY());
+        batch.draw(sideSprite, screenX, screenY - sideSprite.getRegionHeight());
+        batch.end();
     }
 }

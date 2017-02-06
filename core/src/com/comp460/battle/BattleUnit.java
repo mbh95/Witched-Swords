@@ -88,7 +88,6 @@ public class BattleUnit implements IRenderable {
         this.currentAnim = animIdle;
         this.animTimer = 0.0f;
         this.invlunerable = false;
-
     }
 
     public void setAnimAttack() {

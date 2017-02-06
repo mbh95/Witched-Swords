@@ -42,6 +42,7 @@ public class BattlePracticeMenu extends ScreenAdapter {
 
         addPlayerButton("common/units/ruby.json", 0, 0, 100, 100);
         addPlayerButton("common/units/shieldman.json", 100, 0, 100, 100);
+        addPlayerButton("common/units/bulba.json", 200, 0, 100, 100);
 
         addAiButton("common/units/bulba.json", Gdx.graphics.getWidth()-100, 0, 100, 100);
 

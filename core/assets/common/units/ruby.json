@@ -1,0 +1,9 @@
+{
+"id": "ruby",
+"name": "Ruby",
+"maxHP": 100,
+"curHP": 100,
+"moveDist": 5,
+"action1": 0,
+"action2": -1
+}

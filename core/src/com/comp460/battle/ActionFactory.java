@@ -25,6 +25,8 @@ public class ActionFactory {
                 return buildShield();
             case 3:
                 return buildSpike();
+            case 4:
+                return buildArrow();
             default:
                 return (owner) -> {};
 
@@ -199,6 +201,55 @@ public class ActionFactory {
             owner.setAnimAttack();
 
             grid.addEffect(new SpikeEffect(owner, owner.getGridRow(), owner.getGridCol() - 1, 1));
+        });
+    }
+
+    private static class ArrowEffect extends BattleEffect {
+
+        boolean hit = false;
+
+        public ArrowEffect(BattleUnit owner, int row, int col, int priority) {
+            super(owner, row, col, priority);
+        }
+
+        @Override
+        public boolean tick() {
+            if (this.numTicks > 3) {
+                if (col < owner.getGrid().getNumCols()-1) {
+                    this.owner.getGrid().addEffect(new ArrowEffect(owner, row, col + 1, 0));
+                }
+                return false;
+            }
+            owner.getGrid().getUnits().forEach((u)->{
+                if (u == owner) {
+                    return;
+                } else {
+                    if (u.getGridRow() == this.row && u.getGridCol() == this.col) {
+                        u.hurt(15);
+                        hit = true;
+                    }
+                }
+            });
+            return !hit;
+        }
+
+        @Override
+        public void render(SpriteBatch batch) {
+            batch.begin();
+            batch.draw(AssetManager.Textures.ARROW, owner.getGrid().getTile(this.row, this.col).getScreenX(), owner.getGrid().getTile(this.row, this.col).getScreenY());
+            batch.end();
+        }
+    }
+    public static BattleAction buildArrow() {
+        return ((owner) -> {
+            if (owner.getEnergy() <= 0) {
+                return;
+            }
+            BattleGrid grid = owner.getGrid();
+            owner.setEnergy(owner.getEnergy() - 1);
+            owner.setAnimAttack();
+
+            grid.addEffect(new ArrowEffect(owner, owner.getGridRow(), owner.getGridCol() + 1, 1));
         });
     }
 

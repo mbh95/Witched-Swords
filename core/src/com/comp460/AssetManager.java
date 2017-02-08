@@ -59,6 +59,7 @@ public class AssetManager {
         public static Texture LAZER;
         public static Texture SHIELD;
         public static Texture SPIKE;
+        public static Texture ARROW;
 
     }
 
@@ -71,6 +72,7 @@ public class AssetManager {
         loadAllBattleAnims("bulba");
         loadAllBattleAnims("ruby");
         loadAllBattleAnims("shieldman");
+        loadAllBattleAnims("clarissa");
         getAnimation("shieldman", BattleAnimation.ATTACK).setFrameDuration(.5f);
 
         Texture battleTilesTexture = new Texture(Gdx.files.internal("battle/sprites/ui/battle_tiles_plains.png"));
@@ -87,6 +89,7 @@ public class AssetManager {
         Textures.LAZER = new Texture(Gdx.files.internal("battle/sprites/attacks/lazer.png"));
         Textures.SHIELD = new Texture(Gdx.files.internal("battle/sprites/attacks/shield_outline.png"));
         Textures.SPIKE = new Texture(Gdx.files.internal("battle/sprites/attacks/spike.png"));
+        Textures.ARROW = new Texture(Gdx.files.internal("battle/sprites/attacks/arrow.png"));
 
         Maps.TEST = new TmxMapLoader().load(MAPS_PATH + "testmap.tmx");
     }

@@ -68,6 +68,8 @@ public class BattlePracticeMenu extends ScreenAdapter {
 
     private CharacterIcon rubyButton;
     private CharacterIcon shieldmanButton;
+    private CharacterIcon clarissaButton;
+
 
     private CharacterIcon bulbaButton;
 
@@ -82,6 +84,8 @@ public class BattlePracticeMenu extends ScreenAdapter {
 
         rubyButton = addButton("common/units/ruby.json", 0, 0);
         shieldmanButton = addButton("common/units/shieldman.json", 50, 0);
+        clarissaButton = addButton("common/units/clarissa.json", 0, 50);
+
 //        addPlayerButton("common/units/bulba.json", 200, 0, 100, 100);
 
         bulbaButton = addButton("common/units/bulba.json", 400 - 50, 0);
@@ -92,11 +96,15 @@ public class BattlePracticeMenu extends ScreenAdapter {
         fightButton = new MenuButton("Fight!    ", 160, 0, fightFont, TEXTURE_FIGHT_BUTTON, TEXTURE_FIGHT_BUTTON_HOVER, TEXTURE_FIGHT_BUTTON_HOVER);
         buttons.add(fightButton);
 
-        rubyButton.up = backButton;
+        rubyButton.up = clarissaButton;
         rubyButton.right = shieldmanButton;
 
         shieldmanButton.left = rubyButton;
         shieldmanButton.right = fightButton;
+
+        clarissaButton.down = rubyButton;
+        clarissaButton.up = backButton;
+        clarissaButton.right = fightButton;
 
         fightButton.right = bulbaButton;
         fightButton.left = shieldmanButton;
@@ -113,6 +121,11 @@ public class BattlePracticeMenu extends ScreenAdapter {
 
         shieldmanButton.action = ()->{
             playerUnit = shieldmanButton.unit;
+            playerUnitIdle = AssetManager.getAnimation(playerUnit.getId(), AssetManager.BattleAnimation.IDLE);
+        };
+
+        clarissaButton.action = ()->{
+            playerUnit = clarissaButton.unit;
             playerUnitIdle = AssetManager.getAnimation(playerUnit.getId(), AssetManager.BattleAnimation.IDLE);
         };
 

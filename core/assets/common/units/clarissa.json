@@ -1,0 +1,9 @@
+{
+  "id": "clarissa",
+  "name": "Clarissa",
+  "maxHP": 70,
+  "curHP": 70,
+  "moveDist": 5,
+  "action1": 4,
+  "action2": -1
+}

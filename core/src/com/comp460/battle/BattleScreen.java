@@ -41,6 +41,8 @@ public class BattleScreen extends ScreenAdapter {
 
     private BattleState curState;
 
+    private float endDelay = 2.0f;
+
     public BattleScreen(Game parent, int width, int height, GameUnit basePlayerUnit, GameUnit baseAiUnit) {
 
         this.batch = new SpriteBatch();
@@ -69,10 +71,13 @@ public class BattleScreen extends ScreenAdapter {
 
         if (curState != BattleState.RUNNING) {
             renderEnd();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
+            if (endDelay <=0 ) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
                     game.setScreen(new BattlePracticeMenu(game));
                     dispose();
+                }
             }
+            endDelay-=delta;
         }
     }
 
@@ -188,7 +193,7 @@ public class BattleScreen extends ScreenAdapter {
         batch.end();
     }
 
-    private void takeInput() {
+    protected void takeInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) playerUnit.move(0, -1);
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) playerUnit.move(0, 1);
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) playerUnit.move(1, 0);

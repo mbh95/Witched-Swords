@@ -22,6 +22,7 @@ public class MainMenu extends ScreenAdapter {
 
     public MainMenu(Game parent) {
         super();
+        System.out.println(Gdx.graphics.getWidth());
         batch = new SpriteBatch();
         skin = new Skin(Gdx.files.internal("launcher/ui/uiskin.json"));
         stage = new Stage();
@@ -29,7 +30,7 @@ public class MainMenu extends ScreenAdapter {
 
         final TextButton battleButton = new TextButton("Battle Practice", skin, "default");
         battleButton.setSize(200f, 100f);
-        battleButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2 - 10f);
+        battleButton.setPosition(400 /2 - 100f, 240/2 - 10f);
 
         battleButton.addListener(new ClickListener() {
             @Override

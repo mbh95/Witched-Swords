@@ -83,7 +83,7 @@ public class ActionFactory {
             owner.setEnergy(owner.getEnergy() - 1);
             owner.setAnimAttack();
             for (int i = 0; i < grid.getNumCols(); i++) {
-                grid.addEffect(buildWarning(10, 1f, 0f, 0f, 0.4f, new BattleEffect(owner, i, grid.getNumCols()/2 - 1 - rng.nextInt(grid.getNumCols()/2), 0) {
+                grid.addEffect(buildWarning(30, 1f, 0f, 0f, 0.4f, new BattleEffect(owner, i, grid.getNumCols()/2 - 1 - rng.nextInt(grid.getNumCols()/2), 0) {
                     boolean active = true;
                     @Override
                     public boolean tick() {

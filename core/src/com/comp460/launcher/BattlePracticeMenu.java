@@ -3,6 +3,7 @@ package com.comp460.launcher;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -24,6 +25,7 @@ public class BattlePracticeMenu extends ScreenAdapter {
     private Skin skin;
     private Stage stage;
     private Game game;
+    OrthographicCamera camera;
 
     GameUnit playerUnit;
     GameUnit aiUnit;
@@ -36,6 +38,8 @@ public class BattlePracticeMenu extends ScreenAdapter {
     public BattlePracticeMenu(Game parent) {
         super();
         batch = new SpriteBatch();
+        camera = new OrthographicCamera(400, 240);
+        camera.setToOrtho(false, 400, 240);
         skin = new Skin(Gdx.files.internal("launcher/ui/uiskin.json"));
         stage = new Stage();
         game = parent;
@@ -103,6 +107,8 @@ public class BattlePracticeMenu extends ScreenAdapter {
     @Override
     public void render(float delta) {
         super.render(delta);
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         stage.draw();
         batch.end();
@@ -112,7 +118,7 @@ public class BattlePracticeMenu extends ScreenAdapter {
         float scale = 4.0f;
         if (playerUnitIdle != null) {
             TextureRegion currentFrame = playerUnitIdle.getKeyFrame(frameTime, true);
-            batch.draw(currentFrame, 0, Gdx.graphics.getHeight() - currentFrame.getRegionHeight() * scale , currentFrame.getRegionWidth() * scale, currentFrame.getRegionHeight() * scale);
+            batch.draw(currentFrame, 0, 0 , currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
         }
         if (aiUnitIdle != null) {
             TextureRegion currentFrame = aiUnitIdle.getKeyFrame(frameTime, true);

@@ -1,0 +1,15 @@
+{
+  "id": "lazer",
+  "name": "Lazer",
+  "description": "Fire your lazer!",
+  "priority": 1,
+
+  "properties": [
+    ""
+  ],
+
+  "position": "relative",
+  "pattern": [["0", "1"],
+              ["0", "2"],
+              ["0", "3"]]
+}

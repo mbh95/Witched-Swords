@@ -93,8 +93,8 @@ public class AssetManager {
         Textures.SHIELD = new Texture(Gdx.files.internal("battle/sprites/attacks/shield_outline.png"));
         Textures.SPIKE = new Texture(Gdx.files.internal("battle/sprites/attacks/spike.png"));
 
-        Fonts.PIXELATED = new BitmapFont(Gdx.files.internal("common/fonts/boss.fnt"));
-        Fonts.PIXELATED_SMALL = new BitmapFont(Gdx.files.internal("common/fonts/pixelSmall.fnt"));
+        Fonts.PIXELATED = new BitmapFont(Gdx.files.internal("common/fonts/KenPixel.fnt"));
+        Fonts.PIXELATED_SMALL = new BitmapFont(Gdx.files.internal("common/fonts/KenPixel-Mini.fnt"));
 
         Maps.TEST = new TmxMapLoader().load(MAPS_PATH + "testmap.tmx");
     }

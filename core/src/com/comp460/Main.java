@@ -39,7 +39,7 @@ public class Main extends Game {
 		bufferRegion = new TextureRegion(buffer.getColorBufferTexture());
 		bufferRegion.flip(false, true);
 
-		fpsFont = new BitmapFont(Gdx.files.internal("common/fonts/KenPixel.fnt"));
+		fpsFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.YELLOW);
 		fpsFont.setColor(Color.YELLOW);
 
 //		Assets.load();
@@ -54,6 +54,7 @@ public class Main extends Game {
 //		this.setScreen(new MainMenu(this));
 
 		this.setScreen(new SplashScreen(this));
+
 	}
 
 	@Override

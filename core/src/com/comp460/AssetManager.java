@@ -62,11 +62,6 @@ public class AssetManager {
 
     }
 
-    public static class Fonts {
-        public static BitmapFont PIXELATED;
-        public static BitmapFont PIXELATED_SMALL;
-    }
-
     public static class Maps {
         public static TiledMap TEST;
     }
@@ -92,9 +87,6 @@ public class AssetManager {
         Textures.LAZER = new Texture(Gdx.files.internal("battle/sprites/attacks/lazer.png"));
         Textures.SHIELD = new Texture(Gdx.files.internal("battle/sprites/attacks/shield_outline.png"));
         Textures.SPIKE = new Texture(Gdx.files.internal("battle/sprites/attacks/spike.png"));
-
-        Fonts.PIXELATED = new BitmapFont(Gdx.files.internal("common/fonts/KenPixel.fnt"));
-        Fonts.PIXELATED_SMALL = new BitmapFont(Gdx.files.internal("common/fonts/KenPixel-Mini.fnt"));
 
         Maps.TEST = new TmxMapLoader().load(MAPS_PATH + "testmap.tmx");
     }

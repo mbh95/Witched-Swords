@@ -2,28 +2,54 @@ package com.comp460.launcher;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.comp460.AssetManager;
+import com.comp460.FontManager;
 import com.comp460.Settings;
 import com.comp460.battle.BattleScreen;
 import com.comp460.common.GameUnit;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by matthewhammond on 2/6/17.
  */
 public class BattlePracticeMenu extends ScreenAdapter {
+
+    private static BitmapFont battleIconFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
+    private static BitmapFont fightFont = FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 16, Color.WHITE);
+    private static BitmapFont vsFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 48, Color.RED);
+
+    private static TextureRegion TEXTURE_SQUARE = new TextureRegion(new Texture(Gdx.files.local("launcher/sprites/battle-square.png")));
+    private static TextureRegion TEXTURE_SQUARE_HOVERED = new TextureRegion(new Texture(Gdx.files.local("launcher/sprites/battle-square-hovered.png")));
+
+    private static TextureRegion TEXTURE_BACK_BUTTON = new TextureRegion(new Texture(Gdx.files.local("launcher/sprites/back-button.png")));
+    private static TextureRegion BG = SplashScreen.BG;
+
+    private static TextureRegion TEXTURE_PLAYER_AREA = new TextureRegion(new Texture(Gdx.files.local("launcher/sprites/player-area.png")));
+    private static TextureRegion TEXTURE_AI_AREA = new TextureRegion(new Texture(Gdx.files.local("launcher/sprites/ai-area.png")));
+
+    private static TextureRegion TEXTURE_FIGHT_BUTTON = new TextureRegion(new Texture(Gdx.files.local("launcher/sprites/fight-button.png")));
+    private static TextureRegion TEXTURE_FIGHT_BUTTON_HOVER = new TextureRegion(new Texture(Gdx.files.local("launcher/sprites/fight-button-hover.png")));
+
+
     private SpriteBatch batch;
-    private Skin skin;
-    private Stage stage;
     private Game game;
     OrthographicCamera camera;
 
@@ -33,75 +59,88 @@ public class BattlePracticeMenu extends ScreenAdapter {
     Animation<TextureRegion> playerUnitIdle;
     Animation<TextureRegion> aiUnitIdle;
 
-    float frameTime = 0.0f;
+    Collection<MenuButton> buttons = new ArrayList<>();
+
+    private float frameTime = 0;
+
+    private BackButton backButton;
+    private MenuButton fightButton;
+
+    private CharacterIcon rubyButton;
+    private CharacterIcon shieldmanButton;
+
+    private CharacterIcon bulbaButton;
+
+    MenuButton selectedButton;
 
     public BattlePracticeMenu(Game parent) {
         super();
         batch = new SpriteBatch();
         camera = new OrthographicCamera(400, 240);
         camera.setToOrtho(false, 400, 240);
-        skin = new Skin(Gdx.files.internal("launcher/ui/uiskin.json"));
-        stage = new Stage();
         game = parent;
 
-        addPlayerButton("common/units/ruby.json", 0, 0, 100, 100);
-        addPlayerButton("common/units/shieldman.json", 100, 0, 100, 100);
-        addPlayerButton("common/units/bulba.json", 200, 0, 100, 100);
+        rubyButton = addButton("common/units/ruby.json", 0, 0);
+        shieldmanButton = addButton("common/units/shieldman.json", 50, 0);
+//        addPlayerButton("common/units/bulba.json", 200, 0, 100, 100);
 
-        addAiButton("common/units/bulba.json", Gdx.graphics.getWidth()-100, 0, 100, 100);
+        bulbaButton = addButton("common/units/bulba.json", 400 - 50, 0);
 
-        final TextButton battleButton = new TextButton("Fight!", skin, "default");
-        battleButton.setSize(200f, 100f);
-        battleButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2 - 10f);
+        backButton = new BackButton(0, 240 - TEXTURE_BACK_BUTTON.getRegionHeight(), TEXTURE_BACK_BUTTON);
+        buttons.add(backButton);
 
-        battleButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                if (playerUnit == null || aiUnit == null) {
-                    return;
-                }
-                game.setScreen(new BattleScreen(game, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, playerUnit, aiUnit));
-                dispose();
+        fightButton = new MenuButton("Fight!    ", 160, 0, fightFont, TEXTURE_FIGHT_BUTTON, TEXTURE_FIGHT_BUTTON_HOVER, TEXTURE_FIGHT_BUTTON_HOVER);
+        buttons.add(fightButton);
+
+        rubyButton.up = backButton;
+        rubyButton.right = shieldmanButton;
+
+        shieldmanButton.left = rubyButton;
+        shieldmanButton.right = fightButton;
+
+        fightButton.right = bulbaButton;
+        fightButton.left = shieldmanButton;
+
+        bulbaButton.left = fightButton;
+//        bulbaButton.up = backButton;
+
+        backButton.down = rubyButton;
+
+        rubyButton.action = ()->{
+            playerUnit = rubyButton.unit;
+            playerUnitIdle = AssetManager.getAnimation(playerUnit.getId(), AssetManager.BattleAnimation.IDLE);
+        };
+
+        shieldmanButton.action = ()->{
+            playerUnit = shieldmanButton.unit;
+            playerUnitIdle = AssetManager.getAnimation(playerUnit.getId(), AssetManager.BattleAnimation.IDLE);
+        };
+
+        bulbaButton.action = ()->{
+            aiUnit = bulbaButton.unit;
+            aiUnitIdle = AssetManager.getAnimation(aiUnit.getId(), AssetManager.BattleAnimation.IDLE);
+
+        };
+
+        backButton.action = ()->{
+            this.game.setScreen(new MainMenu(game));
+            dispose();
+        };
+
+        fightButton.action = ()->{
+            if (playerUnit != null && aiUnit != null) {
+                this.game.setScreen(new BattleScreen(game, 400, 240, playerUnit, aiUnit));
             }
-        });
-        stage.addActor(battleButton);
+        };
 
-        Gdx.input.setInputProcessor(stage);
+        selectedButton = rubyButton;
     }
 
-    private void addPlayerButton(String jsonFile, int x, int y, int width, int height) {
-
+    private CharacterIcon addButton(String jsonFile, int x, int y) {
         GameUnit unit = GameUnit.loadFromJSON(jsonFile);
-        TextButton button = new TextButton(unit.getName(), skin, "default");
-        button.setSize(width, height);
-        button.setPosition(x, y);
-        button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                playerUnit = unit;
-                playerUnitIdle = com.comp460.AssetManager.getAnimation(unit.getId(), AssetManager.BattleAnimation.IDLE);
-            }
-        });
-        stage.addActor(button);
-    }
-
-    private void addAiButton(String jsonFile, int x, int y, int width, int height) {
-
-        GameUnit unit = GameUnit.loadFromJSON(jsonFile);
-        TextButton button = new TextButton(unit.getName(), skin, "default");
-        button.setSize(width, height);
-        button.setPosition(x, y);
-        button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                aiUnit = unit;
-                aiUnitIdle = com.comp460.AssetManager.getAnimation(unit.getId(), AssetManager.BattleAnimation.IDLE);
-            }
-        });
-        stage.addActor(button);
+        CharacterIcon icon = new CharacterIcon(unit.getName(), x, y, battleIconFont, new TextureRegion(AssetManager.getAnimation(unit.getId(), AssetManager.BattleAnimation.ATTACK).getKeyFrame(0)), unit, true);
+        buttons.add(icon);
+        return icon;
     }
 
     @Override
@@ -110,21 +149,90 @@ public class BattlePracticeMenu extends ScreenAdapter {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        stage.draw();
-        batch.end();
 
-        batch.begin();
+        batch.draw(BG, 0, 0);
+        for (MenuButton butt : buttons) {
+            butt.render(batch);
+        }
 
-        float scale = 4.0f;
+        batch.draw(TEXTURE_PLAYER_AREA, 30, 240-10-TEXTURE_PLAYER_AREA.getRegionHeight());
+        batch.draw(TEXTURE_AI_AREA, 400-30-TEXTURE_AI_AREA.getRegionWidth(), 240-10-TEXTURE_AI_AREA.getRegionHeight());
+
+        float scale = 3.0f;
         if (playerUnitIdle != null) {
             TextureRegion currentFrame = playerUnitIdle.getKeyFrame(frameTime, true);
-            batch.draw(currentFrame, 0, 0 , currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
+            batch.draw(currentFrame, 30, 240-10-TEXTURE_PLAYER_AREA.getRegionHeight(), currentFrame.getRegionWidth() * scale, currentFrame.getRegionHeight() * scale);
         }
         if (aiUnitIdle != null) {
             TextureRegion currentFrame = aiUnitIdle.getKeyFrame(frameTime, true);
-            batch.draw(currentFrame, Gdx.graphics.getWidth() - currentFrame.getRegionWidth() * scale, Gdx.graphics.getHeight() - currentFrame.getRegionHeight() * scale , currentFrame.getRegionWidth() * scale, currentFrame.getRegionHeight() * scale);
+            batch.draw(currentFrame, 400-30-TEXTURE_AI_AREA.getRegionWidth(), 240-10-TEXTURE_AI_AREA.getRegionHeight(), currentFrame.getRegionWidth() * scale, currentFrame.getRegionHeight() * scale);
         }
+
+        vsFont.draw(batch, "Vs", 200-32, 160);
         batch.end();
         frameTime += delta;
+
+        selectedButton.currenState = MenuButton.ButtonState.NORMAL;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) selectedButton = selectedButton.left;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) selectedButton = selectedButton.right;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) selectedButton = selectedButton.up;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) selectedButton = selectedButton.down;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Z )) {
+            selectedButton.click();
+        } else {
+            selectedButton.currenState = MenuButton.ButtonState.HOVERED;
+        }
+    }
+
+    private class CharacterIcon extends MenuButton {
+
+        boolean player = true;
+        TextureRegion unitIcon;
+        GameUnit unit;
+
+        public CharacterIcon(String text, float x, float y, BitmapFont font, TextureRegion unitSprite, GameUnit unit, boolean player) {
+            super(text, x, y, font, TEXTURE_SQUARE, TEXTURE_SQUARE_HOVERED, TEXTURE_SQUARE_HOVERED);
+            this.unitIcon = unitSprite;
+            this.player = player;
+            this.unit = unit;
+//            this.unitIcon.setRegion(0, 0, 40, 40);
+        }
+
+        @Override
+        public void render(SpriteBatch batch) {
+            if (this.currenState == ButtonState.HOVERED) {
+                batch.draw(hovered, pos.x, pos.y);
+            } else if (this.currenState == ButtonState.NORMAL) {
+                batch.draw(normal, pos.x, pos.y);
+            } else {
+                batch.draw(pressed, pos.x, pos.y);
+            }
+            batch.draw(unitIcon, pos.x + 4, pos.y + 4);
+            font.draw(batch, text, pos.x + normal.getRegionWidth() / 2f - layout.width / 2f, pos.y + layout.height + 4);
+        }
+    }
+
+    private class BackButton extends MenuButton {
+
+        public BackButton(float x, float y, TextureRegion normal) {
+            super("", x, y, null, normal, normal, normal);
+        }
+
+        @Override
+        public void render(SpriteBatch batch) {
+            batch.end();
+
+            batch.begin();
+            if (currenState == ButtonState.HOVERED) {
+                batch.setColor(Color.YELLOW);
+            } else {
+                batch.setColor(Color.WHITE);
+            }
+
+            batch.draw(normal, pos.x, pos.y);
+            batch.end();
+            batch.setColor(Color.WHITE);
+            batch.begin();
+        }
     }
 }

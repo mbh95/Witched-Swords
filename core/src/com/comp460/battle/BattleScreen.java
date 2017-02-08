@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.AssetManager;
+import com.comp460.FontManager;
 import com.comp460.common.GameUnit;
 import com.comp460.launcher.BattlePracticeMenu;
 import com.sun.javafx.binding.StringFormatter;
@@ -22,6 +23,9 @@ import java.util.Random;
  * Created by matthewhammond on 1/29/17.
  */
 public class BattleScreen extends ScreenAdapter {
+
+    private static BitmapFont timerFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 16, Color.RED);
+    private static BitmapFont resultsFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 32, Color.WHITE);
 
     private enum BattleState {RUNNING, END_ENERGY, END_DEATH, END_TIME};
 
@@ -82,35 +86,34 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void renderEnd() {
-        BitmapFont font = AssetManager.Fonts.PIXELATED;
         GlyphLayout layout;
         batch.begin();
         switch (curState) {
             case END_DEATH:
                 if (playerUnit.getCurHP() <= 0 && aiUnit.getCurHP() <= 0) {
                     // DRAW
-                    layout = new GlyphLayout(AssetManager.Fonts.PIXELATED, "YOU BOTH DIED");
-                    font.draw(batch, "YOU BOTH DIED", width/2 - layout.width/2, 100);
+                    layout = new GlyphLayout(resultsFont, "YOU BOTH DIED");
+                    resultsFont.draw(batch, "YOU BOTH DIED", width/2 - layout.width/2, 100);
                 } else if (playerUnit.getCurHP() <= 0) {
                     // YOU LOSE
-                    layout = new GlyphLayout(font, "YOU DIED");
-                    font.draw(batch, "YOU DIED", width/2 - layout.width/2, 100);
+                    layout = new GlyphLayout(resultsFont, "YOU DIED");
+                    resultsFont.draw(batch, "YOU DIED", width/2 - layout.width/2, 100);
 
                 } else if (aiUnit.getCurHP() <= 0) {
                     // YOU WIN
-                    layout = new GlyphLayout(font, "ENEMY DIED");
-                    font.draw(batch, "ENEMY DIED", width/2 - layout.width/2, 100);
+                    layout = new GlyphLayout(resultsFont, "ENEMY DIED");
+                    resultsFont.draw(batch, "ENEMY DIED", width/2 - layout.width/2, 100);
                 }
                 break;
             case END_TIME:
                 // TIME DRAW
-                layout = new GlyphLayout(font, "OUT OF TIME");
-                font.draw(batch, "OUT OF TIME", width/2 - layout.width/2, 100);
+                layout = new GlyphLayout(resultsFont, "OUT OF TIME");
+                resultsFont.draw(batch, "OUT OF TIME", width/2 - layout.width/2, 100);
                 break;
             case END_ENERGY:
                 // ENERGY DRAW
-                layout = new GlyphLayout(font, "OUT OF ENERGY");
-                font.draw(batch, "OUT OF ENERGY", width/2 - layout.width/2, 100);
+                layout = new GlyphLayout(resultsFont, "OUT OF ENERGY");
+                resultsFont.draw(batch, "OUT OF ENERGY", width/2 - layout.width/2, 100);
                 break;
         }
 //        if (freezeDelay < 0) {
@@ -187,9 +190,9 @@ public class BattleScreen extends ScreenAdapter {
     private void renderTimer(SpriteBatch batch, int x, int y) {
         int seconds = ((int) countdownTimer) % 60;
         String timerString = StringFormatter.format("%02d", seconds).getValue();
-        GlyphLayout timerLayout = new GlyphLayout(AssetManager.Fonts.PIXELATED, timerString);
+        GlyphLayout timerLayout = new GlyphLayout(timerFont, timerString);
         batch.begin();
-        AssetManager.Fonts.PIXELATED.draw(batch, timerLayout, x - timerLayout.width/2, y);
+        timerFont.draw(batch, timerLayout, x - timerLayout.width/2, y);
         batch.end();
     }
 

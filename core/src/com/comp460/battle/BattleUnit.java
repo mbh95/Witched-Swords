@@ -1,11 +1,13 @@
 package com.comp460.battle;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.AssetManager;
+import com.comp460.FontManager;
 import com.comp460.common.GameUnit;
 
 import java.util.*;
@@ -15,6 +17,7 @@ import java.util.*;
  */
 public class BattleUnit implements IRenderable {
 
+    private static BitmapFont floatingFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
     private BattleGrid grid;
     private GameUnit base;
 
@@ -212,7 +215,7 @@ public class BattleUnit implements IRenderable {
     }
 
     public void addFloatingText(String text) {
-        FloatingText f = new FloatingText(text, 1.0f, AssetManager.Fonts.PIXELATED_SMALL, this.getScreenX(), this.getScreenY() + this.getSprite().getRegionHeight());
+        FloatingText f = new FloatingText(text, 1.0f, floatingFont, this.getScreenX(), this.getScreenY() + this.getSprite().getRegionHeight());
         this.floatingTexts.add(f);
     }
 

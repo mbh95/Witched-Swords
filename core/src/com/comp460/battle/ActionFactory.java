@@ -15,6 +15,8 @@ import java.util.Set;
  */
 public class ActionFactory {
 
+    public static Random rng = new Random();
+
     public static BattleAction buildAction(int actionID) {
         switch (actionID) {
             case 0:
@@ -27,11 +29,14 @@ public class ActionFactory {
                 return buildSpike();
             case 4:
                 return buildArrow();
+            case 5:
+                return buildPuffs();
             default:
                 return (owner) -> {};
 
         }
     }
+
     public static BattleAction buildLazer() {
         return ((owner) -> {
             if (owner.getEnergy() <= 0) {
@@ -126,7 +131,7 @@ public class ActionFactory {
             BattleGrid grid = owner.getGrid();
             owner.setEnergy(owner.getEnergy() - 1);
             owner.setAnimAttack();
-            grid.addEffect(new BattleEffect(owner, owner.getGridRow(), owner.getGridCol(), 1) {
+            grid.addEffect(new BattleEffect(owner, owner.getGridRow(), owner.getGridCol(), 2) {
                 @Override
                 public boolean tick() {
                     if (this.numTicks > 30) {
@@ -250,6 +255,65 @@ public class ActionFactory {
             owner.setAnimAttack();
 
             grid.addEffect(new ArrowEffect(owner, owner.getGridRow(), owner.getGridCol() + 1, 1));
+        });
+    }
+
+    private static class PuffEffect extends BattleEffect {
+
+        boolean hit = false;
+
+        public PuffEffect(BattleUnit owner, int row, int col, int priority) {
+            super(owner, row, col, priority);
+        }
+
+        @Override
+        public boolean tick() {
+            if (this.numTicks > 20) {
+                if (col > 0) {
+                    this.owner.getGrid().addEffect(new PuffEffect(owner, row, col - 1, 0));
+                }
+                return false;
+            }
+            owner.getGrid().getUnits().forEach((u)->{
+                if (u == owner) {
+                    return;
+                } else {
+                    if (u.getGridRow() == this.row && u.getGridCol() == this.col) {
+                        u.hurt(15);
+                        owner.heal(25);
+                        hit = true;
+                    }
+                }
+            });
+            return !hit;
+        }
+
+        @Override
+        public void render(SpriteBatch batch) {
+            batch.begin();
+            batch.draw(AssetManager.Textures.PUFF, owner.getGrid().getTile(this.row, this.col).getScreenX(), owner.getGrid().getTile(this.row, this.col).getScreenY());
+            batch.end();
+        }
+    }
+    public static BattleAction buildPuffs() {
+        return ((owner) -> {
+//            if (owner.getEnergy() <= 0) {
+//                return;
+//            }
+            if (owner.getCurHP() <= 10) {
+                return;
+            }
+            BattleGrid grid = owner.getGrid();
+            owner.hurt(10);
+            owner.setAnimAttack();
+
+            int hole = rng.nextInt(owner.getGrid().getNumRows());
+            for (int rowNum = 0; rowNum < owner.getGrid().getNumRows(); rowNum++) {
+                if (rowNum != hole) {
+                    grid.addEffect(new PuffEffect(owner, rowNum, owner.getGridCol() - 1, 1));
+                }
+            }
+
         });
     }
 

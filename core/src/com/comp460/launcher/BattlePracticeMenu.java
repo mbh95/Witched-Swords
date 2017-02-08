@@ -72,6 +72,7 @@ public class BattlePracticeMenu extends ScreenAdapter {
 
 
     private CharacterIcon bulbaButton;
+    private CharacterIcon ghastButton;
 
     MenuButton selectedButton;
 
@@ -89,6 +90,7 @@ public class BattlePracticeMenu extends ScreenAdapter {
 //        addPlayerButton("common/units/bulba.json", 200, 0, 100, 100);
 
         bulbaButton = addButton("common/units/bulba.json", 400 - 50, 0);
+        ghastButton = addButton("common/units/ghast.json", 400 - 100, 0);
 
         backButton = new BackButton(0, 240 - TEXTURE_BACK_BUTTON.getRegionHeight(), TEXTURE_BACK_BUTTON);
         buttons.add(backButton);
@@ -106,10 +108,13 @@ public class BattlePracticeMenu extends ScreenAdapter {
         clarissaButton.up = backButton;
         clarissaButton.right = fightButton;
 
-        fightButton.right = bulbaButton;
+        fightButton.right = ghastButton;
         fightButton.left = shieldmanButton;
 
-        bulbaButton.left = fightButton;
+        bulbaButton.left = ghastButton;
+
+        ghastButton.left = fightButton;
+        ghastButton.right = bulbaButton;
 //        bulbaButton.up = backButton;
 
         backButton.down = rubyButton;
@@ -132,8 +137,12 @@ public class BattlePracticeMenu extends ScreenAdapter {
         bulbaButton.action = ()->{
             aiUnit = bulbaButton.unit;
             aiUnitIdle = AssetManager.getAnimation(aiUnit.getId(), AssetManager.BattleAnimation.IDLE);
-
         };
+        ghastButton.action = ()->{
+            aiUnit = ghastButton.unit;
+            aiUnitIdle = AssetManager.getAnimation(aiUnit.getId(), AssetManager.BattleAnimation.IDLE);
+        };
+
 
         backButton.action = ()->{
             this.game.setScreen(new MainMenu(game));
@@ -151,6 +160,7 @@ public class BattlePracticeMenu extends ScreenAdapter {
 
     private CharacterIcon addButton(String jsonFile, int x, int y) {
         GameUnit unit = GameUnit.loadFromJSON(jsonFile);
+        System.out.println("LOADING BUTTON FOR " + unit.getId());
         CharacterIcon icon = new CharacterIcon(unit.getName(), x, y, battleIconFont, new TextureRegion(AssetManager.getAnimation(unit.getId(), AssetManager.BattleAnimation.ATTACK).getKeyFrame(0)), unit, true);
         buttons.add(icon);
         return icon;

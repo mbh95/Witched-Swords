@@ -44,6 +44,7 @@ public class AssetManager {
 
     public static class Textures {
 
+
         public static Texture BATTLE_BG;
 
         public static Texture ACTION_MENU;
@@ -60,7 +61,7 @@ public class AssetManager {
         public static Texture SHIELD;
         public static Texture SPIKE;
         public static Texture ARROW;
-
+        public static Texture PUFF;
     }
 
     public static class Maps {
@@ -70,6 +71,7 @@ public class AssetManager {
     public static void load() {
 
         loadAllBattleAnims("bulba");
+        loadAllBattleAnims("ghast");
         loadAllBattleAnims("ruby");
         loadAllBattleAnims("shieldman");
         loadAllBattleAnims("clarissa");
@@ -90,6 +92,7 @@ public class AssetManager {
         Textures.SHIELD = new Texture(Gdx.files.internal("battle/sprites/attacks/shield_outline.png"));
         Textures.SPIKE = new Texture(Gdx.files.internal("battle/sprites/attacks/spike.png"));
         Textures.ARROW = new Texture(Gdx.files.internal("battle/sprites/attacks/arrow.png"));
+        Textures.PUFF = new Texture(Gdx.files.internal("battle/sprites/attacks/puff.png"));
 
         Maps.TEST = new TmxMapLoader().load(MAPS_PATH + "testmap.tmx");
     }
@@ -108,7 +111,7 @@ public class AssetManager {
 
     public static void loadBattleAnim(String unitID, BattleAnimation animID) {
         File path = new File(BATTLE_SPRITES_UNITS_PATH + unitID + "/");
-        if (path.listFiles().length == 0) {
+        if (path == null || path.listFiles() == null || path.listFiles().length == 0) {
             System.err.printf("Error loading battle animation (%s, %s): No such files\n", unitID, animID.getAnimId());
             return;
         }

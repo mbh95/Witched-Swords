@@ -190,6 +190,13 @@ public class BattleUnit implements IRenderable {
         }
     }
 
+    public void heal(int amt) {
+        this.setAnimIdle();
+        amt = Math.min(amt, base.getMaxHP() - base.getCurHP());
+        this.base.setCurHP(this.base.getCurHP() + amt);
+        this.addFloatingText("+" + amt);
+    }
+
     public int getCurHP() {
         return this.base.getCurHP();
     }
@@ -252,5 +259,9 @@ public class BattleUnit implements IRenderable {
             font.draw(batch, text, x, y);
         }
 
+    }
+
+    public GameUnit getBase() {
+        return this.base;
     }
 }

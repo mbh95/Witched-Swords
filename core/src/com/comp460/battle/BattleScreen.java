@@ -211,6 +211,40 @@ public class BattleScreen extends ScreenAdapter {
     public Random rng = new Random();
 
     public void updateAI(float delta) {
+        if (aiUnit.getBase().getId().equals("bulba")) {
+            bulbaAI(delta);
+        } else if (aiUnit.getBase().getId().equals("ghast")) {
+            ghastAI(delta);
+        }
+    }
+
+    private int attackDelay = 2;
+    private void ghastAI(float delta) {
+
+        if (aiDelay == 0) {
+            aiDelay = 30;
+
+            aiUnit.setGridCol(aiUnit.getGridCol() + 1);
+            if (aiUnit.getGridRow() == playerUnit.getGridRow()) {
+                aiUnit.move(rng.nextBoolean()?1:-1, 0);
+                if (aiUnit.getGridRow() < 0) {
+                    aiUnit.move(2, 0);
+                } else if (aiUnit.getGridRow() >= 3) {
+                    aiUnit.move(-2, 0);
+                }
+            }
+
+            attackDelay--;
+            if (attackDelay == 0) {
+                attackDelay = 2;
+                aiUnit.action1();
+            }
+        } else {
+            aiDelay--;
+        }
+    }
+
+    private void bulbaAI(float delta) {
         if (aiDelay == 0) {
             aiDelay = 30;
             if (rng.nextDouble() < .1) {

@@ -46,9 +46,6 @@ public class BattleUnit implements IRenderable {
         this.grid = grid;
         this.base = base;
 
-        animIdle = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.IDLE);
-        animIdle.setPlayMode(Animation.PlayMode.LOOP);
-
         animAttack = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.ATTACK);
         animAttack.setPlayMode(Animation.PlayMode.NORMAL);
 
@@ -57,6 +54,9 @@ public class BattleUnit implements IRenderable {
 
         animFallen = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.FALLEN);
         animFallen.setPlayMode(Animation.PlayMode.NORMAL);
+
+        animIdle = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.IDLE);
+        animIdle.setPlayMode(Animation.PlayMode.LOOP);
 
         this.currentAnim = animIdle;
         this.animTimer = 0.0f;

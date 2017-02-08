@@ -26,6 +26,7 @@ public class BattleScreen extends ScreenAdapter {
 
     private static BitmapFont timerFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 16, Color.RED);
     private static BitmapFont resultsFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 32, Color.WHITE);
+    private static BitmapFont continueFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 16, Color.WHITE);
 
     private enum BattleState {RUNNING, END_ENERGY, END_DEATH, END_TIME};
 
@@ -116,10 +117,10 @@ public class BattleScreen extends ScreenAdapter {
                 resultsFont.draw(batch, "OUT OF ENERGY", width/2 - layout.width/2, 100);
                 break;
         }
-//        if (freezeDelay < 0) {
-//            layout = new GlyphLayout(font, "any key to continue");
-//            font.draw(batch, "any key to continue", width/2 - layout.width/2, 50);
-//        }
+        if (this.endDelay <= 0) {
+            layout = new GlyphLayout(continueFont, "any key to continue");
+            continueFont.draw(batch, "any key to continue", width/2 - layout.width/2, 50);
+        }
         batch.end();
     }
 
@@ -130,8 +131,11 @@ public class BattleScreen extends ScreenAdapter {
             takeInput();
             updateAI(delta);
             countdownTimer -= delta;
+            grid.update(delta);
+        } else {
+            aiUnit.update(delta);
+            playerUnit.update(delta);
         }
-        grid.update(delta);
     }
 
     private void checkEndConditions() {

@@ -160,7 +160,6 @@ public class BattlePracticeMenu extends ScreenAdapter {
 
     private CharacterIcon addButton(String jsonFile, int x, int y) {
         GameUnit unit = GameUnit.loadFromJSON(jsonFile);
-        System.out.println("LOADING BUTTON FOR " + unit.getId());
         CharacterIcon icon = new CharacterIcon(unit.getName(), x, y, battleIconFont, new TextureRegion(AssetManager.getAnimation(unit.getId(), AssetManager.BattleAnimation.ATTACK).getKeyFrame(0)), unit, true);
         buttons.add(icon);
         return icon;
@@ -204,6 +203,10 @@ public class BattlePracticeMenu extends ScreenAdapter {
             selectedButton.click();
         } else {
             selectedButton.currenState = MenuButton.ButtonState.HOVERED;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X )) {
+            game.setScreen(new MainMenu(game));
+            dispose();
         }
     }
 

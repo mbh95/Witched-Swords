@@ -106,6 +106,10 @@ public class MainMenu extends ScreenAdapter {
         } else {
             selectedButton.currenState = MenuButton.ButtonState.HOVERED;
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X )) {
+            game.setScreen(new SplashScreen(game));
+            dispose();
+        }
 
         switch (curAnimState) {
             case BUILD_MENU:

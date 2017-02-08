@@ -1,0 +1,9 @@
+{
+  "id": "ghast ",
+  "name": "Ghast",
+  "maxHP": 400,
+  "curHP": 100,
+  "moveDist": 5,
+  "action1": 5,
+  "action2": -1
+}

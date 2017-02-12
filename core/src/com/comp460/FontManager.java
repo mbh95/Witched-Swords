@@ -14,8 +14,6 @@ public class FontManager {
     public static final FreeTypeFontGenerator KEN_PIXEL_MINI = new FreeTypeFontGenerator(Gdx.files.local("common/fonts/kenpixel_mini.ttf"));
     public static final FreeTypeFontGenerator KEN_VECTOR_FUTURE = new FreeTypeFontGenerator(Gdx.files.local("common/fonts/kenvector_future.ttf"));
 
-
-
     public static BitmapFont getFont(FreeTypeFontGenerator generator, int size, Color color) {
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.size = size;

@@ -13,7 +13,7 @@
 //import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 //import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //import com.badlogic.gdx.math.Vector3;
-//import com.comp460.AssetManager;
+//import com.comp460.AssetMgr;
 //import com.comp460.GameDriver;
 //
 ///**
@@ -55,7 +55,7 @@
 //        //this.camera = new OrthographicCamera(Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT);
 //
 //        this.tiledMap = tiledMap;
-//        this.mapRenderer = new OrthogonalTiledMapRenderer(AssetManager.testMap);
+//        this.mapRenderer = new OrthogonalTiledMapRenderer(AssetMgr.testMap);
 //
 //        mapWidth = tiledMap.getProperties().get("width", Integer.class);
 //        mapHeight = tiledMap.getProperties().get("height", Integer.class);
@@ -67,7 +67,7 @@
 //        this.mapContents = new Entity[mapHeight][mapWidth];
 //
 //        // Iterate over map layers and create a collision mask for the map taking collision data from the topmost layer.
-//        for (MapLayer ml : AssetManager.testMap.getLayers()) {
+//        for (MapLayer ml : AssetMgr.testMap.getLayers()) {
 //            TiledMapTileLayer tl = (TiledMapTileLayer)ml;
 //            for (int r = 0; r < mapHeight; r++) {
 //                for (int c = 0; c < mapWidth; c++) {
@@ -224,19 +224,19 @@
 //        game.batch.begin();
 //        switch (state) {
 //            case CAMERA_STATE:
-//                game.batch.draw(AssetManager.cursor, cursorCol * 16, cursorRow * 16);
-//                game.batch.draw(AssetManager.bulbaMicro, bulbaCol * 16, bulbaRow * 16);
+//                game.batch.draw(AssetMgr.cursor, cursorCol * 16, cursorRow * 16);
+//                game.batch.draw(AssetMgr.bulbaMicro, bulbaCol * 16, bulbaRow * 16);
 //                break;
 //            case MOVEMENT_STATE:
-//                game.batch.draw(AssetManager.cursor, cursorCol * 16, cursorRow * 16);
-//                game.batch.draw(AssetManager.bulbaMicro, bulbaCol * 16, bulbaRow * 16);
+//                game.batch.draw(AssetMgr.cursor, cursorCol * 16, cursorRow * 16);
+//                game.batch.draw(AssetMgr.bulbaMicro, bulbaCol * 16, bulbaRow * 16);
 //                break;
 //            case ACTION_STATE:
-//                game.batch.draw(AssetManager.cursor, cursorCol * 16, cursorRow * 16);
-//                game.batch.draw(AssetManager.bulbaMicro, bulbaCol * 16, bulbaRow * 16);
-//                game.batch.draw(AssetManager.actionMenu, 0, mapHeight-16, 0, 0, 48, 16);
-//                game.batch.draw(AssetManager.actionMenu, 0, mapHeight-32, 0, 0, 48, 16);
-//                game.batch.draw(AssetManager.actionMenu, 0, mapHeight-16*selectionRow-16, 0, 16, 48, 16);
+//                game.batch.draw(AssetMgr.cursor, cursorCol * 16, cursorRow * 16);
+//                game.batch.draw(AssetMgr.bulbaMicro, bulbaCol * 16, bulbaRow * 16);
+//                game.batch.draw(AssetMgr.actionMenu, 0, mapHeight-16, 0, 0, 48, 16);
+//                game.batch.draw(AssetMgr.actionMenu, 0, mapHeight-32, 0, 0, 48, 16);
+//                game.batch.draw(AssetMgr.actionMenu, 0, mapHeight-16*selectionRow-16, 0, 16, 48, 16);
 //                break;
 //        }
 //

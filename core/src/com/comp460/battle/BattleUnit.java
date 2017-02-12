@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
-import com.comp460.AssetManager;
+import com.comp460.AssetMgr;
 import com.comp460.FontManager;
 import com.comp460.common.GameUnit;
 
@@ -24,7 +24,7 @@ public class BattleUnit implements IRenderable {
     private int gridRow, gridCol;
     private Vector3 transform;
 
-    private int energy = 50;
+    private int energy = 5;
 
     private Animation<TextureRegion> animIdle;
     private Animation<TextureRegion> animAttack;
@@ -46,16 +46,16 @@ public class BattleUnit implements IRenderable {
         this.grid = grid;
         this.base = base;
 
-        animAttack = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.ATTACK);
+        animAttack = AssetMgr.getAnimation(base.getId(), AssetMgr.BattleAnimation.ATTACK);
         animAttack.setPlayMode(Animation.PlayMode.NORMAL);
 
-        animHurt = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.HURT);
+        animHurt = AssetMgr.getAnimation(base.getId(), AssetMgr.BattleAnimation.HURT);
         animHurt.setPlayMode(Animation.PlayMode.NORMAL);
 
-        animFallen = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.FALLEN);
+        animFallen = AssetMgr.getAnimation(base.getId(), AssetMgr.BattleAnimation.FALLEN);
         animFallen.setPlayMode(Animation.PlayMode.NORMAL);
 
-        animIdle = AssetManager.getAnimation(base.getId(), AssetManager.BattleAnimation.IDLE);
+        animIdle = AssetMgr.getAnimation(base.getId(), AssetMgr.BattleAnimation.IDLE);
         animIdle.setPlayMode(Animation.PlayMode.LOOP);
 
         this.currentAnim = animIdle;

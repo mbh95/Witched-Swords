@@ -3,7 +3,6 @@ package com.comp460.battle;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,10 +10,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.comp460.AssetManager;
+import com.comp460.AssetMgr;
 import com.comp460.FontManager;
+import com.comp460.GameScreen;
 import com.comp460.common.GameUnit;
-import com.comp460.launcher.BattlePracticeMenu;
 import com.sun.javafx.binding.StringFormatter;
 
 import java.util.Random;
@@ -22,7 +21,7 @@ import java.util.Random;
 /**
  * Created by matthewhammond on 1/29/17.
  */
-public class BattleScreen extends ScreenAdapter {
+public class BattleScreen extends GameScreen {
 
     private static BitmapFont timerFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 16, Color.RED);
     private static BitmapFont resultsFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 32, Color.WHITE);
@@ -42,13 +41,14 @@ public class BattleScreen extends ScreenAdapter {
 
     private int width, height;
 
-    private float countdownTimer = 10;
+    private float countdownTimer = 30;
 
     private BattleState curState;
 
     private float endDelay = 2.0f;
 
-    public BattleScreen(Game parent, int width, int height, GameUnit basePlayerUnit, GameUnit baseAiUnit) {
+    public BattleScreen(Game parent, int width, int height, GameUnit basePlayerUnit, GameUnit baseAiUnit, GameScreen prev) {
+        super(parent, prev);
 
         this.batch = new SpriteBatch();
         this.game = parent;
@@ -78,8 +78,7 @@ public class BattleScreen extends ScreenAdapter {
             renderEnd();
             if (endDelay <=0 ) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-                    game.setScreen(new BattlePracticeMenu(game));
-                    dispose();
+                    previousScreen();
                 }
             }
             endDelay-=delta;
@@ -142,23 +141,22 @@ public class BattleScreen extends ScreenAdapter {
         if (aiUnit.getCurHP() == 0 || playerUnit.getCurHP() == 0) {
             curState = BattleState.END_DEATH;
             return;
-        } else if (aiUnit.getEnergy() == 0 && playerUnit.getEnergy() == 0) {
+        } else if (aiUnit.getEnergy() == 0 && playerUnit.getEnergy() == 0 && grid.getEffects().isEmpty()) {
             curState = BattleState.END_ENERGY;
+        } else if (countdownTimer <= 0){
+            curState = BattleState.END_TIME;
         }
-//        } else if (countdownTimer <= 0){
-//            curState = BattleState.END_TIME;
-//        }
     }
 
     private void renderBackground(SpriteBatch batch) {
         batch.begin();
-        batch.draw(AssetManager.Textures.BATTLE_BG, 0,0);
+        batch.draw(AssetMgr.Textures.BATTLE_BG, 0,0);
         batch.end();
     }
 
     private void renderUI(SpriteBatch batch) {
 
-        Texture hpBarTexture = AssetManager.Textures.HP_BAR;
+        Texture hpBarTexture = AssetMgr.Textures.HP_BAR;
 
         renderHealthBar(batch, playerUnit, width/2 - hpBarTexture.getWidth() - 10, 3);
         renderHealthBar(batch, aiUnit, width/2 + 10, 3);
@@ -169,10 +167,10 @@ public class BattleScreen extends ScreenAdapter {
     private void renderHealthBar(SpriteBatch batch, BattleUnit unit, int x, int y) {
         batch.begin();
 
-        batch.draw(AssetManager.Textures.HP_BAR, x, y);
+        batch.draw(AssetMgr.Textures.HP_BAR, x, y);
 
         for (int i = unit.getEnergy(); i > 0 ; i--)
-            batch.draw(AssetManager.Textures.ENERGY, 51 + x - (i-1)*11, y+2);
+            batch.draw(AssetMgr.Textures.ENERGY, 51 + x - (i-1)*11, y+2);
 
         batch.end();
 
@@ -207,6 +205,9 @@ public class BattleScreen extends ScreenAdapter {
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) playerUnit.move(-1, 0);
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) playerUnit.action1();
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) playerUnit.action2();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            this.previousScreen();
+        }
     }
 
     public enum AiState {OFFENSE, DEFENSE};

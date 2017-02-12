@@ -2,7 +2,7 @@ package com.comp460.battle;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.comp460.AssetManager;
+import com.comp460.AssetMgr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +28,15 @@ public class BattleGrid {
         this.numCols = halfNumCols * 2;
         this.grid = new BattleTile[this.numRows][this.numCols];
 
-        TextureRegion tile = AssetManager.Textures.BATTLE_TILE_BLUE;
+        TextureRegion tile = AssetMgr.Textures.BATTLE_TILE_BLUE;
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < numCols; c++) {
                 float x = (screenWidth/2) + (c - halfNumCols) * tile.getRegionWidth();
                 float y = tile.getRegionHeight() * (r + 1);
                 if (c < numCols / 2) {
-                    grid[r][c] = new BattleTile(x, y, AssetManager.Textures.BATTLE_TILE_BLUE, AssetManager.Textures.BATTLE_TILE_BLUE_SIDE);
+                    grid[r][c] = new BattleTile(x, y, AssetMgr.Textures.BATTLE_TILE_BLUE, AssetMgr.Textures.BATTLE_TILE_BLUE_SIDE);
                 } else {
-                    grid[r][c] = new BattleTile(x, y, AssetManager.Textures.BATTLE_TILE_RED, AssetManager.Textures.BATTLE_TILE_RED_SIDE);
+                    grid[r][c] = new BattleTile(x, y, AssetMgr.Textures.BATTLE_TILE_RED, AssetMgr.Textures.BATTLE_TILE_RED_SIDE);
                 }
             }
         }

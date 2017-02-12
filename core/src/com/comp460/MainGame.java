@@ -11,17 +11,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.comp460.common.GameUnit;
-import com.comp460.battle.BattleScreen;
-import com.comp460.launcher.MainMenu;
-import com.comp460.launcher.SplashScreen;
-//import com.comp460.archive.battle.BattleScreen;
+import com.comp460.launcher.splash.SplashScreen;
 
 
-public class Main extends Game {
+public class MainGame extends Game {
 
-	public SpriteBatch batch;
+	private SpriteBatch batch;
 	private FrameBuffer buffer;
 	private TextureRegion bufferRegion;
 
@@ -43,7 +38,7 @@ public class Main extends Game {
 		fpsFont.setColor(Color.YELLOW);
 
 //		Assets.load();
-		AssetManager.load();
+		AssetMgr.load();
 
 //		TacticsScreen ts = new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST);
 //		this.setScreen(new BattleScreen(this, ts));
@@ -77,7 +72,6 @@ public class Main extends Game {
 
 	@Override
 	public void dispose () {
-		Assets.dispose();
 		batch.dispose();
 	}
 }

@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 /**
  * Created by matthewhammond on 1/12/17.
  */
-public class AssetManager {
+public class AssetMgr {
 
     public static final String BATTLE_SPRITES_UNITS_PATH = "./battle/sprites/units/";
     public static final String MAPS_PATH = "./tactics/maps/";
@@ -92,7 +92,9 @@ public class AssetManager {
         Textures.SHIELD = new Texture(Gdx.files.internal("battle/sprites/attacks/shield_outline.png"));
         Textures.SPIKE = new Texture(Gdx.files.internal("battle/sprites/attacks/spike.png"));
         Textures.ARROW = new Texture(Gdx.files.internal("battle/sprites/attacks/arrow.png"));
-        Textures.PUFF = new Texture(Gdx.files.internal("battle/sprites/attacks/puff.png"));
+//        Textures.PUFF = new Texture(Gdx.files.internal("battle/sprites/attacks/puff.png"));
+        Textures.PUFF = new Texture(Gdx.files.internal("battle/sprites/attacks/poof.png"));
+
 
         Maps.TEST = new TmxMapLoader().load(MAPS_PATH + "testmap.tmx");
     }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.comp460.AssetManager;
+import com.comp460.AssetMgr;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -72,7 +72,7 @@ public class ActionFactory {
                     @Override
                     public void render(SpriteBatch batch) {
                         batch.begin();
-                        batch.draw(AssetManager.Textures.LAZER, grid.getTile(this.row, this.col).getScreenX(), grid.getTile(this.row, this.col).getScreenY());
+                        batch.draw(AssetMgr.Textures.LAZER, grid.getTile(this.row, this.col).getScreenX(), grid.getTile(this.row, this.col).getScreenY());
                         batch.end();
                     }
                 }));
@@ -115,7 +115,7 @@ public class ActionFactory {
                     @Override
                     public void render(SpriteBatch batch) {
                         batch.begin();
-                        batch.draw(AssetManager.Textures.SCRATCH, grid.getTile(this.row, this.col).getScreenX(), grid.getTile(this.row, this.col).getScreenY());
+                        batch.draw(AssetMgr.Textures.SCRATCH, grid.getTile(this.row, this.col).getScreenX(), grid.getTile(this.row, this.col).getScreenY());
                         batch.end();
                     }
                 }));
@@ -153,7 +153,7 @@ public class ActionFactory {
                 @Override
                 public void render(SpriteBatch batch) {
                     batch.begin();
-                    batch.draw(AssetManager.Textures.SHIELD, grid.getTile(this.row, this.col).getScreenX(), grid.getTile(this.row, this.col).getScreenY());
+                    batch.draw(AssetMgr.Textures.SHIELD, grid.getTile(this.row, this.col).getScreenX(), grid.getTile(this.row, this.col).getScreenY());
                     batch.end();
                 }
             });
@@ -192,7 +192,7 @@ public class ActionFactory {
         @Override
         public void render(SpriteBatch batch) {
             batch.begin();
-            batch.draw(AssetManager.Textures.SPIKE, owner.getGrid().getTile(this.row, this.col).getScreenX(), owner.getGrid().getTile(this.row, this.col).getScreenY());
+            batch.draw(AssetMgr.Textures.SPIKE, owner.getGrid().getTile(this.row, this.col).getScreenX(), owner.getGrid().getTile(this.row, this.col).getScreenY());
             batch.end();
         }
     }
@@ -241,7 +241,7 @@ public class ActionFactory {
         @Override
         public void render(SpriteBatch batch) {
             batch.begin();
-            batch.draw(AssetManager.Textures.ARROW, owner.getGrid().getTile(this.row, this.col).getScreenX(), owner.getGrid().getTile(this.row, this.col).getScreenY());
+            batch.draw(AssetMgr.Textures.ARROW, owner.getGrid().getTile(this.row, this.col).getScreenX(), owner.getGrid().getTile(this.row, this.col).getScreenY());
             batch.end();
         }
     }
@@ -268,7 +268,7 @@ public class ActionFactory {
 
         @Override
         public boolean tick() {
-            if (this.numTicks > 20) {
+            if (this.numTicks > 10) {
                 if (col > 0) {
                     this.owner.getGrid().addEffect(new PuffEffect(owner, row, col - 1, 0));
                 }
@@ -291,7 +291,7 @@ public class ActionFactory {
         @Override
         public void render(SpriteBatch batch) {
             batch.begin();
-            batch.draw(AssetManager.Textures.PUFF, owner.getGrid().getTile(this.row, this.col).getScreenX(), owner.getGrid().getTile(this.row, this.col).getScreenY());
+            batch.draw(AssetMgr.Textures.PUFF, owner.getGrid().getTile(this.row, this.col).getScreenX(), owner.getGrid().getTile(this.row, this.col).getScreenY());
             batch.end();
         }
     }

@@ -9,11 +9,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.Assets;
-import com.comp460.archive.battle.BattleAttack;
-import com.comp460.archive.battle.BattleUnit;
-import com.comp460.Main;
+import com.comp460.MainGame;
 import com.sun.javafx.binding.StringFormatter;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class BattleScreen extends ScreenAdapter {
 
     private float totalTime = 1100;
 
-    private Main game;
+    private MainGame game;
     private ScreenAdapter tacticsScreen;
     private OrthographicCamera camera;
     private BitmapFont font = new BitmapFont(Gdx.files.internal("common/fonts/boss.fnt"));
@@ -41,12 +40,15 @@ public class BattleScreen extends ScreenAdapter {
     private int bounceDelay = 120;
     private boolean freeze = false;
     private int freezeDelay = 180;
+    private SpriteBatch batch;
 
     private float t = 0f;
 
     private List<BattleAttack> attacks = new ArrayList<BattleAttack>();
 
-    public BattleScreen(Main parentGame, ScreenAdapter tacticsScreen) {
+    public BattleScreen(MainGame parentGame, ScreenAdapter tacticsScreen) {
+
+        this.batch = new SpriteBatch();
         this.game = parentGame;
         this.tacticsScreen = tacticsScreen;
         this.camera = new OrthographicCamera(DISP_WIDTH, DISP_HEIGHT);
@@ -168,8 +170,8 @@ public class BattleScreen extends ScreenAdapter {
         // draw battle tiles
         for (int i = 2; i >= 0; i--) {
             for (int j = 2; j >= 0; j--) {
-                game.batch.draw(Assets.Textures.BATTLE_TILE_BLUE, DISP_WIDTH/2 - (i+1)*40, j*40 + 20);
-                game.batch.draw(Assets.Textures.BATTLE_TILE_RED, DISP_WIDTH/2 + i*40, j*40 + 20);
+                batch.draw(Assets.Textures.BATTLE_TILE_BLUE, DISP_WIDTH/2 - (i+1)*40, j*40 + 20);
+                batch.draw(Assets.Textures.BATTLE_TILE_RED, DISP_WIDTH/2 + i*40, j*40 + 20);
             }
         }
     }
@@ -209,10 +211,10 @@ public class BattleScreen extends ScreenAdapter {
             x = DISP_WIDTH/2 + 10;
             y = 3;
         }
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        game.batch.draw(Assets.Textures.HP_BAR, x, y);
-        game.batch.end();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        batch.draw(Assets.Textures.HP_BAR, x, y);
+        batch.end();
 
         ShapeRenderer sr = new ShapeRenderer();
         sr.setProjectionMatrix(camera.combined);
@@ -228,10 +230,10 @@ public class BattleScreen extends ScreenAdapter {
             sr.rect(x+9, y+8, (int) (52 * percentHP), 4);
         sr.end();
 
-        game.batch.begin();
+        batch.begin();
         for (int i = unit.currNRG; i > 0 ; i--)
-            game.batch.draw(Assets.Textures.ENERGY, 51 + x - (i-1)*11, y+2);
-        game.batch.end();
+            batch.draw(Assets.Textures.ENERGY, 51 + x - (i-1)*11, y+2);
+        batch.end();
     }
 
     private void countdown() {
@@ -241,22 +243,22 @@ public class BattleScreen extends ScreenAdapter {
         }
         int seconds = ((int) totalTime) % 60;
         String timerString = StringFormatter.format("%02d", seconds).getValue();
-        font.draw(game.batch, timerString, DISP_WIDTH/2 - font.getSpaceWidth()*2, DISP_HEIGHT-55);
+        font.draw(batch, timerString, DISP_WIDTH/2 - font.getSpaceWidth()*2, DISP_HEIGHT-55);
     }
 
     @Override
     public void render(float delta) {
         update(delta);
 
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        game.batch.draw(Assets.Textures.BATTLE_BG, 0f, 0f, 400, 240);
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        batch.draw(Assets.Textures.BATTLE_BG, 0f, 0f, 400, 240);
         drawMap();
-        game.batch.end();
+        batch.end();
         drawMask();
 
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
 
         countdown();
 
@@ -270,15 +272,15 @@ public class BattleScreen extends ScreenAdapter {
         if (bounceDelay == 0) bounceDelay = 120;
         bounceDelay--;
 
-        game.batch.draw(bulba.getSprite(), DISP_WIDTH/2 + (bulba.col - 3)*40, bulbaHeight);
-        game.batch.draw(rogue.getSprite(), DISP_WIDTH/2 - 40*3 + rogue.col*40, rogueHeight);
+        batch.draw(bulba.getSprite(), DISP_WIDTH/2 + (bulba.col - 3)*40, bulbaHeight);
+        batch.draw(rogue.getSprite(), DISP_WIDTH/2 - 40*3 + rogue.col*40, rogueHeight);
 
         for (BattleAttack attack : attacks) {
             if (attack.warning <= 0)
-                game.batch.draw(attack.sprite, DISP_WIDTH/2 + (attack.col - 3)*40, attack.row*40 + 29);
+                batch.draw(attack.sprite, DISP_WIDTH/2 + (attack.col - 3)*40, attack.row*40 + 29);
         }
 
-        game.batch.end();
+        batch.end();
 
         drawHP(bulba);
         drawHP(rogue);
@@ -296,36 +298,36 @@ public class BattleScreen extends ScreenAdapter {
         }
          */
 
-        game.batch.begin();
+        batch.begin();
         if (rogue.currHP <= 0 && bulba.currHP <= 0) {
             // DRAW
             GlyphLayout layout = new GlyphLayout(font, "YOU BOTH DIED");
-            font.draw(game.batch, "YOU BOTH DIED", DISP_WIDTH/2 - layout.width/2, 100);
+            font.draw(batch, "YOU BOTH DIED", DISP_WIDTH/2 - layout.width/2, 100);
         } else if (rogue.currHP <= 0) {
             // YOU LOSE
             GlyphLayout layout = new GlyphLayout(font, "YOU DIED");
-            font.draw(game.batch, "YOU DIED", DISP_WIDTH/2 - layout.width/2, 100);
+            font.draw(batch, "YOU DIED", DISP_WIDTH/2 - layout.width/2, 100);
 
         } else if (bulba.currHP <= 0) {
             // YOU WIN
             GlyphLayout layout = new GlyphLayout(font, "ENEMY DIED");
-            font.draw(game.batch, "ENEMY DIED", DISP_WIDTH/2 - layout.width/2, 100);
+            font.draw(batch, "ENEMY DIED", DISP_WIDTH/2 - layout.width/2, 100);
 
         } else if (rogue.currNRG == 0 && bulba.currNRG == 0) {
             // ENERGY DRAW
             GlyphLayout layout = new GlyphLayout(font, "OUT OF ENERGY");
-            font.draw(game.batch, "OUT OF ENERGY", DISP_WIDTH/2 - layout.width/2, 100);
+            font.draw(batch, "OUT OF ENERGY", DISP_WIDTH/2 - layout.width/2, 100);
 
         } else if(totalTime < 0) {
             // TIME DRAW
             GlyphLayout layout = new GlyphLayout(font, "OUT OF TIME");
-            font.draw(game.batch, "OUT OF TIME", DISP_WIDTH/2 - layout.width/2, 100);
+            font.draw(batch, "OUT OF TIME", DISP_WIDTH/2 - layout.width/2, 100);
         }
         if (freezeDelay < 0) {
             GlyphLayout layout = new GlyphLayout(font, "any key to continue");
-            font.draw(game.batch, "any key to continue", DISP_WIDTH/2 - layout.width/2, 50);
+            font.draw(batch, "any key to continue", DISP_WIDTH/2 - layout.width/2, 50);
         }
-        game.batch.end();
+        batch.end();
     }
 
     public enum AiState {OFFENSE, DEFENSE};

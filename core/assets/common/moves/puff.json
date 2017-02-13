@@ -1,0 +1,32 @@
+{
+  "id": "puff",
+  "name": "Puff",
+  "description": "Wafts a wave of toxic gas that drains health from enemies to heals the user.",
+  "energyCost": 0,
+  "healthCost": 15,
+  "entities": [
+    {
+      "class":"com.comp460.battle.PuffEntityTemplate",
+      "components": [
+        {
+          "class": "com.comp460.battle.components.ProjectileComponent",
+          "dr": 0,
+          "dc": -1,
+          "delay": 0.2
+        },
+        {
+          "class": "com.comp460.battle.components.MoveTextureComponent",
+          "path": "battle/sprites/attacks/poof.png"
+        },
+        {
+          "class": "com.comp460.battle.components.DamageComponent",
+          "amount": 15,
+          "lifesteal": 30
+        },
+        {
+          "class": "com.comp460.battle.components.OwnerComponent"
+        }
+      ]
+    }
+  ]
+}

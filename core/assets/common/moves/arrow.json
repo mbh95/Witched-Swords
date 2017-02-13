@@ -1,0 +1,35 @@
+{
+  "id": "arrow",
+  "name": "Arrow",
+  "description": "Shoots a quick, straight-flying arrow that deals low damage.",
+  "energyCost": 1,
+  "entities": [
+    {
+      "components": [
+        {
+          "class": "com.comp460.battle.components.LocationComponent",
+          "relative": "true",
+          "row": 0,
+          "col": 0
+        },
+        {
+          "class": "com.comp460.battle.components.ProjectileComponent",
+          "dr": 0,
+          "dc": 1,
+          "delay": 0.05
+        },
+        {
+          "class": "com.comp460.battle.components.MoveTextureComponent",
+          "path": "battle/sprites/attacks/arrow.png"
+        },
+        {
+          "class": "com.comp460.battle.components.DamageComponent",
+          "amount": 15
+        },
+        {
+          "class": "com.comp460.battle.components.OwnerComponent"
+        }
+      ]
+    }
+  ]
+}

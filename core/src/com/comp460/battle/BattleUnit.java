@@ -18,7 +18,7 @@ import java.util.*;
 public class BattleUnit implements IRenderable {
 
     private static BitmapFont floatingFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
-    private BattleGrid grid;
+    private BattleScreen screen;
     private GameUnit base;
 
     private int gridRow, gridCol;
@@ -36,14 +36,17 @@ public class BattleUnit implements IRenderable {
 
     private boolean invlunerable;
 
-    private BattleAction action1;
-    private BattleAction action2;
+//    private BattleAction action1;
+//    private BattleAction action2;
+
+    private BattleMove move1;
+    private BattleMove move2;
 
     private List<FloatingText> floatingTexts = new ArrayList<>();
 
 
-    public BattleUnit( BattleGrid grid, GameUnit base, int row, int col) {
-        this.grid = grid;
+    public BattleUnit( BattleScreen screen, GameUnit base, int row, int col) {
+        this.screen = screen;
         this.base = base;
 
         animAttack = AssetMgr.getAnimation(base.getId(), AssetMgr.BattleAnimation.ATTACK);
@@ -65,10 +68,13 @@ public class BattleUnit implements IRenderable {
         this.transform = new Vector3(this.getTileX(), this.getTileY(), 0.0f);
         this.invlunerable = false;
 
-        this.action1 = ActionFactory.buildAction(this.base.getAction1());
-        this.action2 = ActionFactory.buildAction(this.base.getAction2());
+//        this.action1 = ActionFactory.buildAction(this.base.getAction1());
+//        this.action2 = ActionFactory.buildAction(this.base.getAction2());
 
-        this.grid.addUnit(this);
+        this.move1 = ActionFactory.getMove(base.getAction1(), this);
+        this.move2 = ActionFactory.getMove(base.getAction2(), this);
+
+        this.screen.grid.addUnit(this);
     }
 
     public void update(float delta) {
@@ -128,7 +134,7 @@ public class BattleUnit implements IRenderable {
     }
 
     public BattleGrid getGrid() {
-        return this.grid;
+        return this.screen.grid;
     }
 
     public int getGridRow() {
@@ -140,20 +146,20 @@ public class BattleUnit implements IRenderable {
     }
 
     public void setGridRow(int newRow) {
-        if (this.grid.isOnLHS(gridRow, gridCol) && !this.grid.isOnLHS(newRow, gridCol)) {
+        if (this.screen.grid.isOnLHS(gridRow, gridCol) && !this.screen.grid.isOnLHS(newRow, gridCol)) {
             return;
         }
-        if (this.grid.isOnRHS(gridRow, gridCol) && !this.grid.isOnRHS(newRow, gridCol)) {
+        if (this.screen.grid.isOnRHS(gridRow, gridCol) && !this.screen.grid.isOnRHS(newRow, gridCol)) {
             return;
         }
         this.gridRow = newRow;
     }
 
     public void setGridCol(int newCol) {
-        if (this.grid.isOnLHS(gridRow, gridCol) && !this.grid.isOnLHS(gridRow, newCol)) {
+        if (this.screen.grid.isOnLHS(gridRow, gridCol) && !this.screen.grid.isOnLHS(gridRow, newCol)) {
             return;
         }
-        if (this.grid.isOnRHS(gridRow, gridCol) && !this.grid.isOnRHS(gridRow, newCol)) {
+        if (this.screen.grid.isOnRHS(gridRow, gridCol) && !this.screen.grid.isOnRHS(gridRow, newCol)) {
             return;
         }
         this.gridCol = newCol;
@@ -165,19 +171,36 @@ public class BattleUnit implements IRenderable {
     }
 
     public void action1() {
-        action1.perform(this);
-    }
+        if (move1 != null) {
+            if (this.getEnergy() >= move1.energyCost && this.getCurHP() >= move1.healthCost) {
+                this.setEnergy(this.getEnergy() - move1.energyCost);
+                if (move1.healthCost > 0) {
+                    this.hurt(move1.healthCost);
+                }
+                move1.perform(this.screen.engine);
+                this.setAnimAttack();
+            }
+        }    }
 
     public void action2() {
-        action2.perform(this);
+        if (move2 != null) {
+            if (this.getEnergy() >= move2.energyCost && this.getCurHP() >= move2.healthCost) {
+                this.setEnergy(this.getEnergy() - move2.energyCost);
+                if (move2.healthCost > 0) {
+                    this.hurt(move2.healthCost);
+                }
+                move2.perform(this.screen.engine);
+                this.setAnimAttack();
+            }
+        }
     }
 
     private float getTileX() {
-        return grid.getTile(gridRow, gridCol).getScreenX();
+        return screen.grid.getTile(gridRow, gridCol).getScreenX();
     }
 
     private float getTileY() {
-        return grid.getTile(gridRow, gridCol).getScreenY();// + grid.getTile(gridRow, gridCol).getSprite().getRegionHeight()/3;
+        return screen.grid.getTile(gridRow, gridCol).getScreenY();// + grid.getTile(gridRow, gridCol).getSprite().getRegionHeight()/3;
     }
 
     public void hurt(int amt) {
@@ -246,7 +269,7 @@ public class BattleUnit implements IRenderable {
 
         public boolean update(float delta) {
             this.y += delta * dy;
-            dy /= 1.2f;
+//            dy /= 1.2f;
             duration -= delta;
             if (duration <= 0) {
                 return false;

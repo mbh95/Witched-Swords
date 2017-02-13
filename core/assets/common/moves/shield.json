@@ -1,0 +1,32 @@
+{
+  "id": "shield",
+  "name": "Shield",
+  "description": "Raise a heavy shield to momentarily block any incoming attacks.",
+  "energyCost": 1,
+  "entities": [
+    {
+      "components": [
+        {
+          "class": "com.comp460.battle.components.LocationComponent",
+          "relative": "true",
+          "row": 0,
+          "col": 0
+        },
+        {
+          "class": "com.comp460.battle.components.BlockMoveComponent"
+        },
+        {
+          "class": "com.comp460.battle.components.ExpiringComponent",
+          "duration": 0.5
+        },
+        {
+          "class": "com.comp460.battle.components.MoveTextureComponent",
+          "path": "battle/sprites/attacks/shield_outline.png"
+        },
+        {
+          "class": "com.comp460.battle.components.OwnerComponent"
+        }
+      ]
+    }
+  ]
+}

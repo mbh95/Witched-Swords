@@ -11,14 +11,15 @@ public class GameUnit {
 
     private String id;
     private String name;
+    private String description;
 
     private int maxHP;
     private int curHP;
 
     private int moveDist;
 
-    private int action1;
-    private int action2;
+    private String action1;
+    private String action2;
 
     public String getId() {
         return id;
@@ -26,6 +27,10 @@ public class GameUnit {
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public int getMaxHP() {
@@ -40,11 +45,11 @@ public class GameUnit {
         return moveDist;
     }
 
-    public int getAction1() {
+    public String getAction1() {
         return action1;
     }
 
-    public int getAction2() {
+    public String getAction2() {
         return action2;
     }
 

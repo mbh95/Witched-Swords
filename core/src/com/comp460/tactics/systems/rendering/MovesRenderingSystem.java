@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.comp460.battle.BattleScreen;
 import com.comp460.tactics.TacticsScreen;
 import com.comp460.tactics.components.ShowValidMovesComponent;
 import com.comp460.tactics.components.UnitStatsComponent;
@@ -32,6 +33,7 @@ public class MovesRenderingSystem  extends EntitySystem implements EntityListene
         this.teamToValidMoves = new HashMap<>(2);
         this.parentScreen = tacticsScreen;
     }
+
 
     @Override
     public void addedToEngine(Engine engine) {

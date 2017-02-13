@@ -1,9 +1,10 @@
 {
-"id": "bulba",
-"name": "Baddie",
-"maxHP": 100,
-"curHP": 100,
-"moveDist": 5,
-"action1": 1,
-"action2": -1
+  "id": "bulba",
+  "name": "Baddie",
+  "description": "A prickly character.",
+  "maxHP": 100,
+  "curHP": 100,
+  "moveDist": 5,
+  "action1": "spike",
+  "action2": "null"
 }

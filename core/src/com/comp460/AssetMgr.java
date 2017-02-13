@@ -41,9 +41,9 @@ public class AssetMgr {
     }
 
     private static Map<String, Animation<TextureRegion>> idAnimLookup = new HashMap<>();
+    private static Map<String, Texture> pathTextureLookup = new HashMap<>();
 
     public static class Textures {
-
 
         public static Texture BATTLE_BG;
 
@@ -72,6 +72,7 @@ public class AssetMgr {
 
         loadAllBattleAnims("bulba");
         loadAllBattleAnims("ghast");
+        loadAllBattleAnims("trixy");
         loadAllBattleAnims("ruby");
         loadAllBattleAnims("shieldman");
         loadAllBattleAnims("clarissa");
@@ -85,7 +86,7 @@ public class AssetMgr {
         Textures.BATTLE_TILE_RED_SIDE = new TextureRegion(battleTilesTexture, battleTilesTexture.getWidth()/2, battleTilesTexture.getWidth()/2, battleTilesTexture.getWidth()/2, battleTilesTexture.getHeight() - battleTilesTexture.getWidth()/2);
 
         Textures.BATTLE_BG = new Texture(Gdx.files.internal("battle/sprites/backgrounds/plains.png"));
-        Textures.HP_BAR = new Texture(Gdx.files.internal("battle/sprites/ui/hp_bar.png"));
+        Textures.HP_BAR = new Texture(Gdx.files.internal("battle/sprites/ui/hp_bar_new.png"));
         Textures.ENERGY = new Texture(Gdx.files.internal("battle/sprites/ui/energy.png"));
         Textures.SCRATCH = new Texture(Gdx.files.internal("battle/sprites/attacks/scratch.png"));
         Textures.LAZER = new Texture(Gdx.files.internal("battle/sprites/attacks/lazer.png"));
@@ -148,5 +149,16 @@ public class AssetMgr {
             }
         }
         return idAnimLookup.get(id + anim.getAnimId());
+    }
+
+    public static TextureRegion getTexture(String path) {
+        Texture tex;
+        if (!pathTextureLookup.containsKey(path)) {
+            tex = new Texture(Gdx.files.internal(path));
+            pathTextureLookup.put(path, tex);
+        } else {
+            tex = pathTextureLookup.get(path);
+        }
+        return new TextureRegion(tex);
     }
 }

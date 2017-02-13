@@ -1,0 +1,35 @@
+{
+  "id": "spike",
+  "name": "Spike",
+  "description": "Shoots a spike in a straight line that deals high damage.",
+  "energyCost": 1,
+  "entities": [
+    {
+      "components": [
+        {
+          "class": "com.comp460.battle.components.LocationComponent",
+          "relative": "true",
+          "row": 0,
+          "col": 0
+        },
+        {
+          "class": "com.comp460.battle.components.ProjectileComponent",
+          "dr": 0,
+          "dc": -1,
+          "delay": 0.1
+        },
+        {
+          "class": "com.comp460.battle.components.MoveTextureComponent",
+          "path": "battle/sprites/attacks/spike.png"
+        },
+        {
+          "class": "com.comp460.battle.components.DamageComponent",
+          "amount": 30
+        },
+        {
+          "class": "com.comp460.battle.components.OwnerComponent"
+        }
+      ]
+    }
+  ]
+}

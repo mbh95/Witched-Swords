@@ -1,15 +1,86 @@
 {
   "id": "lazer",
   "name": "Lazer",
-  "description": "Fire your lazer!",
-  "priority": 1,
-
-  "properties": [
-    ""
-  ],
-
-  "position": "relative",
-  "pattern": [["0", "1"],
-              ["0", "2"],
-              ["0", "3"]]
+  "description": "Fires a short burst of lazer in a straight line that deals moderate damage.",
+  "energyCost": 1,
+  "entities": [
+    {
+      "components": [
+        {
+          "class": "com.comp460.battle.components.WarningComponent",
+          "duration": 0.5
+        },
+        {
+          "class": "com.comp460.battle.components.LocationComponent",
+          "relative": "true",
+          "row": 0,
+          "col": 1
+        },
+        {
+          "class": "com.comp460.battle.components.DamageComponent",
+          "amount": 20
+        },
+        {
+          "class": "com.comp460.battle.components.ExpiringComponent",
+          "duration": 0.5
+        },
+        {
+          "class": "com.comp460.battle.components.MoveTextureComponent",
+          "path": "battle/sprites/attacks/lazer.png"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "class": "com.comp460.battle.components.WarningComponent",
+          "duration": 0.5
+        },
+        {
+          "class": "com.comp460.battle.components.LocationComponent",
+          "relative": "true",
+          "row": 0,
+          "col": 2
+        },
+        {
+          "class": "com.comp460.battle.components.DamageComponent",
+          "amount": 20
+        },
+        {
+          "class": "com.comp460.battle.components.ExpiringComponent",
+          "duration": 0.45
+        },
+        {
+          "class": "com.comp460.battle.components.MoveTextureComponent",
+          "path": "battle/sprites/attacks/lazer.png"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "class": "com.comp460.battle.components.WarningComponent",
+          "duration": 0.5
+        },
+        {
+          "class": "com.comp460.battle.components.LocationComponent",
+          "relative": "true",
+          "row": 0,
+          "col": 3
+        },
+        {
+          "class": "com.comp460.battle.components.DamageComponent",
+          "amount": 20
+        },
+        {
+          "class": "com.comp460.battle.components.ExpiringComponent",
+          "duration": 0.4
+        },
+        {
+          "class": "com.comp460.battle.components.MoveTextureComponent",
+          "path": "battle/sprites/attacks/lazer.png"
+        }
+      ]
+    }
+  ]
 }

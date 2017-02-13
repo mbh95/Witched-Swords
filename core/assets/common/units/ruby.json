@@ -1,9 +1,10 @@
 {
-"id": "ruby",
-"name": "Ruby",
-"maxHP": 100,
-"curHP": 100,
-"moveDist": 5,
-"action1": 0,
-"action2": -1
+  "id": "ruby",
+  "name": "Ruby",
+  "description": "A powerful mage.",
+  "maxHP": 100,
+  "curHP": 100,
+  "moveDist": 5,
+  "action1": "lazer",
+  "action2": "shield"
 }

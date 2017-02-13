@@ -66,30 +66,30 @@ public class Assets {
         TextureRegion[] ROGUE_MICRO_ANIM = new TextureRegion[] {new TextureRegion(Textures.ROGUE_MICRO_1), new TextureRegion(Textures.ROGUE_MICRO_2)};
         animLookup.put("rogue_micro", ROGUE_MICRO_ANIM);
 
-        Textures.BULBA_IDLE0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba1_idle.png"));
-        Textures.BULBA_IDLE1_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_0.png"));
-        Textures.BULBA_IDLE2_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_1.png"));
-        Textures.BULBA_IDLE3_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_2.png"));
-        Textures.BULBA_IDLE4_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_3.png"));
-        Textures.BULBA_ATTACK0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_attack_0.png"));
-        Textures.BULBA_HURT0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_hurt_0.png"));
-        Textures.BULBA_FALLEN0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_fallen_0.png"));
-        Textures.BULBA_FALLEN1_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_fallen_1.png"));
+//        Textures.BULBA_IDLE0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba1_idle.png"));
+//        Textures.BULBA_IDLE1_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_0.png"));
+//        Textures.BULBA_IDLE2_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_1.png"));
+//        Textures.BULBA_IDLE3_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_2.png"));
+//        Textures.BULBA_IDLE4_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_idle_3.png"));
+//        Textures.BULBA_ATTACK0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_attack_0.png"));
+//        Textures.BULBA_HURT0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_hurt_0.png"));
+//        Textures.BULBA_FALLEN0_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_fallen_0.png"));
+//        Textures.BULBA_FALLEN1_BATTLE = new Texture(Gdx.files.internal("battle/sprites/units/bulba_fallen_1.png"));
 
         Textures.ACTION_MENU = new Texture(Gdx.files.internal("tactics/sprites/ui/action_menu.png"));
-        Texture tempTiles = new Texture(Gdx.files.internal("battle/sprites/ui/battle_tiles_plains.png"));
-        Textures.BATTLE_TILE = new Texture(Gdx.files.internal("battle/sprites/ui/battle_tile.png"));
-        Textures.BATTLE_TILE_BLUE = new TextureRegion(tempTiles, 0,0,tempTiles.getWidth()/2, tempTiles.getHeight());
-        Textures.BATTLE_TILE_RED = new TextureRegion(tempTiles, tempTiles.getWidth()/2, 0, tempTiles.getWidth()/2, tempTiles.getHeight());
-        Textures.BATTLE_BG = new Texture(Gdx.files.internal("battle/sprites/backgrounds/plains.png"));
-        Textures.HP_BAR = new Texture(Gdx.files.internal("battle/sprites/ui/hp_bar.png"));
-        Textures.ENERGY = new Texture(Gdx.files.internal("battle/sprites/ui/energy.png"));
-        Textures.MEGA = new Texture(Gdx.files.internal("battle/sprites/units/megadude.png"));
-        Textures.SCRATCH = new Texture(Gdx.files.internal("battle/sprites/attacks/scratch.png"));
-        Textures.LAZER = new Texture(Gdx.files.internal("battle/sprites/attacks/lazer.png"));
-        Textures.ROGUE = new Texture(Gdx.files.internal("battle/sprites/units/ruby_idle_0.png"));
-        Textures.ROGUE1 = new Texture(Gdx.files.internal("battle/sprites/units/ruby_idle_1.png"));
-        Textures.ROGUE2 = new Texture(Gdx.files.internal("battle/sprites/units/ruby_idle_2.png"));
+//        Texture tempTiles = new Texture(Gdx.files.internal("battle/sprites/ui/battle_tiles_plains.png"));
+//        Textures.BATTLE_TILE = new Texture(Gdx.files.internal("battle/sprites/ui/battle_tile.png"));
+//        Textures.BATTLE_TILE_BLUE = new TextureRegion(tempTiles, 0,0,tempTiles.getWidth()/2, tempTiles.getHeight());
+//        Textures.BATTLE_TILE_RED = new TextureRegion(tempTiles, tempTiles.getWidth()/2, 0, tempTiles.getWidth()/2, tempTiles.getHeight());
+//        Textures.BATTLE_BG = new Texture(Gdx.files.internal("battle/sprites/backgrounds/plains.png"));
+//        Textures.HP_BAR = new Texture(Gdx.files.internal("battle/sprites/ui/hp_bar.png"));
+//        Textures.ENERGY = new Texture(Gdx.files.internal("battle/sprites/ui/energy.png"));
+//        Textures.MEGA = new Texture(Gdx.files.internal("battle/sprites/units/megadude.png"));
+//        Textures.SCRATCH = new Texture(Gdx.files.internal("battle/sprites/attacks/scratch.png"));
+//        Textures.LAZER = new Texture(Gdx.files.internal("battle/sprites/attacks/lazer.png"));
+//        Textures.ROGUE = new Texture(Gdx.files.internal("battle/sprites/units/ruby_idle_0.png"));
+//        Textures.ROGUE1 = new Texture(Gdx.files.internal("battle/sprites/units/ruby_idle_1.png"));
+//        Textures.ROGUE2 = new Texture(Gdx.files.internal("battle/sprites/units/ruby_idle_2.png"));
         Maps.TEST = new TmxMapLoader().load("tactics/maps/testmap.tmx");
     }
 

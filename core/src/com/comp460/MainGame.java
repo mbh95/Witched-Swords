@@ -11,7 +11,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
+import com.comp460.battle.BattleMove;
+import com.comp460.battle.BattleScreen;
+import com.comp460.common.GameUnit;
 import com.comp460.launcher.splash.SplashScreen;
+import com.comp460.tactics.TacticsScreen;
 
 
 public class MainGame extends Game {
@@ -37,19 +44,19 @@ public class MainGame extends Game {
 		fpsFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.YELLOW);
 		fpsFont.setColor(Color.YELLOW);
 
-//		Assets.load();
+		Assets.load();
 		AssetMgr.load();
 
-//		TacticsScreen ts = new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST);
+		TacticsScreen ts = new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST);
 //		this.setScreen(new BattleScreen(this, ts));
 
 //		this.setScreen(new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST));
-//		this.setScreen(new BattleScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, GameUnit.loadFromJSON("common/units/shieldman.json"), GameUnit.loadFromJSON("common/units/bulba.json")));
+//		this.setScreen(new BattleScreen(this, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, GameUnit.loadFromJSON("common/units/shieldman.json"), GameUnit.loadFromJSON("common/units/bulba.json"), null));
 
 //		this.setScreen(new MainMenu(this));
 
 		this.setScreen(new SplashScreen(this));
-
+//		this.setScreen(ts);
 	}
 
 	@Override

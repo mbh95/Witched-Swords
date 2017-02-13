@@ -19,11 +19,15 @@ public class BattleGrid {
 
     private BattleTile[][] grid;
 
-    private List<BattleUnit> units = new ArrayList<>();
+    public List<BattleUnit> units = new ArrayList<>();
     private Queue<BattleEffect> effects = new PriorityQueue<>();
     private Queue<BattleEffect> nextEffects = new PriorityQueue<>();
 
+    private int screenWidth;
+    private int screenHeight;
     public BattleGrid(int screenWidth, int screenHeight, int numRows, int halfNumCols) {
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
         this.numRows = numRows;
         this.numCols = halfNumCols * 2;
         this.grid = new BattleTile[this.numRows][this.numCols];
@@ -44,7 +48,9 @@ public class BattleGrid {
 
     public BattleTile getTile(int row, int col) {
         if (row < 0 || row >= numRows || col < 0 || col >= numCols) {
-            return null;
+            float x = (screenWidth/2) + (col - numCols/2) * AssetMgr.Textures.BATTLE_TILE_BLUE.getRegionWidth();
+            float y = AssetMgr.Textures.BATTLE_TILE_BLUE.getRegionHeight() * (row + 1);
+            return new BattleTile(x, y, AssetMgr.Textures.BATTLE_TILE_BLUE, AssetMgr.Textures.BATTLE_TILE_BLUE_SIDE);
         }
         return grid[row][col];
     }

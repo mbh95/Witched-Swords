@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Json;
 import com.comp460.AssetMgr;
 
 import java.util.HashSet;
@@ -32,7 +33,8 @@ public class ActionFactory {
             case 5:
                 return buildPuffs();
             default:
-                return (owner) -> {};
+                return (owner) -> {
+                };
 
         }
     }
@@ -49,6 +51,7 @@ public class ActionFactory {
                 grid.addEffect(buildWarning(20, 0f, 0f, 1f, 0.4f, new BattleEffect(owner, owner.getGridRow(), owner.getGridCol() + i + 1, 0) {
 
                     boolean active = true;
+
                     @Override
                     public boolean tick() {
                         if (this.numTicks > 10) {
@@ -90,24 +93,25 @@ public class ActionFactory {
             owner.setEnergy(owner.getEnergy() - 1);
             owner.setAnimAttack();
             for (int i = 0; i < grid.getNumCols(); i++) {
-                grid.addEffect(buildWarning(30, 1f, 0f, 0f, 0.4f, new BattleEffect(owner, i, grid.getNumCols()/2 - 1 - rng.nextInt(grid.getNumCols()/2), 0) {
+                grid.addEffect(buildWarning(30, 1f, 0f, 0f, 0.4f, new BattleEffect(owner, i, grid.getNumCols() / 2 - 1 - rng.nextInt(grid.getNumCols() / 2), 0) {
                     boolean active = true;
+
                     @Override
                     public boolean tick() {
                         if (this.numTicks > 10) {
                             return false;
                         }
                         if (active) {
-                        grid.getUnits().forEach((u)->{
-                            if (u == owner) {
-                                return;
-                            } else {
-                                if (u.getGridRow() == this.row && u.getGridCol() == this.col) {
-                                    u.hurt(20);
-                                    active = false;
+                            grid.getUnits().forEach((u) -> {
+                                if (u == owner) {
+                                    return;
+                                } else {
+                                    if (u.getGridRow() == this.row && u.getGridCol() == this.col) {
+                                        u.hurt(20);
+                                        active = false;
+                                    }
                                 }
-                            }
-                        });
+                            });
                         }
                         return true;
                     }
@@ -138,13 +142,13 @@ public class ActionFactory {
                         return false;
                     }
                     Set<BattleEffect> toRemove = new HashSet<>();
-                    grid.getEffects().forEach((e)->{
+                    grid.getEffects().forEach((e) -> {
                         if (e != this && e.row == this.row && e.col == this.col) {
                             toRemove.add(e);
                             owner.addFloatingText("Block!");
                         }
                     });
-                    toRemove.forEach((e)->{
+                    toRemove.forEach((e) -> {
                         grid.removeEffect(e);
                     });
                     return true;
@@ -176,7 +180,7 @@ public class ActionFactory {
                 }
                 return false;
             }
-            owner.getGrid().getUnits().forEach((u)->{
+            owner.getGrid().getUnits().forEach((u) -> {
                 if (u == owner) {
                     return;
                 } else {
@@ -196,6 +200,7 @@ public class ActionFactory {
             batch.end();
         }
     }
+
     public static BattleAction buildSpike() {
         return ((owner) -> {
             if (owner.getEnergy() <= 0) {
@@ -220,12 +225,12 @@ public class ActionFactory {
         @Override
         public boolean tick() {
             if (this.numTicks > 3) {
-                if (col < owner.getGrid().getNumCols()-1) {
+                if (col < owner.getGrid().getNumCols() - 1) {
                     this.owner.getGrid().addEffect(new ArrowEffect(owner, row, col + 1, 0));
                 }
                 return false;
             }
-            owner.getGrid().getUnits().forEach((u)->{
+            owner.getGrid().getUnits().forEach((u) -> {
                 if (u == owner) {
                     return;
                 } else {
@@ -245,6 +250,7 @@ public class ActionFactory {
             batch.end();
         }
     }
+
     public static BattleAction buildArrow() {
         return ((owner) -> {
             if (owner.getEnergy() <= 0) {
@@ -274,7 +280,7 @@ public class ActionFactory {
                 }
                 return false;
             }
-            owner.getGrid().getUnits().forEach((u)->{
+            owner.getGrid().getUnits().forEach((u) -> {
                 if (u == owner) {
                     return;
                 } else {
@@ -295,6 +301,7 @@ public class ActionFactory {
             batch.end();
         }
     }
+
     public static BattleAction buildPuffs() {
         return ((owner) -> {
 //            if (owner.getEnergy() <= 0) {
@@ -348,5 +355,18 @@ public class ActionFactory {
                 Gdx.gl.glDisable(GL20.GL_BLEND);
             }
         };
+    }
+
+    public static BattleMove getMove(String id, BattleUnit owner) {
+        if (id.equalsIgnoreCase("null")) {
+            return null;
+        }
+
+        String path = "common/moves/" + id + ".json";
+
+        Json json = new Json();
+        BattleMove move = json.fromJson(BattleMove.class, Gdx.files.local(path));
+        move.owner = owner;
+        return move;
     }
 }

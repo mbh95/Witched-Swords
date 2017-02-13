@@ -1,0 +1,33 @@
+{
+  "id": "scratch",
+  "name": "Scratch",
+  "description": "Lashes out with razor sharp claws.",
+  "energyCost": 1,
+  "healthCost": 0,
+  "entities": [
+    {
+      "class":"com.comp460.battle.ScratchEntityTemplate",
+      "components": [
+        {
+          "class": "com.comp460.battle.components.WarningComponent",
+          "duration": 0.5
+        },
+        {
+          "class": "com.comp460.battle.components.ExpiringComponent",
+          "duration": 0.5
+        },
+        {
+          "class": "com.comp460.battle.components.MoveTextureComponent",
+          "path": "battle/sprites/attacks/scratch.png"
+        },
+        {
+          "class": "com.comp460.battle.components.DamageComponent",
+          "amount": 25
+        },
+        {
+          "class": "com.comp460.battle.components.OwnerComponent"
+        }
+      ]
+    }
+  ]
+}

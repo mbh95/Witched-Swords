@@ -10,10 +10,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public abstract class GameScreen extends ScreenAdapter {
 
-    protected Game game;
-    protected SpriteBatch batch;
-    protected OrthographicCamera camera;
-    protected GameScreen prevScreen;
+    public Game game;
+    public SpriteBatch batch;
+    public OrthographicCamera camera;
+    public GameScreen prevScreen;
 
     public GameScreen(Game game, GameScreen prevScreen) {
         super();

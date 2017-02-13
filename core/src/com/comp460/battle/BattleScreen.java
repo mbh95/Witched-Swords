@@ -1,5 +1,6 @@
 package com.comp460.battle;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,9 +14,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.AssetMgr;
 import com.comp460.FontManager;
 import com.comp460.GameScreen;
+import com.comp460.battle.systems.*;
 import com.comp460.common.GameUnit;
+import com.comp460.tactics.systems.rendering.MovesRenderingSystem;
 import com.sun.javafx.binding.StringFormatter;
 
+import java.util.Formatter;
 import java.util.Random;
 
 /**
@@ -23,29 +27,38 @@ import java.util.Random;
  */
 public class BattleScreen extends GameScreen {
 
+    private static BitmapFont greenFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 16, Color.GREEN, Color.BLACK, 2);
+    private static BitmapFont yellowFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 16, Color.ORANGE, Color.BLACK, 2);
+    private static BitmapFont redFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 16, Color.RED, Color.BLACK, 2);
+
+    private static GlyphLayout readyLayout = new GlyphLayout(redFont, "READY");
+    private static GlyphLayout setLayout = new GlyphLayout(yellowFont, "SET");
+    private static GlyphLayout fightLayout = new GlyphLayout(greenFont, "FIGHT!");
+
     private static BitmapFont timerFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 16, Color.RED);
-    private static BitmapFont resultsFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 32, Color.WHITE);
+    private static BitmapFont resultsFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 32, Color.WHITE, Color.BLACK, 2);
     private static BitmapFont continueFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 16, Color.WHITE);
 
-    private enum BattleState {RUNNING, END_ENERGY, END_DEATH, END_TIME};
+    private static BitmapFont hpFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.WHITE);
+
+    private enum BattleState {COUNTOFF, RUNNING, END_ENERGY, END_DEATH, END_TIME};
 
     private BattleUnit playerUnit;
 
     private BattleUnit aiUnit;
 
-    private BattleGrid grid;
-
-    private SpriteBatch batch;
-    private OrthographicCamera camera;
-    private Game game;
+    public BattleGrid grid;
 
     private int width, height;
 
+    private float countOffTimer = 3;
     private float countdownTimer = 30;
 
     private BattleState curState;
 
     private float endDelay = 2.0f;
+
+    public Engine engine = new Engine();
 
     public BattleScreen(Game parent, int width, int height, GameUnit basePlayerUnit, GameUnit baseAiUnit, GameScreen prev) {
         super(parent, prev);
@@ -60,29 +73,76 @@ public class BattleScreen extends GameScreen {
         int gridHeight = 3;
         grid = new BattleGrid(width, height, gridHeight, gridWidth);
 
-        playerUnit = new BattleUnit(grid, basePlayerUnit, gridHeight/2, 0);
-        aiUnit = new BattleUnit(grid, baseAiUnit, gridHeight/2, gridWidth * 2 - 1);
+        playerUnit = new BattleUnit(this, basePlayerUnit, gridHeight/2, 0);
+        aiUnit = new BattleUnit(this, baseAiUnit, gridHeight/2, gridWidth * 2 - 1);
 
-        curState = BattleState.RUNNING;
+        engine.addSystem(new ExpiringSystem());
+        engine.addSystem(new WarningSystem());
+        engine.addSystem(new ProjectileSystem(this));
+
+        engine.addSystem(new BlockingSystem());
+        engine.addSystem(new DamageSystem(this));
+        engine.addSystem(new MoveRenderingSystem(this));
+        engine.addSystem(new WarningRenderingSystem(this));
+        curState = BattleState.COUNTOFF;
     }
 
     @Override
     public void render(float delta) {
-        update(delta);
-        batch.setProjectionMatrix(camera.combined);
+        super.render(delta);
+
         renderBackground(batch);
         grid.render(batch);
+        engine.update(delta);
         renderUI(batch);
 
-        if (curState != BattleState.RUNNING) {
-            renderEnd();
-            if (endDelay <=0 ) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-                    previousScreen();
+
+
+        countdownTimer -= delta;
+        grid.update(delta);
+
+        switch (curState) {
+            case COUNTOFF:
+                renderCountoff(delta);
+                break;
+            case RUNNING:
+                checkEndConditions();
+                takeInput();
+                updateAI(delta);
+                break;
+            case END_DEATH:
+            case END_ENERGY:
+            case END_TIME:
+                renderEnd();
+                if (endDelay <=0 ) {
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
+                        previousScreen();
+                    }
                 }
-            }
-            endDelay-=delta;
+                endDelay-=delta;
+                break;
         }
+    }
+
+    private void renderCountoff(float delta) {
+        countOffTimer-=delta;
+        int seconds = ((int) countOffTimer) % 60;
+        batch.begin();
+        switch (seconds) {
+            case 2:
+                redFont.draw(batch, readyLayout, 400/2-readyLayout.width/2,240/2-readyLayout.height/2);
+                break;
+            case 1:
+                yellowFont.draw(batch, setLayout, 400/2-setLayout.width/2,240/2-setLayout.height/2);
+                break;
+            case 0:
+                greenFont.draw(batch, fightLayout, 400/2-fightLayout.width/2,240/2-fightLayout.height/2);
+                break;
+        }
+        if (countOffTimer <= 0 ) {
+            curState = BattleState.RUNNING;
+        }
+        batch.end();
     }
 
     private void renderEnd() {
@@ -123,20 +183,6 @@ public class BattleScreen extends GameScreen {
         batch.end();
     }
 
-    public void update(float delta) {
-        checkEndConditions();
-        camera.update();
-        if (curState == BattleState.RUNNING) {
-            takeInput();
-            updateAI(delta);
-            countdownTimer -= delta;
-            grid.update(delta);
-        } else {
-            aiUnit.update(delta);
-            playerUnit.update(delta);
-        }
-    }
-
     private void checkEndConditions() {
         if (aiUnit.getCurHP() == 0 || playerUnit.getCurHP() == 0) {
             curState = BattleState.END_DEATH;
@@ -145,6 +191,9 @@ public class BattleScreen extends GameScreen {
             curState = BattleState.END_ENERGY;
         } else if (countdownTimer <= 0){
             curState = BattleState.END_TIME;
+        }
+        if (curState != BattleState.RUNNING) {
+            engine.getSystem(DamageSystem.class).setProcessing(false);
         }
     }
 
@@ -172,6 +221,9 @@ public class BattleScreen extends GameScreen {
         for (int i = unit.getEnergy(); i > 0 ; i--)
             batch.draw(AssetMgr.Textures.ENERGY, 51 + x - (i-1)*11, y+2);
 
+        String hpString = String.format("%03d/%03d", unit.getCurHP(), unit.getMaxHP());
+        GlyphLayout hpLayout = new GlyphLayout(hpFont, hpString);
+        hpFont.draw(batch, hpString, x + AssetMgr.Textures.HP_BAR.getWidth() - hpLayout.width - 2, y+22);
         batch.end();
 
         ShapeRenderer sr = new ShapeRenderer();
@@ -220,6 +272,8 @@ public class BattleScreen extends GameScreen {
             bulbaAI(delta);
         } else if (aiUnit.getBase().getId().equals("ghast")) {
             ghastAI(delta);
+        } else {
+            bulbaAI(delta);
         }
     }
 

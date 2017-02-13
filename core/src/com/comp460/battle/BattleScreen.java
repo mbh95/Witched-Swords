@@ -331,9 +331,16 @@ public class BattleScreen extends GameScreen {
 
             switch(curAiState) {
                 case OFFENSE:
-//                    if (aiUnit.row != playerUnit.row) {
-//                        aiUnit.row += (int)((1.0*playerUnit.row - aiUnit.row) / 2.0);
-//                    } else {
+                    if (aiUnit.getGridRow() != playerUnit.getGridRow()) {
+//                        aiUnit.setGridRow(aiUnit.getGridRow()+(int)((1.0*playerUnit.getGridRow() - aiUnit.getGridRow())));
+                        aiUnit.move(rng.nextBoolean()?1:-1, 0);
+                        if (aiUnit.getGridRow() < playerUnit.getGridRow()) {
+                            aiUnit.move(1, 0);
+                        } else if (aiUnit.getGridRow() > playerUnit.getGridRow()) {
+                            aiUnit.move(-1, 0);
+                        }
+//                        System.out.println((int)(1.0*playerUnit.getGridRow() - aiUnit.getGridRow()));
+                    } //else {
                     if (aiUnit.getGridCol() == 3 && rng.nextDouble() < .7 && aiUnit.getEnergy() != 0) {
                         aiUnit.action1();
                     }

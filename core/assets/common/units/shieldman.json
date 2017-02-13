@@ -6,5 +6,5 @@
   "curHP": 200,
   "moveDist": 5,
   "action1": "lazer",
-  "action2": "null"
+  "action2": "shield"
 }

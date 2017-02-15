@@ -11,11 +11,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
-import com.comp460.battle.BattleMove;
 import com.comp460.battle.BattleScreen;
+import com.comp460.battle.factories.unit.BattleUnitFactory;
+import com.comp460.common.FontManager;
 import com.comp460.common.GameUnit;
 import com.comp460.launcher.splash.SplashScreen;
 import com.comp460.tactics.TacticsScreen;
@@ -44,10 +42,7 @@ public class MainGame extends Game {
 		fpsFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.YELLOW);
 		fpsFont.setColor(Color.YELLOW);
 
-		Assets.load();
-		AssetMgr.load();
-
-		TacticsScreen ts = new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST);
+//		TacticsScreen ts = new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST);
 //		this.setScreen(new BattleScreen(this, ts));
 
 //		this.setScreen(new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST));
@@ -57,6 +52,8 @@ public class MainGame extends Game {
 
 		this.setScreen(new SplashScreen(this));
 //		this.setScreen(ts);
+
+//		this.setScreen(new BattleScreen(this, null, new BattleUnitFactory(GameUnit.loadFromJSON("json/units/clarissa.json")), new BattleUnitFactory(GameUnit.loadFromJSON("json/units/ghast.json"))));
 	}
 
 	@Override

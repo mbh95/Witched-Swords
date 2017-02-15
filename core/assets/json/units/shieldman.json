@@ -1,0 +1,9 @@
+{
+  "id": "shieldman",
+  "name": "Shield Dude",
+  "description": "The toughest guy around.",
+  "maxHP": 200,
+  "curHP": 200,
+  "moveDist": 5,
+  "moves": ["lazer", "shield"]
+}

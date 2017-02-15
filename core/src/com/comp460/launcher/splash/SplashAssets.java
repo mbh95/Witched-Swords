@@ -1,56 +1,26 @@
 package com.comp460.launcher.splash;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.comp460.common.SpriteManager;
 
 /**
  * Created by matthewhammond on 2/11/17.
  */
 public class SplashAssets {
-
-    private static SplashAssets singleton;
-
-    public static SplashAssets getInstance() {
-        if (singleton == null) {
-            singleton = new SplashAssets();
-        }
-        return singleton;
-    }
-
-    private SplashAssets() {
-        load();
-        singleton = this;
-    }
-
-    public TextureRegion TITLE_S;
-    public TextureRegion TITLE_S_BG;
-    public TextureRegion TITLE_WITCHED;
-    public TextureRegion TITLE_WITCHED_BG;
-    public TextureRegion TITLE_WORDS;
-    public TextureRegion TITLE_WORDS_BG;
-
-    public TextureRegion TITLE;
-    public TextureRegion TITLE_BG;
     
-    public TextureRegion SWORD;
+    public static final TextureRegion TITLE_S = SpriteManager.SPLASH.findRegion("S");
+    public static final TextureRegion TITLE_S_BG = SpriteManager.SPLASH.findRegion("S-outline");
+    public static final TextureRegion TITLE_WITCHED = SpriteManager.SPLASH.findRegion("Witched");
+    public static final TextureRegion TITLE_WITCHED_BG = SpriteManager.SPLASH.findRegion("Witched-outline");
+    public static final TextureRegion TITLE_WORDS = SpriteManager.SPLASH.findRegion("words");
+    public static final TextureRegion TITLE_WORDS_BG = SpriteManager.SPLASH.findRegion("words-outline");
 
-    public TextureRegion BG;
+    public static final TextureRegion SWORD = SpriteManager.SPLASH.findRegion("sword1");
 
-    private void load() {
-        TITLE_S = new TextureRegion(new Texture(Gdx.files.internal("launcher/splash/sprites/S.png")));
-        TITLE_S_BG = new TextureRegion(new Texture(Gdx.files.internal("launcher/splash/sprites/S-outline.png")));
-        TITLE_WITCHED = new TextureRegion(new Texture(Gdx.files.internal("launcher/splash/sprites/Witched.png")));
-        TITLE_WITCHED_BG = new TextureRegion(new Texture(Gdx.files.internal("launcher/splash/sprites/Witched-outline.png")));
-        TITLE_WORDS = new TextureRegion(new Texture(Gdx.files.internal("launcher/splash/sprites/words.png")));
-        TITLE_WORDS_BG = new TextureRegion(new Texture(Gdx.files.internal("launcher/splash/sprites/words-outline.png")));
+    public static final TextureRegion TITLE = SpriteManager.COMMON.findRegion("title");
+    public static final TextureRegion TITLE_BG = SpriteManager.COMMON.findRegion("title-outline");
 
-        SWORD = new TextureRegion(new Texture(Gdx.files.internal("launcher/splash/sprites/sword1.png")));
+    public static final TextureRegion BG = SpriteManager.COMMON.findRegion("bg");
 
-        TITLE = new TextureRegion(new Texture(Gdx.files.internal("launcher/common/sprites/title.png")));
-        TITLE_BG = new TextureRegion(new Texture(Gdx.files.internal("launcher/common/sprites/title-outline.png")));
 
-        BG = new TextureRegion(new Texture(Gdx.files.internal("launcher/common/sprites/bg.png")));
-
-    }
 }

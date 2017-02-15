@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.comp460.battle.components.ExpiringComponent;
+import com.comp460.battle.Mappers;
 import com.comp460.battle.components.WarningComponent;
 
 /**
@@ -13,15 +13,13 @@ import com.comp460.battle.components.WarningComponent;
 public class WarningSystem extends IteratingSystem {
     private static final Family warningFamily = Family.all(WarningComponent.class).get();
 
-    private static final ComponentMapper<WarningComponent> warningM = ComponentMapper.getFor(WarningComponent.class);
-
     public WarningSystem() {
         super(warningFamily);
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        WarningComponent warning = warningM.get(entity);
+        WarningComponent warning = Mappers.warningM.get(entity);
         warning.duration-=deltaTime;
         if (warning.duration <= 0) {
             entity.remove(WarningComponent.class);

@@ -1,0 +1,9 @@
+{
+  "id": "ghast",
+  "name": "Ghast",
+  "description": "A lonely spirit.",
+  "maxHP": 400,
+  "curHP": 100,
+  "moveDist": 5,
+  "moves": ["puff"]
+}

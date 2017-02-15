@@ -1,27 +1,19 @@
 package com.comp460.battle.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.comp460.battle.BattleScreen;
-import com.comp460.battle.BattleUnit;
-import com.comp460.battle.components.DamageComponent;
-import com.comp460.battle.components.LocationComponent;
-import com.comp460.battle.components.OwnerComponent;
-import com.comp460.battle.components.WarningComponent;
+import com.comp460.battle.Mappers;
+import com.comp460.battle.components.*;
 
 /**
  * Created by matth on 2/13/2017.
  */
 public class DamageSystem extends IteratingSystem {
 
-    private static final Family damagingFamily = Family.all(DamageComponent.class, LocationComponent.class).exclude(WarningComponent.class).get();
-
-    private static final ComponentMapper<DamageComponent> damageM = ComponentMapper.getFor(DamageComponent.class);
-    private static final ComponentMapper<LocationComponent> locM = ComponentMapper.getFor(LocationComponent.class);
-    private static final ComponentMapper<OwnerComponent> ownerM = ComponentMapper.getFor(OwnerComponent.class);
-
+    private static final Family damagingFamily = Family.all(DamageComponent.class, GridPositionComponent.class).exclude(WarningComponent.class).get();
+    private static final Family damageableFamily = Family.all(GridPositionComponent.class, HealthComponent.class).get();
 
     private BattleScreen screen;
 
@@ -32,22 +24,41 @@ public class DamageSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        LocationComponent loc = locM.get(entity);
-        DamageComponent damage = damageM.get(entity);
-        OwnerComponent owner = ownerM.get(entity);
+        GridPositionComponent gridPos = Mappers.gridPosM.get(entity);
+        DamageComponent damage = Mappers.damageM.get(entity);
+        OwnerComponent ownerComponent = Mappers.ownerM.get(entity);
 
-        for (BattleUnit u : screen.grid.units) {
-            if (loc.row == u.getGridRow() && loc.col == u.getGridCol()) {
-                if (owner == null || (owner != null && owner.owner != u)) {
-                    u.hurt(damage.amount);
-                    if (damage.removeOnContact) {
+        for (Entity u : screen.engine.getEntitiesFor(damageableFamily)) {
+            GridPositionComponent uPos = Mappers.gridPosM.get(u);
+            if (uPos.row == gridPos.row && uPos.col == gridPos.col) {
+
+
+                if (ownerComponent == null || ownerComponent.owner != u) {
+                    hurt(u, damage.amount);
+                    if (damage.destroyOnHit) {
                         entity.remove(DamageComponent.class);
                     }
-                    if (damage.lifesteal != 0 && owner != null) {
-                        owner.owner.heal(damage.lifesteal);
+                    if (damage.lifeSteal != 0 && ownerComponent != null) {
+                        heal(ownerComponent.owner, damage.lifeSteal);
                     }
                 }
             }
+        }
+    }
+
+    public void heal(Entity e, int amount) {
+        HealthComponent health = Mappers.healthM.get(e);
+        if (health != null) {
+            health.curHP += amount;
+            health.curHP = Math.min(health.curHP, health.maxHP);
+        }
+    }
+
+    private void hurt(Entity e, int amount) {
+        HealthComponent health = Mappers.healthM.get(e);
+        if (health != null) {
+            health.curHP -= amount;
+            health.curHP = Math.max(health.curHP, 0);
         }
     }
 }

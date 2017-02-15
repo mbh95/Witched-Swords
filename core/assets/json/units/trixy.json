@@ -1,0 +1,9 @@
+{
+  "id": "trixy",
+  "name": "Trixy",
+  "description": "Mischievous little trickster.",
+  "maxHP": 50,
+  "curHP": 50,
+  "moveDist": 5,
+  "moves": ["scratch"]
+}

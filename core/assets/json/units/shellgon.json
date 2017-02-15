@@ -1,0 +1,9 @@
+{
+  "id": "shellgon",
+  "name": "Shelly",
+  "description": "Just wants to go to sleep.",
+  "maxHP": 300,
+  "curHP": 300,
+  "moveDist": 5,
+  "moves": ["puff"]
+}

@@ -6,8 +6,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector3;
-import com.comp460.GameScreen;
-import com.comp460.FontManager;
+import com.comp460.common.GameScreen;
+import com.comp460.common.FontManager;
 import com.comp460.Settings;
 import com.comp460.launcher.main.MainMenuScreen;
 
@@ -17,9 +17,7 @@ import com.comp460.launcher.main.MainMenuScreen;
 public class SplashScreen extends GameScreen {
 
     private enum SplashState {WORDS_FLY_IN, SWITCHED_FLY_IN, S_FALL, DONE, POST, TRANSITION};
-
-    private SplashAssets assets = SplashAssets.getInstance();
-
+    
     public static class Constants {
         public static final Vector3 TITLE_GOAL_POS = new Vector3(60f, 70f, 0f);
 
@@ -55,12 +53,12 @@ public class SplashScreen extends GameScreen {
     public SplashScreen(Game game) {
         super(game, null);
 
-        topPos = new Vector3(-assets.TITLE.getRegionWidth(), Constants.TITLE_GOAL_POS.y, 0f);
+        topPos = new Vector3(-SplashAssets.TITLE.getRegionWidth(), Constants.TITLE_GOAL_POS.y, 0f);
         botPos = new Vector3(Settings.INTERNAL_WIDTH, Constants.TITLE_GOAL_POS.y, 0f);
 
         titlePos = new Vector3(Constants.TITLE_GOAL_POS);
 
-        sOffset = new Vector3(-10f, assets.TITLE_S.getRegionHeight() / 2f, 0f);
+        sOffset = new Vector3(-10f, SplashAssets.TITLE_S.getRegionHeight() / 2f, 0f);
         sVel = new Vector3(0f, 0f, 0f);
 
         swordColor = new Color(0f, 0f, 0f, 1f);
@@ -79,13 +77,13 @@ public class SplashScreen extends GameScreen {
 
         batch.setColor(Color.WHITE);
         batch.begin();
-        batch.draw(assets.BG, 0f, 0f);
+        batch.draw(SplashAssets.BG, 0f, 0f);
         batch.end();
 
         batch.setColor(swordColor);
         batch.begin();
-        batch.draw(assets.SWORD, botPos.x - 20 + assets.SWORD.getRegionWidth(), botPos.y - assets.SWORD.getRegionHeight(), -assets.SWORD.getRegionWidth(), assets.SWORD.getRegionHeight());
-        batch.draw(assets.SWORD, topPos.x - 50, topPos.y + assets.TITLE_WITCHED.getRegionHeight());
+        batch.draw(SplashAssets.SWORD, botPos.x - 20 + SplashAssets.SWORD.getRegionWidth(), botPos.y - SplashAssets.SWORD.getRegionHeight(), -SplashAssets.SWORD.getRegionWidth(), SplashAssets.SWORD.getRegionHeight());
+        batch.draw(SplashAssets.SWORD, topPos.x - 50, topPos.y + SplashAssets.TITLE_WITCHED.getRegionHeight());
         batch.end();
 
         switch(curSplashState) {
@@ -94,16 +92,16 @@ public class SplashScreen extends GameScreen {
             case S_FALL:
                 batch.setColor(Constants.WORD_OUTLINE_COLOR);
                 batch.begin();
-                batch.draw(assets.TITLE_S_BG, topPos.x + sOffset.x, topPos.y + sOffset.y);
-                batch.draw(assets.TITLE_WITCHED_BG, topPos.x, topPos.y);
-                batch.draw(assets.TITLE_WORDS_BG, botPos.x, botPos.y);
+                batch.draw(SplashAssets.TITLE_S_BG, topPos.x + sOffset.x, topPos.y + sOffset.y);
+                batch.draw(SplashAssets.TITLE_WITCHED_BG, topPos.x, topPos.y);
+                batch.draw(SplashAssets.TITLE_WORDS_BG, botPos.x, botPos.y);
                 batch.end();
 
                 batch.setColor(Constants.WORD_COLOR);
                 batch.begin();
-                batch.draw(assets.TITLE_S, topPos.x + sOffset.x, topPos.y + sOffset.y);
-                batch.draw(assets.TITLE_WITCHED, topPos.x, topPos.y);
-                batch.draw(assets.TITLE_WORDS, botPos.x, botPos.y);
+                batch.draw(SplashAssets.TITLE_S, topPos.x + sOffset.x, topPos.y + sOffset.y);
+                batch.draw(SplashAssets.TITLE_WITCHED, topPos.x, topPos.y);
+                batch.draw(SplashAssets.TITLE_WORDS, botPos.x, botPos.y);
                 batch.end();
                 break;
             case DONE:
@@ -111,12 +109,12 @@ public class SplashScreen extends GameScreen {
             case TRANSITION:
                 batch.setColor(Constants.WORD_OUTLINE_COLOR);
                 batch.begin();
-                batch.draw(assets.TITLE_BG, titlePos.x, titlePos.y, assets.TITLE_BG.getRegionWidth() * titleScalePercent.x / 100f, assets.TITLE_BG.getRegionHeight() * titleScalePercent.y / 100f);
+                batch.draw(SplashAssets.TITLE_BG, titlePos.x, titlePos.y, SplashAssets.TITLE_BG.getRegionWidth() * titleScalePercent.x / 100f, SplashAssets.TITLE_BG.getRegionHeight() * titleScalePercent.y / 100f);
                 batch.end();
 
                 batch.setColor(Constants.WORD_COLOR);
                 batch.begin();
-                batch.draw(assets.TITLE, titlePos.x, titlePos.y, assets.TITLE.getRegionWidth() * titleScalePercent.x / 100f, assets.TITLE.getRegionHeight() * titleScalePercent.y / 100f);
+                batch.draw(SplashAssets.TITLE, titlePos.x, titlePos.y, SplashAssets.TITLE.getRegionWidth() * titleScalePercent.x / 100f, SplashAssets.TITLE.getRegionHeight() * titleScalePercent.y / 100f);
                 batch.end();
                 break;
         }

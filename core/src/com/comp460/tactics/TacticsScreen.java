@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.comp460.Assets;
 import com.comp460.common.components.CameraTargetComponent;
 import com.comp460.common.components.TextureComponent;
 import com.comp460.common.components.TransformComponent;
@@ -115,7 +114,7 @@ public class TacticsScreen extends ScreenAdapter {
     public void makeCursor() {
         Entity cursor = engine.createEntity();
         TextureComponent texture = engine.createComponent(TextureComponent.class)
-                .populate(new TextureRegion(Assets.Textures.CURSOR));
+                .populate(new TextureRegion(TacticsAssets.CURSOR));
         CameraTargetComponent cameraTarget = engine.createComponent(CameraTargetComponent.class)
                 .populate(camera, 0.3f);
         MapPositionComponent selectedSquare = engine.createComponent(MapPositionComponent.class)

@@ -4,6 +4,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 
+import java.util.List;
+
 /**
  * Created by matthewhammond on 1/29/17.
  */
@@ -18,8 +20,7 @@ public class GameUnit {
 
     private int moveDist;
 
-    private String action1;
-    private String action2;
+    private List<String> moves;
 
     public String getId() {
         return id;
@@ -45,21 +46,10 @@ public class GameUnit {
         return moveDist;
     }
 
-    public String getAction1() {
-        return action1;
+    public List<String> getMoves() {
+        return moves;
     }
 
-    public String getAction2() {
-        return action2;
-    }
-
-    public void setCurHP(int curHP) {
-        if (curHP > maxHP || curHP < 0) {
-            return;
-        } else {
-            this.curHP = curHP;
-        }
-    }
     public void writeToJSON(String filename) {
         Json json = new Json();
         json.setTypeName(null);

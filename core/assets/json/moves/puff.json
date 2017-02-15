@@ -1,0 +1,30 @@
+{
+  "id": "puff",
+  "name": "Puff",
+  "description": "Wafts a wave of toxic gas that drains health from enemies to heals the user.",
+  "energyCost": 0,
+  "healthCost": 15,
+  "entities": [
+    {
+      "class": "com.comp460.battle.factories.ability.entity.PuffEntityFactory",
+      "components": [
+        {
+          "class": "com.comp460.battle.factories.ability.component.ProjectileFactory",
+          "dr": 0,
+          "dc": -1,
+          "delay": 0.5
+        },
+        {
+          "class": "com.comp460.battle.factories.ability.component.TextureFactory",
+          "path": "attacks/poof"
+        },
+        {
+          "class": "com.comp460.battle.factories.ability.component.DamageFactory",
+          "amount": 15,
+          "lifeSteal": 15
+        }
+      ]
+    }
+  ]
+}
+

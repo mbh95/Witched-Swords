@@ -6,14 +6,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Json;
-import com.comp460.AssetMgr;
-import com.comp460.GameScreen;
-import com.comp460.Settings;
-import com.comp460.battle.ActionFactory;
-import com.comp460.battle.BattleMove;
-import com.comp460.battle.BattleScreen;
-import com.comp460.battle.BattleUnit;
+import com.comp460.battle.AnimationManager;
+import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
 import com.comp460.launcher.Button;
 import com.comp460.launcher.TextButton;
@@ -34,12 +28,11 @@ public class BattlePracticeScreen extends GameScreen {
     private Button[] buttons;
     private Button selectedButton;
 
-    private InfoUnit infoUnit = null;
     private boolean infoMode = false;
+    private InfoUnit infoUnit = null;
 
     public BattlePracticeScreen(Game game, GameScreen prevScreen) {
         super(game, prevScreen);
-        this.assets = BattlePracticeAssets.getInstance();
 
         Button backButton = new Button(0f, 240f - assets.TEXTURE_BACK_BUTTON.getRegionHeight(), assets.TEXTURE_BACK_BUTTON, assets.TEXTURE_BACK_BUTTON_HOVERED, () -> {
             previousScreen();
@@ -47,19 +40,19 @@ public class BattlePracticeScreen extends GameScreen {
 
         TextButton fightButton = new TextButton(160f, 0f, "Fight!    ", assets.FONT_FIGHT, assets.TEXTURE_FIGHT_BUTTON, assets.TEXTURE_FIGHT_BUTTON_HOVER, () -> {
             if (playerUnitJSON != null && aiUnitJSON != null) {
-                game.setScreen(new BattleScreen(game, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, GameUnit.loadFromJSON(playerUnitJSON), GameUnit.loadFromJSON(aiUnitJSON), this));
+//                game.setScreen(new BattleScreen(game, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, GameUnit.loadFromJSON(playerUnitJSON), GameUnit.loadFromJSON(aiUnitJSON), this));
             }
         });
 
-        CharacterButton rubyButton = makePlayerCharacterButton("common/units/ruby.json", 0, 0);
-        CharacterButton shieldmanButton = makePlayerCharacterButton("common/units/shieldman.json", 50, 0);
-        CharacterButton clarissaButton = makePlayerCharacterButton("common/units/clarissa.json", 0, 50);
+        CharacterButton rubyButton = makePlayerCharacterButton("json/units/ruby.json", 0, 0);
+        CharacterButton shieldmanButton = makePlayerCharacterButton("json/units/shieldman.json", 50, 0);
+        CharacterButton clarissaButton = makePlayerCharacterButton("json/units/clarissa.json", 0, 50);
 
 //        addPlayerButton("common/units/bulba.json", 200, 0, 100, 100);
 
-        CharacterButton bulbaButton = makeAiCharacterButton("common/units/bulba.json", 400 - 50, 0);
-        CharacterButton ghastButton = makeAiCharacterButton("common/units/ghast.json", 400 - 100, 0);
-        CharacterButton trixyButton = makeAiCharacterButton("common/units/trixy.json", 400 - 50, 50);
+        CharacterButton bulbaButton = makeAiCharacterButton("json/units/bulba.json", 400 - 50, 0);
+        CharacterButton ghastButton = makeAiCharacterButton("json/units/ghast.json", 400 - 100, 0);
+        CharacterButton trixyButton = makeAiCharacterButton("json/units/trixy.json", 400 - 50, 50);
 
         rubyButton.up = clarissaButton;
         rubyButton.right = shieldmanButton;
@@ -121,21 +114,25 @@ public class BattlePracticeScreen extends GameScreen {
 
         batch.end();
 
+        selectedButton.setNormal();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) selectedButton = selectedButton.left;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) selectedButton = selectedButton.right;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) selectedButton = selectedButton.up;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) selectedButton = selectedButton.down;
+        selectedButton.setHovered();
 
         if (infoMode) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
+            if (selectedButton instanceof CharacterButton) {
+                CharacterButton sel = ((CharacterButton)selectedButton);
+                if (!sel.json.equals(infoUnit.json))
+                    infoUnit = new InfoUnit(sel.json);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.X) || Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
                 infoMode = false;
             }
         } else {
-            selectedButton.setNormal();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) selectedButton = selectedButton.left;
-            if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) selectedButton = selectedButton.right;
-            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) selectedButton = selectedButton.up;
-            if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) selectedButton = selectedButton.down;
             if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
                 selectedButton.click();
-            } else {
-                selectedButton.setHovered();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
                 this.previousScreen();
@@ -147,7 +144,7 @@ public class BattlePracticeScreen extends GameScreen {
 
     private CharacterButton makeGenericCharacterButton(String json, float x, float y) {
         GameUnit unit = GameUnit.loadFromJSON(json);
-        TextureRegion icon = new TextureRegion(AssetMgr.getAnimation(unit.getId(), AssetMgr.BattleAnimation.ATTACK).getKeyFrame(0));
+        TextureRegion icon = new TextureRegion(AnimationManager.getUnitAnimation(unit.getId(), "attack").getKeyFrame(0));
         CharacterButton button = new CharacterButton(json, unit.getName(), icon, x, y, () -> {
         });
         return button;
@@ -158,10 +155,10 @@ public class BattlePracticeScreen extends GameScreen {
         button.action = () -> {
             if (playerUnitJSON.equals(json)) {
                 infoMode = true;
-                infoUnit = new InfoUnit(GameUnit.loadFromJSON(playerUnitJSON));
+                infoUnit = new InfoUnit(playerUnitJSON);
             } else {
                 playerUnitJSON = json;
-                playerUnitIdle = AssetMgr.getAnimation(GameUnit.loadFromJSON(json).getId(), AssetMgr.BattleAnimation.IDLE);
+                playerUnitIdle = AnimationManager.getUnitAnimation(GameUnit.loadFromJSON(playerUnitJSON).getId(), "idle");
             }
         };
         return button;
@@ -172,10 +169,10 @@ public class BattlePracticeScreen extends GameScreen {
         button.action = () -> {
             if (aiUnitJSON.equals(json)) {
                 infoMode = true;
-                infoUnit = new InfoUnit(GameUnit.loadFromJSON(aiUnitJSON));
+                infoUnit = new InfoUnit(aiUnitJSON);
             } else {
                 aiUnitJSON = json;
-                aiUnitIdle = AssetMgr.getAnimation(GameUnit.loadFromJSON(json).getId(), AssetMgr.BattleAnimation.IDLE);
+                aiUnitIdle = AnimationManager.getUnitAnimation(GameUnit.loadFromJSON(aiUnitJSON).getId(), "idle");
             }
         };
         return button;
@@ -228,14 +225,17 @@ public class BattlePracticeScreen extends GameScreen {
     }
 
     private class InfoUnit {
+        public String json;
         public GameUnit base;
-        public BattleMove move1, move2;
+//        public BattleMove move1, move2;
         public GlyphLayout infoLayout;
 
-        public InfoUnit(GameUnit gameUnit) {
-            this.base = gameUnit;
-            this.move1 = getInfoMove(base.getAction1());
-            this.move2 = getInfoMove(base.getAction2());
+        public InfoUnit(String json) {
+            this.json = json;
+
+            this.base = GameUnit.loadFromJSON(json);
+//            this.move1 = getInfoMove(base.getAction1());
+//            this.move2 = getInfoMove(base.getAction2());
 
             StringBuilder text = new StringBuilder();
             text.append("Name: \t" + base.getName());
@@ -245,15 +245,15 @@ public class BattlePracticeScreen extends GameScreen {
             text.append("Max HP: \t" + base.getMaxHP());
             text.append("\n");
             text.append("\n");
-
-            text.append("Move 1: \t" + (move1 == null ? "None" : move1.name));
-            text.append("\n");
-            text.append((move1 == null ? "" : move1.description));
-            text.append("\n");
-            text.append("\n");
-            text.append("Move 2: \t" + (move2 == null ? "None" : move2.name));
-            text.append("\n");
-            text.append(move2 == null ? "" : move2.description);
+//
+//            text.append("Move 1: \t" + (move1 == null ? "None" : move1.name));
+//            text.append("\n");
+//            text.append((move1 == null ? "" : move1.description));
+//            text.append("\n");
+//            text.append("\n");
+//            text.append("Move 2: \t" + (move2 == null ? "None" : move2.name));
+//            text.append("\n");
+//            text.append(move2 == null ? "" : move2.description);
 
             float w = 300;
             float padding = 4;
@@ -261,16 +261,16 @@ public class BattlePracticeScreen extends GameScreen {
             infoLayout = new GlyphLayout(assets.FONT_INFO, text.toString(), Color.WHITE, w - 2 * padding, Align.left, true);
         }
     }
-
-    public static BattleMove getInfoMove(String id) {
-        if (id.equalsIgnoreCase("null")) {
-            return null;
-        }
-
-        String path = "common/moves/" + id + ".json";
-
-        Json json = new Json();
-        BattleMove move = json.fromJson(BattleMove.class, Gdx.files.local(path));
-        return move;
-    }
+//
+//    public static BattleMove getInfoMove(String id) {
+//        if (id.equalsIgnoreCase("null")) {
+//            return null;
+//        }
+//
+//        String path = "common/moves/" + id + ".json";
+//
+//        Json json = new Json();
+//        BattleMove ability = json.fromJson(BattleMove.class, Gdx.files.local(path));
+//        return ability;
+//    }
 }

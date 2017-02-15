@@ -1,20 +1,15 @@
 package com.comp460.battle.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.Color;
-import com.comp460.battle.BattleUnit;
+import com.badlogic.ashley.core.Entity;
 
 /**
- * Created by matth on 2/13/2017.
+ * Created by matth on 2/14/2017.
  */
 public class OwnerComponent implements Component {
-    public transient BattleUnit owner;
+    public Entity owner;
 
-    public OwnerComponent() {
-
-    }
-
-    public OwnerComponent(BattleUnit owner, OwnerComponent template) {
+    public OwnerComponent(Entity owner) {
         this.owner = owner;
     }
 }

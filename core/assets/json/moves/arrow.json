@@ -1,0 +1,33 @@
+{
+  "id": "arrow",
+  "name": "Arrow",
+  "description": "Shoots a quick, straight-flying arrow that deals low damage.",
+  "energyCost": 1,
+  "castTime": 0.25,
+  "entities": [
+    {
+      "components": [
+        {
+          "class": "com.comp460.battle.factories.ability.component.RelativePositionFactory",
+          "row": 0,
+          "col": 1
+        },
+        {
+          "class": "com.comp460.battle.factories.ability.component.ProjectileFactory",
+          "dr": 0,
+          "dc": 1,
+          "delay": 0.1
+        },
+        {
+          "class": "com.comp460.battle.factories.ability.component.TextureFactory",
+          "path": "attacks/arrow"
+        },
+        {
+          "class": "com.comp460.battle.factories.ability.component.DamageFactory",
+          "amount": 15,
+          "destroyOnHit": true
+        }
+      ]
+    }
+  ]
+}

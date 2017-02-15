@@ -1,7 +1,6 @@
 package com.comp460.battle.components;
 
 import com.badlogic.ashley.core.Component;
-import com.comp460.battle.BattleUnit;
 
 /**
  * Created by matth on 2/13/2017.
@@ -12,14 +11,11 @@ public class ProjectileComponent implements Component {
     public float delay;
     public transient float countdown;
 
-    public ProjectileComponent() {
 
-    }
-
-    public ProjectileComponent(BattleUnit owner, ProjectileComponent template) {
-        this.dr = template.dr;
-        this.dc = template.dc;
-        this.delay = template.delay;
+    public ProjectileComponent(int dr, int dc, float delay) {
+        this.dr = dr;
+        this.dc = dc;
+        this.delay = delay;
         this.countdown = delay;
     }
 }

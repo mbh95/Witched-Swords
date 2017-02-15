@@ -25,11 +25,7 @@ public class SpriteAnimationSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         AnimationComponent anim = animationM.get(entity);
         TextureComponent texture = textureM.get(entity);
-        if (anim.countdown == 0) {
-            anim.currentFrame = (anim.currentFrame + 1) % anim.frames.length;
-            texture.populate(anim.frames[anim.currentFrame]);
-            anim.countdown = anim.delay;
-        }
-        anim.countdown--;
+        anim.timer +=deltaTime;
+        texture.texture = anim.animation.getKeyFrame(anim.timer);
     }
 }

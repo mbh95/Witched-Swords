@@ -1,0 +1,9 @@
+{
+  "id": "yvonne",
+  "name": "Yvonne",
+  "description": "A vampire?",
+  "maxHP": 500,
+  "curHP": 50,
+  "moveDist": 5,
+  "moves": ["arrow", "puff"]
+}

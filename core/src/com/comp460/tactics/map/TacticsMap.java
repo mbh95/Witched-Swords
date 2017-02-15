@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.comp460.Assets;
 import com.comp460.common.components.AnimationComponent;
 import com.comp460.common.components.TextureComponent;
 import com.comp460.common.components.TransformComponent;
@@ -90,13 +89,13 @@ public class TacticsMap {
                         if (cell.getTile().getProperties().containsKey("sprite")) {
                             animName = cell.getTile().getProperties().get("sprite", String.class);
                         }
-                        if (Assets.animLookup.containsKey(animName)) {
-                            AnimationComponent anim = new AnimationComponent().populate(Assets.animLookup.get(animName), 30);
-                            texture.populate(anim.frames[anim.currentFrame]);
-                            unit.add(anim);
-                        } else {
-                            texture.populate(cell.getTile().getTextureRegion());
-                        }
+//                        if (Assets.animLookup.containsKey(animName)) {
+//                            AnimationComponent anim = new AnimationComponent().populate(Assets.animLookup.get(animName), 30);
+//                            texture.populate(anim.frames[anim.currentFrame]);
+//                            unit.add(anim);
+//                        } else {
+//                            texture.populate(cell.getTile().getTextureRegion());
+//                        }
                         TransformComponent transformComponent = engine.createComponent(TransformComponent.class)
                                 .populate(tileWidth * c, tileHeight*r, 0);
                         UnitStatsComponent stats = engine.createComponent(UnitStatsComponent.class).populate(cell.getTile().getProperties().get("team", Integer.class), 5);

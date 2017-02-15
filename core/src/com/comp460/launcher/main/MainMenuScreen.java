@@ -6,7 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.math.Vector3;
-import com.comp460.GameScreen;
+import com.comp460.common.GameScreen;
 import com.comp460.launcher.Button;
 import com.comp460.launcher.TextButton;
 import com.comp460.launcher.practice.battle.BattlePracticeScreen;
@@ -18,9 +18,7 @@ import com.comp460.launcher.splash.SplashScreen;
 public class MainMenuScreen extends GameScreen {
 
     private enum MainMenuState {BUILD_MENU, DONE, POST, TRANSITION};
-
-    private MainMenuAssets assets = MainMenuAssets.getInstance();
-
+    
     public static class Constants {
         public static final Vector3 TITLE_SCALE = new Vector3(50f, 50f, 0f);
         public static final Vector3 TITLE_POS = new Vector3(400f / 2f - 280f * (TITLE_SCALE.x / 100f) / 2f, 240f - 100f * (TITLE_SCALE.y / 100f) - 10f, 0f);
@@ -37,16 +35,16 @@ public class MainMenuScreen extends GameScreen {
     private Vector3 cursorPos = new Vector3(0, 0, 0);
 
 
-    private NinePatch cursor = new NinePatch(assets.TEXTURE_CURSOR, 2, 2, 2, 2);
+    private NinePatch cursor = new NinePatch(MainMenuAssets.TEXTURE_CURSOR, 2, 2, 2, 2);
 
     public MainMenuScreen(Game game, GameScreen prevScreen) {
         super(game, prevScreen);
         curMenuState = MainMenuState.BUILD_MENU;
 
-        TextButton newGameButton = new TextButton(Constants.TITLE_POS.x, Constants.TITLE_POS.y - assets.TEXTURE_BUTTON_NORMAL.getRegionHeight(), "---", assets.FONT_MENU_ITEM, assets.TEXTURE_BUTTON_NORMAL, assets.TEXTURE_BUTTON_NORMAL, ()->{});
-        TextButton loadGameButton = new TextButton(Constants.TITLE_POS.x, Constants.TITLE_POS.y - 2 * assets.TEXTURE_BUTTON_NORMAL.getRegionHeight(), "---", assets.FONT_MENU_ITEM, assets.TEXTURE_BUTTON_NORMAL, assets.TEXTURE_BUTTON_NORMAL, () -> {
+        TextButton newGameButton = new TextButton(Constants.TITLE_POS.x, Constants.TITLE_POS.y - MainMenuAssets.TEXTURE_BUTTON_NORMAL.getRegionHeight(), "---", MainMenuAssets.FONT_MENU_ITEM, MainMenuAssets.TEXTURE_BUTTON_NORMAL, MainMenuAssets.TEXTURE_BUTTON_NORMAL, ()->{});
+        TextButton loadGameButton = new TextButton(Constants.TITLE_POS.x, Constants.TITLE_POS.y - 2 * MainMenuAssets.TEXTURE_BUTTON_NORMAL.getRegionHeight(), "---", MainMenuAssets.FONT_MENU_ITEM, MainMenuAssets.TEXTURE_BUTTON_NORMAL, MainMenuAssets.TEXTURE_BUTTON_NORMAL, () -> {
         });
-        TextButton battlePracticeButton = new TextButton(Constants.TITLE_POS.x, Constants.TITLE_POS.y - 3 * assets.TEXTURE_BUTTON_NORMAL.getRegionHeight(), "Battle\nPractice", assets.FONT_MENU_ITEM, assets.TEXTURE_BUTTON_NORMAL, assets.TEXTURE_BUTTON_NORMAL, () -> {
+        TextButton battlePracticeButton = new TextButton(Constants.TITLE_POS.x, Constants.TITLE_POS.y - 3 * MainMenuAssets.TEXTURE_BUTTON_NORMAL.getRegionHeight(), "Battle\nPractice", MainMenuAssets.FONT_MENU_ITEM, MainMenuAssets.TEXTURE_BUTTON_NORMAL, MainMenuAssets.TEXTURE_BUTTON_NORMAL, () -> {
             game.setScreen(new BattlePracticeScreen(game, this));
         });
 
@@ -67,17 +65,17 @@ public class MainMenuScreen extends GameScreen {
 
         batch.setColor(Color.WHITE);
         batch.begin();
-        batch.draw(assets.TEXTURE_BG, 0f, 0f);
+        batch.draw(MainMenuAssets.TEXTURE_BG, 0f, 0f);
         batch.end();
 
         batch.setColor(Constants.WORD_OUTLINE_COLOR);
         batch.begin();
-        batch.draw(assets.TEXTURE_TITLE_BG, Constants.TITLE_POS.x, Constants.TITLE_POS.y, assets.TEXTURE_TITLE_BG.getRegionWidth() * Constants.TITLE_SCALE.x / 100f, assets.TEXTURE_TITLE.getRegionHeight() * Constants.TITLE_SCALE.y / 100f);
+        batch.draw(MainMenuAssets.TEXTURE_TITLE_BG, Constants.TITLE_POS.x, Constants.TITLE_POS.y, MainMenuAssets.TEXTURE_TITLE_BG.getRegionWidth() * Constants.TITLE_SCALE.x / 100f, MainMenuAssets.TEXTURE_TITLE.getRegionHeight() * Constants.TITLE_SCALE.y / 100f);
         batch.end();
 
         batch.setColor(Constants.WORD_COLOR);
         batch.begin();
-        batch.draw(assets.TEXTURE_TITLE, Constants.TITLE_POS.x, Constants.TITLE_POS.y, assets.TEXTURE_TITLE.getRegionWidth() * Constants.TITLE_SCALE.x / 100f, assets.TEXTURE_TITLE.getRegionHeight() * Constants.TITLE_SCALE.y / 100f);
+        batch.draw(MainMenuAssets.TEXTURE_TITLE, Constants.TITLE_POS.x, Constants.TITLE_POS.y, MainMenuAssets.TEXTURE_TITLE.getRegionWidth() * Constants.TITLE_SCALE.x / 100f, MainMenuAssets.TEXTURE_TITLE.getRegionHeight() * Constants.TITLE_SCALE.y / 100f);
         batch.end();
 
         batch.setColor(Color.WHITE);

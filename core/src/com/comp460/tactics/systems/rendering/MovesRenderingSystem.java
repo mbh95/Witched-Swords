@@ -3,14 +3,11 @@ package com.comp460.tactics.systems.rendering;
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.comp460.battle.BattleScreen;
 import com.comp460.tactics.TacticsScreen;
 import com.comp460.tactics.components.ShowValidMovesComponent;
 import com.comp460.tactics.components.UnitStatsComponent;
 import com.comp460.tactics.map.MapPosition;
-import com.comp460.tactics.map.TacticsMap;
 
 import java.util.HashMap;
 import java.util.HashSet;

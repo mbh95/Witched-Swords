@@ -1,0 +1,9 @@
+{
+  "id": "ruby",
+  "name": "Ruby",
+  "description": "A powerful mage.",
+  "maxHP": 100,
+  "curHP": 100,
+  "moveDist": 5,
+  "moves": ["lazer"]
+}

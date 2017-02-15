@@ -8,22 +8,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.comp460.battle.BattleMove;
 import com.comp460.battle.BattleScreen;
-import com.comp460.battle.BattleTile;
-import com.comp460.battle.components.ExpiringComponent;
-import com.comp460.battle.components.LocationComponent;
+import com.comp460.battle.Mappers;
+import com.comp460.battle.components.GridPositionComponent;
 import com.comp460.battle.components.WarningComponent;
-import com.comp460.tactics.map.MapPosition;
 
 /**
  * Created by matth on 2/13/2017.
  */
 public class WarningRenderingSystem extends IteratingSystem {
-    private static final Family visibleWarningFamily = Family.all(WarningComponent.class, LocationComponent.class).get();
-
-    private static final ComponentMapper<WarningComponent> warningM = ComponentMapper.getFor(WarningComponent.class);
-    private static final ComponentMapper<LocationComponent> locM = ComponentMapper.getFor(LocationComponent.class);
+    private static final Family visibleWarningFamily = Family.all(WarningComponent.class, GridPositionComponent.class).get();
 
     private BattleScreen screen;
 
@@ -39,13 +33,14 @@ public class WarningRenderingSystem extends IteratingSystem {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         ShapeRenderer sr = new ShapeRenderer();
         sr.setProjectionMatrix(screen.camera.combined);
-        Color c = warningM.get(entity).color;
-        LocationComponent locComp = locM.get(entity);
-        BattleTile tile = screen.grid.getTile(locComp.row, locComp.col);
+        Color c = Mappers.warningM.get(entity).color;
+        GridPositionComponent locComp = Mappers.gridPosM.get(entity);
 
+        float x = screen.colToScreenX(locComp.col);
+        float y = screen.rowToScreenY(locComp.row);
         sr.setColor(c);
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        sr.rect(tile.getScreenX(), tile.getScreenY(), tile.getWidth(), tile.getHeight());
+        sr.rect(x, y, screen.tileWidth, screen.tileHeight);
         sr.end();
         sr.dispose();
         Gdx.gl.glDisable(GL20.GL_BLEND);

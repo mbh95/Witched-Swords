@@ -1,0 +1,9 @@
+{
+  "id": "clarissa",
+  "name": "Clarissa",
+  "description": "A cute girl with a crossbow.",
+  "maxHP": 70,
+  "curHP": 70,
+  "moveDist": 5,
+  "moves": ["arrow", "puff"]
+}

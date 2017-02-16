@@ -6,7 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Align;
-import com.comp460.battle.AnimationManager;
+import com.comp460.assets.AnimationManager;
 import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
 import com.comp460.launcher.Button;

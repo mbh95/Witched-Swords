@@ -1,12 +1,10 @@
 package com.comp460.common;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.comp460.Settings;
-import com.comp460.battle.components.OwnerComponent;
 
 /**
  * Created by matthewhammond on 2/11/17.

@@ -2,8 +2,8 @@ package com.comp460.launcher.practice.battle;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.comp460.common.FontManager;
-import com.comp460.common.SpriteManager;
+import com.comp460.assets.FontManager;
+import com.comp460.assets.SpriteManager;
 
 /**
  * Created by matthewhammond on 2/11/17.

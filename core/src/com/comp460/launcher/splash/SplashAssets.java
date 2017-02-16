@@ -1,7 +1,7 @@
 package com.comp460.launcher.splash;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.comp460.common.SpriteManager;
+import com.comp460.assets.SpriteManager;
 
 /**
  * Created by matthewhammond on 2/11/17.

@@ -1,4 +1,4 @@
-package com.comp460.common;
+package com.comp460.assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

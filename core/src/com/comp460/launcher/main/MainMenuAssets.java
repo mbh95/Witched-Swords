@@ -1,13 +1,10 @@
 package com.comp460.launcher.main;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.comp460.common.FontManager;
-import com.comp460.common.SpriteManager;
+import com.comp460.assets.FontManager;
+import com.comp460.assets.SpriteManager;
 
 /**
  * Created by matthewhammond on 2/11/17.

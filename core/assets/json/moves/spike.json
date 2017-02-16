@@ -16,7 +16,7 @@
           "class": "com.comp460.battle.components.ProjectileComponent",
           "dr": 0,
           "dc": -1,
-          "delay": 0.1
+          "delay": 0.2
         },
         {
           "class": "com.comp460.battle.components.MoveTextureComponent",

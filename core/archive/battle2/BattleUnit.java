@@ -30,17 +30,15 @@ public class BattleUnit implements IRenderable {
     private Animation<TextureRegion> animAttack;
     private Animation<TextureRegion> animHurt;
     private Animation<TextureRegion> animFallen;
+    private Animation<TextureRegion> animVictory;
 
     private Animation<TextureRegion> currentAnim;
     private float animTimer;
 
     private boolean invlunerable;
 
-//    private BattleAction action1;
-//    private BattleAction action2;
-
-    private BattleMove move1;
-    private BattleMove move2;
+    public BattleMove move1;
+    public BattleMove move2;
 
     private List<FloatingText> floatingTexts = new ArrayList<>();
 
@@ -57,6 +55,9 @@ public class BattleUnit implements IRenderable {
 
         animFallen = AssetMgr.getAnimation(base.getId(), AssetMgr.BattleAnimation.FALLEN);
         animFallen.setPlayMode(Animation.PlayMode.NORMAL);
+
+        animVictory = AssetMgr.getAnimation(base.getId(), AssetMgr.BattleAnimation.VICTORY);
+        animVictory.setPlayMode(Animation.PlayMode.NORMAL);
 
         animIdle = AssetMgr.getAnimation(base.getId(), AssetMgr.BattleAnimation.IDLE);
         animIdle.setPlayMode(Animation.PlayMode.LOOP);
@@ -116,6 +117,11 @@ public class BattleUnit implements IRenderable {
         this.currentAnim = animFallen;
         this.animTimer = 0.0f;
         this.invlunerable = true;
+    }
+
+    public void setAnimVictory() {
+        this.currentAnim = animVictory;
+        this.animTimer = 0.0f;
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.common.GameScreen;
-import com.comp460.common.FontManager;
+import com.comp460.assets.FontManager;
 import com.comp460.Settings;
 import com.comp460.launcher.main.MainMenuScreen;
 

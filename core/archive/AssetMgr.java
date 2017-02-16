@@ -28,7 +28,7 @@ public class AssetMgr {
     }
 
     public enum BattleAnimation {
-        IDLE("_idle"), ATTACK("_attack"), HURT("_hurt"), FALLEN("_fallen");
+        IDLE("_idle"), ATTACK("_attack"), HURT("_hurt"), FALLEN("_fallen"), VICTORY("_victory");
         private String animId;
 
         BattleAnimation(String id) {
@@ -55,6 +55,7 @@ public class AssetMgr {
 
         public static Texture ENERGY;
         public static Texture HP_BAR;
+        public static Texture INFO_OVERLAY;
         public static Texture MEGA;
         public static Texture SCRATCH;
         public static Texture LAZER;
@@ -87,6 +88,7 @@ public class AssetMgr {
 
         Textures.BATTLE_BG = new Texture(Gdx.files.internal("battle/sprites/backgrounds/plains.png"));
         Textures.HP_BAR = new Texture(Gdx.files.internal("battle/sprites/ui/hp_bar_new.png"));
+        Textures.INFO_OVERLAY = new Texture(Gdx.files.internal("battle/sprites/ui/info-overlay.png"));
         Textures.ENERGY = new Texture(Gdx.files.internal("battle/sprites/ui/energy.png"));
         Textures.SCRATCH = new Texture(Gdx.files.internal("battle/sprites/attacks/scratch.png"));
         Textures.LAZER = new Texture(Gdx.files.internal("battle/sprites/attacks/lazer.png"));

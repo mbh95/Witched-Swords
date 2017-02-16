@@ -6,4 +6,5 @@ package com.comp460.battle.buffs;
 public interface BattleBuff {
     void tick(float delta);
     boolean isDone();
+    void post();
 }

@@ -5,5 +5,7 @@
   "maxHP": 400,
   "curHP": 100,
   "moveDist": 5,
-  "moves": ["puff"]
+  "battleFactory": {
+    "class": "com.comp460.battle.units.enemies.Ghast.GhastFactory"
+  }
 }

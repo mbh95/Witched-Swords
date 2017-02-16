@@ -21,6 +21,11 @@ public class BattleUnit implements BattleObject {
     public String name;
     public String description;
 
+    public boolean canMove = true;
+
+    public BattleUnitAbility ability1 = new BattleUnitAbility();
+    public BattleUnitAbility ability2 = new BattleUnitAbility();
+
     public int maxHP;
     public int curHP;
 
@@ -31,7 +36,7 @@ public class BattleUnit implements BattleObject {
 
     public Vector3 transform;
 
-    public String curAnimId;
+    public Queue<BattleBuff> buffs = new PriorityQueue<>();
 
     private boolean idleAnim;
     private Map<String, Animation<TextureRegion>> animationCache = new HashMap<>();
@@ -41,10 +46,6 @@ public class BattleUnit implements BattleObject {
     public BattleScreen screen;
 
     public GameUnit base;
-
-    public boolean canMove = true;
-
-    public Queue<BattleBuff> buffs = new PriorityQueue<>();
 
     public BattleUnit(BattleScreen screen, int row, int col, GameUnit base) {
 
@@ -63,7 +64,6 @@ public class BattleUnit implements BattleObject {
 
         this.curEnergy = 5;
 
-        this.curAnimId = AnimationManager.defaultAnimID;
         this.curAnim = AnimationManager.getUnitAnimation(id, AnimationManager.defaultAnimID);
         this.animTimer = 0f;
     }
@@ -88,6 +88,7 @@ public class BattleUnit implements BattleObject {
             buff.tick(delta);
             if (buff.isDone()) {
                 iterator.remove();
+                buff.post();
             }
         }
     }
@@ -121,8 +122,15 @@ public class BattleUnit implements BattleObject {
         this.curCol = newCol;
     }
 
-    public void useAbility() {
-
+    public void useAbility1() {
+        if (this.ability1 != null) {
+            this.ability1.use(this, screen);
+        }
     }
 
+    public void useAbility2() {
+        if (this.ability2 != null) {
+            this.ability2.use(this, screen);
+        }
+    }
 }

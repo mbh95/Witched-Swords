@@ -3,6 +3,7 @@ package com.comp460.common;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.comp460.battle.units.BattleUnitFactory;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class GameUnit {
     private int moveDist;
 
     private List<String> moves;
+
+    private BattleUnitFactory battleFactory;
 
     public String getId() {
         return id;
@@ -46,8 +49,8 @@ public class GameUnit {
         return moveDist;
     }
 
-    public List<String> getMoves() {
-        return moves;
+    public BattleUnitFactory getBattleUnitFactory() {
+        return battleFactory;
     }
 
     public void writeToJSON(String filename) {

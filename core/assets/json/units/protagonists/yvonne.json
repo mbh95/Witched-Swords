@@ -1,11 +1,11 @@
 {
-  "id": "clarissa",
-  "name": "Clarissa",
+  "id": "yvonne",
+  "name": "Yvonne",
   "description": "A cute girl with a crossbow.",
   "maxHP": 70,
   "curHP": 70,
   "moveDist": 5,
   "battleFactory": {
-    "class": "com.comp460.battle.units.protagonists.Clarissa.ClarissaFactory"
+    "class": "com.comp460.battle.units.protagonists.clarissa.ClarissaFactory"
   }
 }

@@ -1,0 +1,11 @@
+{
+  "id": "bulba",
+  "name": "Baddie",
+  "description": "A prickly character.",
+  "maxHP": 100,
+  "curHP": 100,
+  "moveDist": 5,
+  "battleFactory": {
+    "class": "com.comp460.battle.units.enemies.ghast.GhastFactory"
+  }
+}

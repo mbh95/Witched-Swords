@@ -7,13 +7,20 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.assets.FontManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.battle.players.BattlePlayer;
 import com.comp460.battle.players.HumanPlayer;
+import com.comp460.battle.players.ai.GhastAi;
 import com.comp460.battle.units.BattleUnit;
 import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
+import com.sun.javafx.binding.StringFormatter;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by matthewhammond on 2/15/17.
@@ -23,19 +30,19 @@ public class BattleScreen extends GameScreen {
     public final int numRows = 3;
     public final int numCols = 6;
 
-    public final TextureRegion background = SpriteManager.BATTLE.findRegion("bg/plains");
-    public final TextureRegion tileLHS = SpriteManager.BATTLE.findRegion("bg/tile_plains_blue");
-    public final TextureRegion tileRHS = SpriteManager.BATTLE.findRegion("bg/tile_plains_red");
+    private final TextureRegion background = SpriteManager.BATTLE.findRegion("bg/plains");
+    private final TextureRegion tileLHS = SpriteManager.BATTLE.findRegion("bg/tile_plains_blue");
+    private final TextureRegion tileRHS = SpriteManager.BATTLE.findRegion("bg/tile_plains_red");
 
-    public final TextureRegion tileSideLHS = SpriteManager.BATTLE.findRegion("bg/tile_plains_blue_side");
-    public final TextureRegion tileSideRHS = SpriteManager.BATTLE.findRegion("bg/tile_plains_red_side");
+    private final TextureRegion tileSideLHS = SpriteManager.BATTLE.findRegion("bg/tile_plains_blue_side");
+    private final TextureRegion tileSideRHS = SpriteManager.BATTLE.findRegion("bg/tile_plains_red_side");
 
-    public final TextureRegion hpBar = SpriteManager.BATTLE.findRegion("ui/hp_bar_new");
-    public final TextureRegion energyBar = SpriteManager.BATTLE.findRegion("ui/energy");
+    private final TextureRegion hpBar = SpriteManager.BATTLE.findRegion("ui/hp_bar_new");
+    private final TextureRegion energyBar = SpriteManager.BATTLE.findRegion("ui/energy");
 
-    public final int tileWidth = tileLHS.getRegionWidth();
-    public final int tileHeight = tileLHS.getRegionHeight();
-    public final int tileSideHeight = tileSideLHS.getRegionHeight();
+    private final int tileWidth = tileLHS.getRegionWidth();
+    private final int tileHeight = tileLHS.getRegionHeight();
+    private final int tileSideHeight = tileSideLHS.getRegionHeight();
 
     public final float gridOffsetX = 0;
     public final float gridOffsetY = tileHeight;
@@ -54,13 +61,13 @@ public class BattleScreen extends GameScreen {
     private static GlyphLayout setLayout = new GlyphLayout(yellowFont, "SET");
     private static GlyphLayout fightLayout = new GlyphLayout(greenFont, "FIGHT!");
 
-    private static GlyphLayout tieLayout = new GlyphLayout(resultsFont, "DRAW");
-    private static GlyphLayout p1WinsLayout = new GlyphLayout(resultsFont, "YOU WIN!");
-    private static GlyphLayout p2WinsLayout = new GlyphLayout(resultsFont, "YOU LOSE!");
-    private static GlyphLayout stalemateLayout = new GlyphLayout(resultsFont, "STALEMATE");
-    private static GlyphLayout outOfTimeLayout = new GlyphLayout(resultsFont, "OUT OF TIME");
+    private GlyphLayout drawLayout = new GlyphLayout(resultsFont, "DRAW");
+    private GlyphLayout stalemateLayout = new GlyphLayout(resultsFont, "STALEMATE");
+    private GlyphLayout p1WinsLayout = new GlyphLayout(resultsFont, "YOU WIN!");
+    private GlyphLayout p2WinsLayout = new GlyphLayout(resultsFont, "YOU LOSE!");
+    private GlyphLayout outOfTimeLayout = new GlyphLayout(resultsFont, "OUT OF TIME");
 
-    private enum BattleState {COUNTOFF, RUNNING, END_STALEMATE, END_PLAYER_DIED, END_AI_DIED, END_BOTH_DIED, END_TIME}
+    private enum BattleState {COUNTOFF, RUNNING, END_STALEMATE, END_P1_DIED, END_P2_DIED, END_DRAW, END_TIME}
 
     private float countOffTimer = 3;
     private float countdownTimer = 30;
@@ -75,13 +82,25 @@ public class BattleScreen extends GameScreen {
     public BattlePlayer player1;
     public BattlePlayer player2;
 
+    public List<BattleAnimation> playingAnimations = new ArrayList<>();
+
     public BattleScreen(Game game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase) {
         super(game, prevScreen);
-        this.p1Unit = new BattleUnit(this, 0, 0, p1UnitBase);
-        this.p2Unit = new BattleUnit(this, 0, numCols - 1, p2UnitBase);
+        this.p1Unit = p1UnitBase.buildBattleUnit(this, 1, 1);
+        this.p2Unit = p2UnitBase.buildBattleUnit(this, 1, numCols - 2);
 
         this.player1 = new HumanPlayer(p1Unit);
-        this.player2 = new HumanPlayer(p2Unit);
+        this.player2 = new GhastAi(p2Unit, p1Unit, this);
+
+        drawLayout = new GlyphLayout(resultsFont, "DRAW");
+        p1WinsLayout = new GlyphLayout(resultsFont, p1Unit.name + " WINS!");
+        p2WinsLayout = new GlyphLayout(resultsFont, p2Unit.name + " WINS!");
+        stalemateLayout = new GlyphLayout(resultsFont, "STALEMATE");
+        outOfTimeLayout = new GlyphLayout(resultsFont, "OUT OF TIME");
+    }
+
+    public void addAnimation(BattleAnimation anim) {
+        this.playingAnimations.add(anim);
     }
 
     public float rowToScreenY(int row) {
@@ -105,6 +124,13 @@ public class BattleScreen extends GameScreen {
     }
 
     public void update(float delta) {
+        for (Iterator<BattleAnimation> iter = playingAnimations.iterator(); iter.hasNext();) {
+            BattleAnimation anim = iter.next();
+            anim.update(delta);
+            if (anim.duration <= 0) {
+                iter.remove();
+            }
+        }
         switch (curState) {
             case COUNTOFF:
                 countoff(delta);
@@ -112,13 +138,16 @@ public class BattleScreen extends GameScreen {
             case RUNNING:
                 tickTimer(delta);
                 checkEndConditions(delta);
+                player1.update(delta);
+                player2.update(delta);
+                p1Unit.update(delta);
+                p2Unit.update(delta);
                 break;
             case END_STALEMATE:
-            case END_BOTH_DIED:
-            case END_PLAYER_DIED:
-            case END_AI_DIED:
+            case END_DRAW:
+            case END_P1_DIED:
+            case END_P2_DIED:
             case END_TIME:
-                renderEnd(delta);
                 endDelay -= delta;
                 if (endDelay <= 0) {
                     if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
@@ -146,26 +175,16 @@ public class BattleScreen extends GameScreen {
                 countoff(delta);
                 break;
             case RUNNING:
-                tickTimer(delta);
-                checkEndConditions(delta);
                 break;
             case END_STALEMATE:
-            case END_BOTH_DIED:
-            case END_PLAYER_DIED:
-            case END_AI_DIED:
+            case END_DRAW:
+            case END_P1_DIED:
+            case END_P2_DIED:
             case END_TIME:
                 renderEnd(delta);
-                endDelay -= delta;
-                if (endDelay <= 0) {
-                    if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-                        previousScreen();
-                    }
-                }
                 break;
         }
     }
-
-
 
     private void renderScene() {
         batch.begin();
@@ -196,6 +215,9 @@ public class BattleScreen extends GameScreen {
         batch.begin();
         p1Unit.render(batch, delta);
         p2Unit.render(batch, delta);
+        for (BattleAnimation anim : playingAnimations) {
+            anim.render(batch, delta);
+        }
         batch.end();
     }
 
@@ -205,21 +227,8 @@ public class BattleScreen extends GameScreen {
 
     private void renderUI(float delta) {
 
-        for (Entity e : engine.getEntitiesFor(playerUnitsFamily)) {
-            HealthComponent health = Mappers.healthM.get(e);
-            EnergyComponent energy = Mappers.energyM.get(e);
-            if (health != null && energy != null) {
-                renderHealthBar(health, energy, width / 2 - hpBar.getRegionWidth() - 10, 3);
-            }
-        }
-
-        for (Entity e : engine.getEntitiesFor(aiUnitsFamily)) {
-            HealthComponent health = Mappers.healthM.get(e);
-            EnergyComponent energy = Mappers.energyM.get(e);
-            if (health != null && energy != null) {
-                renderHealthBar(health, energy, width / 2 + 10, 3);
-            }
-        }
+        renderHealthBar(p1Unit, width / 2 - hpBar.getRegionWidth() - 10, 3);
+        renderHealthBar(p2Unit, width / 2 + 10, 3);
 
         renderTimer(width / 2, 200);
     }
@@ -233,22 +242,22 @@ public class BattleScreen extends GameScreen {
         batch.end();
     }
 
-    private void renderHealthBar(HealthComponent health, EnergyComponent energy, float x, float y) {
+    private void renderHealthBar(BattleUnit unit, float x, float y) {
         batch.begin();
 
         batch.draw(hpBar, x, y);
 
-        for (int i = energy.curEnergy; i > 0; i--)
+        for (int i = unit.curEnergy; i > 0; i--)
             batch.draw(energyBar, 51 + x - (i - 1) * 11, y + 2);
 
-        String hpString = String.format("%03d/%03d", health.curHP, health.maxHP);
+        String hpString = String.format("%03d/%03d", unit.curHP, unit.maxHP);
         GlyphLayout hpLayout = new GlyphLayout(hpFont, hpString);
         hpFont.draw(batch, hpString, x + hpBar.getRegionWidth() - hpLayout.width - 2, y + 22);
         batch.end();
 
         ShapeRenderer sr = new ShapeRenderer();
         sr.setProjectionMatrix(camera.combined);
-        double percentHP = 1.0 * health.curHP / health.maxHP;
+        double percentHP = 1.0 * unit.curHP / unit.maxHP;
         if (percentHP > .45)
             sr.setColor(Color.GREEN);
         else if (percentHP > .25)
@@ -262,36 +271,18 @@ public class BattleScreen extends GameScreen {
     }
 
     private void checkEndConditions(float delta) {
-        if (engine.getEntitiesFor(movesToKeepAliveFamily).size() > 0) {
-            return;
-        }
 
-        boolean allPlayersDead = true;
-        for (Entity e : engine.getEntitiesFor(playerUnitsFamily)) {
-            HealthComponent health = Mappers.healthM.get(e);
-            if (health.curHP > 0) {
-                allPlayersDead = false;
-                break;
-            }
-        }
+        boolean p1Dead = p1Unit.curHP <= 0;
+        boolean p2Dead = p2Unit.curHP <= 0;
 
-        boolean allAiDead = true;
-        for (Entity e : engine.getEntitiesFor(aiUnitsFamily)) {
-            HealthComponent health = Mappers.healthM.get(e);
-            if (health.curHP > 0) {
-                allAiDead = false;
-                break;
-            }
-        }
-
-        if (allPlayersDead && allAiDead) {
-            curState = BattleState.END_BOTH_DIED;
+        if (p1Dead && p2Dead) {
+            curState = BattleState.END_DRAW;
             return;
-        } else if (allPlayersDead) {
-            curState = BattleState.END_PLAYER_DIED;
+        } else if (p1Dead) {
+            curState = BattleState.END_P1_DIED;
             return;
-        } else if (allAiDead) {
-            curState = BattleState.END_AI_DIED;
+        } else if (p2Dead) {
+            curState = BattleState.END_P2_DIED;
             return;
         }
 
@@ -300,41 +291,25 @@ public class BattleScreen extends GameScreen {
             return;
         }
 
-        boolean allPlayersIdle = true;
-        for (Entity e : engine.getEntitiesFor(playerUnitsFamily)) {
-            if (canUseAnyAbilities(e)) {
-                allPlayersIdle = false;
-                break;
-            }
-        }
-        boolean allAiIdle = true;
-        for (Entity e : engine.getEntitiesFor(aiUnitsFamily)) {
-            if (canUseAnyAbilities(e)) {
-                allAiIdle = false;
-                break;
-            }
-        }
-
-        if (allPlayersIdle && allAiIdle) {
+        boolean p1CanAct = p1Unit.canUseAbility();
+        boolean p2CanAct = p2Unit.canUseAbility();
+        if ((!p1CanAct) && (!p2CanAct)) {
             curState = BattleState.END_STALEMATE;
-        }
-
-        if (curState != BattleState.RUNNING) {
-            engine.getSystem(UnitControlSystem.class).setProcessing(false);
+            return;
         }
     }
 
     private void renderEnd(float delta) {
-        GlyphLayout layout = tieLayout;
+        GlyphLayout layout = drawLayout;
         batch.begin();
         switch (curState) {
-            case END_BOTH_DIED:
-                layout = tieLayout;
+            case END_DRAW:
+                layout = drawLayout;
                 break;
-            case END_PLAYER_DIED:
+            case END_P1_DIED:
                 layout = p2WinsLayout;
                 break;
-            case END_AI_DIED:
+            case END_P2_DIED:
                 layout = p1WinsLayout;
                 break;
             case END_TIME:
@@ -345,7 +320,6 @@ public class BattleScreen extends GameScreen {
                 break;
         }
         resultsFont.draw(batch, layout, width / 2 - layout.width / 2, 100);
-
 
         if (this.endDelay <= 0) {
             layout = new GlyphLayout(continueFont, "any key to continue");
@@ -371,7 +345,6 @@ public class BattleScreen extends GameScreen {
         }
         if (countOffTimer <= 0) {
             curState = BattleState.RUNNING;
-            engine.getSystem(UnitControlSystem.class).setProcessing(true);
         }
         batch.end();
     }

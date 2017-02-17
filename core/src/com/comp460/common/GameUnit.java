@@ -3,6 +3,8 @@ package com.comp460.common;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.comp460.battle.BattleScreen;
+import com.comp460.battle.units.BattleUnit;
 import com.comp460.battle.units.BattleUnitFactory;
 
 import java.util.List;
@@ -53,6 +55,9 @@ public class GameUnit {
         return battleFactory;
     }
 
+    public BattleUnit buildBattleUnit(BattleScreen screen, int row, int col) {
+        return battleFactory.buildUnit(screen, row, col, this);
+    }
     public void writeToJSON(String filename) {
         Json json = new Json();
         json.setTypeName(null);

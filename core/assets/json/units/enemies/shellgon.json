@@ -1,0 +1,11 @@
+{
+  "id": "shellgon",
+  "name": "Shelly",
+  "description": "One tough cookie.",
+  "maxHP": 250,
+  "curHP": 250,
+  "moveDist": 5,
+  "battleFactory": {
+    "class": "com.comp460.battle.units.enemies.ghast.GhastFactory"
+  }
+}

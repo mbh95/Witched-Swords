@@ -1,12 +1,16 @@
 package com.comp460.battle.units;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.comp460.assets.FontManager;
 import com.comp460.battle.BattleObject;
 import com.comp460.battle.BattleScreen;
 import com.comp460.assets.AnimationManager;
+import com.comp460.battle.FloatingText;
 import com.comp460.battle.buffs.BattleBuff;
 import com.comp460.common.GameUnit;
 
@@ -16,6 +20,9 @@ import java.util.*;
  * Created by matthewhammond on 2/15/17.
  */
 public class BattleUnit implements BattleObject {
+
+    public static BitmapFont damageFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.RED);
+    public static BitmapFont healingFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.GREEN);
 
     public String id;
     public String name;
@@ -64,7 +71,13 @@ public class BattleUnit implements BattleObject {
 
         this.curEnergy = 5;
 
-        this.curAnim = AnimationManager.getUnitAnimation(id, AnimationManager.defaultAnimID);
+        if (screen != null)
+            this.transform = new Vector3(screen.colToScreenX(col), screen.rowToScreenY(row), 0f);
+        else
+            this.transform = new Vector3(0, 0, 0f);
+
+
+        this.curAnim = AnimationManager.getBattleUnitAnimation(id, AnimationManager.defaultBattleAnimID);
         this.animTimer = 0f;
     }
 
@@ -72,7 +85,7 @@ public class BattleUnit implements BattleObject {
         transform.slerp(new Vector3(screen.colToScreenX(curCol), screen.rowToScreenY(curRow), transform.z), 0.3f);
         animTimer += delta;
         if (!idleAnim && curAnim.isAnimationFinished(animTimer)) {
-            curAnim = AnimationManager.getUnitAnimation(id, AnimationManager.defaultAnimID);
+            curAnim = AnimationManager.getBattleUnitAnimation(id, AnimationManager.defaultBattleAnimID);
             curAnim.setPlayMode(Animation.PlayMode.LOOP);
             animTimer = 0f;
             idleAnim = true;
@@ -97,7 +110,7 @@ public class BattleUnit implements BattleObject {
         if (animationCache.containsKey(animId)) {
             curAnim = animationCache.get(animId);
         } else {
-            curAnim = AnimationManager.getUnitAnimation(id, animId);
+            curAnim = AnimationManager.getBattleUnitAnimation(id, animId);
             animationCache.put(animId, curAnim);
         }
         animTimer = 0f;
@@ -123,14 +136,40 @@ public class BattleUnit implements BattleObject {
     }
 
     public void useAbility1() {
-        if (this.ability1 != null) {
+        if (this.ability1.canUse(this, screen)) {
             this.ability1.use(this, screen);
+            this.startAnimation(this.ability1.animationId);
         }
     }
 
     public void useAbility2() {
-        if (this.ability2 != null) {
+        if (this.ability2.canUse(this, screen)) {
             this.ability2.use(this, screen);
+            this.startAnimation(this.ability2.animationId);
+        }
+    }
+
+    public boolean canUseAbility() {
+        return ability1.canUse(this, screen) || ability2.canUse(this, screen);
+    }
+
+    public void applyDamage(DamageVector damageVector) {
+        int prevHP = curHP;
+        this.curHP -= damageVector.trueDamage;
+        if (curHP <= 0) {
+            curHP = 0;
+        }
+        if (curHP > maxHP) {
+            curHP = maxHP;
+        }
+
+        int deltaHP = curHP - prevHP;
+        if (deltaHP < 0) {
+            screen.addAnimation(new FloatingText(deltaHP+"", damageFont, (float)(transform.x + 5f), transform.y + 40, 0.5f));
+        }
+
+        if (deltaHP > 0) {
+            screen.addAnimation(new FloatingText("+"+deltaHP, healingFont, (float)(transform.x + 16f), transform.y + 40, 0.5f));
         }
     }
 }

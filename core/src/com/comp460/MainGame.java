@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 import com.comp460.assets.FontManager;
+import com.comp460.battle.BattleScreen;
+import com.comp460.common.GameUnit;
 import com.comp460.launcher.splash.SplashScreen;
 
 
@@ -43,7 +45,7 @@ public class MainGame extends Game {
 //		this.setScreen(new BattleScreen(this, ts));
 
 //		this.setScreen(new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST));
-//		this.setScreen(new BattleScreen(this, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, GameUnit.loadFromJSON("common/units/shieldman.json"), GameUnit.loadFromJSON("common/units/bulba.json"), null));
+//		this.setScreen(new BattleScreen(this, null, GameUnit.loadFromJSON("json/units/protagonists/clarissa.json"), GameUnit.loadFromJSON("json/units/enemies/ghast.json")));
 
 //		this.setScreen(new MainMenu(this));
 
@@ -64,7 +66,7 @@ public class MainGame extends Game {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		batch.draw(bufferRegion, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(bufferRegion, 0, 0, Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT);
 		if (showFPS) {
 			fpsFont.draw(batch, Gdx.graphics.getFramesPerSecond() + "", 10, 10);
 		}

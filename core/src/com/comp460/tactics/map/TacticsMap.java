@@ -98,7 +98,7 @@ public class TacticsMap {
 //                        }
                         TransformComponent transformComponent = engine.createComponent(TransformComponent.class)
                                 .populate(tileWidth * c, tileHeight*r, 0);
-                        UnitStatsComponent stats = engine.createComponent(UnitStatsComponent.class).populate(cell.getTile().getProperties().get("team", Integer.class), 5);
+                        UnitStatsComponent stats = engine.createComponent(UnitStatsComponent.class).populate(cell.getTile().getProperties().get("id", String.class), cell.getTile().getProperties().get("team", Integer.class), 5);
 
                         if (stats.team == 0) {
                             unit.add(new PlayerControlledComponent());
@@ -161,7 +161,7 @@ public class TacticsMap {
         Map<MapPosition, Integer> validMoves = new HashMap<>();
         validMovesHelper(e, validMoves, mapPosM.get(e).row, mapPosM.get(e).col, statsM.get(e).moveDist);
         Set<MapPosition> finalMoves = validMoves.keySet();
-        finalMoves.removeIf(pos->units[pos.getRow()][pos.getCol()] != null);
+//        finalMoves.removeIf(pos->units[pos.getRow()][pos.getCol()] != null);
         return finalMoves;
     }
 
@@ -169,9 +169,11 @@ public class TacticsMap {
         if (countdown < 0 || r < 0 || r >= this.height || c < 0 || c >= this.width || !this.tiles[r][c].isTraversable()) {
             return;
         }
-        if (this.units[r][c] != null && statsM.get(this.units[r][c]).team != statsM.get(e).team) {
-            return;
-        }
+
+        // You can't move through enemies:
+//        if (this.units[r][c] != null && statsM.get(this.units[r][c]).team != statsM.get(e).team) {
+//            return;
+//        }
         MapPosition newPos = new MapPosition(this, r, c);
         if (bestSoFar.containsKey(newPos)) {
             if (bestSoFar.get(newPos) >= countdown) {

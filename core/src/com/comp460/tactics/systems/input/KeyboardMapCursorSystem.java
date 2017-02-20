@@ -6,6 +6,8 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.comp460.battle.BattleScreen;
+import com.comp460.common.GameUnit;
 import com.comp460.tactics.TacticsScreen;
 import com.comp460.tactics.components.*;
 import com.comp460.tactics.map.MapPosition;
@@ -19,8 +21,12 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
     private static final Family toggledUnitsFamily = Family.all(ShowValidMovesComponent.class).get();
     private static final Family readyPlayerControlledFamily = Family.all(PlayerControlledComponent.class, ReadyToMoveComponent.class).get();
 
+    private static final Family playerControlledFamily = Family.all(PlayerControlledComponent.class).get();
+    private static final Family aiControlledFamily = Family.all(AIControlledComponent.class).get();
+
     private static final ComponentMapper<MapCursorComponent> cursorM = ComponentMapper.getFor(MapCursorComponent.class);
     private static final ComponentMapper<MapPositionComponent> mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
+    private static final ComponentMapper<UnitStatsComponent> statsM = ComponentMapper.getFor(UnitStatsComponent.class);
 
     private TacticsScreen parentScreen;
 
@@ -41,10 +47,12 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) cursorPos.col++;
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) cursorPos.row++;
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) cursorPos.row--;
-            if(cursorPos.row < 0) cursorPos.row = 0;
-            else if(cursorPos.row >= parentScreen.getMap().getHeight()) cursorPos.row = parentScreen.getMap().getHeight() - 1;
-            if(cursorPos.col < 0) cursorPos.col = 0;
-            else if(cursorPos.col >= parentScreen.getMap().getWidth()) cursorPos.col = parentScreen.getMap().getWidth() - 1;
+            if (cursorPos.row < 0) cursorPos.row = 0;
+            else if (cursorPos.row >= parentScreen.getMap().getHeight())
+                cursorPos.row = parentScreen.getMap().getHeight() - 1;
+            if (cursorPos.col < 0) cursorPos.col = 0;
+            else if (cursorPos.col >= parentScreen.getMap().getWidth())
+                cursorPos.col = parentScreen.getMap().getWidth() - 1;
             if (cursorPos.row != oldRow || cursorPos.col != oldCol) {
                 cursor.countdown = cursor.delay;
             }
@@ -52,7 +60,7 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
             cursor.countdown--;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Z) ) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
             Entity newSelection = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col);
 
             if (newSelection != null) {
@@ -64,7 +72,17 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
                         newSelection.add(toggle);
                     }
                 } else {
-                    if (newSelection != null) {
+
+                    // This is a hack to get combat wired in
+                    MapPositionComponent mapPosComp = mapPosM.get(newSelection);
+                    if (cursor.selection != null && aiControlledFamily.matches(newSelection)/* && parentScreen.getMap().computeValidMoves(cursor.selection).contains(new MapPosition(parentScreen.getMap(), mapPosComp.row, mapPosComp.col))*/) {
+                        System.out.println("STARTING COMBAT");
+                        UnitStatsComponent playerUnitStats = statsM.get(cursor.selection);
+                        UnitStatsComponent aiUnitStats = statsM.get(newSelection);
+                        this.parentScreen.game.setScreen(new BattleScreen(this.parentScreen.game, this.parentScreen, GameUnit.loadFromJSON("json/units/protagonists/" + playerUnitStats.id + ".json"), GameUnit.loadFromJSON("json/units/enemies/" + aiUnitStats.id + ".json")));
+
+                    } else {
+                        // This is the real selection code:
                         cursor.selection = newSelection;
 
                         clearToggledUnits();
@@ -75,6 +93,7 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
                             cursor.selection.add(toggle);
                         }
                     }
+
                 }
             } else {
                 if (cursor.selection != null && readyPlayerControlledFamily.matches(cursor.selection)) {
@@ -96,7 +115,7 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
     }
 
     private void clearToggledUnits() {
-        this.getEngine().getEntitiesFor(toggledUnitsFamily).forEach((e)->{
+        this.getEngine().getEntitiesFor(toggledUnitsFamily).forEach((e) -> {
             e.remove(ShowValidMovesComponent.class);
         });
     }

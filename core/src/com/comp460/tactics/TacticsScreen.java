@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.comp460.MainGame;
+import com.comp460.common.GameScreen;
 import com.comp460.common.components.CameraTargetComponent;
 import com.comp460.common.components.TextureComponent;
 import com.comp460.common.components.TransformComponent;
@@ -27,7 +29,7 @@ import com.comp460.tactics.systems.rendering.SelectionRenderingSystem;
 /**
  * Created by matthewhammond on 1/15/17.
  */
-public class TacticsScreen extends ScreenAdapter {
+public class TacticsScreen extends GameScreen {
 
     private static final Family readyPlayerUnitsFamily = Family.all(PlayerControlledComponent.class, ReadyToMoveComponent.class).get();
     private static final Family waitingPlayerUnitsFamily = Family.all(PlayerControlledComponent.class).exclude(ReadyToMoveComponent.class).get();
@@ -41,7 +43,8 @@ public class TacticsScreen extends ScreenAdapter {
 
     private TacticsMap map;
 
-    public TacticsScreen(int width, int height, TiledMap tiledMap) {
+    public TacticsScreen(MainGame game, GameScreen prevScreen, int width, int height, TiledMap tiledMap) {
+        super(game, prevScreen);
 
         this.batch = new SpriteBatch();
         this.engine = new PooledEngine();
@@ -64,6 +67,7 @@ public class TacticsScreen extends ScreenAdapter {
         engine.addSystem(new CameraTrackingSystem());
         engine.addSystem(new SnapToParentSystem());
 
+        // For now just skip the enemy turn:
         engine.addEntityListener(readyPlayerUnitsFamily, new EntityListener() {
             @Override
             public void entityAdded(Entity entity) {
@@ -73,30 +77,47 @@ public class TacticsScreen extends ScreenAdapter {
             @Override
             public void entityRemoved(Entity entity) {
                 if (engine.getEntitiesFor(readyPlayerUnitsFamily).size() == 0) {
-                    engine.getEntitiesFor(waitingAiUnitsFamily).forEach(e->{
-                        e.add(new ReadyToMoveComponent());
-                    });
-                    engine.getSystem(KeyboardMapCursorSystem.class).setProcessing(false);
-                }
-            }
-        });
-
-        engine.addEntityListener(readyAiUnitsFamily, new EntityListener() {
-            @Override
-            public void entityAdded(Entity entity) {
-
-            }
-
-            @Override
-            public void entityRemoved(Entity entity) {
-                if (engine.getEntitiesFor(readyAiUnitsFamily).size() == 0) {
                     engine.getEntitiesFor(waitingPlayerUnitsFamily).forEach(e->{
                         e.add(new ReadyToMoveComponent());
                     });
-                    engine.getSystem(KeyboardMapCursorSystem.class).setProcessing(true);
                 }
             }
         });
+
+        // In the future uncomment this to enable the ai to take a turn
+//        engine.addEntityListener(readyPlayerUnitsFamily, new EntityListener() {
+//            @Override
+//            public void entityAdded(Entity entity) {
+//
+//            }
+//
+//            @Override
+//            public void entityRemoved(Entity entity) {
+//                if (engine.getEntitiesFor(readyPlayerUnitsFamily).size() == 0) {
+//                    engine.getEntitiesFor(waitingAiUnitsFamily).forEach(e->{
+//                        e.add(new ReadyToMoveComponent());
+//                    });
+//                    engine.getSystem(KeyboardMapCursorSystem.class).setProcessing(false);
+//                }
+//            }
+//        });
+//
+//        engine.addEntityListener(readyAiUnitsFamily, new EntityListener() {
+//            @Override
+//            public void entityAdded(Entity entity) {
+//
+//            }
+//
+//            @Override
+//            public void entityRemoved(Entity entity) {
+//                if (engine.getEntitiesFor(readyAiUnitsFamily).size() == 0) {
+//                    engine.getEntitiesFor(waitingPlayerUnitsFamily).forEach(e->{
+//                        e.add(new ReadyToMoveComponent());
+//                    });
+//                    engine.getSystem(KeyboardMapCursorSystem.class).setProcessing(true);
+//                }
+//            }
+//        });
     }
 
     public TacticsMap getMap() {

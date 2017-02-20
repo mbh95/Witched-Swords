@@ -56,6 +56,7 @@ public class BattleScreen extends GameScreen {
     private static BitmapFont continueFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 16, Color.WHITE);
 
     private static BitmapFont hpFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.WHITE);
+    private static BitmapFont movesFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.WHITE);
 
     private static GlyphLayout readyLayout = new GlyphLayout(redFont, "READY");
     private static GlyphLayout setLayout = new GlyphLayout(yellowFont, "SET");
@@ -82,6 +83,9 @@ public class BattleScreen extends GameScreen {
     public BattlePlayer player1;
     public BattlePlayer player2;
 
+    public GlyphLayout p1MovesLayout;
+    public GlyphLayout p2MovesLayout;
+
     public List<BattleAnimation> playingAnimations = new ArrayList<>();
 
     public BattleScreen(Game game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase) {
@@ -91,6 +95,9 @@ public class BattleScreen extends GameScreen {
 
         this.player1 = new HumanPlayer(p1Unit);
         this.player2 = new GhastAi(p2Unit, p1Unit, this);
+
+        this.p1MovesLayout = new GlyphLayout(movesFont, "Z: " + p1Unit.ability1.name + "\nX: "+p1Unit.ability2.name);
+        this.p2MovesLayout = new GlyphLayout(movesFont, "1: " + p2Unit.ability1.name + "\n2: "+p2Unit.ability2.name);
 
         drawLayout = new GlyphLayout(resultsFont, "DRAW");
         p1WinsLayout = new GlyphLayout(resultsFont, p1Unit.name + " WINS!");
@@ -229,6 +236,11 @@ public class BattleScreen extends GameScreen {
 
         renderHealthBar(p1Unit, width / 2 - hpBar.getRegionWidth() - 10, 3);
         renderHealthBar(p2Unit, width / 2 + 10, 3);
+
+        batch.begin();
+        movesFont.draw(batch, p1MovesLayout, 10, 220);
+        movesFont.draw(batch, p2MovesLayout, 400 - p2MovesLayout.width - 10, 220);
+        batch.end();
 
         renderTimer(width / 2, 200);
     }

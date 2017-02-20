@@ -1,17 +1,12 @@
 package com.comp460.battle.units.protagonists.clarissa;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
-import com.comp460.assets.AnimationManager;
 import com.comp460.assets.SpriteManager;
-import com.comp460.battle.BattleAnimation;
 import com.comp460.battle.BattleScreen;
 import com.comp460.battle.units.BattleUnit;
-import com.comp460.battle.units.BattleUnitAbility;
-import com.comp460.battle.units.DamageVector;
 import com.comp460.common.GameUnit;
+import com.comp460.battle.units.protagonists.clarissa.moves.*;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -122,151 +117,5 @@ public class Clarissa extends BattleUnit {
 
     public float getNewSpawnTime() {
         return (float)(Math.random() + 2);
-    }
-}
-
-class Crossbow extends BattleUnitAbility {
-
-    public Clarissa clarissa;
-
-    public float arrowSpeed = 300f;
-
-    public Crossbow(Clarissa clarissa) {
-        this.clarissa = clarissa;
-
-        this.clarissa = clarissa;
-        this.id = "crossbow";
-        this.name = "Ready aim Fire!";
-        this.animationId = "attack";
-        this.description = "placeholder description";
-    }
-
-    @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 1;
-    }
-
-    @Override
-    public void use(BattleUnit user, BattleScreen screen) {
-        super.use(user, screen);
-        if (clarissa.inventory.size() == 0) {
-            clarissa.arrows.add(new Arrow(Ingredient.IngredientID.NONE, screen.colToScreenX(user.curCol) + 26, screen.rowToScreenY(user.curRow) + 22));
-            return;
-        }
-        clarissa.arrows.add(new Arrow(clarissa.popIngredient().id, screen.colToScreenX(user.curCol) + 26, screen.rowToScreenY(user.curRow) + 22));
-    }
-
-    public class Arrow {
-        public Vector3 tipPos;
-        public Ingredient.IngredientID ingredient;
-
-        public Arrow(Ingredient.IngredientID ingredient, float x, float y) {
-            this.ingredient = ingredient;
-            this.tipPos = new Vector3(x, y, 0);
-        }
-
-        public void render(SpriteBatch batch) {
-            batch.draw(ingredient.arrowSprite, tipPos.x - ingredient.arrowSprite.getRegionWidth(), tipPos.y - ingredient.arrowSprite.getRegionHeight()/2);
-        }
-
-        public boolean updateAndReturnCollided(float delta, BattleScreen screen) {
-            tipPos.x += arrowSpeed * delta;
-            BattleUnit opponent = screen.p1Unit;
-            if (opponent == clarissa) {
-                opponent = screen.p2Unit;
-            }
-            if (tipPos.x >= opponent.transform.x + 15 && tipPos.x <= opponent.transform.x + 30) {
-                if (tipPos.y >= opponent.transform.y && tipPos.y <= opponent.transform.y + 40) {
-                    opponent.applyDamage(ingredient.damageVector);
-                    screen.addAnimation(new BattleAnimation(ingredient.impactAnim, tipPos.x - 20, tipPos.y - 10, 0.1f));
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-}
-
-class PickUp extends BattleUnitAbility {
-
-    public Clarissa clarissa;
-
-    public PickUp(Clarissa clarissa) {
-        this.clarissa = clarissa;
-        this.id = "pickup";
-        this.name = "PickUp";
-        this.animationId = "attack";
-        this.description = "placeholder description";
-    }
-
-    @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return clarissa.inventory.size() < clarissa.maxIngredients;
-    }
-
-    @Override
-    public void use(BattleUnit user, BattleScreen screen) {
-        super.use(user, screen);
-        if (clarissa.inventory.size() >= clarissa.maxIngredients) {
-            return;
-        }
-        for (Iterator<Ingredient> iter = clarissa.spawnedIngredients.iterator(); iter.hasNext();) {
-            Ingredient cur = iter.next();
-            if (clarissa.curRow == cur.row && clarissa.curCol == cur.col) {
-                iter.remove();
-                clarissa.pushIngredient(cur);
-            }
-        }
-    }
-}
-
-class Ingredient {
-    enum IngredientID{
-        NONE("", "", "attacks/arrow_normal", "attacks/impact", new DamageVector(15)),
-        POISON("ingredients/poison_inv", "ingredients/poison_field", "attacks/arrow_poison", "attacks/impact",  new DamageVector(20)),
-        FIRE("ingredients/fire_inv", "ingredients/fire_field", "attacks/arrow_fire", "attacks/impact", new DamageVector(30));
-
-        public Animation<TextureRegion> fieldAnim;
-        public Animation<TextureRegion> impactAnim;
-        public TextureRegion inventorySprite;
-        public TextureRegion arrowSprite;
-        public DamageVector damageVector;
-
-        IngredientID(String inventorySpritePath, String fieldAnimPath, String arrowSpritePath, String impactAnimPath, DamageVector damageVec) {
-            inventorySprite = SpriteManager.BATTLE.findRegion(inventorySpritePath);
-            fieldAnim = AnimationManager.getBattleAnimation(fieldAnimPath);
-            arrowSprite = SpriteManager.BATTLE.findRegion(arrowSpritePath);
-            impactAnim = AnimationManager.getBattleAnimation(impactAnimPath);
-
-            this.damageVector = damageVec;
-        }
-    }
-
-    public IngredientID id;
-    public Animation<TextureRegion> animation;
-    public TextureRegion invTexture;
-    public TextureRegion arrowTexture;
-    public float lifetime;
-    public float animTimer;
-    public int row, col;
-
-    public Ingredient(IngredientID id, int row, int col) {
-        this.id = id;
-        this.animation = id.fieldAnim;
-        this.invTexture = id.inventorySprite;
-        this.arrowTexture = id.arrowSprite;
-        lifetime = 5f;
-        animTimer = 0f;
-        this.row = row;
-        this.col = col;
-    }
-
-    public void update(float delta) {
-        this.animTimer += delta;
-        lifetime -= delta;
-    }
-
-    public void render(BattleScreen screen) {
-        screen.batch.draw(animation.getKeyFrame(animTimer), screen.colToScreenX(col), screen.rowToScreenY(row));
     }
 }

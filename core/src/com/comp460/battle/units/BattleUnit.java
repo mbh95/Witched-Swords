@@ -30,8 +30,8 @@ public class BattleUnit implements BattleObject {
 
     public boolean canMove = true;
 
-    public BattleUnitAbility ability1 = new BattleUnitAbility();
-    public BattleUnitAbility ability2 = new BattleUnitAbility();
+    public BattleUnitAbility ability1 = BattleUnitAbility.getNullMove();
+    public BattleUnitAbility ability2 = BattleUnitAbility.getNullMove();
 
     public int maxHP;
     public int curHP;
@@ -153,7 +153,7 @@ public class BattleUnit implements BattleObject {
         return ability1.canUse(this, screen) || ability2.canUse(this, screen);
     }
 
-    public void applyDamage(DamageVector damageVector) {
+    public float applyDamage(DamageVector damageVector) {
         int prevHP = curHP;
         this.curHP -= damageVector.trueDamage;
         if (curHP <= 0) {
@@ -171,5 +171,6 @@ public class BattleUnit implements BattleObject {
         if (deltaHP > 0) {
             screen.addAnimation(new FloatingText("+"+deltaHP, healingFont, (float)(transform.x + 16f), transform.y + 40, 0.5f));
         }
+        return deltaHP;
     }
 }

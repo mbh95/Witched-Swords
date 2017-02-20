@@ -1,11 +1,11 @@
 {
   "id": "zane",
   "name": "Zane",
-  "description": "A cute girl with a crossbow.",
-  "maxHP": 70,
-  "curHP": 70,
+  "description": "A master swordsman.",
+  "maxHP": 150,
+  "curHP": 150,
   "moveDist": 5,
   "battleFactory": {
-    "class": "com.comp460.battle.units.protagonists.clarissa.ClarissaFactory"
+    "class": "com.comp460.battle.units.protagonists.zane.ZaneFactory"
   }
 }

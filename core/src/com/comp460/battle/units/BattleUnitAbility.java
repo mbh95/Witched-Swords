@@ -7,10 +7,17 @@ import com.comp460.battle.BattleScreen;
  * Created by matth on 2/15/2017.
  */
 public class BattleUnitAbility {
-    public String id = "none";
-    public String name = "None";
-    public String animationId = AnimationManager.defaultBattleAnimID;
-    public String description = "";
+    public final String id;
+    public final String name;
+    public final String animationId;
+    public final String description;
+
+    public BattleUnitAbility(String id, String name, String animId, String description) {
+        this.id = id;
+        this.name = name;
+        this.animationId = animId;
+        this.description = description;
+    }
 
     public boolean canUse(BattleUnit user, BattleScreen screen) {
         return false;
@@ -18,5 +25,9 @@ public class BattleUnitAbility {
 
     public void use(BattleUnit user, BattleScreen screen) {
 
+    }
+
+    public static BattleUnitAbility getNullMove() {
+        return new BattleUnitAbility("none", "None", AnimationManager.defaultBattleAnimID, "");
     }
 }

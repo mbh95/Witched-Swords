@@ -94,7 +94,7 @@ public class TacticsMap {
 //                            texture.populate(anim.frames[anim.currentFrame]);
 //                            unit.add(anim);
 //                        } else {
-//                            texture.populate(cell.getTile().getTextureRegion());
+                            texture.populate(cell.getTile().getTextureRegion());
 //                        }
                         TransformComponent transformComponent = engine.createComponent(TransformComponent.class)
                                 .populate(tileWidth * c, tileHeight*r, 0);

@@ -59,10 +59,7 @@ class Puff extends BattleUnitAbility {
     public Random rng = new Random();
 
     public Puff(Ghast ghast) {
-        id = "puff";
-        name = "Noxious Fumes";
-        animationId = "attack";
-        description = "";
+        super("puff", "Noxious Fumes", "attack", "Release toxic fumes that damage enemies over time and restore user's health.");
         this.ghast = ghast;
     }
 
@@ -84,7 +81,7 @@ class Puff extends BattleUnitAbility {
 
     @Override
     public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curHP >= 10;
+        return user.curHP > 10;
     }
 
     class PuffCloud {
@@ -113,8 +110,8 @@ class Puff extends BattleUnitAbility {
             }
 
             if (opponent.curRow == row && opponent.curCol == col) {
-                opponent.applyDamage(new DamageVector(1));
-                owner.applyDamage(new DamageVector(-2));
+                float damageDealt = opponent.applyDamage(new DamageVector(1));
+                owner.applyDamage(new DamageVector((int)(2*damageDealt)));
             }
         }
 

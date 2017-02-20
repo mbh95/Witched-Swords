@@ -1,11 +1,11 @@
 {
   "id": "yvonne",
   "name": "Yvonne",
-  "description": "A cute girl with a crossbow.",
-  "maxHP": 70,
-  "curHP": 70,
+  "description": "A monster hunter.",
+  "maxHP": 300,
+  "curHP": 50,
   "moveDist": 5,
   "battleFactory": {
-    "class": "com.comp460.battle.units.protagonists.clarissa.ClarissaFactory"
+    "class": "com.comp460.battle.units.protagonists.yvonne.YvonneFactory"
   }
 }

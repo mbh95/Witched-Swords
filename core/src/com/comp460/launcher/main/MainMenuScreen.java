@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.comp460.common.GameScreen;
 import com.comp460.launcher.Button;
 import com.comp460.launcher.TextButton;
+import com.comp460.launcher.mapselect.MapSelectScreen;
 import com.comp460.launcher.practice.battle.BattlePracticeScreen;
 import com.comp460.launcher.splash.SplashScreen;
 
@@ -41,7 +42,9 @@ public class MainMenuScreen extends GameScreen {
         super(game, prevScreen);
         curMenuState = MainMenuState.BUILD_MENU;
 
-        TextButton newGameButton = new TextButton(Constants.TITLE_POS.x, Constants.TITLE_POS.y - MainMenuAssets.TEXTURE_BUTTON_NORMAL.getRegionHeight(), "---", MainMenuAssets.FONT_MENU_ITEM, MainMenuAssets.TEXTURE_BUTTON_NORMAL, MainMenuAssets.TEXTURE_BUTTON_NORMAL, ()->{});
+        TextButton newGameButton = new TextButton(Constants.TITLE_POS.x, Constants.TITLE_POS.y - MainMenuAssets.TEXTURE_BUTTON_NORMAL.getRegionHeight(), "New Game", MainMenuAssets.FONT_MENU_ITEM, MainMenuAssets.TEXTURE_BUTTON_NORMAL, MainMenuAssets.TEXTURE_BUTTON_NORMAL, ()->{
+            game.setScreen(new MapSelectScreen(game, this));
+        });
         TextButton loadGameButton = new TextButton(Constants.TITLE_POS.x, Constants.TITLE_POS.y - 2 * MainMenuAssets.TEXTURE_BUTTON_NORMAL.getRegionHeight(), "---", MainMenuAssets.FONT_MENU_ITEM, MainMenuAssets.TEXTURE_BUTTON_NORMAL, MainMenuAssets.TEXTURE_BUTTON_NORMAL, () -> {
         });
         TextButton battlePracticeButton = new TextButton(Constants.TITLE_POS.x, Constants.TITLE_POS.y - 3 * MainMenuAssets.TEXTURE_BUTTON_NORMAL.getRegionHeight(), "Battle\nPractice", MainMenuAssets.FONT_MENU_ITEM, MainMenuAssets.TEXTURE_BUTTON_NORMAL, MainMenuAssets.TEXTURE_BUTTON_NORMAL, () -> {

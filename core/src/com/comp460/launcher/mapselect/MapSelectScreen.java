@@ -4,14 +4,17 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector3;
+import com.comp460.MainGame;
 import com.comp460.Settings;
+import com.comp460.assets.SpriteManager;
 import com.comp460.common.GameScreen;
 import com.comp460.launcher.Button;
-import com.comp460.launcher.main.MainMenuScreen;
+import com.comp460.launcher.TexturedButton;
 import com.comp460.launcher.practice.battle.BattlePracticeAssets;
 import com.comp460.tactics.TacticsScreen;
 
@@ -23,8 +26,13 @@ public class MapSelectScreen extends GameScreen {
     private Button[] buttons;
     private Button selectedButton;
 
-    public MapSelectScreen(Game game, GameScreen prevScreen) {
+    private Vector3 cursorPos;
+
+    private NinePatch cursorSprite = new NinePatch(SpriteManager.MAIN_MENU.findRegion("cursor-tiny"), 2, 2, 2, 2);
+
+    public MapSelectScreen(MainGame game, GameScreen prevScreen) {
         super(game, prevScreen);
+
         MapButton map1Button = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Map 1", 0, 50, ()->{});
 
         map1Button.action = () -> {
@@ -56,6 +64,7 @@ public class MapSelectScreen extends GameScreen {
         }
         buttons = new Button[] {map1Button};
         selectedButton = map1Button;
+        cursorPos = new Vector3(selectedButton.pos);
     }
 
     @Override
@@ -69,6 +78,8 @@ public class MapSelectScreen extends GameScreen {
         }
 
         float scale = 3.0f;
+
+        cursorSprite.draw(batch, cursorPos.x, cursorPos.y, selectedButton.width, selectedButton.height);
 
         batch.end();
 
@@ -86,14 +97,15 @@ public class MapSelectScreen extends GameScreen {
             this.previousScreen();
         }
 
+        cursorPos.slerp(selectedButton.pos, 0.3f);
     }
 
-    private class MapButton extends Button {
+    private class MapButton extends TexturedButton {
         public TiledMap map;
         private GlyphLayout layout;
 
         public MapButton(TiledMap map, String name, float x, float y, Runnable action) {
-            super(x, y, BattlePracticeAssets.TEXTURE_SQUARE, BattlePracticeAssets.TEXTURE_SQUARE_HOVERED, action);
+            super(x, y, BattlePracticeAssets.TEXTURE_SQUARE, action);
             System.out.println(name);
             this.map = map;
             this.layout = new GlyphLayout(BattlePracticeAssets.FONT_BATTLE_PORTRAIT, name);

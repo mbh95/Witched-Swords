@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 /**
  * Created by matth on 2/8/2017.
  */
-public class Button {
+public abstract class Button {
 
     enum ButtonState {NORMAL, HOVERED}
 
@@ -16,9 +16,6 @@ public class Button {
     public Vector3 pos;
     public float width, height;
 
-    public TextureRegion normalTexture;
-    public TextureRegion hoveredTexture;
-
     public Button up;
     public Button down;
     public Button left;
@@ -26,18 +23,13 @@ public class Button {
 
     public Runnable action = ()->{};
 
-    public Button(float x, float y, float width, float height, TextureRegion texture, Runnable action) {
-        this(x, y, width, height, texture, texture, action);
-    }
-    public Button(float x, float y, float width, float height, TextureRegion normalTexture, TextureRegion hoveredTexture, Runnable action) {
-        this.pos = new Vector3(x, y, 0);
-        this.width = width;
-        this.height = height;
+    public Button(float x, float y, float width, float height, Runnable action) {
 
         this.curState = ButtonState.NORMAL;
 
-        this.normalTexture = normalTexture;
-        this.hoveredTexture = hoveredTexture;
+        this.pos = new Vector3(x, y, 0);
+        this.width = width;
+        this.height = height;
 
         this.up = this;
         this.down = this;
@@ -45,21 +37,6 @@ public class Button {
         this.right = this;
 
         this.action = action;
-    }
-
-    public Button(float x, float y, TextureRegion texture, Runnable action) {
-        this(x, y, texture, texture, action);
-    }
-    public Button(float x, float y, TextureRegion texture, TextureRegion hoveredTexture, Runnable action) {
-        this(x, y, texture.getRegionWidth(), texture.getRegionHeight(), texture, hoveredTexture, action);
-    }
-
-    public void render(SpriteBatch batch) {
-        if (curState == ButtonState.NORMAL) {
-            batch.draw(normalTexture, pos.x, pos.y, width, height);
-        } else if (curState == ButtonState.HOVERED){
-            batch.draw(hoveredTexture, pos.x, pos.y, width, height);
-        }
     }
 
     public void click() {
@@ -73,4 +50,6 @@ public class Button {
     public void setNormal() {
         this.curState = ButtonState.NORMAL;
     }
+
+    public abstract void render(SpriteBatch batch);
 }

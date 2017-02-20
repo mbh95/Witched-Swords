@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.comp460.assets.FontManager;
 import com.comp460.battle.BattleScreen;
 import com.comp460.common.GameUnit;
+import com.comp460.common.input.Controller;
+import com.comp460.common.input.KeyboardController;
 import com.comp460.launcher.splash.SplashScreen;
 
 
@@ -26,6 +28,8 @@ public class MainGame extends Game {
 
 	private boolean showFPS = true;
 	private BitmapFont fpsFont;
+
+	public Controller controller;
 
 	@Override
 	public void create () {
@@ -49,12 +53,13 @@ public class MainGame extends Game {
 
 //		this.setScreen(new MainMenu(this));
 
+		controller = new KeyboardController();
 		this.setScreen(new SplashScreen(this));
 //		this.setScreen(ts);
 
 //		this.setScreen(new BattleScreen(this, null, new BattleUnitFactory(GameUnit.loadFromJSON("json/units/clarissa.json")), new BattleUnitFactory(GameUnit.loadFromJSON("json/units/ghast.json"))));
 	}
-
+// i'm matt and i want to be mean to ms poops <3
 	@Override
 	public void render () {
 		buffer.begin();
@@ -68,7 +73,7 @@ public class MainGame extends Game {
 		batch.begin();
 		batch.draw(bufferRegion, 0, 0, Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT);
 		if (showFPS) {
-			fpsFont.draw(batch, Gdx.graphics.getFramesPerSecond() + "", 10, 10);
+			fpsFont.draw(batch, Gdx.graphics.getFramesPerSecond() + "", 10, Settings.WINDOW_HEIGHT - 10);
 		}
 		batch.end();
 	}

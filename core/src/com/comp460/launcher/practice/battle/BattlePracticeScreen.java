@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
+import com.comp460.MainGame;
 import com.comp460.assets.AnimationManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.battle.BattleScreen;
@@ -13,7 +15,7 @@ import com.comp460.battle.units.BattleUnit;
 import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
 import com.comp460.launcher.Button;
-import com.comp460.launcher.TextButton;
+import com.comp460.launcher.TexturedButton;
 
 /**
  * Created by matthewhammond on 2/11/17.
@@ -22,6 +24,9 @@ public class BattlePracticeScreen extends GameScreen {
 
     private BattleUnit playerUnit;
     private BattleUnit aiUnit;
+
+    private CharacterButton playerButton;
+    private CharacterButton aiButton;
 
     private Animation<TextureRegion> playerUnitIdle;
     private Animation<TextureRegion> aiUnitIdle;
@@ -37,44 +42,47 @@ public class BattlePracticeScreen extends GameScreen {
 
     private BattleScreen dummyScreen = new BattleScreen(this.game, this, GameUnit.loadFromJSON("json/units/protagonists/andre.json"), GameUnit.loadFromJSON("json/units/protagonists/andre.json"));
 
+    private Vector3 cursorPos = new Vector3(0, 0, 0);
 
-    public BattlePracticeScreen(Game game, GameScreen prevScreen) {
+    private int bottomBorder = 1;
+
+    public BattlePracticeScreen(MainGame game, GameScreen prevScreen) {
         super(game, prevScreen);
 
-        CharacterButton andreButton = makePlayerCharacterButton("json/units/protagonists/andre.json", 0, 50);
-        CharacterButton clarissaButton = makePlayerCharacterButton("json/units/protagonists/clarissa.json", 50, 50);
-        CharacterButton yvonneButton = makePlayerCharacterButton("json/units/protagonists/yvonne.json", 0, 0);
-        CharacterButton zaneButton = makePlayerCharacterButton("json/units/protagonists/zane.json", 50, 0);
+        CharacterButton andreButton = makePlayerCharacterButton("json/units/protagonists/andre.json", 0, 50 + bottomBorder);
+        CharacterButton clarissaButton = makePlayerCharacterButton("json/units/protagonists/clarissa.json", 50, 50+ bottomBorder);
+        CharacterButton yvonneButton = makePlayerCharacterButton("json/units/protagonists/yvonne.json", 0, 0+ bottomBorder);
+        CharacterButton zaneButton = makePlayerCharacterButton("json/units/protagonists/zane.json", 50, 0+ bottomBorder);
 
 
 //        addPlayerButton("common/units/bulba.json", 200, 0, 100, 100);
 
-        CharacterButton bulbaButton = makeAiCharacterButton("json/units/enemies/bulba.json", 400 - 50, 50);
-        CharacterButton ghastButton = makeAiCharacterButton("json/units/enemies/ghast.json", 400 - 100, 50);
-        CharacterButton trixyButton = makeAiCharacterButton("json/units/enemies/trixy.json", 400 - 50, 0);
-        CharacterButton shellButton = makeAiCharacterButton("json/units/enemies/shellgon.json", 400 - 100, 0);
+        CharacterButton bulbaButton = makeAiCharacterButton("json/units/enemies/bulba.json", 400 - 50, 50+ bottomBorder);
+        CharacterButton ghastButton = makeAiCharacterButton("json/units/enemies/ghast.json", 400 - 100, 50+ bottomBorder);
+        CharacterButton trixyButton = makeAiCharacterButton("json/units/enemies/trixy.json", 400 - 50, 0+ bottomBorder);
+        CharacterButton shellButton = makeAiCharacterButton("json/units/enemies/shellgon.json", 400 - 100, 0+ bottomBorder);
 
 
 
-        Button fightButton = new Button(150,50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON_HOVER, ()->{
+        TexturedButton fightButton = new TexturedButton(150,50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, ()->{
             if (playerUnit != null && aiUnit != null) {
                 game.setScreen(new BattleScreen(game, this, playerUnit.base, aiUnit.base));
             }
         });
 
-        Button optionsButton = new Button(200,50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON_HOVER, ()->{
+        TexturedButton optionsButton = new TexturedButton(200,50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, ()->{
             if (playerUnit != null && aiUnit != null) {
                 game.setScreen(new BattleScreen(game, this, playerUnit.base, aiUnit.base));
             }
         });
 
-        Button backButton = new Button(150,0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON_HOVER, ()->{
+        TexturedButton backButton = new TexturedButton(150,0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, ()->{
             if (playerUnit != null && aiUnit != null) {
                 game.setScreen(new BattleScreen(game, this, playerUnit.base, aiUnit.base));
             }
         });
 
-        Button helpButton = new Button(200,0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON_HOVER, ()->{
+        TexturedButton helpButton = new TexturedButton(200,0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, ()->{
             if (playerUnit != null && aiUnit != null) {
                 game.setScreen(new BattleScreen(game, this, playerUnit.base, aiUnit.base));
             }
@@ -128,18 +136,21 @@ public class BattlePracticeScreen extends GameScreen {
             TextureRegion currentFrame = aiUnitIdle.getKeyFrame(frameTime, true);
             batch.draw(currentFrame, 400 - 30 - assets.TEXTURE_AI_AREA.getRegionWidth(), 240 - 10 - assets.TEXTURE_AI_AREA.getRegionHeight(), currentFrame.getRegionWidth() * scale, currentFrame.getRegionHeight() * scale);
         }
+
+        BattlePracticeAssets.NINEPATCH_CURSOR.draw(batch, cursorPos.x, cursorPos.y, selectedButton.width, selectedButton.height);
+
         if (infoMode) {
             drawInfo();
         }
 
         batch.end();
 
-        selectedButton.setNormal();
+//        selectedButton.setNormal();
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) selectedButton = selectedButton.left;
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) selectedButton = selectedButton.right;
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) selectedButton = selectedButton.up;
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) selectedButton = selectedButton.down;
-        selectedButton.setHovered();
+//        selectedButton.setHovered();
 
         if (infoMode) {
             if (selectedButton instanceof CharacterButton) {
@@ -158,8 +169,8 @@ public class BattlePracticeScreen extends GameScreen {
                 this.previousScreen();
             }
         }
-
         frameTime += delta;
+        cursorPos.slerp(selectedButton.pos, 0.3f);
     }
 
     private CharacterButton makeGenericCharacterButton(String json, float x, float y) {
@@ -176,6 +187,12 @@ public class BattlePracticeScreen extends GameScreen {
                 infoUnit = new InfoUnit(button.unit);
             } else {
                 playerUnit = button.unit;
+                if (playerButton != null) {
+                    playerButton.normalTexture = BattlePracticeAssets.TEXTURE_SQUARE;
+                }
+                playerButton = button;
+                playerButton.normalTexture = BattlePracticeAssets.TEXTURE_SQUARE_BLUE;
+
                 playerUnitIdle = AnimationManager.getBattleUnitAnimation(button.unit.id, "idle");
             }
         };
@@ -190,6 +207,12 @@ public class BattlePracticeScreen extends GameScreen {
                 infoUnit = new InfoUnit(button.unit);
             } else {
                 aiUnit = button.unit;
+                if (aiButton != null) {
+                    aiButton.normalTexture = BattlePracticeAssets.TEXTURE_SQUARE;
+                }
+                aiButton = button;
+                aiButton.normalTexture = BattlePracticeAssets.TEXTURE_SQUARE_RED;
+
                 aiUnitIdle = AnimationManager.getBattleUnitAnimation(button.unit.id, "idle");
             }
         };
@@ -211,19 +234,19 @@ public class BattlePracticeScreen extends GameScreen {
 
 
 //        batch.draw(assets.TEXTURE_INFO_BG, 0, 0);
-        assets.NP_INFO_BG.draw(batch, x, y, w, h);
+        assets.NP_INFO_BG.draw(batch, (int)x, (int)y, (int)w, (int)h);
 
         assets.FONT_INFO.draw(batch, infoUnit.infoLayout, x + padding, y + h - padding);
     }
 
-    private class CharacterButton extends Button {
+    private class CharacterButton extends TexturedButton {
 
         public BattleUnit unit;
         public TextureRegion unitIcon;
         private GlyphLayout layout;
 
         public CharacterButton(BattleUnit unit, float x, float y, Runnable action) {
-            super(x, y, assets.TEXTURE_SQUARE, assets.TEXTURE_SQUARE_HOVERED, action);
+            super(x, y, assets.TEXTURE_SQUARE, action);
             this.unit = unit;
             System.out.println(unit.name);
             this.unitIcon = AnimationManager.getBattleUnitAnimation(unit.id, "attack").getKeyFrame(0f);

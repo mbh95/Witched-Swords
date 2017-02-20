@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.battle.players.BattlePlayer;
@@ -88,7 +89,7 @@ public class BattleScreen extends GameScreen {
 
     public List<BattleAnimation> playingAnimations = new ArrayList<>();
 
-    public BattleScreen(Game game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase) {
+    public BattleScreen(MainGame game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase) {
         super(game, prevScreen);
         this.p1Unit = p1UnitBase.buildBattleUnit(this, 1, 1);
         this.p2Unit = p2UnitBase.buildBattleUnit(this, 1, numCols - 2);

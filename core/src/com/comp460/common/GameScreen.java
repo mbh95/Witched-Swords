@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.comp460.MainGame;
 import com.comp460.Settings;
 
 /**
@@ -11,7 +12,7 @@ import com.comp460.Settings;
  */
 public abstract class GameScreen extends ScreenAdapter {
 
-    public Game game;
+    public MainGame game;
     public SpriteBatch batch;
     public OrthographicCamera camera;
     public GameScreen prevScreen;
@@ -19,7 +20,7 @@ public abstract class GameScreen extends ScreenAdapter {
     public final int width = Settings.INTERNAL_WIDTH;
     public final int height = Settings.INTERNAL_HEIGHT;
 
-    public GameScreen(Game game, GameScreen prevScreen) {
+    public GameScreen(MainGame game, GameScreen prevScreen) {
         super();
         this.game = game;
         this.batch = new SpriteBatch();

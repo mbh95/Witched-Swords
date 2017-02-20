@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector3;
+import com.comp460.MainGame;
 import com.comp460.common.GameScreen;
 import com.comp460.assets.FontManager;
 import com.comp460.Settings;
@@ -16,15 +17,16 @@ import com.comp460.launcher.main.MainMenuScreen;
  */
 public class SplashScreen extends GameScreen {
 
-    private enum SplashState {WORDS_FLY_IN, SWITCHED_FLY_IN, S_FALL, DONE, POST, TRANSITION};
-    
+    private enum SplashState {WORDS_FLY_IN, SWITCHED_FLY_IN, S_FALL, DONE, POST, TRANSITION}
+
     public static class Constants {
         public static final Vector3 TITLE_GOAL_POS = new Vector3(60f, 70f, 0f);
 
         public static final Vector3 TITLE_MENU_POS = new Vector3(MainMenuScreen.Constants.TITLE_POS.x, MainMenuScreen.Constants.TITLE_POS.y, 0f);
         public static final Vector3 TITLE_MENU_SCALE = new Vector3(MainMenuScreen.Constants.TITLE_SCALE.x, MainMenuScreen.Constants.TITLE_SCALE.y, 0f);
 
-        public static final Vector3 GRAVITY = new Vector3(0f, -0.9f, 0f);;
+        public static final Vector3 GRAVITY = new Vector3(0f, -0.9f, 0f);
+        ;
         public static final float DAMPING = 0.8f;
 
         public static final Color WORD_COLOR = Color.WHITE;
@@ -50,7 +52,7 @@ public class SplashScreen extends GameScreen {
 
     private Vector3 titleScalePercent = new Vector3(100f, 100f, 0f);
 
-    public SplashScreen(Game game) {
+    public SplashScreen(MainGame game) {
         super(game, null);
 
         topPos = new Vector3(-SplashAssets.TITLE.getRegionWidth(), Constants.TITLE_GOAL_POS.y, 0f);
@@ -66,7 +68,7 @@ public class SplashScreen extends GameScreen {
         curSplashState = SplashState.WORDS_FLY_IN;
 
         pressStartFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 8, Color.BLACK);
-        pressStartLayout = new GlyphLayout(pressStartFont, "<Press Any Key to Continue>");
+        pressStartLayout = new GlyphLayout(pressStartFont, "Press ");
     }
 
     @Override
@@ -86,7 +88,7 @@ public class SplashScreen extends GameScreen {
         batch.draw(SplashAssets.SWORD, topPos.x - 50, topPos.y + SplashAssets.TITLE_WITCHED.getRegionHeight());
         batch.end();
 
-        switch(curSplashState) {
+        switch (curSplashState) {
             case WORDS_FLY_IN:
             case SWITCHED_FLY_IN:
             case S_FALL:
@@ -164,13 +166,17 @@ public class SplashScreen extends GameScreen {
                 break;
             case DONE:
                 if (((int) timer) % 2 == 0) {
-                    batch.setColor(Color.BLACK);
                     batch.begin();
-                    pressStartFont.draw(batch, "<Press Any Key to Begin>", 400 / 2 - pressStartLayout.width / 2, botPos.y - 30);
+                    float pressStartX = 400 / 2 - pressStartLayout.width / 2;
+                    float pressStartY = botPos.y - 30;
+                    TextureRegion button1Sprite = game.controller.button1Sprite();
+                    pressStartFont.draw(batch, pressStartLayout, pressStartX, pressStartY);
+                    batch.draw(button1Sprite, pressStartX + pressStartLayout.width, pressStartY - 8 - (button1Sprite.getRegionHeight() - 8)/2 + 1);
+
                     batch.end();
                 }
-                timer += 0.03;
-                if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
+                timer += delta;
+                if (game.controller.button1JustPressed()) {
                     curSplashState = SplashState.POST;
                     timer = 0;
                 }

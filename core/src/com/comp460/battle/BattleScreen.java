@@ -361,4 +361,13 @@ public class BattleScreen extends GameScreen {
         }
         batch.end();
     }
+
+    @Override
+    public void previousScreen() {
+
+        this.p1Unit.updateBase();
+        this.p2Unit.updateBase();
+
+        super.previousScreen();
+    }
 }

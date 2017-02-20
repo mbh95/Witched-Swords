@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.tactics.TacticsScreen;
 import com.comp460.tactics.components.ShowValidMovesComponent;
-import com.comp460.tactics.components.UnitStatsComponent;
+import com.comp460.tactics.components.unit.UnitStatsComponent;
 import com.comp460.tactics.map.MapPosition;
 
 import java.util.HashMap;

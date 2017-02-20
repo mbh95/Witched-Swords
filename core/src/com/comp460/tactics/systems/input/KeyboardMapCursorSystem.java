@@ -10,6 +10,10 @@ import com.comp460.battle.BattleScreen;
 import com.comp460.common.GameUnit;
 import com.comp460.tactics.TacticsScreen;
 import com.comp460.tactics.components.*;
+import com.comp460.tactics.components.unit.AIControlledComponent;
+import com.comp460.tactics.components.unit.PlayerControlledComponent;
+import com.comp460.tactics.components.unit.ReadyToMoveComponent;
+import com.comp460.tactics.components.unit.UnitStatsComponent;
 import com.comp460.tactics.map.MapPosition;
 
 /**
@@ -79,7 +83,7 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
                         System.out.println("STARTING COMBAT");
                         UnitStatsComponent playerUnitStats = statsM.get(cursor.selection);
                         UnitStatsComponent aiUnitStats = statsM.get(newSelection);
-                        this.parentScreen.game.setScreen(new BattleScreen(this.parentScreen.game, this.parentScreen, GameUnit.loadFromJSON("json/units/protagonists/" + playerUnitStats.id + ".json"), GameUnit.loadFromJSON("json/units/enemies/" + aiUnitStats.id + ".json")));
+                        this.parentScreen.game.setScreen(new BattleScreen(this.parentScreen.game, this.parentScreen, playerUnitStats.base, aiUnitStats.base));
 
                     } else {
                         // This is the real selection code:
@@ -101,6 +105,7 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
                     if (parentScreen.getMap().computeValidMoves(cursor.selection).contains(new MapPosition(parentScreen.getMap(), cursorPos.row, cursorPos.col))) {
                         parentScreen.getMap().move(cursor.selection, cursorPos.row, cursorPos.col);
                         clearToggledUnits();
+
                         cursor.selection = null;
                     } else {
                         //ERR ERR SOUND

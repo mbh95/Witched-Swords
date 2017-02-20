@@ -1478,7 +1478,7 @@
   <tile id="0">
    <properties>
     <property name="id" value="yvonne"/>
-    <property name="team" type="int" value="1"/>
+    <property name="team" type="int" value="0"/>
    </properties>
   </tile>
  </tileset>

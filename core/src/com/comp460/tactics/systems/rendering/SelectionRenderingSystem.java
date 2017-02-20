@@ -8,10 +8,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.tactics.TacticsScreen;
-import com.comp460.tactics.components.AIControlledComponent;
+import com.comp460.tactics.components.unit.AIControlledComponent;
 import com.comp460.tactics.components.MapCursorComponent;
 import com.comp460.tactics.components.MapPositionComponent;
-import com.comp460.tactics.components.PlayerControlledComponent;
+import com.comp460.tactics.components.unit.PlayerControlledComponent;
 
 /**
  * Created by matthewhammond on 1/20/17.

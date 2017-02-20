@@ -4,14 +4,18 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.comp460.common.components.AnimationComponent;
-import com.comp460.common.components.TextureComponent;
-import com.comp460.common.components.TransformComponent;
+import com.comp460.common.GameUnit;
+import com.comp460.tactics.components.TextureComponent;
+import com.comp460.tactics.components.TransformComponent;
 import com.comp460.tactics.components.*;
-import com.comp460.tactics.components.UnitStatsComponent;
+import com.comp460.tactics.components.unit.ReadyToMoveComponent;
+import com.comp460.tactics.components.unit.UnitStatsComponent;
+import com.comp460.tactics.components.unit.AIControlledComponent;
+import com.comp460.tactics.components.unit.PlayerControlledComponent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -98,7 +102,15 @@ public class TacticsMap {
 //                        }
                         TransformComponent transformComponent = engine.createComponent(TransformComponent.class)
                                 .populate(tileWidth * c, tileHeight*r, 0);
-                        UnitStatsComponent stats = engine.createComponent(UnitStatsComponent.class).populate(cell.getTile().getProperties().get("id", String.class), cell.getTile().getProperties().get("team", Integer.class), 5);
+
+                        int team = cell.getTile().getProperties().get("team", Integer.class);
+                        String id = cell.getTile().getProperties().get("id", String.class);
+                        UnitStatsComponent stats = engine.createComponent(UnitStatsComponent.class);
+                        if (team == 0) {
+                            stats.populate(team, GameUnit.loadFromJSON("json/units/protagonists/" + id + ".json"));
+                        } else {
+                            stats.populate(team, GameUnit.loadFromJSON("json/units/enemies/" + id + ".json"));
+                        }
 
                         if (stats.team == 0) {
                             unit.add(new PlayerControlledComponent());
@@ -159,7 +171,7 @@ public class TacticsMap {
             return null;
         }
         Map<MapPosition, Integer> validMoves = new HashMap<>();
-        validMovesHelper(e, validMoves, mapPosM.get(e).row, mapPosM.get(e).col, statsM.get(e).moveDist);
+        validMovesHelper(e, validMoves, mapPosM.get(e).row, mapPosM.get(e).col, statsM.get(e).base.moveDist);
         Set<MapPosition> finalMoves = validMoves.keySet();
 //        finalMoves.removeIf(pos->units[pos.getRow()][pos.getCol()] != null);
         return finalMoves;

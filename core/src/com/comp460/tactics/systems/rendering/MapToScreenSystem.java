@@ -7,8 +7,8 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.tactics.TacticsScreen;
 import com.comp460.tactics.components.MapPositionComponent;
-import com.comp460.common.components.ChildComponent;
-import com.comp460.common.components.TransformComponent;
+import com.comp460.tactics.components.ChildComponent;
+import com.comp460.tactics.components.TransformComponent;
 
 /**
  * Created by matthewhammond on 1/15/17.

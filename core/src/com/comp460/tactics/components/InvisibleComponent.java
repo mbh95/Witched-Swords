@@ -5,5 +5,5 @@ import com.badlogic.ashley.core.Component;
 /**
  * Created by matthewhammond on 1/27/17.
  */
-public class AIControlledComponent implements Component {
+public class InvisibleComponent implements Component {
 }

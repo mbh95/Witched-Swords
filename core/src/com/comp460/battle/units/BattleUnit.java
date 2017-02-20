@@ -62,12 +62,12 @@ public class BattleUnit implements BattleObject {
         this.curRow = row;
         this.curCol = col;
 
-        this.id = base.getId();
-        this.name = base.getName();
-        this.description = base.getDescription();
+        this.id = base.id;
+        this.name = base.name;
+        this.description = base.description;
 
-        this.maxHP = base.getMaxHP();
-        this.curHP = base.getCurHP();
+        this.maxHP = base.maxHP;
+        this.curHP = base.curHP;
 
         this.curEnergy = 5;
 
@@ -172,5 +172,10 @@ public class BattleUnit implements BattleObject {
             screen.addAnimation(new FloatingText("+"+deltaHP, healingFont, (float)(transform.x + 16f), transform.y + 40, 0.5f));
         }
         return deltaHP;
+    }
+
+    public void updateBase() {
+        this.base.curHP = this.curHP;
+        this.base.maxHP = this.maxHP;
     }
 }

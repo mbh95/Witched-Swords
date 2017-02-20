@@ -4,27 +4,27 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.comp460.MainGame;
 import com.comp460.common.GameScreen;
-import com.comp460.common.components.CameraTargetComponent;
-import com.comp460.common.components.TextureComponent;
-import com.comp460.common.components.TransformComponent;
-import com.comp460.common.systems.CameraTrackingSystem;
-import com.comp460.common.systems.SnapToParentSystem;
-import com.comp460.common.systems.SpriteAnimationSystem;
-import com.comp460.common.systems.SpriteRenderingSystem;
+import com.comp460.tactics.components.CameraTargetComponent;
+import com.comp460.tactics.components.TextureComponent;
+import com.comp460.tactics.components.TransformComponent;
+import com.comp460.tactics.components.unit.AIControlledComponent;
+import com.comp460.tactics.components.unit.PlayerControlledComponent;
+import com.comp460.tactics.components.unit.ReadyToMoveComponent;
+import com.comp460.tactics.systems.CameraTrackingSystem;
+import com.comp460.tactics.systems.SnapToParentSystem;
+import com.comp460.tactics.systems.SpriteAnimationSystem;
+import com.comp460.tactics.systems.events.UnitColorizerSystem;
+import com.comp460.tactics.systems.rendering.SpriteRenderingSystem;
 import com.comp460.tactics.components.*;
 import com.comp460.tactics.map.TacticsMap;
 import com.comp460.tactics.systems.input.KeyboardMapCursorSystem;
-import com.comp460.tactics.systems.rendering.MapRenderingSystem;
-import com.comp460.tactics.systems.rendering.MapToScreenSystem;
-import com.comp460.tactics.systems.rendering.MovesRenderingSystem;
-import com.comp460.tactics.systems.rendering.SelectionRenderingSystem;
+import com.comp460.tactics.systems.rendering.*;
 
 /**
  * Created by matthewhammond on 1/15/17.
@@ -66,6 +66,8 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new SpriteAnimationSystem());
         engine.addSystem(new CameraTrackingSystem());
         engine.addSystem(new SnapToParentSystem());
+
+        UnitColorizerSystem.register(engine);
 
         // For now just skip the enemy turn:
         engine.addEntityListener(readyPlayerUnitsFamily, new EntityListener() {

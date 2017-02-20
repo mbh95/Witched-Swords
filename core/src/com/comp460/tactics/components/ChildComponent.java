@@ -1,4 +1,4 @@
-package com.comp460.common.components;
+package com.comp460.tactics.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;

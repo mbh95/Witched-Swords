@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.comp460.battle.BattleScreen;
 import com.comp460.battle.units.BattleUnit;
 import com.comp460.battle.units.BattleUnitFactory;
+import com.comp460.tactics.components.unit.UnitStatsComponent;
 
 import java.util.List;
 
@@ -14,50 +15,28 @@ import java.util.List;
  */
 public class GameUnit {
 
-    private String id;
-    private String name;
-    private String description;
+    public String id;
+    public String name;
+    public String description;
 
-    private int maxHP;
-    private int curHP;
+    public int maxHP;
+    public int curHP;
 
-    private int moveDist;
+    public int moveDist;
 
-    private List<String> moves;
+    public List<String> moves;
 
-    private BattleUnitFactory battleFactory;
+    public BattleUnitFactory battleFactory;
 
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getMaxHP() {
-        return maxHP;
-    }
-
-    public int getCurHP() {
-        return curHP;
-    }
-
-    public int getMoveDist() {
-        return moveDist;
-    }
-
-    public BattleUnitFactory getBattleUnitFactory() {
-        return battleFactory;
-    }
 
     public BattleUnit buildBattleUnit(BattleScreen screen, int row, int col) {
         return battleFactory.buildUnit(screen, row, col, this);
     }
+
+    public UnitStatsComponent buildTacticsUnitStatsComponent(int team) {
+        return new UnitStatsComponent().populate(team, this);
+    }
+
     public void writeToJSON(String filename) {
         Json json = new Json();
         json.setTypeName(null);

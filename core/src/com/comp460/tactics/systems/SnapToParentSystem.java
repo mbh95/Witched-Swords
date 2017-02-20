@@ -1,11 +1,11 @@
-package com.comp460.common.systems;
+package com.comp460.tactics.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.comp460.common.components.ChildComponent;
-import com.comp460.common.components.TransformComponent;
+import com.comp460.tactics.components.ChildComponent;
+import com.comp460.tactics.components.TransformComponent;
 
 /**
  * Created by matthewhammond on 1/16/17.

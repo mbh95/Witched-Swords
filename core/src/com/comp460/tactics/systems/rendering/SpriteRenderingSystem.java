@@ -1,14 +1,16 @@
-package com.comp460.common.systems;
+package com.comp460.tactics.systems.rendering;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.comp460.common.components.InvisibleComponent;
-import com.comp460.common.components.TransformComponent;
-import com.comp460.common.components.TextureComponent;
+import com.comp460.tactics.components.ColorComponent;
+import com.comp460.tactics.components.InvisibleComponent;
+import com.comp460.tactics.components.TransformComponent;
+import com.comp460.tactics.components.TextureComponent;
 
 import java.util.PriorityQueue;
 
@@ -21,6 +23,7 @@ public class SpriteRenderingSystem extends IteratingSystem {
 
     private static final ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
     private static final ComponentMapper<TransformComponent> transformM = ComponentMapper.getFor(TransformComponent.class);
+    private static final ComponentMapper<ColorComponent> colorM = ComponentMapper.getFor(ColorComponent.class);
 
     PriorityQueue<Entity> renderQueue;
 
@@ -41,6 +44,12 @@ public class SpriteRenderingSystem extends IteratingSystem {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (Entity e: renderQueue) {
+            Color color = Color.WHITE;
+            ColorComponent colorComponent = colorM.get(e);
+            if (colorComponent != null) {
+                color = colorComponent.color;
+            }
+            batch.setColor(color);
             TextureComponent texComp = textureM.get(e);
             TransformComponent t = transformM.get(e);
             batch.draw(texComp.texture, t.pos.x, t.pos.y);

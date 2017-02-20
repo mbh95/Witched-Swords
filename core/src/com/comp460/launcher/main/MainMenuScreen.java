@@ -45,7 +45,7 @@ public class MainMenuScreen extends GameScreen {
             new TemplateRow("New Game", ()->{
                 game.setScreen(new MapSelectScreen(game, this));
             }),
-            new TemplateRow("Load Game", ()->{}),
+            new TemplateRow("---", ()->{}),
             new TemplateRow("Practice", () -> {
                 game.setScreen(new BattlePracticeScreen(game, this));
             })

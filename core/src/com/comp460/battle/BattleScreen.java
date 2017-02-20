@@ -335,8 +335,8 @@ public class BattleScreen extends GameScreen {
         resultsFont.draw(batch, layout, width / 2 - layout.width / 2, 100);
 
         if (this.endDelay <= 0) {
-            layout = new GlyphLayout(continueFont, "any key to continue");
-            continueFont.draw(batch, "any key to continue", width / 2 - layout.width / 2, 50);
+            layout = new GlyphLayout(continueFont, "z to continue");
+            continueFont.draw(batch, "z to continue", width / 2 - layout.width / 2, 50);
         }
         batch.end();
     }

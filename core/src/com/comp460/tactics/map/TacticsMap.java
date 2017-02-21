@@ -7,7 +7,10 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.comp460.assets.BattleAnimationManager;
+import com.comp460.assets.TacticsAnimationManager;
 import com.comp460.common.GameUnit;
+import com.comp460.tactics.components.core.AnimationComponent;
 import com.comp460.tactics.components.map.MapPositionComponent;
 import com.comp460.tactics.components.core.TextureComponent;
 import com.comp460.tactics.components.core.TransformComponent;
@@ -83,25 +86,20 @@ public class TacticsMap {
                         if (cell == null || cell.getTile() == null) {
                             continue;
                         }
-                        Entity unit = engine.createEntity();
-                        MapPositionComponent mapPos = new MapPositionComponent(r, c);
-                        TextureComponent texture = new TextureComponent(cell.getTile().getTextureRegion());
-
-//                        String animName = "";
-//                        if (cell.getTile().getProperties().containsKey("sprite")) {
-//                            animName = cell.getTile().getProperties().get("sprite", String.class);
-//                        }
-////                        if (Assets.animLookup.containsKey(animName)) {
-////                            AnimationComponent anim = new AnimationComponent().populate(Assets.animLookup.get(animName), 30);
-////                            texture.populate(anim.frames[anim.currentFrame]);
-////                            unit.add(anim);
-////                        } else {
-//                            texture.populate();
-////                        }
-                        TransformComponent transformComponent = new TransformComponent(tileWidth * c, tileHeight * r, 0);
 
                         int team = cell.getTile().getProperties().get("team", Integer.class);
                         String id = cell.getTile().getProperties().get("id", String.class);
+
+                        Entity unit = engine.createEntity();
+                        MapPositionComponent mapPos = new MapPositionComponent(r, c);
+
+                        AnimationComponent anim = new AnimationComponent(TacticsAnimationManager.getTacticsAnimation(id, "idle"));
+                        TextureComponent texture = new TextureComponent(anim.animation.getKeyFrame(0f));
+                        unit.add(anim);
+
+                        TransformComponent transformComponent = new TransformComponent(tileWidth * c, tileHeight * r, 0);
+
+
                         UnitStatsComponent stats = engine.createComponent(UnitStatsComponent.class);
                         if (team == 0) {
                             stats.populate(team, GameUnit.loadFromJSON("json/units/protagonists/" + id + ".json"));

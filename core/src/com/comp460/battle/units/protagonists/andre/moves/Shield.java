@@ -2,7 +2,7 @@ package com.comp460.battle.units.protagonists.andre.moves;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.comp460.assets.AnimationManager;
+import com.comp460.assets.BattleAnimationManager;
 import com.comp460.battle.BattleAnimation;
 import com.comp460.battle.BattleScreen;
 import com.comp460.battle.units.BattleUnit;
@@ -15,7 +15,7 @@ import com.comp460.battle.units.protagonists.andre.Andre;
 public class Shield extends BattleUnitAbility {
 
     public static float duration = 1f;
-    public static Animation<TextureRegion> shieldFlare = AnimationManager.getBattleAnimation("attacks/shield_outline");
+    public static Animation<TextureRegion> shieldFlare = BattleAnimationManager.getBattleAnimation("attacks/shield_outline");
 
     public Andre andre;
     public Shield(Andre andre) {

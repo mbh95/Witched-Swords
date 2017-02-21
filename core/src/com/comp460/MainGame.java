@@ -67,17 +67,16 @@ public class MainGame extends Game {
     // i'm matt and i want to be mean to ms poops <3
     @Override
     public void render() {
+        // Render the game to the frame-buffer
         buffer.begin();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         super.render();
         buffer.end();
 
+        // Render the frame-buffer to the screen adjusted for window size
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        super.render();
-
-        batch.setProjectionMatrix(this.windowCamera.combined);
         batch.begin();
         batch.draw(bufferRegion, bufferX, bufferY, buffer.getWidth(), buffer.getHeight());
         if (showFPS) {
@@ -91,6 +90,8 @@ public class MainGame extends Game {
         super.resize(width, height);
         this.windowCamera.setToOrtho(false, width, height);
         this.windowCamera.update();
+        this.batch.setProjectionMatrix(this.windowCamera.combined);
+
 
         float aspect = 1f * width / height;
 

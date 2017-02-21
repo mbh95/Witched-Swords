@@ -4,10 +4,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.comp460.assets.AnimationManager;
+import com.comp460.assets.BattleAnimationManager;
 import com.comp460.launcher.practice.battle.BattlePracticeAssets;
 import com.comp460.tactics.TacticsScreen;
 import com.comp460.tactics.components.cursor.MapCursorComponent;
@@ -47,7 +46,7 @@ public class HoverRenderingSystem extends IteratingSystem {
         if (hovered == null) {
             return;
         }
-        TextureRegion unitIcon = AnimationManager.getBattleUnitAnimation(unitStatsM.get(hovered).base.id, "attack").getKeyFrame(0f);
+        TextureRegion unitIcon = BattleAnimationManager.getBattleUnitAnimation(unitStatsM.get(hovered).base.id, "attack").getKeyFrame(0f);
 
 //        Gdx.gl.glEnable(GL20.GL_BLEND);
 //        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);

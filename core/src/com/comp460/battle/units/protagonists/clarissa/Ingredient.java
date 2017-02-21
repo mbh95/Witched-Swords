@@ -2,7 +2,7 @@ package com.comp460.battle.units.protagonists.clarissa;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.comp460.assets.AnimationManager;
+import com.comp460.assets.BattleAnimationManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.battle.BattleScreen;
 import com.comp460.battle.units.DamageVector;
@@ -24,9 +24,9 @@ public class Ingredient {
 
         IngredientID(String inventorySpritePath, String fieldAnimPath, String arrowSpritePath, String impactAnimPath, DamageVector damageVec) {
             inventorySprite = SpriteManager.BATTLE.findRegion(inventorySpritePath);
-            fieldAnim = AnimationManager.getBattleAnimation(fieldAnimPath);
+            fieldAnim = BattleAnimationManager.getBattleAnimation(fieldAnimPath);
             arrowSprite = SpriteManager.BATTLE.findRegion(arrowSpritePath);
-            impactAnim = AnimationManager.getBattleAnimation(impactAnimPath);
+            impactAnim = BattleAnimationManager.getBattleAnimation(impactAnimPath);
 
             this.damageVector = damageVec;
         }

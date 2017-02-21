@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.comp460.assets.FontManager;
 import com.comp460.battle.BattleObject;
 import com.comp460.battle.BattleScreen;
-import com.comp460.assets.AnimationManager;
+import com.comp460.assets.BattleAnimationManager;
 import com.comp460.battle.FloatingText;
 import com.comp460.battle.buffs.BattleBuff;
 import com.comp460.common.GameUnit;
@@ -77,7 +77,7 @@ public class BattleUnit implements BattleObject {
             this.transform = new Vector3(0, 0, 0f);
 
 
-        this.curAnim = AnimationManager.getBattleUnitAnimation(id, AnimationManager.defaultBattleAnimID);
+        this.curAnim = BattleAnimationManager.getBattleUnitAnimation(id, BattleAnimationManager.defaultBattleAnimID);
         this.animTimer = 0f;
     }
 
@@ -85,7 +85,7 @@ public class BattleUnit implements BattleObject {
         transform.slerp(new Vector3(screen.colToScreenX(curCol), screen.rowToScreenY(curRow), transform.z), 0.3f);
         animTimer += delta;
         if (!idleAnim && curAnim.isAnimationFinished(animTimer)) {
-            curAnim = AnimationManager.getBattleUnitAnimation(id, AnimationManager.defaultBattleAnimID);
+            curAnim = BattleAnimationManager.getBattleUnitAnimation(id, BattleAnimationManager.defaultBattleAnimID);
             curAnim.setPlayMode(Animation.PlayMode.LOOP);
             animTimer = 0f;
             idleAnim = true;
@@ -110,7 +110,7 @@ public class BattleUnit implements BattleObject {
         if (animationCache.containsKey(animId)) {
             curAnim = animationCache.get(animId);
         } else {
-            curAnim = AnimationManager.getBattleUnitAnimation(id, animId);
+            curAnim = BattleAnimationManager.getBattleUnitAnimation(id, animId);
             animationCache.put(animId, curAnim);
         }
         animTimer = 0f;

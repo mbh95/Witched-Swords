@@ -56,13 +56,13 @@ public class Assets {
     public static void load() {
         Textures.CURSOR = new Texture(Gdx.files.internal("tactics/sprites/ui/cursor.png"));
 
-        Textures.BULBA_MICRO_1 = new Texture(Gdx.files.internal("tactics/sprites/units/bulba_idle_0.png"));
+        Textures.BULBA_MICRO_1 = new Texture(Gdx.files.internal("tactics/sprites/units/bulba.png"));
         Textures.BULBA_MICRO_2 = new Texture(Gdx.files.internal("tactics/sprites/units/bulba_idle_1.png"));
         TextureRegion[] BULBA_MICRO_ANIM = new TextureRegion[] {new TextureRegion(Textures.BULBA_MICRO_1), new TextureRegion(Textures.BULBA_MICRO_2)};
         animLookup.put("bulba_tactics_idle", BULBA_MICRO_ANIM);
 
-        Textures.ROGUE_MICRO_1 = new Texture(Gdx.files.internal("tactics/sprites/units/ruby_idle_0.png"));
-        Textures.ROGUE_MICRO_2 = new Texture(Gdx.files.internal("tactics/sprites/units/ruby_idle_0.png"));
+        Textures.ROGUE_MICRO_1 = new Texture(Gdx.files.internal("tactics/sprites/units/ruby.png"));
+        Textures.ROGUE_MICRO_2 = new Texture(Gdx.files.internal("tactics/sprites/units/ruby.png"));
         TextureRegion[] ROGUE_MICRO_ANIM = new TextureRegion[] {new TextureRegion(Textures.ROGUE_MICRO_1), new TextureRegion(Textures.ROGUE_MICRO_2)};
         animLookup.put("rogue_micro", ROGUE_MICRO_ANIM);
 
@@ -87,7 +87,7 @@ public class Assets {
 //        Textures.MEGA = new Texture(Gdx.files.internal("battle/sprites/units/megadude.png"));
 //        Textures.SCRATCH = new Texture(Gdx.files.internal("battle/sprites/attacks/scratch.png"));
 //        Textures.LAZER = new Texture(Gdx.files.internal("battle/sprites/attacks/lazer.png"));
-//        Textures.ROGUE = new Texture(Gdx.files.internal("battle/sprites/units/ruby_idle_0.png"));
+//        Textures.ROGUE = new Texture(Gdx.files.internal("battle/sprites/units/ruby.png"));
 //        Textures.ROGUE1 = new Texture(Gdx.files.internal("battle/sprites/units/ruby_idle_1.png"));
 //        Textures.ROGUE2 = new Texture(Gdx.files.internal("battle/sprites/units/ruby_idle_2.png"));
         Maps.TEST = new TmxMapLoader().load("tactics/maps/testmap.tmx");

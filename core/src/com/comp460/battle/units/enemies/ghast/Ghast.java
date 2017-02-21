@@ -3,7 +3,7 @@ package com.comp460.battle.units.enemies.ghast;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.comp460.assets.AnimationManager;
+import com.comp460.assets.BattleAnimationManager;
 import com.comp460.battle.BattleScreen;
 import com.comp460.battle.units.BattleUnit;
 import com.comp460.battle.units.BattleUnitAbility;
@@ -20,7 +20,7 @@ import java.util.Random;
  */
 public class Ghast extends BattleUnit {
 
-    public static Animation<TextureRegion> puffAnimation = AnimationManager.getBattleAnimation("attacks/poof");
+    public static Animation<TextureRegion> puffAnimation = BattleAnimationManager.getBattleAnimation("attacks/poof");
     public static final float cloudSpeed = 0.25f;
 
     public List<Puff.PuffCloud> clouds = new ArrayList<>();

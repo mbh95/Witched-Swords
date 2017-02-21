@@ -1,6 +1,5 @@
 package com.comp460.launcher.practice.battle;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -8,8 +7,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.comp460.MainGame;
-import com.comp460.assets.AnimationManager;
-import com.comp460.assets.SpriteManager;
+import com.comp460.assets.BattleAnimationManager;
 import com.comp460.battle.BattleScreen;
 import com.comp460.battle.units.BattleUnit;
 import com.comp460.common.GameScreen;
@@ -193,7 +191,7 @@ public class BattlePracticeScreen extends GameScreen {
                 playerButton = button;
                 playerButton.normalTexture = BattlePracticeAssets.TEXTURE_SQUARE_BLUE;
 
-                playerUnitIdle = AnimationManager.getBattleUnitAnimation(button.unit.id, "idle");
+                playerUnitIdle = BattleAnimationManager.getBattleUnitAnimation(button.unit.id, "idle");
             }
         };
         return button;
@@ -213,7 +211,7 @@ public class BattlePracticeScreen extends GameScreen {
                 aiButton = button;
                 aiButton.normalTexture = BattlePracticeAssets.TEXTURE_SQUARE_RED;
 
-                aiUnitIdle = AnimationManager.getBattleUnitAnimation(button.unit.id, "idle");
+                aiUnitIdle = BattleAnimationManager.getBattleUnitAnimation(button.unit.id, "idle");
             }
         };
         return button;
@@ -249,7 +247,7 @@ public class BattlePracticeScreen extends GameScreen {
             super(x, y, assets.TEXTURE_SQUARE, action);
             this.unit = unit;
             System.out.println(unit.name);
-            this.unitIcon = AnimationManager.getBattleUnitAnimation(unit.id, "attack").getKeyFrame(0f);
+            this.unitIcon = BattleAnimationManager.getBattleUnitAnimation(unit.id, "attack").getKeyFrame(0f);
             this.layout = new GlyphLayout(assets.FONT_BATTLE_PORTRAIT, unit.name);
         }
 

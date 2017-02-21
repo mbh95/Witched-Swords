@@ -34,7 +34,9 @@ public class MapSelectScreen extends GameScreen {
         super(game, prevScreen);
 
         MapButton bigmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Big Map", 0, 50, ()->{});
-        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/smallmap.tmx"), "Small Map", 50, 50, ()->{});
+//        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/smallmap.tmx"), "Small Map", 50, 50, ()->{});
+        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Small Map", 50, 50, ()->{});
+
 
         bigmapButton.action = () -> {
             game.setScreen(new TacticsScreen(game, prevScreen, bigmapButton.map));

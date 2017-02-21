@@ -22,6 +22,7 @@ import com.comp460.tactics.systems.core.SpriteRenderingSystem;
 import com.comp460.tactics.components.unit.AIControlledComponent;
 import com.comp460.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.tactics.components.unit.ReadyToMoveComponent;
+import com.comp460.tactics.systems.cursor.MapCursorMovementSystem;
 import com.comp460.tactics.systems.unit.UnitColorizerListener;
 import com.comp460.tactics.map.TacticsMap;
 import com.comp460.tactics.systems.map.MapRenderingSystem;
@@ -56,6 +57,7 @@ public class TacticsScreen extends GameScreen {
         makeCursor();
 
         engine.addSystem(new KeyboardMapCursorSystem(this));
+        engine.addSystem(new MapCursorMovementSystem(this));
         engine.addSystem(new MapRenderingSystem(this));
         engine.addSystem(new MapToScreenSystem(this));
         engine.addSystem(new MovesRenderingSystem(this));

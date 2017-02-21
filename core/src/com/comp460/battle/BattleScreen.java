@@ -166,6 +166,11 @@ public class BattleScreen extends GameScreen {
         }
     }
 
+    private void tickTimer(float delta) {
+        countdownTimer -= delta;
+    }
+
+    //region render
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -229,10 +234,6 @@ public class BattleScreen extends GameScreen {
         batch.end();
     }
 
-    private void tickTimer(float delta) {
-        countdownTimer -= delta;
-    }
-
     private void renderUI(float delta) {
 
         renderHealthBar(p1Unit, width / 2 - hpBar.getRegionWidth() - 10, 3);
@@ -283,35 +284,6 @@ public class BattleScreen extends GameScreen {
         sr.end();
     }
 
-    private void checkEndConditions(float delta) {
-
-        boolean p1Dead = p1Unit.curHP <= 0;
-        boolean p2Dead = p2Unit.curHP <= 0;
-
-        if (p1Dead && p2Dead) {
-            curState = BattleState.END_DRAW;
-            return;
-        } else if (p1Dead) {
-            curState = BattleState.END_P1_DIED;
-            return;
-        } else if (p2Dead) {
-            curState = BattleState.END_P2_DIED;
-            return;
-        }
-
-        if (countdownTimer <= 0) {
-            curState = BattleState.END_TIME;
-            return;
-        }
-
-        boolean p1CanAct = p1Unit.canUseAbility();
-        boolean p2CanAct = p2Unit.canUseAbility();
-        if ((!p1CanAct) && (!p2CanAct)) {
-            curState = BattleState.END_STALEMATE;
-            return;
-        }
-    }
-
     private void renderEnd(float delta) {
         GlyphLayout layout = drawLayout;
         batch.begin();
@@ -339,6 +311,37 @@ public class BattleScreen extends GameScreen {
             continueFont.draw(batch, "z to continue", width / 2 - layout.width / 2, 50);
         }
         batch.end();
+    }
+
+    //endregion
+
+    private void checkEndConditions(float delta) {
+
+        boolean p1Dead = p1Unit.curHP <= 0;
+        boolean p2Dead = p2Unit.curHP <= 0;
+
+        if (p1Dead && p2Dead) {
+            curState = BattleState.END_DRAW;
+            return;
+        } else if (p1Dead) {
+            curState = BattleState.END_P1_DIED;
+            return;
+        } else if (p2Dead) {
+            curState = BattleState.END_P2_DIED;
+            return;
+        }
+
+        if (countdownTimer <= 0) {
+            curState = BattleState.END_TIME;
+            return;
+        }
+
+        boolean p1CanAct = p1Unit.canUseAbility();
+        boolean p2CanAct = p2Unit.canUseAbility();
+        if ((!p1CanAct) && (!p2CanAct)) {
+            curState = BattleState.END_STALEMATE;
+            return;
+        }
     }
 
     public void countoff(float delta) {

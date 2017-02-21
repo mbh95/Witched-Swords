@@ -1,4 +1,4 @@
-package com.comp460.tactics.systems.rendering;
+package com.comp460.tactics.systems.map;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -6,12 +6,12 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.tactics.TacticsScreen;
-import com.comp460.tactics.components.MapPositionComponent;
-import com.comp460.tactics.components.ChildComponent;
-import com.comp460.tactics.components.TransformComponent;
+import com.comp460.tactics.components.map.MapPositionComponent;
+import com.comp460.tactics.components.core.ChildComponent;
+import com.comp460.tactics.components.core.TransformComponent;
 
 /**
- * Created by matthewhammond on 1/15/17.
+ * For each entity with both a map position and a transform which is not already tied to a parent entity
  */
 public class MapToScreenSystem extends IteratingSystem {
 
@@ -31,6 +31,6 @@ public class MapToScreenSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         MapPositionComponent mapPos = mapPosM.get(entity);
         TransformComponent transform = transformM.get(entity);
-        transform.pos.slerp(new Vector3(mapPos.col * parentScreen.getMap().getTileWidth(), mapPos.row *  parentScreen.getMap().getTileHeight(), transform.pos.z), 0.3f);
+        transform.pos.lerp(new Vector3(mapPos.col * parentScreen.getMap().getTileWidth(), mapPos.row *  parentScreen.getMap().getTileHeight(), transform.pos.z), 0.3f);
     }
 }

@@ -14,7 +14,9 @@ public abstract class GameScreen extends ScreenAdapter {
 
     public MainGame game;
     public SpriteBatch batch;
+    public SpriteBatch uiBatch;
     public OrthographicCamera camera;
+    public OrthographicCamera uiCamera;
     public GameScreen prevScreen;
 
     public final int width = Settings.INTERNAL_WIDTH;
@@ -24,9 +26,17 @@ public abstract class GameScreen extends ScreenAdapter {
         super();
         this.game = game;
         this.batch = new SpriteBatch();
+        this.uiBatch = new SpriteBatch();
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT);
+
+        this.uiCamera = new OrthographicCamera();
+        this.uiCamera.setToOrtho(false, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT);
+
         this.prevScreen = prevScreen;
+
+        this.uiCamera.update();
+        this.uiBatch.setProjectionMatrix(uiCamera.combined);
     }
 
     @Override

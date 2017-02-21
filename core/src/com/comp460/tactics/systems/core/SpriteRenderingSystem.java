@@ -1,21 +1,21 @@
-package com.comp460.tactics.systems.rendering;
+package com.comp460.tactics.systems.core;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.comp460.tactics.components.ColorComponent;
-import com.comp460.tactics.components.InvisibleComponent;
-import com.comp460.tactics.components.TransformComponent;
-import com.comp460.tactics.components.TextureComponent;
+import com.comp460.tactics.components.core.InvisibleComponent;
+import com.comp460.tactics.components.core.TransformComponent;
+import com.comp460.tactics.components.core.TextureComponent;
 
 import java.util.PriorityQueue;
 
 /**
- * Created by matthewhammond on 1/15/17.
+ * For each entity with a texture component and a transform component, a transform component and is not invisible,
+ * queues the entity for ui (sorted by their z transform),
+ * then at the end of each frame renders all entities in the queue
  */
 public class SpriteRenderingSystem extends IteratingSystem {
 
@@ -23,7 +23,6 @@ public class SpriteRenderingSystem extends IteratingSystem {
 
     private static final ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
     private static final ComponentMapper<TransformComponent> transformM = ComponentMapper.getFor(TransformComponent.class);
-    private static final ComponentMapper<ColorComponent> colorM = ComponentMapper.getFor(ColorComponent.class);
 
     PriorityQueue<Entity> renderQueue;
 
@@ -44,14 +43,10 @@ public class SpriteRenderingSystem extends IteratingSystem {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (Entity e: renderQueue) {
-            Color color = Color.WHITE;
-            ColorComponent colorComponent = colorM.get(e);
-            if (colorComponent != null) {
-                color = colorComponent.color;
-            }
-            batch.setColor(color);
             TextureComponent texComp = textureM.get(e);
             TransformComponent t = transformM.get(e);
+            batch.setColor(texComp.tint);
+
             batch.draw(texComp.texture, t.pos.x, t.pos.y);
         }
         renderQueue.clear();

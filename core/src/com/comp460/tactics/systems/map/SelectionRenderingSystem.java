@@ -1,4 +1,4 @@
-package com.comp460.tactics.systems.rendering;
+package com.comp460.tactics.systems.map;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -9,12 +9,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.tactics.TacticsScreen;
 import com.comp460.tactics.components.unit.AIControlledComponent;
-import com.comp460.tactics.components.MapCursorComponent;
-import com.comp460.tactics.components.MapPositionComponent;
+import com.comp460.tactics.components.cursor.MapCursorComponent;
+import com.comp460.tactics.components.map.MapPositionComponent;
 import com.comp460.tactics.components.unit.PlayerControlledComponent;
 
 /**
  * Created by matthewhammond on 1/20/17.
+ *
+ * Renders the light blue/yellow square on a selected unit.
+ * i love commenting!!!!!!!!
  */
 public class SelectionRenderingSystem extends IteratingSystem {
 

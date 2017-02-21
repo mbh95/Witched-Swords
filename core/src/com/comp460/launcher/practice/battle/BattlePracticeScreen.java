@@ -44,7 +44,7 @@ public class BattlePracticeScreen extends GameScreen {
 
     private Vector3 cursorPos = new Vector3(0, 0, 0);
 
-    private int bottomBorder = 1;
+    private int bottomBorder = 0;
 
     public BattlePracticeScreen(MainGame game, GameScreen prevScreen) {
         super(game, prevScreen);
@@ -170,7 +170,7 @@ public class BattlePracticeScreen extends GameScreen {
             }
         }
         frameTime += delta;
-        cursorPos.slerp(selectedButton.pos, 0.3f);
+        cursorPos.lerp(selectedButton.pos, 0.3f);
     }
 
     private CharacterButton makeGenericCharacterButton(String json, float x, float y) {

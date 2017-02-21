@@ -52,5 +52,7 @@ public class MapCursorMovementSystem extends IteratingSystem {
                 cursor.countdown = cursor.delay;
             }
         }
+
+        cursor.hovered = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col);
     }
 }

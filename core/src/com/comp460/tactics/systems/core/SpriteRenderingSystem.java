@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
 
 /**
  * For each entity with a texture component and a transform component, a transform component and is not invisible,
- * queues the entity for rendering (sorted by their z transform),
+ * queues the entity for ui (sorted by their z transform),
  * then at the end of each frame renders all entities in the queue
  */
 public class SpriteRenderingSystem extends IteratingSystem {

@@ -15,6 +15,9 @@ import com.comp460.tactics.components.unit.PlayerControlledComponent;
 
 /**
  * Created by matthewhammond on 1/20/17.
+ *
+ * Renders the light blue/yellow square on a selected unit.
+ * i love commenting!!!!!!!!
  */
 public class SelectionRenderingSystem extends IteratingSystem {
 

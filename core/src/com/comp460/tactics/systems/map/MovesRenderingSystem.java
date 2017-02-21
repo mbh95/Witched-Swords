@@ -16,6 +16,9 @@ import java.util.Set;
 
 /**
  * Created by matthewhammond on 1/20/17.
+ *
+ * Renders the blue move squares.
+ * commenting is my favorite!!!!!!!!!!!
  */
 public class MovesRenderingSystem  extends EntitySystem implements EntityListener {
 

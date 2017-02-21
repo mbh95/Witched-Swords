@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Entity;
 public class MapCursorComponent implements Component {
     public float countdown, delay;
     public Entity selection;
+    public Entity hovered;
 
     public MapCursorComponent(float delay) {
         this.delay = delay;

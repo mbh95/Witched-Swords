@@ -22,6 +22,7 @@ import com.comp460.tactics.systems.core.SpriteRenderingSystem;
 import com.comp460.tactics.components.unit.AIControlledComponent;
 import com.comp460.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.tactics.components.unit.ReadyToMoveComponent;
+import com.comp460.tactics.systems.ui.HoverRenderingSystem;
 import com.comp460.tactics.systems.cursor.MapCursorMovementSystem;
 import com.comp460.tactics.systems.unit.UnitColorizerListener;
 import com.comp460.tactics.map.TacticsMap;
@@ -46,7 +47,7 @@ public class TacticsScreen extends GameScreen {
 
     private TacticsMap map;
 
-    public TacticsScreen(MainGame game, GameScreen prevScreen, int width, int height, TiledMap tiledMap) {
+    public TacticsScreen(MainGame game, GameScreen prevScreen, TiledMap tiledMap) {
         super(game, prevScreen);
 
         this.engine = new PooledEngine();
@@ -56,18 +57,19 @@ public class TacticsScreen extends GameScreen {
 
         makeCursor();
 
-        engine.addSystem(new KeyboardMapCursorSystem(this));
-        engine.addSystem(new MapCursorMovementSystem(this));
         engine.addSystem(new MapRenderingSystem(this));
-        engine.addSystem(new MapToScreenSystem(this));
-        engine.addSystem(new MovesRenderingSystem(this));
-        engine.addSystem(new SelectionRenderingSystem(this));
 
         engine.addSystem(new SpriteRenderingSystem(batch, camera));
         engine.addSystem(new SpriteAnimationSystem());
         engine.addSystem(new CameraTrackingSystem());
         engine.addSystem(new SnapToParentSystem());
 
+        engine.addSystem(new KeyboardMapCursorSystem(this));
+        engine.addSystem(new MapCursorMovementSystem(this));
+        engine.addSystem(new MapToScreenSystem(this));
+        engine.addSystem(new MovesRenderingSystem(this));
+        engine.addSystem(new SelectionRenderingSystem(this));
+        engine.addSystem(new HoverRenderingSystem(this));
 
         engine.addEntityListener(new UnitColorizerListener());
 

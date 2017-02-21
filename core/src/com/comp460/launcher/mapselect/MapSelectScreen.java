@@ -33,13 +33,17 @@ public class MapSelectScreen extends GameScreen {
     public MapSelectScreen(MainGame game, GameScreen prevScreen) {
         super(game, prevScreen);
 
-        MapButton map1Button = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Map 1", 0, 50, ()->{});
+        MapButton bigmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Big Map", 0, 50, ()->{});
+        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/smallmap.tmx"), "Small Map", 50, 50, ()->{});
 
-        map1Button.action = () -> {
-            game.setScreen(new TacticsScreen(game, prevScreen, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, map1Button.map));
+        bigmapButton.action = () -> {
+            game.setScreen(new TacticsScreen(game, prevScreen, bigmapButton.map));
+        };
+        smallmapButton.action = () -> {
+            game.setScreen(new TacticsScreen(game, prevScreen, smallmapButton.map));
         };
 
-        Button[][] buttonMap = new Button[][] {{map1Button}};
+        Button[][] buttonMap = new Button[][] {{bigmapButton, smallmapButton}};
 
         for (int r = 0; r < buttonMap.length; r++) {
             for (int c = 0; c < buttonMap[0].length; c++) {
@@ -62,8 +66,8 @@ public class MapSelectScreen extends GameScreen {
                 }
             }
         }
-        buttons = new Button[] {map1Button};
-        selectedButton = map1Button;
+        buttons = new Button[] {bigmapButton, smallmapButton};
+        selectedButton = bigmapButton;
         cursorPos = new Vector3(selectedButton.pos);
     }
 

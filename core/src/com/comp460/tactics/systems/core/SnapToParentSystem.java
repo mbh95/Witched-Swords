@@ -1,16 +1,17 @@
-package com.comp460.tactics.systems;
+package com.comp460.tactics.systems.core;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.comp460.tactics.components.ChildComponent;
-import com.comp460.tactics.components.TransformComponent;
+import com.comp460.tactics.components.core.ChildComponent;
+import com.comp460.tactics.components.core.TransformComponent;
 
 /**
- * Created by matthewhammond on 1/16/17.
+ * For each entity with a parent-child relationship and transform component, snaps childrens' positions to their
+ * parent's position.
  */
-public class SnapToParentSystem extends IteratingSystem{
+public class SnapToParentSystem extends IteratingSystem {
 
     private static final Family childFamily = Family.all(ChildComponent.class, TransformComponent.class).get();
 
@@ -18,10 +19,10 @@ public class SnapToParentSystem extends IteratingSystem{
     private static final ComponentMapper<TransformComponent> transformM = ComponentMapper.getFor(TransformComponent.class);
 
     public SnapToParentSystem() {
-        super(Family.all(ChildComponent.class, TransformComponent.class).get());
-   }
+        super(childFamily);
+    }
 
-   @Override
+    @Override
     protected void processEntity(Entity entity, float deltaTime) {
         ChildComponent childRelation = childM.get(entity);
         TransformComponent transform = transformM.get(entity);

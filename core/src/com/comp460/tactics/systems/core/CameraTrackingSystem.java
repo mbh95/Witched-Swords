@@ -1,17 +1,18 @@
-package com.comp460.tactics.systems;
+package com.comp460.tactics.systems.core;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
-import com.comp460.tactics.components.CameraTargetComponent;
-import com.comp460.tactics.components.TransformComponent;
+import com.comp460.tactics.components.core.CameraTargetComponent;
+import com.comp460.tactics.components.core.TransformComponent;
 
 /**
- * Created by matthewhammond on 1/15/17.
+ * For each entity which has a camera target component and a transform component, attempts to focus their
+ * targeted camera on them by lerp-ing the camera towards their position. Note the z component is not affected.
  */
-public class CameraTrackingSystem extends IteratingSystem{
+public class CameraTrackingSystem extends IteratingSystem {
 
     private static final Family cameraTargetFamily = Family.all(CameraTargetComponent.class, TransformComponent.class).get();
 
@@ -27,6 +28,6 @@ public class CameraTrackingSystem extends IteratingSystem{
         CameraTargetComponent cameraTargetComponent = cameraTargetM.get(entity);
         TransformComponent transformComponent = transformM.get(entity);
 
-        cameraTargetComponent.camera.position.slerp(new Vector3(transformComponent.pos.x, transformComponent.pos.y, cameraTargetComponent.camera.position.z), cameraTargetComponent.alpha);
+        cameraTargetComponent.camera.position.lerp(new Vector3(transformComponent.pos.x, transformComponent.pos.y, cameraTargetComponent.camera.position.z), cameraTargetComponent.alpha);
     }
 }

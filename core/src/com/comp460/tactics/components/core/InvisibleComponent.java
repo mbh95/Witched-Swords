@@ -1,9 +1,9 @@
-package com.comp460.tactics.components;
+package com.comp460.tactics.components.core;
 
 import com.badlogic.ashley.core.Component;
 
 /**
- * Created by matthewhammond on 1/27/17.
+ * Attached to entities to prevent them from being rendered;
  */
 public class InvisibleComponent implements Component {
 }

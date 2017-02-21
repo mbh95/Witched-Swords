@@ -1,4 +1,4 @@
-package com.comp460.tactics.systems.input;
+package com.comp460.tactics.systems.cursor;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -7,13 +7,10 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.comp460.battle.BattleScreen;
-import com.comp460.common.GameUnit;
 import com.comp460.tactics.TacticsScreen;
-import com.comp460.tactics.components.*;
-import com.comp460.tactics.components.unit.AIControlledComponent;
-import com.comp460.tactics.components.unit.PlayerControlledComponent;
-import com.comp460.tactics.components.unit.ReadyToMoveComponent;
-import com.comp460.tactics.components.unit.UnitStatsComponent;
+import com.comp460.tactics.components.map.MapPositionComponent;
+import com.comp460.tactics.components.cursor.MapCursorComponent;
+import com.comp460.tactics.components.unit.*;
 import com.comp460.tactics.map.MapPosition;
 
 /**
@@ -43,26 +40,6 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         MapCursorComponent cursor = cursorM.get(entity);
         MapPositionComponent cursorPos = mapPosM.get(entity);
-
-        if (cursor.countdown == 0) {
-            int oldRow = cursorPos.row;
-            int oldCol = cursorPos.col;
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) cursorPos.col--;
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) cursorPos.col++;
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) cursorPos.row++;
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) cursorPos.row--;
-            if (cursorPos.row < 0) cursorPos.row = 0;
-            else if (cursorPos.row >= parentScreen.getMap().getHeight())
-                cursorPos.row = parentScreen.getMap().getHeight() - 1;
-            if (cursorPos.col < 0) cursorPos.col = 0;
-            else if (cursorPos.col >= parentScreen.getMap().getWidth())
-                cursorPos.col = parentScreen.getMap().getWidth() - 1;
-            if (cursorPos.row != oldRow || cursorPos.col != oldCol) {
-                cursor.countdown = cursor.delay;
-            }
-        } else if (cursor.countdown > 0) {
-            cursor.countdown--;
-        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
             Entity newSelection = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col);

@@ -4,14 +4,13 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.comp460.common.GameUnit;
-import com.comp460.tactics.components.TextureComponent;
-import com.comp460.tactics.components.TransformComponent;
-import com.comp460.tactics.components.*;
+import com.comp460.tactics.components.map.MapPositionComponent;
+import com.comp460.tactics.components.core.TextureComponent;
+import com.comp460.tactics.components.core.TransformComponent;
 import com.comp460.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.tactics.components.unit.UnitStatsComponent;
 import com.comp460.tactics.components.unit.AIControlledComponent;
@@ -85,23 +84,21 @@ public class TacticsMap {
                             continue;
                         }
                         Entity unit = engine.createEntity();
-                        MapPositionComponent mapPos = engine.createComponent(MapPositionComponent.class)
-                                .populate(r, c);
-                        TextureComponent texture = engine.createComponent(TextureComponent.class);
+                        MapPositionComponent mapPos = new MapPositionComponent(r, c);
+                        TextureComponent texture = new TextureComponent(cell.getTile().getTextureRegion());
 
-                        String animName = "";
-                        if (cell.getTile().getProperties().containsKey("sprite")) {
-                            animName = cell.getTile().getProperties().get("sprite", String.class);
-                        }
-//                        if (Assets.animLookup.containsKey(animName)) {
-//                            AnimationComponent anim = new AnimationComponent().populate(Assets.animLookup.get(animName), 30);
-//                            texture.populate(anim.frames[anim.currentFrame]);
-//                            unit.add(anim);
-//                        } else {
-                            texture.populate(cell.getTile().getTextureRegion());
+//                        String animName = "";
+//                        if (cell.getTile().getProperties().containsKey("sprite")) {
+//                            animName = cell.getTile().getProperties().get("sprite", String.class);
 //                        }
-                        TransformComponent transformComponent = engine.createComponent(TransformComponent.class)
-                                .populate(tileWidth * c, tileHeight*r, 0);
+////                        if (Assets.animLookup.containsKey(animName)) {
+////                            AnimationComponent anim = new AnimationComponent().populate(Assets.animLookup.get(animName), 30);
+////                            texture.populate(anim.frames[anim.currentFrame]);
+////                            unit.add(anim);
+////                        } else {
+//                            texture.populate();
+////                        }
+                        TransformComponent transformComponent = new TransformComponent(tileWidth * c, tileHeight * r, 0);
 
                         int team = cell.getTile().getProperties().get("team", Integer.class);
                         String id = cell.getTile().getProperties().get("id", String.class);

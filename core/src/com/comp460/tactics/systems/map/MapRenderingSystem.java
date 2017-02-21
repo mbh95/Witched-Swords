@@ -1,4 +1,4 @@
-package com.comp460.tactics.systems.rendering;
+package com.comp460.tactics.systems.map;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.Color;

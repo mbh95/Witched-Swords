@@ -1,14 +1,15 @@
-package com.comp460.tactics.systems;
+package com.comp460.tactics.systems.core;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.comp460.tactics.components.AnimationComponent;
-import com.comp460.tactics.components.TextureComponent;
+import com.comp460.tactics.components.core.AnimationComponent;
+import com.comp460.tactics.components.core.TextureComponent;
 
 /**
- * Created by matthewhammond on 1/22/17.
+ * For each entity with both an animation and a texture advances the animation and updates the texture to the current
+ * keyframe of the animation.
  */
 public class SpriteAnimationSystem extends IteratingSystem {
 

@@ -10,21 +10,25 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.comp460.MainGame;
 import com.comp460.common.GameScreen;
-import com.comp460.tactics.components.CameraTargetComponent;
-import com.comp460.tactics.components.TextureComponent;
-import com.comp460.tactics.components.TransformComponent;
+import com.comp460.tactics.components.core.CameraTargetComponent;
+import com.comp460.tactics.components.map.MapPositionComponent;
+import com.comp460.tactics.components.core.TextureComponent;
+import com.comp460.tactics.components.core.TransformComponent;
+import com.comp460.tactics.components.cursor.MapCursorComponent;
+import com.comp460.tactics.systems.core.CameraTrackingSystem;
+import com.comp460.tactics.systems.core.SnapToParentSystem;
+import com.comp460.tactics.systems.core.SpriteAnimationSystem;
+import com.comp460.tactics.systems.core.SpriteRenderingSystem;
 import com.comp460.tactics.components.unit.AIControlledComponent;
 import com.comp460.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.tactics.components.unit.ReadyToMoveComponent;
-import com.comp460.tactics.systems.CameraTrackingSystem;
-import com.comp460.tactics.systems.SnapToParentSystem;
-import com.comp460.tactics.systems.SpriteAnimationSystem;
-import com.comp460.tactics.systems.events.UnitColorizerSystem;
-import com.comp460.tactics.systems.rendering.SpriteRenderingSystem;
-import com.comp460.tactics.components.*;
+import com.comp460.tactics.systems.unit.UnitColorizerListener;
 import com.comp460.tactics.map.TacticsMap;
-import com.comp460.tactics.systems.input.KeyboardMapCursorSystem;
-import com.comp460.tactics.systems.rendering.*;
+import com.comp460.tactics.systems.map.MapRenderingSystem;
+import com.comp460.tactics.systems.map.MapToScreenSystem;
+import com.comp460.tactics.systems.cursor.KeyboardMapCursorSystem;
+import com.comp460.tactics.systems.map.MovesRenderingSystem;
+import com.comp460.tactics.systems.map.SelectionRenderingSystem;
 
 /**
  * Created by matthewhammond on 1/15/17.
@@ -37,19 +41,14 @@ public class TacticsScreen extends GameScreen {
     private static final Family readyAiUnitsFamily = Family.all(AIControlledComponent.class, ReadyToMoveComponent.class).get();
     private static final Family waitingAiUnitsFamily = Family.all(AIControlledComponent.class).exclude(ReadyToMoveComponent.class).get();
 
-    private SpriteBatch batch;
     private PooledEngine engine;
-    private OrthographicCamera camera;
 
     private TacticsMap map;
 
     public TacticsScreen(MainGame game, GameScreen prevScreen, int width, int height, TiledMap tiledMap) {
         super(game, prevScreen);
 
-        this.batch = new SpriteBatch();
         this.engine = new PooledEngine();
-
-        this.camera = new OrthographicCamera(width, height);
 
         this.map = new TacticsMap(tiledMap);
         this.map.populate(engine);
@@ -67,7 +66,8 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new CameraTrackingSystem());
         engine.addSystem(new SnapToParentSystem());
 
-        UnitColorizerSystem.register(engine);
+
+        engine.addEntityListener(new UnitColorizerListener());
 
         // For now just skip the enemy turn:
         engine.addEntityListener(readyPlayerUnitsFamily, new EntityListener() {
@@ -79,7 +79,7 @@ public class TacticsScreen extends GameScreen {
             @Override
             public void entityRemoved(Entity entity) {
                 if (engine.getEntitiesFor(readyPlayerUnitsFamily).size() == 0) {
-                    engine.getEntitiesFor(waitingPlayerUnitsFamily).forEach(e->{
+                    engine.getEntitiesFor(waitingPlayerUnitsFamily).forEach(e -> {
                         e.add(new ReadyToMoveComponent());
                     });
                 }
@@ -136,15 +136,12 @@ public class TacticsScreen extends GameScreen {
 
     public void makeCursor() {
         Entity cursor = engine.createEntity();
-        TextureComponent texture = engine.createComponent(TextureComponent.class)
-                .populate(new TextureRegion(TacticsAssets.CURSOR));
-        CameraTargetComponent cameraTarget = engine.createComponent(CameraTargetComponent.class)
-                .populate(camera, 0.3f);
-        MapPositionComponent selectedSquare = engine.createComponent(MapPositionComponent.class)
-                .populate(0, 0);
-        TransformComponent transformComponent = engine.createComponent(TransformComponent.class)
-                .populate(0,0,0);
-        MapCursorComponent cursorComponent = engine.createComponent(MapCursorComponent.class).populate(8);
+        TextureComponent texture = new TextureComponent(new TextureRegion(TacticsAssets.CURSOR));
+        CameraTargetComponent cameraTarget = new CameraTargetComponent(camera, 0.3f);
+        MapPositionComponent selectedSquare = new MapPositionComponent(0, 0);
+        TransformComponent transformComponent = new TransformComponent(0, 0, 0);
+
+        MapCursorComponent cursorComponent = new MapCursorComponent(0.1f);
 
         cursor.add(texture);
         cursor.add(cameraTarget);
@@ -154,7 +151,7 @@ public class TacticsScreen extends GameScreen {
         engine.addEntity(cursor);
     }
 
-    public void render (float deltaTime) {
+    public void render(float deltaTime) {
         engine.update(deltaTime);
         camera.update();
     }

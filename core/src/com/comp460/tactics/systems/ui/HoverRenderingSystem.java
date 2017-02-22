@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.assets.BattleAnimationManager;
 import com.comp460.launcher.practice.battle.BattlePracticeAssets;
 import com.comp460.tactics.TacticsScreen;
@@ -46,6 +47,9 @@ public class HoverRenderingSystem extends IteratingSystem {
         if (hovered == null) {
             return;
         }
+
+        ShapeRenderer sr = new ShapeRenderer();
+        sr.setTransformMatrix(this.parentScreen.uiCamera.combined);
         TextureRegion unitIcon = BattleAnimationManager.getBattleUnitAnimation(unitStatsM.get(hovered).base.id, "attack").getKeyFrame(0f);
 
 //        Gdx.gl.glEnable(GL20.GL_BLEND);

@@ -15,7 +15,7 @@ import com.comp460.tactics.components.unit.*;
 /**
  * Created by matthewhammond on 1/15/17.
  */
-public class KeyboardMapCursorSystem extends IteratingSystem {
+public class MapCursorSelectionSystem extends IteratingSystem {
 
     private static final Family mapCursorFamily = Family.all(MapCursorComponent.class, MapPositionComponent.class).get();
     private static final Family toggledUnitsFamily = Family.all(ShowValidMovesComponent.class).get();
@@ -30,7 +30,7 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
 
     private TacticsScreen parentScreen;
 
-    public KeyboardMapCursorSystem(TacticsScreen tacticsScreen) {
+    public MapCursorSelectionSystem(TacticsScreen tacticsScreen) {
         super(mapCursorFamily);
         this.parentScreen = tacticsScreen;
     }
@@ -44,7 +44,7 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
         Entity newSelection = null;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-            newSelection = cursor.selection = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col);
+            newSelection = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col);
 
             // You just clicked on your own unit
             if (newSelection != null && playerControlledFamily.matches(newSelection)) {
@@ -56,8 +56,10 @@ public class KeyboardMapCursorSystem extends IteratingSystem {
 
             // You currently have your own unit selected
             if (cursor.selection != null && playerControlledFamily.matches(cursor.selection)) {
+
                 // The unit you have selected is ready to move
                 if (readyPlayerControlledFamily.matches(cursor.selection)) {
+
                     // The unit can move the space you clicked on
                     if (parentScreen.getMap().computeValidMoves(cursor.selection).contains(new MapPositionComponent(cursorPos.row, cursorPos.col))) {
 

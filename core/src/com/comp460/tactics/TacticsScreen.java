@@ -1,21 +1,14 @@
 package com.comp460.tactics;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.comp460.MainGame;
 import com.comp460.common.GameScreen;
-import com.comp460.tactics.components.core.CameraTargetComponent;
-import com.comp460.tactics.components.map.MapPositionComponent;
-import com.comp460.tactics.components.core.TextureComponent;
-import com.comp460.tactics.components.core.TransformComponent;
-import com.comp460.tactics.components.cursor.MapCursorComponent;
 import com.comp460.tactics.factories.CursorFactory;
+import com.comp460.tactics.systems.ai.AiSystem;
 import com.comp460.tactics.systems.core.CameraTrackingSystem;
 import com.comp460.tactics.systems.core.SnapToParentSystem;
 import com.comp460.tactics.systems.core.SpriteAnimationSystem;
@@ -25,10 +18,11 @@ import com.comp460.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.tactics.systems.ui.HoverRenderingSystem;
 import com.comp460.tactics.systems.cursor.MapCursorMovementSystem;
+import com.comp460.tactics.systems.unit.TurnManagementSystem;
 import com.comp460.tactics.systems.unit.UnitColorizerListener;
 import com.comp460.tactics.systems.map.MapRenderingSystem;
 import com.comp460.tactics.systems.map.MapToScreenSystem;
-import com.comp460.tactics.systems.cursor.KeyboardMapCursorSystem;
+import com.comp460.tactics.systems.cursor.MapCursorSelectionSystem;
 import com.comp460.tactics.systems.map.MovesRenderingSystem;
 import com.comp460.tactics.systems.map.SelectionRenderingSystem;
 
@@ -37,15 +31,15 @@ import com.comp460.tactics.systems.map.SelectionRenderingSystem;
  */
 public class TacticsScreen extends GameScreen {
 
-    private static final Family readyPlayerUnitsFamily = Family.all(PlayerControlledComponent.class, ReadyToMoveComponent.class).get();
-    private static final Family waitingPlayerUnitsFamily = Family.all(PlayerControlledComponent.class).exclude(ReadyToMoveComponent.class).get();
+    enum TacticsState {PLAYER_TURN, AI_TURN};
 
-    private static final Family readyAiUnitsFamily = Family.all(AIControlledComponent.class, ReadyToMoveComponent.class).get();
-    private static final Family waitingAiUnitsFamily = Family.all(AIControlledComponent.class).exclude(ReadyToMoveComponent.class).get();
+    private static final Family playerUnitsFamily = Family.all(PlayerControlledComponent.class).get();
+    private static final Family aiUnitsFamily = Family.all(AIControlledComponent.class).get();
 
     private PooledEngine engine;
 
     private TacticsMap map;
+    public int turn;
 
     public TacticsScreen(MainGame game, GameScreen prevScreen, TiledMap tiledMap) {
         super(game, prevScreen);
@@ -53,9 +47,6 @@ public class TacticsScreen extends GameScreen {
         this.engine = new PooledEngine();
 
         this.map = new TacticsMap(tiledMap);
-        this.map.populate(engine);
-
-        engine.addEntity(CursorFactory.makeCursor(this));
 
         engine.addSystem(new MapRenderingSystem(this));
 
@@ -64,66 +55,23 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new CameraTrackingSystem());
         engine.addSystem(new SnapToParentSystem());
 
-        engine.addSystem(new KeyboardMapCursorSystem(this));
+        engine.addSystem(new MapCursorSelectionSystem(this));
         engine.addSystem(new MapCursorMovementSystem(this));
         engine.addSystem(new MapToScreenSystem(this));
         engine.addSystem(new MovesRenderingSystem(this));
         engine.addSystem(new SelectionRenderingSystem(this));
         engine.addSystem(new HoverRenderingSystem(this));
 
-        engine.addEntityListener(new UnitColorizerListener());
+        engine.addSystem(new TurnManagementSystem(this));
 
-        // For now just skip the enemy turn:
-        engine.addEntityListener(readyPlayerUnitsFamily, new EntityListener() {
-            @Override
-            public void entityAdded(Entity entity) {
+        engine.addSystem(new AiSystem());
 
-            }
 
-            @Override
-            public void entityRemoved(Entity entity) {
-                if (engine.getEntitiesFor(readyPlayerUnitsFamily).size() == 0) {
-                    engine.getEntitiesFor(waitingPlayerUnitsFamily).forEach(e -> {
-                        e.add(new ReadyToMoveComponent());
-                    });
-                }
-            }
-        });
+        this.map.populate(engine);
 
-        // In the future uncomment this to enable the ai to take a turn
-//        engine.addEntityListener(readyPlayerUnitsFamily, new EntityListener() {
-//            @Override
-//            public void entityAdded(Entity entity) {
-//
-//            }
-//
-//            @Override
-//            public void entityRemoved(Entity entity) {
-//                if (engine.getEntitiesFor(readyPlayerUnitsFamily).size() == 0) {
-//                    engine.getEntitiesFor(waitingAiUnitsFamily).forEach(e->{
-//                        e.add(new ReadyToMoveComponent());
-//                    });
-//                    engine.getSystem(KeyboardMapCursorSystem.class).setProcessing(false);
-//                }
-//            }
-//        });
-//
-//        engine.addEntityListener(readyAiUnitsFamily, new EntityListener() {
-//            @Override
-//            public void entityAdded(Entity entity) {
-//
-//            }
-//
-//            @Override
-//            public void entityRemoved(Entity entity) {
-//                if (engine.getEntitiesFor(readyAiUnitsFamily).size() == 0) {
-//                    engine.getEntitiesFor(waitingPlayerUnitsFamily).forEach(e->{
-//                        e.add(new ReadyToMoveComponent());
-//                    });
-//                    engine.getSystem(KeyboardMapCursorSystem.class).setProcessing(true);
-//                }
-//            }
-//        });
+        engine.addEntity(CursorFactory.makeCursor(this));
+
+        startPlayerTurn();
     }
 
     public TacticsMap getMap() {
@@ -143,5 +91,17 @@ public class TacticsScreen extends GameScreen {
     public void render(float deltaTime) {
         engine.update(deltaTime);
         camera.update();
+    }
+
+    public void startPlayerTurn() {
+        engine.getEntitiesFor(playerUnitsFamily).forEach(e->{
+            e.add(new ReadyToMoveComponent());
+        });
+    }
+
+    public void startAiTurn() {
+        engine.getEntitiesFor(aiUnitsFamily).forEach(e->{
+            e.add(new ReadyToMoveComponent());
+        });
     }
 }

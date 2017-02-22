@@ -176,6 +176,12 @@ public class TacticsMap {
         if (!isOnMap(row, col)) {
             return null;
         }
+        if (selection == null) {
+            return null;
+        }
+        if (!readyFamily.matches(selection)) {
+            return null;
+        }
         MapPositionComponent selectionPos = mapPosM.get(selection);
         if (isOnMap(selectionPos.row, selectionPos.col) && selection == this.units[selectionPos.row][selectionPos.col]) {
             this.units[selectionPos.row][selectionPos.col] = null;
@@ -184,6 +190,8 @@ public class TacticsMap {
         selectionPos.col = col;
         Entity prevUnit = this.units[row][col];
         this.units[row][col] = selection;
+
+        selection.remove(ReadyToMoveComponent.class);
 
         return prevUnit;
     }

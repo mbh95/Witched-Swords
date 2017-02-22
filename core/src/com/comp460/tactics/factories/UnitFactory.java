@@ -22,6 +22,7 @@ public class UnitFactory {
     public static Entity makeUnit(TacticsMap map, String id, int team, int r, int c) {
         Entity unit = new Entity();
 
+        System.out.println(id);
         unit.add(new AnimationComponent(TacticsAnimationManager.getTacticsAnimation(id, "idle")));
         unit.add(new TextureComponent(animM.get(unit).animation.getKeyFrame(0f)));
 

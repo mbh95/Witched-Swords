@@ -10,11 +10,18 @@ import com.comp460.tactics.components.unit.UnitStatsComponent;
 /**
  * Created by matthewhammond on 2/20/17.
  */
-public class UnitColorizerListener implements EntityListener {
+public class UnitColorizerListener extends EntitySystem implements EntityListener {
 
     private static final Family waitingUnitsFamily = Family.all(MapPositionComponent.class, UnitStatsComponent.class, TextureComponent.class).exclude(ReadyToMoveComponent.class).get();
 
     private static final ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
+
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+
+        engine.addEntityListener(waitingUnitsFamily, this);
+    }
 
     @Override
     public void entityAdded(Entity entity) {

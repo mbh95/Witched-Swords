@@ -4,10 +4,16 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.assets.AnimationManager;
+import com.comp460.assets.FontManager;
+import com.comp460.common.GameUnit;
 import com.comp460.launcher.practice.battle.BattlePracticeAssets;
 import com.comp460.tactics.TacticsScreen;
 import com.comp460.tactics.components.cursor.MapCursorComponent;
@@ -31,22 +37,30 @@ public class HoverRenderingSystem extends IteratingSystem {
     private static final ComponentMapper<MapPositionComponent> mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
     private static final ComponentMapper<UnitStatsComponent> unitStatsM = ComponentMapper.getFor(UnitStatsComponent.class);
 
+    private static BitmapFont hpFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.WHITE);
+
     private TacticsScreen parentScreen;
     private SpriteBatch batch;
+    private OrthographicCamera camera;
 
     public HoverRenderingSystem(TacticsScreen tacticsScreen) {
         super(cursorFamily);
         this.parentScreen = tacticsScreen;
         batch = parentScreen.uiBatch;
+        camera = parentScreen.uiCamera;
 //        uiCamera.translate(200, 120);
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
+        int x = 0;
+        int y = 0;
+        TextureRegion bg = BattlePracticeAssets.TEXTURE_PLAYER_AREA;
         Entity hovered = cursorM.get(entity).hovered;
         if (hovered == null) {
             return;
         }
+        GameUnit unit = unitStatsM.get(hovered).base;
         TextureRegion unitIcon = AnimationManager.getBattleUnitAnimation(unitStatsM.get(hovered).base.id, "attack").getKeyFrame(0f);
 
 //        Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -56,20 +70,36 @@ public class HoverRenderingSystem extends IteratingSystem {
 //        sr.setProjectionMatrix(parentScreen.getCamera().combined);
 //        sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        batch.begin();
         if (playerControlledFamily.matches(hovered)) {
-            batch.draw(BattlePracticeAssets.TEXTURE_PLAYER_AREA, 0, 240 - 10 - BattlePracticeAssets.TEXTURE_PLAYER_AREA.getRegionHeight());
+            x = 0;
+            y = 240;
+            bg = BattlePracticeAssets.TEXTURE_PLAYER_AREA;
         } else if (aiControlledFamily.matches(hovered)) {
-            batch.draw(BattlePracticeAssets.TEXTURE_AI_AREA, 400 - 0 - BattlePracticeAssets.TEXTURE_AI_AREA.getRegionWidth(), 240 - 10 - BattlePracticeAssets.TEXTURE_PLAYER_AREA.getRegionHeight());
+            x = 400 - bg.getRegionWidth();
+            y = 240;
+            bg = BattlePracticeAssets.TEXTURE_AI_AREA;
         }
 
-        batch.draw(unitIcon, 0, 240 - 10 - unitIcon.getRegionHeight());
-
-//        MapPositionComponent pos = mapPosM.get(hovered);
-//        sr.rect(pos.col * parentScreen.getMap().getTileWidth(), pos.row * parentScreen.getMap().getTileHeight(), parentScreen.getMap().getTileWidth(), parentScreen.getMap().getTileHeight());
-//        sr.end();
-//        sr.dispose();
-//        Gdx.gl.glDisable(GL20.GL_BLEND);
+        batch.begin();
+        batch.draw(bg, x, y - bg.getRegionHeight());
+        batch.draw(unitIcon, x + 5, y - 5 - unitIcon.getRegionHeight());
+        String hpString = "HP " + String.format("%03d/%03d", unit.curHP, unit.maxHP);
+        GlyphLayout hpLayout = new GlyphLayout(hpFont, hpString);
+        hpFont.draw(batch, hpString, x + 5, y - 10 - unitIcon.getRegionHeight());
         batch.end();
+
+        ShapeRenderer sr = new ShapeRenderer();
+        sr.setProjectionMatrix(camera.combined);
+        double percentHP = 1.0 * unit.curHP / unit.maxHP;
+        if (percentHP > .45)
+            sr.setColor(Color.GREEN);
+        else if (percentHP > .25)
+            sr.setColor(Color.GOLDENROD);
+        else
+            sr.setColor(Color.SCARLET);
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        if (percentHP > 0)
+            sr.rect(x + 5, y - unitIcon.getRegionHeight() - hpLayout.height - 20, (int) (52 * percentHP), 6);
+        sr.end();
     }
 }

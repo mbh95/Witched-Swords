@@ -81,8 +81,9 @@ public class HoverRenderingSystem extends IteratingSystem {
         }
 
         batch.begin();
+        // draw info box background
         batch.draw(bg, x, y - bg.getRegionHeight());
-        batch.draw(unitIcon, x + 5, y - 5 - unitIcon.getRegionHeight());
+        // draw hp text
         String hpString = "HP " + String.format("%03d/%03d", unit.curHP, unit.maxHP);
         GlyphLayout hpLayout = new GlyphLayout(hpFont, hpString);
         hpFont.draw(batch, hpString, x + 5, y - 10 - unitIcon.getRegionHeight());
@@ -90,6 +91,16 @@ public class HoverRenderingSystem extends IteratingSystem {
 
         ShapeRenderer sr = new ShapeRenderer();
         sr.setProjectionMatrix(camera.combined);
+
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+
+        // draw black hp background box
+        sr.setColor(Color.BLACK);
+        sr.rect(x + 3, y - unitIcon.getRegionHeight() - hpLayout.height - 20 - 2, 56, 10);
+        // draw black portrait bordground box
+//        sr.rect(x + 5, y - 5 - unitIcon.getRegionHeight(), 40, 40);
+
+        // draw hp bar
         double percentHP = 1.0 * unit.curHP / unit.maxHP;
         if (percentHP > .45)
             sr.setColor(Color.GREEN);
@@ -97,9 +108,20 @@ public class HoverRenderingSystem extends IteratingSystem {
             sr.setColor(Color.GOLDENROD);
         else
             sr.setColor(Color.SCARLET);
-        sr.begin(ShapeRenderer.ShapeType.Filled);
         if (percentHP > 0)
             sr.rect(x + 5, y - unitIcon.getRegionHeight() - hpLayout.height - 20, (int) (52 * percentHP), 6);
         sr.end();
+
+        // draw protrait and hp outlines
+        sr.begin(ShapeRenderer.ShapeType.Line);
+        sr.setColor(Color.WHITE);
+//        sr.rect(x + 5, y - 5 - unitIcon.getRegionHeight(), 40, 40);
+        sr.rect(x + 3, y - unitIcon.getRegionHeight() - hpLayout.height - 20 - 2, 56, 10);
+        sr.end();
+
+        batch.begin();
+        // draw portrait
+        batch.draw(unitIcon, x + 5, y - 5 - unitIcon.getRegionHeight());
+        batch.end();
     }
 }

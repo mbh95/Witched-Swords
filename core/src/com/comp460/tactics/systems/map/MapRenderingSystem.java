@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.comp460.tactics.TacticsScreen;
-import com.comp460.tactics.map.TacticsMap;
+import com.comp460.tactics.TacticsMap;
 
 /**
  * Created by matthewhammond on 1/18/17.

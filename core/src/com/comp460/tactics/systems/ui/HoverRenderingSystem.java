@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.assets.AnimationManager;
 import com.comp460.assets.FontManager;
 import com.comp460.common.GameUnit;
+import com.comp460.assets.BattleAnimationManager;
 import com.comp460.launcher.practice.battle.BattlePracticeAssets;
 import com.comp460.tactics.TacticsScreen;
 import com.comp460.tactics.components.cursor.MapCursorComponent;

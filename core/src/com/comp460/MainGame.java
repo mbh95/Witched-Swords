@@ -2,10 +2,7 @@ package com.comp460;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -22,28 +19,34 @@ import com.comp460.launcher.splash.SplashScreen;
 
 public class MainGame extends Game {
 
-	private SpriteBatch batch;
-	private FrameBuffer buffer;
-	private TextureRegion bufferRegion;
+    private float goalAspect;
+    private int width, height;
+    private int bufferX, bufferY;
 
-	private boolean showFPS = true;
-	private BitmapFont fpsFont;
+    private SpriteBatch batch;
+    private FrameBuffer buffer;
+    private TextureRegion bufferRegion;
 
-	public Controller controller;
+    private OrthographicCamera windowCamera = new OrthographicCamera();
 
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
+    private boolean showFPS = true;
+    private BitmapFont fpsFont;
 
-		Settings.load();
+    public Controller controller;
 
-		buffer = new FrameBuffer(Pixmap.Format.RGB888, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, false);
-		buffer.getColorBufferTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-		bufferRegion = new TextureRegion(buffer.getColorBufferTexture());
-		bufferRegion.flip(false, true);
 
-		fpsFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.YELLOW);
-		fpsFont.setColor(Color.YELLOW);
+    @Override
+    public void create() {
+
+        batch = new SpriteBatch();
+
+        Settings.load();
+
+        this.goalAspect = 1f * Settings.INTERNAL_WIDTH / Settings.INTERNAL_HEIGHT;
+        this.resize(Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT);
+
+        fpsFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.YELLOW);
+        fpsFont.setColor(Color.YELLOW);
 
 //		TacticsScreen ts = new TacticsScreen(Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT, Assets.Maps.TEST);
 //		this.setScreen(new BattleScreen(this, ts));
@@ -53,33 +56,67 @@ public class MainGame extends Game {
 
 //		this.setScreen(new MainMenu(this));
 
-		controller = new KeyboardController();
-		this.setScreen(new SplashScreen(this));
+        controller = new KeyboardController();
+
+        this.setScreen(new SplashScreen(this));
 //		this.setScreen(ts);
 
 //		this.setScreen(new BattleScreen(this, null, new BattleUnitFactory(GameUnit.loadFromJSON("json/units/clarissa.json")), new BattleUnitFactory(GameUnit.loadFromJSON("json/units/ghast.json"))));
-	}
-// i'm matt and i want to be mean to ms poops <3
-	@Override
-	public void render () {
-		buffer.begin();
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		super.render();
-		buffer.end();
+    }
 
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(bufferRegion, 0, 0, Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT);
-		if (showFPS) {
-			fpsFont.draw(batch, Gdx.graphics.getFramesPerSecond() + "", 10, Settings.WINDOW_HEIGHT - 10);
-		}
-		batch.end();
-	}
+    // i'm matt and i want to be mean to ms poops <3
+    @Override
+    public void render() {
+        // Render the game to the frame-buffer
+        buffer.begin();
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        super.render();
+        buffer.end();
 
-	@Override
-	public void dispose () {
-		batch.dispose();
-	}
+        // Render the frame-buffer to the screen adjusted for window size
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+        batch.draw(bufferRegion, bufferX, bufferY, buffer.getWidth(), buffer.getHeight());
+        if (showFPS) {
+            fpsFont.draw(batch, Gdx.graphics.getFramesPerSecond() + "", 10, Gdx.graphics.getHeight() - 10);
+        }
+        batch.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        this.windowCamera.setToOrtho(false, width, height);
+        this.windowCamera.update();
+        this.batch.setProjectionMatrix(this.windowCamera.combined);
+
+
+        float aspect = 1f * width / height;
+
+        if (aspect >= goalAspect) {
+            this.height = height;
+            this.width = Math.round(goalAspect * height);
+        } else {
+            this.width = width;
+            this.height = Math.round(width / goalAspect);
+        }
+
+        this.bufferX = width/2 - this.width/2;
+        this.bufferY = height/2 - this.height/2;
+
+        if (buffer != null) {
+            buffer.dispose();
+        }
+        buffer = new FrameBuffer(Pixmap.Format.RGB888, this.width, this.height, false);
+        buffer.getColorBufferTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        bufferRegion = new TextureRegion(buffer.getColorBufferTexture());
+        bufferRegion.flip(false, true);
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+    }
 }

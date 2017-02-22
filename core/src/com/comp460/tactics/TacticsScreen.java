@@ -15,6 +15,7 @@ import com.comp460.tactics.components.map.MapPositionComponent;
 import com.comp460.tactics.components.core.TextureComponent;
 import com.comp460.tactics.components.core.TransformComponent;
 import com.comp460.tactics.components.cursor.MapCursorComponent;
+import com.comp460.tactics.factories.CursorFactory;
 import com.comp460.tactics.systems.core.CameraTrackingSystem;
 import com.comp460.tactics.systems.core.SnapToParentSystem;
 import com.comp460.tactics.systems.core.SpriteAnimationSystem;
@@ -25,7 +26,6 @@ import com.comp460.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.tactics.systems.ui.HoverRenderingSystem;
 import com.comp460.tactics.systems.cursor.MapCursorMovementSystem;
 import com.comp460.tactics.systems.unit.UnitColorizerListener;
-import com.comp460.tactics.map.TacticsMap;
 import com.comp460.tactics.systems.map.MapRenderingSystem;
 import com.comp460.tactics.systems.map.MapToScreenSystem;
 import com.comp460.tactics.systems.cursor.KeyboardMapCursorSystem;
@@ -55,7 +55,7 @@ public class TacticsScreen extends GameScreen {
         this.map = new TacticsMap(tiledMap);
         this.map.populate(engine);
 
-        makeCursor();
+        engine.addEntity(CursorFactory.makeCursor(this));
 
         engine.addSystem(new MapRenderingSystem(this));
 
@@ -138,22 +138,7 @@ public class TacticsScreen extends GameScreen {
         return this.camera;
     }
 
-    public void makeCursor() {
-        Entity cursor = engine.createEntity();
-        TextureComponent texture = new TextureComponent(new TextureRegion(TacticsAssets.CURSOR));
-        CameraTargetComponent cameraTarget = new CameraTargetComponent(camera, 0.3f);
-        MapPositionComponent selectedSquare = new MapPositionComponent(0, 0);
-        TransformComponent transformComponent = new TransformComponent(0, 0, 0);
 
-        MapCursorComponent cursorComponent = new MapCursorComponent(0.1f);
-
-        cursor.add(texture);
-        cursor.add(cameraTarget);
-        cursor.add(selectedSquare);
-        cursor.add(transformComponent);
-        cursor.add(cursorComponent);
-        engine.addEntity(cursor);
-    }
 
     public void render(float deltaTime) {
         engine.update(deltaTime);

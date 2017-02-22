@@ -13,9 +13,8 @@ public class UnitStatsComponent implements Component {
     public int team;
     public GameUnit base;
 
-    public UnitStatsComponent populate(int team, GameUnit base) {
-        this.base = base;
+    public UnitStatsComponent(int team, GameUnit base) {
         this.team = team;
-        return this;
+        this.base = base;
     }
 }

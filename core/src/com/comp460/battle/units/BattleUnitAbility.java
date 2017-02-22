@@ -1,6 +1,6 @@
 package com.comp460.battle.units;
 
-import com.comp460.assets.AnimationManager;
+import com.comp460.assets.BattleAnimationManager;
 import com.comp460.battle.BattleScreen;
 
 /**
@@ -28,6 +28,6 @@ public class BattleUnitAbility {
     }
 
     public static BattleUnitAbility getNullMove() {
-        return new BattleUnitAbility("none", "None", AnimationManager.defaultBattleAnimID, "");
+        return new BattleUnitAbility("none", "None", BattleAnimationManager.defaultBattleAnimID, "");
     }
 }

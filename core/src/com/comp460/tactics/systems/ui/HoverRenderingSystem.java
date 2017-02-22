@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.comp460.assets.AnimationManager;
 import com.comp460.assets.FontManager;
 import com.comp460.common.GameUnit;
 import com.comp460.assets.BattleAnimationManager;
@@ -62,7 +61,7 @@ public class HoverRenderingSystem extends IteratingSystem {
             return;
         }
         GameUnit unit = unitStatsM.get(hovered).base;
-        TextureRegion unitIcon = AnimationManager.getBattleUnitAnimation(unitStatsM.get(hovered).base.id, "attack").getKeyFrame(0f);
+        TextureRegion unitIcon = BattleAnimationManager.getBattleUnitAnimation(unitStatsM.get(hovered).base.id, "attack").getKeyFrame(0f);
 
 //        Gdx.gl.glEnable(GL20.GL_BLEND);
 //        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);

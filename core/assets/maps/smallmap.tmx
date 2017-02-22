@@ -1456,7 +1456,7 @@
   </tile>
  </tileset>
  <tileset firstgid="289" name="clarissa" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="../tactics/sprites/units/clarissa_idle_0.png" width="16" height="16"/>
+  <image source="units/clarissa.png" width="16" height="16"/>
   <tile id="0">
    <properties>
     <property name="id" value="clarissa"/>
@@ -1465,7 +1465,7 @@
   </tile>
  </tileset>
  <tileset firstgid="290" name="bulba" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="../tactics/sprites/units/bulba/bulba_idle_0.png" width="16" height="16"/>
+  <image source="units/bulba.png" width="16" height="16"/>
   <tile id="0">
    <properties>
     <property name="id" value="bulba"/>
@@ -1474,7 +1474,7 @@
   </tile>
  </tileset>
  <tileset firstgid="291" name="yvonne" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="../tactics/sprites/units/yvonne/yvonne_idle_0.png" width="16" height="16"/>
+  <image source="units/yvonne.png" width="16" height="16"/>
   <tile id="0">
    <properties>
     <property name="id" value="yvonne"/>
@@ -1483,7 +1483,7 @@
   </tile>
  </tileset>
  <tileset firstgid="292" name="andre" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="../tactics/sprites/units/andre/andre_idle_0.png" width="16" height="16"/>
+  <image source="units/andre.png" width="16" height="16"/>
   <tile id="0">
    <properties>
     <property name="id" value="andre"/>

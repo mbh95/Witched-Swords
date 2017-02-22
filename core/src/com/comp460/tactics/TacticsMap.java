@@ -1,12 +1,10 @@
 package com.comp460.tactics;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.comp460.battle.BattleScreen;
 import com.comp460.tactics.components.map.MapPositionComponent;
 import com.comp460.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.tactics.components.unit.UnitStatsComponent;
@@ -68,7 +66,7 @@ public class TacticsMap {
         }
     }
 
-    public void populate(PooledEngine engine) {
+    public void populate(Engine engine) {
         for (MapLayer ml : tiledMap.getLayers()) {
             if (ml.getName().equals("units")) {
                 // Process units
@@ -183,7 +181,7 @@ public class TacticsMap {
             return null;
         }
         MapPositionComponent selectionPos = mapPosM.get(selection);
-        if (isOnMap(selectionPos.row, selectionPos.col) && selection == this.units[selectionPos.row][selectionPos.col]) {
+        if (selectionPos != null && isOnMap(selectionPos.row, selectionPos.col) && selection == this.units[selectionPos.row][selectionPos.col]) {
             this.units[selectionPos.row][selectionPos.col] = null;
         }
         selectionPos.row = row;
@@ -194,6 +192,13 @@ public class TacticsMap {
         selection.remove(ReadyToMoveComponent.class);
 
         return prevUnit;
+    }
+
+    public void remove(Entity entity) {
+        MapPositionComponent selectionPos = mapPosM.get(entity);
+        if (selectionPos != null && isOnMap(selectionPos.row, selectionPos.col) && entity == this.units[selectionPos.row][selectionPos.col]) {
+            this.units[selectionPos.row][selectionPos.col] = null;
+        }
     }
 
     class MapTile {

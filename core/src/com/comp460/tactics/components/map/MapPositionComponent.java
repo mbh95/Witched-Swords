@@ -7,7 +7,8 @@ import com.badlogic.ashley.core.Component;
  */
 public class MapPositionComponent implements Component {
     public static final int MAX_MAP_WIDTH = 10000;
-    public int row, col;
+    public int row;
+    public int col;
 
     public MapPositionComponent(int row, int col) {
         this.row = row;

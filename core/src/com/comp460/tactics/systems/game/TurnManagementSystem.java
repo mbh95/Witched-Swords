@@ -1,4 +1,4 @@
-package com.comp460.tactics.systems.unit;
+package com.comp460.tactics.systems.game;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.graphics.Color;
@@ -16,7 +16,7 @@ public class TurnManagementSystem extends EntitySystem implements EntityListener
 
     private static final Family readyFamily = Family.all(ReadyToMoveComponent.class).get();
 
-    private static final Family readyPlayerFamily = Family.all(PlayerControlledComponent.class, ReadyToMoveComponent.class).get();
+    private static final Family playerFamily = Family.all(PlayerControlledComponent.class, ReadyToMoveComponent.class).get();
     private static final Family readyAiFamily = Family.all(AIControlledComponent.class, ReadyToMoveComponent.class).get();
 
     private static final ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
@@ -44,10 +44,10 @@ public class TurnManagementSystem extends EntitySystem implements EntityListener
     @Override
     public void entityRemoved(Entity entity) {
         if (this.getEngine().getEntitiesFor(readyFamily).size() == 0) {
-            if (screen.turn == 0) {
-                screen.startPlayerTurn();
+            if (screen.curState == TacticsScreen.TacticsState.AI_TURN) {
+                    screen.startTransitionToPlayerTurn();
             } else {
-                screen.startAiTurn();
+                screen.startTransitionToAiTurn();
             }
         }
         TextureComponent textureComponent = textureM.get(entity);

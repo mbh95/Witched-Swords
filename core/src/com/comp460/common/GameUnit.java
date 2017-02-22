@@ -34,7 +34,7 @@ public class GameUnit {
     }
 
     public UnitStatsComponent buildTacticsUnitStatsComponent(int team) {
-        return new UnitStatsComponent().populate(team, this);
+        return new UnitStatsComponent(team, this);
     }
 
     public void writeToJSON(String filename) {

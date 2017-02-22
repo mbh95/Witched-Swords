@@ -5,9 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.tactics.TacticsScreen;
+import com.comp460.tactics.components.map.MapPositionComponent;
 import com.comp460.tactics.components.unit.ShowValidMovesComponent;
 import com.comp460.tactics.components.unit.UnitStatsComponent;
-import com.comp460.tactics.map.MapPosition;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +26,7 @@ public class MovesRenderingSystem  extends EntitySystem implements EntityListene
 
     private static final ComponentMapper<UnitStatsComponent> statsM = ComponentMapper.getFor(UnitStatsComponent.class);
 
-    private Map<Integer, Set<MapPosition>> teamToValidMoves;
+    private Map<Integer, Set<MapPositionComponent>> teamToValidMoves;
     private TacticsScreen parentScreen;
 
     public MovesRenderingSystem(TacticsScreen tacticsScreen) {
@@ -55,8 +55,8 @@ public class MovesRenderingSystem  extends EntitySystem implements EntityListene
                 sr.setColor(1f, 0f, 0f, 0.2f);
             }
             sr.begin(ShapeRenderer.ShapeType.Filled);
-            for (MapPosition pos : teamToValidMoves.get(team)) {
-                sr.rect(pos.getCol() * parentScreen.getMap().getTileWidth(), pos.getRow() * parentScreen.getMap().getTileHeight(), parentScreen.getMap().getTileWidth(), parentScreen.getMap().getTileHeight());
+            for (MapPositionComponent pos : teamToValidMoves.get(team)) {
+                sr.rect(pos.col * parentScreen.getMap().getTileWidth(), pos.row * parentScreen.getMap().getTileHeight(), parentScreen.getMap().getTileWidth(), parentScreen.getMap().getTileHeight());
             }
             sr.end();
         }

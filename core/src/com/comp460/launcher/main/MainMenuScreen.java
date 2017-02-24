@@ -121,7 +121,7 @@ public class MainMenuScreen extends GameScreen {
         }
         MainMenuAssets.NINEPATCH_CURSOR.draw(batch, cursorPos.x - 2, cursorPos.y - 2, curSelectedButton.width + 4, curSelectedButton.height + 4);
 
-
+        // draw controls
         batch.draw(game.controller.button1Sprite(), inputHintX, inputHintY + 2 * inputHintLineHeight);
         hintFont.draw(batch, "Confirm", inputHintX + game.controller.button1Sprite().getRegionWidth() + 2, inputHintY + 2 * inputHintLineHeight + 8);
 

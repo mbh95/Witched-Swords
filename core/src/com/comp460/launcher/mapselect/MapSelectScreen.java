@@ -3,6 +3,8 @@ package com.comp460.launcher.mapselect;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.MainGame;
 import com.comp460.Settings;
+import com.comp460.assets.FontManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.common.GameScreen;
 import com.comp460.launcher.Button;
@@ -25,6 +28,11 @@ public class MapSelectScreen extends GameScreen {
 
     private Button[] buttons;
     private Button selectedButton;
+    private BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
+
+    private int inputHintX = 2;
+    private int inputHintY = 2;
+    private int inputHintLineHeight = 16;
 
     private Vector3 cursorPos;
 
@@ -77,11 +85,22 @@ public class MapSelectScreen extends GameScreen {
     public void render(float delta) {
         super.render(delta);
 
-        GlyphLayout layout = new GlyphLayout(BattlePracticeAssets.FONT_BATTLE_PORTRAIT, "SELECT A MAP");
+        GlyphLayout layout = new GlyphLayout(BattlePracticeAssets.FONT_BATTLE_PORTRAIT, "SELECT A MAP!");
         batch.begin();
 
         batch.draw(BattlePracticeAssets.TEXTURE_BG, 0, 0);
         BattlePracticeAssets.FONT_BATTLE_PORTRAIT.draw(batch, layout, Settings.INTERNAL_WIDTH/2 - layout.width/2, Settings.INTERNAL_HEIGHT - 50);
+
+        // draw controls
+        batch.draw(game.controller.button1Sprite(), inputHintX, inputHintY + 2 * inputHintLineHeight);
+        hintFont.draw(batch, "Confirm", inputHintX + game.controller.button1Sprite().getRegionWidth() + 2, inputHintY + 2 * inputHintLineHeight + 8);
+
+        batch.draw(game.controller.button2Sprite(), inputHintX, inputHintY + inputHintLineHeight);
+        hintFont.draw(batch, "Back", inputHintX + game.controller.button1Sprite().getRegionWidth() + 2, inputHintY + 1 * inputHintLineHeight + 8);
+
+        batch.draw(game.controller.directionalSprite(), inputHintX, inputHintY);
+        hintFont.draw(batch, "Select", inputHintX + game.controller.directionalSprite().getRegionWidth() + 2, inputHintY + 8);
+
         for (Button button : buttons) {
             button.render(batch);
         }

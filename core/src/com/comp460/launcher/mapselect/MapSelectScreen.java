@@ -1,6 +1,5 @@
 package com.comp460.launcher.mapselect;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -21,9 +20,6 @@ import com.comp460.launcher.TexturedButton;
 import com.comp460.launcher.practice.battle.BattlePracticeAssets;
 import com.comp460.tactics.TacticsScreen;
 
-/**
- * Created by Belinda on 2/19/17.
- */
 public class MapSelectScreen extends GameScreen {
 
     private Button[] buttons;

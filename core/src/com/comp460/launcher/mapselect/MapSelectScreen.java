@@ -33,11 +33,11 @@ public class MapSelectScreen extends GameScreen {
     public MapSelectScreen(MainGame game, GameScreen prevScreen) {
         super(game, prevScreen);
 
-        MapButton bigmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Big Map", 0, 50, ()->{});
-        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/smallmap.tmx"), "Small Map", 50, 50, ()->{});
+        MapButton bigmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Big Map", Settings.INTERNAL_WIDTH/2-50, 50, ()->{});
+        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/smallmap.tmx"), "Small Map", Settings.INTERNAL_WIDTH/2, 50, ()->{});
 //        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Small Map", 50, 50, ()->{});
 
-
+        // set button actions
         bigmapButton.action = () -> {
             game.setScreen(new TacticsScreen(game, prevScreen, bigmapButton.map));
         };
@@ -45,8 +45,8 @@ public class MapSelectScreen extends GameScreen {
             game.setScreen(new TacticsScreen(game, prevScreen, smallmapButton.map));
         };
 
+        // set up button mapping
         Button[][] buttonMap = new Button[][] {{bigmapButton, smallmapButton}};
-
         for (int r = 0; r < buttonMap.length; r++) {
             for (int c = 0; c < buttonMap[0].length; c++) {
                 if (r < buttonMap.length - 1) {
@@ -77,18 +77,19 @@ public class MapSelectScreen extends GameScreen {
     public void render(float delta) {
         super.render(delta);
 
+        GlyphLayout layout = new GlyphLayout(BattlePracticeAssets.FONT_BATTLE_PORTRAIT, "SELECT A MAP");
         batch.begin();
+
         batch.draw(BattlePracticeAssets.TEXTURE_BG, 0, 0);
+        BattlePracticeAssets.FONT_BATTLE_PORTRAIT.draw(batch, layout, Settings.INTERNAL_WIDTH/2 - layout.width/2, Settings.INTERNAL_HEIGHT - 50);
         for (Button button : buttons) {
             button.render(batch);
         }
-
-        float scale = 3.0f;
-
         cursorSprite.draw(batch, cursorPos.x, cursorPos.y, selectedButton.width, selectedButton.height);
 
         batch.end();
 
+        // set button/cursor selection logic
         selectedButton.setNormal();
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) selectedButton = selectedButton.left;
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) selectedButton = selectedButton.right;

@@ -8,4 +8,12 @@ import com.comp460.assets.SpriteManager;
  */
 public class TacticsAssets {
     public static final TextureRegion CURSOR = SpriteManager.TACTICS.findRegion("ui/cursor");
+
+    public static final TextureRegion HOVER_PLAYER = SpriteManager.TACTICS.findRegion("ui/player-hover");
+    public static final TextureRegion HOVER_AI = SpriteManager.TACTICS.findRegion("ui/enemy-hover");
+
+    public static final TextureRegion TURN_PLAYER = SpriteManager.TACTICS.findRegion("ui/player-turn");
+    public static final TextureRegion TURN_AI = SpriteManager.TACTICS.findRegion("ui/enemy-turn");
+
+
 }

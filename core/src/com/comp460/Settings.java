@@ -7,7 +7,7 @@ import com.badlogic.gdx.Gdx;
  */
 public class Settings {
 
-    public static int WINDOW_WIDTH = 1280;
+    public static int WINDOW_WIDTH = 1200;
     public static int WINDOW_HEIGHT = 720;
 
     public static final int INTERNAL_WIDTH = 400;

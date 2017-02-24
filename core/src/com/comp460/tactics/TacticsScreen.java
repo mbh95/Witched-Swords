@@ -12,7 +12,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
 import com.comp460.common.GameScreen;
-import com.comp460.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.tactics.components.unit.UnitStatsComponent;
 import com.comp460.tactics.factories.CursorFactory;
 import com.comp460.tactics.systems.ai.AiSystem;
@@ -22,10 +21,12 @@ import com.comp460.tactics.systems.core.SpriteAnimationSystem;
 import com.comp460.tactics.systems.core.SpriteRenderingSystem;
 import com.comp460.tactics.components.unit.AIControlledComponent;
 import com.comp460.tactics.components.unit.PlayerControlledComponent;
+import com.comp460.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.tactics.systems.cursor.CursorManagementSystem;
 import com.comp460.tactics.systems.game.EndConditionSystem;
 import com.comp460.tactics.systems.ui.HoverRenderingSystem;
 import com.comp460.tactics.systems.cursor.MapCursorMovementSystem;
+import com.comp460.tactics.systems.ui.TurnRenderingSystem;
 import com.comp460.tactics.systems.unit.MapManagementSystem;
 import com.comp460.tactics.systems.game.TurnManagementSystem;
 import com.comp460.tactics.systems.map.MapRenderingSystem;
@@ -40,21 +41,20 @@ import com.comp460.tactics.systems.unit.UnitShaderSystem;
  */
 public class TacticsScreen extends GameScreen {
 
-    public enum TacticsState {PLAYER_TURN_TRANSITION, PLAYER_TURN, AI_TURN_TRANSITION, AI_TURN, PLAYER_WIN, AI_WIN}
+    public enum TacticsState {BATTLE_START, PLAYER_TURN_TRANSITION, PLAYER_TURN, AI_TURN_TRANSITION, AI_TURN, PLAYER_WIN, AI_WIN}
 
     private static final Family unitsFamily = Family.all(UnitStatsComponent.class).get();
     private static final Family playerUnitsFamily = Family.all(PlayerControlledComponent.class).get();
     private static final Family aiUnitsFamily = Family.all(AIControlledComponent.class).get();
 
-    private static final BitmapFont playerTurnFont = FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 32, Color.BLACK, Color.BLUE, 4); //FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 16, Color.BLUE);
-    private static final BitmapFont aiTurnFont = FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 32, Color.BLACK, Color.RED, 4); //FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 16, Color.RED);
+    private static final BitmapFont playerTurnFont = FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 32, Color.BLACK, new Color(0x3232acFF), 4); //FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 16, Color.BLUE);
+    private static final BitmapFont aiTurnFont = FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 32, Color.BLACK, new Color(0xac3232FF), 4); //FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 16, Color.RED);
 
     private static final GlyphLayout playerTurnLayout = new GlyphLayout(playerTurnFont, "Player Turn");
     private static final GlyphLayout aiTurnLayout = new GlyphLayout(aiTurnFont, "Computer Turn");
 
     private static final GlyphLayout playerWinLayout = new GlyphLayout(playerTurnFont, "You Win!");
     private static final GlyphLayout aiWinLayout = new GlyphLayout(aiTurnFont, "You Lose");
-
 
     public Engine engine;
 
@@ -64,8 +64,12 @@ public class TacticsScreen extends GameScreen {
 
     private float timer;
 
+    public float zoom = 1f;
+
     public TacticsScreen(MainGame game, GameScreen prevScreen, TiledMap tiledMap) {
         super(game, prevScreen);
+
+        this.camera.zoom = zoom;
 
         this.engine = new PooledEngine();
 
@@ -82,6 +86,7 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new MovesRenderingSystem(this));
         engine.addSystem(new SelectionRenderingSystem(this));
         engine.addSystem(new HoverRenderingSystem(this));
+        engine.addSystem(new TurnRenderingSystem(this));
 
         engine.addSystem(new CursorManagementSystem());
         engine.addSystem(new MapManagementSystem(this));
@@ -93,7 +98,6 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new MapCursorMovementSystem(this));
 
         engine.addSystem(new AiSystem());
-
 
         this.map.populate(engine);
 
@@ -120,6 +124,8 @@ public class TacticsScreen extends GameScreen {
         engine.update(delta);
 
         switch (curState) {
+            case BATTLE_START:
+                renderBattleStart(delta);
             case PLAYER_TURN_TRANSITION:
                 renderPlayerTurnTransition(delta);
                 break;
@@ -127,6 +133,9 @@ public class TacticsScreen extends GameScreen {
                 renderAiTurnTransition(delta);
                 break;
             case PLAYER_TURN:
+                if (game.controller.startJustPressed()) {
+                    engine.getSystem(TurnManagementSystem.class).endTurn();
+                }
                 break;
             case AI_TURN:
                 break;
@@ -138,7 +147,20 @@ public class TacticsScreen extends GameScreen {
                 break;
 
         }
+        if (game.controller.endJustPressed()) {
+            this.previousScreen();
+        }
+    }
 
+    private void startBattle() {
+        this.curState = TacticsState.BATTLE_START;
+        this.timer = 2f;
+    }
+    private void renderBattleStart(float delta) {
+        timer-=delta;
+        if (timer <= 0) {
+            startTransitionToPlayerTurn();
+        }
     }
 
     private void renderPlayerWin(float delta) {

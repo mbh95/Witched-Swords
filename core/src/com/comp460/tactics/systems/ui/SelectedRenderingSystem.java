@@ -27,7 +27,7 @@ import com.comp460.tactics.components.unit.UnitStatsComponent;
 /**
  * Created by Belinda on 2/20/17.
  */
-public class HoverRenderingSystem extends IteratingSystem {
+public class SelectedRenderingSystem extends IteratingSystem {
 
     private static final Family cursorFamily = Family.all(MapCursorComponent.class).get();
 
@@ -46,7 +46,7 @@ public class HoverRenderingSystem extends IteratingSystem {
     private static final int x = Settings.INTERNAL_WIDTH - TacticsAssets.HOVER_PLAYER.getRegionWidth();
     private static final int y = Settings.INTERNAL_HEIGHT - TacticsAssets.HOVER_PLAYER.getRegionHeight() - 10;
 
-    public HoverRenderingSystem(TacticsScreen tacticsScreen) {
+    public SelectedRenderingSystem(TacticsScreen tacticsScreen) {
         super(cursorFamily);
         this.parentScreen = tacticsScreen;
         batch = parentScreen.uiBatch;
@@ -55,26 +55,19 @@ public class HoverRenderingSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-//        TextureRegion bg = BattlePracticeAssets.TEXTURE_PLAYER_AREA;
-        MapCursorComponent cursor = cursorM.get(entity);
-
-        Entity displayed = cursorM.get(entity).hovered;
-
-        if (displayed == null) {
-            displayed = cursor.selection;
-            if (displayed == null) {
-                return;
-            }
+        Entity hovered = cursorM.get(entity).hovered;
+        if (hovered == null) {
+            return;
         }
 
-        GameUnit unit = unitStatsM.get(displayed).base;
-        TextureRegion unitIcon = BattleAnimationManager.getBattleUnitAnimation(unitStatsM.get(displayed).base.id, "attack").getKeyFrame(0f);
+        GameUnit unit = unitStatsM.get(hovered).base;
+        TextureRegion unitIcon = BattleAnimationManager.getBattleUnitAnimation(unitStatsM.get(hovered).base.id, "attack").getKeyFrame(0f);
 
         batch.begin();
 
-        if (playerControlledFamily.matches(displayed)) {
+        if (playerControlledFamily.matches(hovered)) {
             batch.draw(TacticsAssets.HOVER_PLAYER, x, y);
-        } else if (aiControlledFamily.matches(displayed)) {
+        } else if (aiControlledFamily.matches(hovered)) {
             batch.draw(TacticsAssets.HOVER_AI, x, y);
         }
 

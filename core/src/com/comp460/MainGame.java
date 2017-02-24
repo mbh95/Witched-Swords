@@ -37,6 +37,7 @@ public class MainGame extends Game {
     public Controller controller;
 
     public Music music;
+    public String playingNow = "";
 
     @Override
     public void create() {
@@ -65,9 +66,6 @@ public class MainGame extends Game {
 //		this.setScreen(ts);
 
 //		this.setScreen(new BattleScreen(this, null, new BattleUnitFactory(GameUnit.loadFromJSON("json/units/clarissa.json")), new BattleUnitFactory(GameUnit.loadFromJSON("json/units/ghast.json"))));
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/old-city-theme.ogg"));
-        music.setLooping(true);
-        music.play();
     }
 
     // i'm matt and i want to be mean to ms poops <3
@@ -124,5 +122,19 @@ public class MainGame extends Game {
     @Override
     public void dispose() {
         batch.dispose();
+    }
+
+    public void playMusic(String string) {
+        if (playingNow.equals(string)) {
+            return;
+        }
+        if (music != null) {
+            music.stop();
+            music.dispose();
+        }
+        music = Gdx.audio.newMusic(Gdx.files.internal(string));
+        music.setLooping(true);
+        music.play();
+        playingNow = string;
     }
 }

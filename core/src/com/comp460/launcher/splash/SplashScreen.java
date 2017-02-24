@@ -203,4 +203,10 @@ public class SplashScreen extends GameScreen {
                 break;
         }
     }
+
+    @Override
+    public void show() {
+        super.show();
+        game.playMusic("music/old-city-theme.ogg");
+    }
 }

@@ -290,4 +290,9 @@ public class BattlePracticeScreen extends GameScreen {
             infoLayout = new GlyphLayout(assets.FONT_INFO, text.toString(), Color.WHITE, w - 2 * padding, Align.left, true);
         }
     }
+    @Override
+    public void show() {
+        super.show();
+        game.playMusic("music/old-city-theme.ogg");
+    }
 }

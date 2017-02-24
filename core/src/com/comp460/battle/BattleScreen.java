@@ -388,4 +388,10 @@ public class BattleScreen extends GameScreen {
 
         super.previousScreen();
     }
+
+    @Override
+    public void show() {
+        super.show();
+        game.playMusic("music/battle-in-the-winter.mp3");
+    }
 }

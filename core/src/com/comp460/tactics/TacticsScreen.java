@@ -270,6 +270,7 @@ public class TacticsScreen extends GameScreen {
     @Override
     public void show() {
         super.show();
+        game.playMusic("music/beeball.mp3");
         engine.getEntitiesFor(unitsFamily).forEach(e -> {
             UnitStatsComponent stats = e.getComponent(UnitStatsComponent.class);
             if (stats.base.curHP <= 0) {

@@ -143,5 +143,9 @@ public class MapSelectScreen extends GameScreen {
             BattlePracticeAssets.FONT_BATTLE_PORTRAIT.draw(batch, layout, pos.x + this.normalTexture.getRegionWidth() / 2f - layout.width / 2f, pos.y + layout.height + 4);
         }
     }
-
+    @Override
+    public void show() {
+        super.show();
+        game.playMusic("music/old-city-theme.ogg");
+    }
 }

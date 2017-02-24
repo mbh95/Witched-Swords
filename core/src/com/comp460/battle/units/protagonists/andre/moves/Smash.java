@@ -19,12 +19,15 @@ public class Smash extends BattleUnitAbility {
 
     @Override
     public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 3;
+        return user.curEnergy >= 3 || andre.smashCol >= 0;
     }
 
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
+        if (andre.smashCol >= 0) {
+            return;
+        }
         user.removeEnergy(3);
         andre.smash();
     }

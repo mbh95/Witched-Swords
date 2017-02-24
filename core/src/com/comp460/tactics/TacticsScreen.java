@@ -147,6 +147,9 @@ public class TacticsScreen extends GameScreen {
                 break;
 
         }
+        if (game.controller.endJustPressed()) {
+            this.previousScreen();
+        }
     }
 
     private void startBattle() {

@@ -19,7 +19,6 @@ public class AiSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        System.out.println("asdf");
         entity.remove(ReadyToMoveComponent.class);
     }
 }

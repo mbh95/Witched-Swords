@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.comp460.battle.BattleScreen;
 import com.comp460.tactics.components.map.MapPositionComponent;
 import com.comp460.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.tactics.components.unit.UnitStatsComponent;
@@ -19,8 +18,8 @@ import java.util.Set;
  */
 public class TacticsMap {
 
+    private static final Family readyUnitsFamily = Family.all(MapPositionComponent.class, ReadyToMoveComponent.class).get();
     private static final Family mapUnitsFamily = Family.all(UnitStatsComponent.class, MapPositionComponent.class).get();
-    private static final Family readyFamily = Family.all(ReadyToMoveComponent.class).get();
 
     private static final ComponentMapper<MapPositionComponent> mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
     private static final ComponentMapper<UnitStatsComponent> statsM = ComponentMapper.getFor(UnitStatsComponent.class);
@@ -177,7 +176,7 @@ public class TacticsMap {
         if (selection == null) {
             return null;
         }
-        if (!readyFamily.matches(selection)) {
+        if (!readyUnitsFamily.matches(selection)) {
             return null;
         }
         MapPositionComponent selectionPos = mapPosM.get(selection);

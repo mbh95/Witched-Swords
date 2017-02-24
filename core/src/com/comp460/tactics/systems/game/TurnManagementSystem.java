@@ -1,13 +1,8 @@
 package com.comp460.tactics.systems.game;
 
 import com.badlogic.ashley.core.*;
-import com.badlogic.gdx.graphics.Color;
 import com.comp460.tactics.TacticsScreen;
-import com.comp460.tactics.components.core.TextureComponent;
-import com.comp460.tactics.components.unit.AIControlledComponent;
-import com.comp460.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.tactics.components.unit.ReadyToMoveComponent;
-import com.comp460.tactics.components.unit.UnitStatsComponent;
 
 /**
  * Created by matthewhammond on 2/20/17.
@@ -15,11 +10,6 @@ import com.comp460.tactics.components.unit.UnitStatsComponent;
 public class TurnManagementSystem extends EntitySystem implements EntityListener {
 
     private static final Family readyFamily = Family.all(ReadyToMoveComponent.class).get();
-
-    private static final Family playerFamily = Family.all(PlayerControlledComponent.class, ReadyToMoveComponent.class).get();
-    private static final Family readyAiFamily = Family.all(AIControlledComponent.class, ReadyToMoveComponent.class).get();
-
-    private static final ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
 
     private TacticsScreen screen;
 
@@ -35,10 +25,7 @@ public class TurnManagementSystem extends EntitySystem implements EntityListener
 
     @Override
     public void entityAdded(Entity entity) {
-        TextureComponent textureComponent = textureM.get(entity);
-        if (textureComponent != null) {
-            textureComponent.tint = Color.WHITE;
-        }
+
     }
 
     @Override
@@ -49,10 +36,6 @@ public class TurnManagementSystem extends EntitySystem implements EntityListener
             } else {
                 screen.startTransitionToAiTurn();
             }
-        }
-        TextureComponent textureComponent = textureM.get(entity);
-        if (textureComponent != null) {
-            textureComponent.tint = Color.GRAY;
         }
     }
 }

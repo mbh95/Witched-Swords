@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.comp460.tactics.components.core.InvisibleComponent;
@@ -46,7 +47,6 @@ public class SpriteRenderingSystem extends IteratingSystem {
             TextureComponent texComp = textureM.get(e);
             TransformComponent t = transformM.get(e);
             batch.setColor(texComp.tint);
-
             batch.draw(texComp.texture, t.pos.x, t.pos.y);
         }
         renderQueue.clear();

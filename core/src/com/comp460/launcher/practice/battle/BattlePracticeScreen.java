@@ -246,7 +246,6 @@ public class BattlePracticeScreen extends GameScreen {
         public CharacterButton(BattleUnit unit, float x, float y, Runnable action) {
             super(x, y, assets.TEXTURE_SQUARE, action);
             this.unit = unit;
-            System.out.println(unit.name);
             this.unitIcon = BattleAnimationManager.getBattleUnitAnimation(unit.id, "attack").getKeyFrame(0f);
             this.layout = new GlyphLayout(assets.FONT_BATTLE_PORTRAIT, unit.name);
         }

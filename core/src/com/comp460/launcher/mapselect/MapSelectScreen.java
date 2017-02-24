@@ -112,7 +112,6 @@ public class MapSelectScreen extends GameScreen {
 
         public MapButton(TiledMap map, String name, float x, float y, Runnable action) {
             super(x, y, BattlePracticeAssets.TEXTURE_SQUARE, action);
-            System.out.println(name);
             this.map = map;
             this.layout = new GlyphLayout(BattlePracticeAssets.FONT_BATTLE_PORTRAIT, name);
         }

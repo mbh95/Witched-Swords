@@ -11,7 +11,6 @@ import com.comp460.tactics.components.core.TransformComponent;
 import com.comp460.tactics.components.map.MapPositionComponent;
 import com.comp460.tactics.components.unit.AIControlledComponent;
 import com.comp460.tactics.components.unit.PlayerControlledComponent;
-import com.comp460.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.tactics.components.unit.UnitStatsComponent;
 
 /**
@@ -22,7 +21,7 @@ public class UnitFactory {
     public static Entity makeUnit(TacticsMap map, String id, int team, int r, int c) {
         Entity unit = new Entity();
 
-        System.out.println(id);
+        System.out.println("Adding " + id + " to the map");
         unit.add(new AnimationComponent(TacticsAnimationManager.getTacticsAnimation(id, "idle")));
         unit.add(new TextureComponent(animM.get(unit).animation.getKeyFrame(0f)));
 
@@ -32,7 +31,6 @@ public class UnitFactory {
         if (team == 0) {
             unit.add(new PlayerControlledComponent());
             unit.add(new UnitStatsComponent(team, GameUnit.loadFromJSON("json/units/protagonists/" + id + ".json")));
-            unit.add(new ReadyToMoveComponent());
         } else {
             unit.add(new AIControlledComponent());
             unit.add(new UnitStatsComponent(team, GameUnit.loadFromJSON("json/units/enemies/" + id + ".json")));

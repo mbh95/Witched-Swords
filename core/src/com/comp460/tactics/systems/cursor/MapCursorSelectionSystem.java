@@ -46,16 +46,16 @@ public class MapCursorSelectionSystem extends IteratingSystem {
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
             newSelection = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col);
 
-            // You just clicked on your own unit
-            if (newSelection != null && playerControlledFamily.matches(newSelection)) {
+            // You just clicked on a unit
+            if (newSelection != null) {
                 clearToggledUnits();
                 cursor.selection = newSelection;
                 cursor.selection.add(new ShowValidMovesComponent());
                 return;
             }
 
-            // You currently have your own unit selected
-            if (cursor.selection != null && playerControlledFamily.matches(cursor.selection)) {
+            // You currently have a unit selected
+            if (cursor.selection != null) {
 
                 // The unit you have selected is ready to move
                 if (readyPlayerControlledFamily.matches(cursor.selection)) {
@@ -79,20 +79,19 @@ public class MapCursorSelectionSystem extends IteratingSystem {
                             clearToggledUnits();
                             cursor.selection = null;
                         }
-
+                    } else {
+                        clearToggledUnits();
+                        cursor.selection = null;
                     }
+                } else {
+                    clearToggledUnits();
+                    cursor.selection = null;
                 }
-            }
-
-            // You currently have an enemy unit selected
-            if (newSelection != null) {
-                clearToggledUnits();
-                cursor.selection = newSelection;
-                cursor.selection.add(new ShowValidMovesComponent());
             }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+            cursor.selection = null;
             clearToggledUnits();
         }
     }

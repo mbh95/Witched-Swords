@@ -25,16 +25,23 @@ public class TurnManagementSystem extends EntitySystem implements EntityListener
 
     @Override
     public void entityAdded(Entity entity) {
-
     }
 
     @Override
     public void entityRemoved(Entity entity) {
         if (this.getEngine().getEntitiesFor(readyFamily).size() == 0) {
             if (screen.curState == TacticsScreen.TacticsState.AI_TURN) {
-                    screen.startTransitionToPlayerTurn();
+                screen.startTransitionToPlayerTurn();
             } else {
                 screen.startTransitionToAiTurn();
+            }
+        }
+    }
+
+    public void endTurn() {
+        for (Entity entity : this.getEngine().getEntities()) {
+            if (readyFamily.matches(entity)) {
+                entity.remove(ReadyToMoveComponent.class);
             }
         }
     }

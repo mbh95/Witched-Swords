@@ -12,6 +12,12 @@ public interface Controller {
     boolean button2Pressed();
     boolean button2JustPressed();
 
+    boolean startPressed();
+    boolean startJustPressed();
+
+    boolean endPressed();
+    boolean endJustPressed();
+
     boolean upPressed();
     boolean upJustPressed();
 
@@ -26,5 +32,7 @@ public interface Controller {
 
     TextureRegion button1Sprite();
     TextureRegion button2Sprite();
+    TextureRegion startSprite();
+    TextureRegion endSprite();
     TextureRegion directionalSprite();
 }

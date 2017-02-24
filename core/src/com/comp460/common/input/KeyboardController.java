@@ -13,7 +13,8 @@ public class KeyboardController implements Controller {
     public TextureRegion zSprite = SpriteManager.COMMON.findRegion("keyboard/z");
     public TextureRegion xSprite = SpriteManager.COMMON.findRegion("keyboard/x");
     public TextureRegion dirSprite = SpriteManager.COMMON.findRegion("keyboard/arrows");
-
+    public TextureRegion enterSprite = SpriteManager.COMMON.findRegion("keyboard/enter");
+    public TextureRegion escapeSprite = SpriteManager.COMMON.findRegion("keyboard/esc");
 
     @Override
     public boolean button1Pressed() {
@@ -33,6 +34,27 @@ public class KeyboardController implements Controller {
     @Override
     public boolean button2JustPressed() {
         return Gdx.input.isKeyJustPressed(Input.Keys.X);
+    }
+
+    @Override
+    public boolean startPressed() {
+        return Gdx.input.isKeyPressed(Input.Keys.ENTER);
+    }
+
+    @Override
+    public boolean startJustPressed() {
+        return Gdx.input.isKeyJustPressed(Input.Keys.ENTER);
+
+    }
+
+    @Override
+    public boolean endPressed() {
+        return Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE);
+    }
+
+    @Override
+    public boolean endJustPressed() {
+        return Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE);
     }
 
     @Override
@@ -83,6 +105,16 @@ public class KeyboardController implements Controller {
     @Override
     public TextureRegion button2Sprite() {
         return xSprite;
+    }
+
+    @Override
+    public TextureRegion startSprite() {
+        return enterSprite;
+    }
+
+    @Override
+    public TextureRegion endSprite() {
+        return escapeSprite;
     }
 
     @Override

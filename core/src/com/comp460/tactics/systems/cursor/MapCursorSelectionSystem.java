@@ -47,7 +47,15 @@ public class MapCursorSelectionSystem extends IteratingSystem {
             newSelection = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col);
 
             // You just clicked on a unit
-            if (newSelection != null) {
+            // FINAL VERSION WILL LOOK LIKE THIS:
+//            if (newSelection != null) {
+//                clearToggledUnits();
+//                cursor.selection = newSelection;
+//                cursor.selection.add(new ShowValidMovesComponent());
+//                return;
+//            }
+            // HACKY WORKAROUND FOR NOW TO GET BATTLES WORKING:
+            if (newSelection != null && playerControlledFamily.matches(newSelection)) {
                 clearToggledUnits();
                 cursor.selection = newSelection;
                 cursor.selection.add(new ShowValidMovesComponent());
@@ -71,7 +79,8 @@ public class MapCursorSelectionSystem extends IteratingSystem {
                                 System.out.println("STARTING COMBAT");
                                 UnitStatsComponent playerUnitStats = statsM.get(cursor.selection);
                                 UnitStatsComponent aiUnitStats = statsM.get(newSelection);
-                                this.parentScreen.game.setScreen(new BattleScreen(this.parentScreen.game, this.parentScreen, playerUnitStats.base, aiUnitStats.base));
+                                cursor.selection.remove(ReadyToMoveComponent.class);
+                                this.parentScreen.game.setScreen(new BattleScreen(this.parentScreen.game, this.parentScreen, playerUnitStats.base, aiUnitStats.base, false));
                                 return;
                             }
                         } else {
@@ -88,6 +97,13 @@ public class MapCursorSelectionSystem extends IteratingSystem {
                     cursor.selection = null;
                 }
             }
+        }
+
+        // HACKY WORKAROUND TO ALLOW SELECTING ENEMY UNITS. DELETE THIS WHEN THE ABOVE HACK IS REMOVED
+        if (newSelection != null) {
+            clearToggledUnits();
+            cursor.selection = newSelection;
+            cursor.selection.add(new ShowValidMovesComponent());
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {

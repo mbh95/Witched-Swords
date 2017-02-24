@@ -35,7 +35,7 @@ public class BattlePracticeScreen extends GameScreen {
     private boolean infoMode = false;
     private InfoUnit infoUnit = null;
 
-    private BattleScreen dummyScreen = new BattleScreen(this.game, this, GameUnit.loadFromJSON("json/units/protagonists/andre.json"), GameUnit.loadFromJSON("json/units/protagonists/andre.json"));
+    private BattleScreen dummyScreen = new BattleScreen(this.game, this, GameUnit.loadFromJSON("json/units/protagonists/andre.json"), GameUnit.loadFromJSON("json/units/protagonists/andre.json"), true);
 
     private Vector3 cursorPos = new Vector3(0, 0, 0);
 
@@ -60,25 +60,25 @@ public class BattlePracticeScreen extends GameScreen {
 
         TexturedButton fightButton = new TexturedButton(150, 50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
             if (selectedAiButton != null && selectedPlayerButton != null) {
-                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json)));
+                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
             }
         });
 
         TexturedButton optionsButton = new TexturedButton(200, 50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
             if (selectedAiButton != null && selectedPlayerButton != null) {
-                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json)));
+                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
             }
         });
 
         TexturedButton backButton = new TexturedButton(150, 0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
             if (selectedAiButton != null && selectedPlayerButton != null) {
-                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json)));
+                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
             }
         });
 
         TexturedButton helpButton = new TexturedButton(200, 0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
             if (selectedAiButton != null && selectedPlayerButton != null) {
-                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json)));
+                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
             }
         });
 

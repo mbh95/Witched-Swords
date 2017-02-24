@@ -89,16 +89,21 @@ public class BattleScreen extends GameScreen {
 
     public List<BattleAnimation> playingAnimations = new ArrayList<>();
 
-    public BattleScreen(MainGame game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase) {
+    public boolean exitAllowed;
+
+    public BattleScreen(MainGame game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase, boolean exitAllowed) {
         super(game, prevScreen);
+
+        this.exitAllowed = exitAllowed;
+
         this.p1Unit = p1UnitBase.buildBattleUnit(this, 1, 1);
         this.p2Unit = p2UnitBase.buildBattleUnit(this, 1, numCols - 2);
 
         this.player1 = new HumanPlayer(p1Unit);
         this.player2 = new GhastAi(p2Unit, p1Unit, this);
 
-        this.p1MovesLayout = new GlyphLayout(movesFont, "Z: " + p1Unit.ability1.name + "\nX: "+p1Unit.ability2.name);
-        this.p2MovesLayout = new GlyphLayout(movesFont, "1: " + p2Unit.ability1.name + "\n2: "+p2Unit.ability2.name);
+        this.p1MovesLayout = new GlyphLayout(movesFont, "Z: " + p1Unit.ability1.name + "\nX: " + p1Unit.ability2.name);
+        this.p2MovesLayout = new GlyphLayout(movesFont, "1: " + p2Unit.ability1.name + "\n2: " + p2Unit.ability2.name);
 
         drawLayout = new GlyphLayout(resultsFont, "DRAW");
         p1WinsLayout = new GlyphLayout(resultsFont, p1Unit.name + " WINS!");
@@ -132,12 +137,15 @@ public class BattleScreen extends GameScreen {
     }
 
     public void update(float delta) {
-        for (Iterator<BattleAnimation> iter = playingAnimations.iterator(); iter.hasNext();) {
+        for (Iterator<BattleAnimation> iter = playingAnimations.iterator(); iter.hasNext(); ) {
             BattleAnimation anim = iter.next();
             anim.update(delta);
             if (anim.duration <= 0) {
                 iter.remove();
             }
+        }
+        if (game.controller.endJustPressed() && exitAllowed) {
+            previousScreen();
         }
         switch (curState) {
             case COUNTOFF:
@@ -158,7 +166,7 @@ public class BattleScreen extends GameScreen {
             case END_TIME:
                 endDelay -= delta;
                 if (endDelay <= 0) {
-                    if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
+                    if (game.controller.button1JustPressed()) {
                         previousScreen();
                     }
                 }

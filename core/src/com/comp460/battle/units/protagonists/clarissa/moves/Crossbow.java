@@ -37,10 +37,10 @@ public class Crossbow extends BattleUnitAbility {
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
         if (clarissa.inventory.size() == 0) {
-            clarissa.arrows.add(new Arrow(Ingredient.IngredientID.NONE, screen.colToScreenX(user.curCol) + 26, screen.rowToScreenY(user.curRow) + 22));
+            clarissa.arrows.add(new Arrow(Ingredient.IngredientID.NONE, screen.colToScreenX(user.curRow, user.curCol) + 26, screen.rowToScreenY(user.curRow, user.curCol) + 22));
             return;
         }
-        clarissa.arrows.add(new Arrow(clarissa.popIngredient().id, screen.colToScreenX(user.curCol) + 26, screen.rowToScreenY(user.curRow) + 22));
+        clarissa.arrows.add(new Arrow(clarissa.popIngredient().id, screen.colToScreenX(user.curRow, user.curCol) + 26, screen.rowToScreenY(user.curRow, user.curCol) + 22));
     }
 
     public class Arrow {

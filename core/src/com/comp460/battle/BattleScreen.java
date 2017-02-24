@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
 import com.comp460.assets.SpriteManager;
@@ -89,12 +90,21 @@ public class BattleScreen extends GameScreen {
 
     public List<BattleAnimation> playingAnimations = new ArrayList<>();
 
+    public Vector2[][] tileOffsets;
+    public Vector2 tileDefaultOffset = new Vector2(0, 0);
+
     public boolean exitAllowed;
 
     public BattleScreen(MainGame game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase, boolean exitAllowed) {
         super(game, prevScreen);
 
         this.exitAllowed = exitAllowed;
+        tileOffsets = new Vector2[numRows][numCols];
+        for (int r = 0; r < numRows; r++) {
+            for (int c = 0; c < numCols; c++) {
+                tileOffsets[r][c] = new Vector2(0, 0);
+            }
+        }
 
         this.p1Unit = p1UnitBase.buildBattleUnit(this, 1, 1);
         this.p2Unit = p2UnitBase.buildBattleUnit(this, 1, numCols - 2);
@@ -116,12 +126,12 @@ public class BattleScreen extends GameScreen {
         this.playingAnimations.add(anim);
     }
 
-    public float rowToScreenY(int row) {
-        return (tileHeight * row) + gridOffsetY;
+    public float rowToScreenY(int row, int col) {
+        return (tileHeight * row) + gridOffsetY + tileOffsets[row][col].y;
     }
 
-    public float colToScreenX(int col) {
-        return ((this.width / 2f) + (col - numCols / 2f) * tileWidth) + gridOffsetX;
+    public float colToScreenX(int row, int col) {
+        return ((this.width / 2f) + (col - numCols / 2f) * tileWidth) + gridOffsetX + tileOffsets[row][col].x;
     }
 
     public boolean isOnGrid(int row, int col) {
@@ -211,22 +221,19 @@ public class BattleScreen extends GameScreen {
         batch.begin();
         batch.draw(background, 0, 0);
 
-        for (int r = 0; r < numRows; r++) {
+        for (int r = numRows - 1; r >= 0; r--) {
             for (int c = 0; c < numCols; c++) {
+                float x = colToScreenX(r, c);
+                float y = rowToScreenY(r, c);
                 if (c < numCols / 2) {
-                    batch.draw(tileLHS, colToScreenX(c), rowToScreenY(r));
+                    batch.draw(tileLHS, x, y);
+                    batch.draw(tileSideLHS, x, y - tileSideHeight);
+
                 } else {
-                    batch.draw(tileRHS, colToScreenX(c), rowToScreenY(r));
+                    batch.draw(tileRHS, x, y);
+                    batch.draw(tileSideRHS, x, y - tileSideHeight);
                 }
-            }
-        }
-        for (int c = 0; c < numCols; c++) {
-            float x = colToScreenX(c);
-            float y = rowToScreenY(0) - tileSideHeight;
-            if (c < numCols / 2) {
-                batch.draw(tileSideLHS, x, y);
-            } else {
-                batch.draw(tileSideRHS, x, y);
+                tileOffsets[r][c].lerp(tileDefaultOffset, 0.3f);
             }
         }
         batch.end();

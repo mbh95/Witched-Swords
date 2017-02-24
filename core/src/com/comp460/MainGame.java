@@ -2,6 +2,7 @@ package com.comp460;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -35,6 +36,7 @@ public class MainGame extends Game {
 
     public Controller controller;
 
+    public Music music;
 
     @Override
     public void create() {
@@ -63,6 +65,9 @@ public class MainGame extends Game {
 //		this.setScreen(ts);
 
 //		this.setScreen(new BattleScreen(this, null, new BattleUnitFactory(GameUnit.loadFromJSON("json/units/clarissa.json")), new BattleUnitFactory(GameUnit.loadFromJSON("json/units/ghast.json"))));
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/old-city-theme.ogg"));
+        music.setLooping(true);
+        music.play();
     }
 
     // i'm matt and i want to be mean to ms poops <3

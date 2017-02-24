@@ -116,7 +116,7 @@ class Puff extends BattleUnitAbility {
         }
 
         public void render(SpriteBatch batch, BattleScreen screen) {
-            batch.draw(Ghast.puffAnimation.getKeyFrame(animTimer), screen.colToScreenX(col), screen.rowToScreenY(row));
+            batch.draw(Ghast.puffAnimation.getKeyFrame(animTimer), screen.colToScreenX(row, col), screen.rowToScreenY(row, col));
         }
     }
 }

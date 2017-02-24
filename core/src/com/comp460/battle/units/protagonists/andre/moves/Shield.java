@@ -33,6 +33,6 @@ public class Shield extends BattleUnitAbility {
         super.use(user, screen);
         screen.addAnimation(new BattleAnimation(shieldFlare, user.transform.x, user.transform.y, 0.2f));
         user.curEnergy-=1;
-        andre.raiseShield(1.0f);
+        andre.raiseShield(0.5f);
     }
 }

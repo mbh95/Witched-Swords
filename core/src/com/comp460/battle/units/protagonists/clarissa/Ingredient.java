@@ -57,6 +57,6 @@ public class Ingredient {
     }
 
     public void render(BattleScreen screen) {
-        screen.batch.draw(animation.getKeyFrame(animTimer), screen.colToScreenX(col), screen.rowToScreenY(row));
+        screen.batch.draw(animation.getKeyFrame(animTimer), screen.colToScreenX(row, col), screen.rowToScreenY(row, col));
     }
 }

@@ -72,7 +72,7 @@ public class BattleUnit implements BattleObject {
         this.curEnergy = 5;
 
         if (screen != null)
-            this.transform = new Vector3(screen.colToScreenX(col), screen.rowToScreenY(row), 0f);
+            this.transform = new Vector3(screen.colToScreenX(row, col), screen.rowToScreenY(row, col), 0f);
         else
             this.transform = new Vector3(0, 0, 0f);
 
@@ -82,7 +82,7 @@ public class BattleUnit implements BattleObject {
     }
 
     public void render(SpriteBatch batch, float delta) {
-        transform.slerp(new Vector3(screen.colToScreenX(curCol), screen.rowToScreenY(curRow), transform.z), 0.3f);
+        transform.slerp(new Vector3(screen.colToScreenX(curRow, curCol), screen.rowToScreenY(curRow, curCol), transform.z), 0.3f);
         animTimer += delta;
         if (!idleAnim && curAnim.isAnimationFinished(animTimer)) {
             curAnim = BattleAnimationManager.getBattleUnitAnimation(id, BattleAnimationManager.defaultBattleAnimID);
@@ -165,13 +165,22 @@ public class BattleUnit implements BattleObject {
 
         int deltaHP = curHP - prevHP;
         if (deltaHP < 0) {
-            screen.addAnimation(new FloatingText(deltaHP+"", damageFont, (float)(transform.x + 5f), transform.y + 40, 0.5f));
+            screen.addAnimation(new FloatingText(deltaHP + "", damageFont, (float) (transform.x + 5f), transform.y + 40, 0.5f));
         }
 
         if (deltaHP > 0) {
-            screen.addAnimation(new FloatingText("+"+deltaHP, healingFont, (float)(transform.x + 16f), transform.y + 40, 0.5f));
+            screen.addAnimation(new FloatingText("+" + deltaHP, healingFont, (float) (transform.x + 16f), transform.y + 40, 0.5f));
         }
         return deltaHP;
+    }
+
+    public void removeEnergy(int amt) {
+        this.curEnergy -= amt;
+        if (this.curEnergy < 0) {
+            curEnergy = 0;
+        } else if (this.curEnergy > 5) {
+            curEnergy = 5;
+        }
     }
 
     public void updateBase() {

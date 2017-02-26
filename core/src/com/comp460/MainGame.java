@@ -47,7 +47,6 @@ public class MainGame extends Game {
         Settings.load();
 
         this.goalAspect = 1f * Settings.INTERNAL_WIDTH / Settings.INTERNAL_HEIGHT;
-        this.resize(Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT);
 
         fpsFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.YELLOW);
         fpsFont.setColor(Color.YELLOW);

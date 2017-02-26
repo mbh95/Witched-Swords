@@ -15,9 +15,5 @@ public class TexturePackerUtil {
         TexturePacker.process(settings, "./assets-raw/sprites/main_menu", "./assets/sprites", "main_menu");
         TexturePacker.process(settings, "./assets-raw/sprites/splash", "./assets/sprites", "splash");
         TexturePacker.process(settings, "./assets-raw/sprites/tactics", "./assets/sprites", "tactics");
-
-
-
-
     }
 }

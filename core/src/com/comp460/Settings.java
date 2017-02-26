@@ -7,6 +7,8 @@ import com.badlogic.gdx.Gdx;
  */
 public class Settings {
 
+    public static String WINDOW_TITLE = "Witched Swords";
+
     public static int WINDOW_WIDTH = 1200;
     public static int WINDOW_HEIGHT = 720;
 

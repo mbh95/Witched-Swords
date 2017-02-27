@@ -12,7 +12,7 @@ import java.util.Random;
  */
 public class GhastAi extends AiPlayer {
 
-    private static final float attackDelay = 3 * Ghast.cloudSpeed;
+    private static final float attackDelay = 5 * Ghast.cloudSpeed;
     private float attackTimer = attackDelay;
     private float moveTimer = getNewMoveTimer();
     private Random rng = new Random();

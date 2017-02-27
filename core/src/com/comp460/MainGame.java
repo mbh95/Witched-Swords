@@ -11,12 +11,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 import com.comp460.assets.FontManager;
-import com.comp460.battle.BattleScreen;
-import com.comp460.common.GameUnit;
 import com.comp460.common.input.Controller;
 import com.comp460.common.input.KeyboardController;
-import com.comp460.launcher.splash.SplashScreen;
-import com.comp460.util.TexturePackerUtil;
+import com.comp460.screens.launcher.splash.SplashScreen;
 
 
 public class MainGame extends Game {

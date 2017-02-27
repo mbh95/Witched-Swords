@@ -8,7 +8,7 @@ import com.comp460.archive.battle2.components.BlockMoveComponent;
 import com.comp460.archive.battle2.components.LocationComponent;
 import com.comp460.archive.battle2.components.OwnerComponent;
 import com.comp460.archive.battle2.components.WarningComponent;
-import com.comp460.battle.components.*;
+import com.comp460.screens.battle.components.*;
 
 /**
  * Created by matth on 2/13/2017.

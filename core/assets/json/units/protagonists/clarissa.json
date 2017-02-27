@@ -6,6 +6,6 @@
   "curHP": 70,
   "moveDist": 5,
   "battleFactory": {
-    "class": "com.comp460.battle.units.protagonists.clarissa.ClarissaFactory"
+    "class": "com.comp460.screens.battle.units.protagonists.clarissa.ClarissaFactory"
   }
 }

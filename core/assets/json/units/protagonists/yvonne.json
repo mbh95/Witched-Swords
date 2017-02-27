@@ -6,6 +6,6 @@
   "curHP": 50,
   "moveDist": 5,
   "battleFactory": {
-    "class": "com.comp460.battle.units.protagonists.yvonne.YvonneFactory"
+    "class": "com.comp460.screens.battle.units.protagonists.yvonne.YvonneFactory"
   }
 }

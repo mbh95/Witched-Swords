@@ -3,10 +3,10 @@ package com.comp460.common;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.comp460.battle.BattleScreen;
-import com.comp460.battle.units.BattleUnit;
-import com.comp460.battle.units.BattleUnitFactory;
-import com.comp460.tactics.components.unit.UnitStatsComponent;
+import com.comp460.screens.battle.BattleScreen;
+import com.comp460.screens.battle.units.BattleUnit;
+import com.comp460.screens.battle.units.BattleUnitFactory;
+import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 
 import java.util.List;
 

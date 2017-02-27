@@ -1,4 +1,4 @@
-//package com.comp460.battle;
+//package com.comp460.screens.battle;
 //
 //import com.badlogic.gdx.Game;
 //import com.badlogic.gdx.math.Rectangle;

@@ -6,6 +6,6 @@
   "curHP": 150,
   "moveDist": 5,
   "battleFactory": {
-    "class": "com.comp460.battle.units.protagonists.andre.AndreFactory"
+    "class": "com.comp460.screens.battle.units.protagonists.andre.AndreFactory"
   }
 }

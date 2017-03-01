@@ -24,16 +24,14 @@ import com.comp460.screens.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.screens.tactics.systems.cursor.CursorManagementSystem;
 import com.comp460.screens.tactics.systems.game.EndConditionSystem;
+import com.comp460.screens.tactics.systems.map.*;
+import com.comp460.screens.tactics.systems.ui.ControlsRenderingSystem;
 import com.comp460.screens.tactics.systems.ui.HoverRenderingSystem;
 import com.comp460.screens.tactics.systems.cursor.MapCursorMovementSystem;
 import com.comp460.screens.tactics.systems.ui.TurnRenderingSystem;
 import com.comp460.screens.tactics.systems.unit.MapManagementSystem;
 import com.comp460.screens.tactics.systems.game.TurnManagementSystem;
-import com.comp460.screens.tactics.systems.map.MapRenderingSystem;
-import com.comp460.screens.tactics.systems.map.MapToScreenSystem;
 import com.comp460.screens.tactics.systems.cursor.MapCursorSelectionSystem;
-import com.comp460.screens.tactics.systems.map.MovesRenderingSystem;
-import com.comp460.screens.tactics.systems.map.SelectionRenderingSystem;
 import com.comp460.screens.tactics.systems.unit.UnitShaderSystem;
 
 /**
@@ -82,11 +80,13 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new CameraTrackingSystem());
         engine.addSystem(new SnapToParentSystem());
 
+        engine.addSystem(new ValidMoveManagementSystem(this));
         engine.addSystem(new MapToScreenSystem(this));
         engine.addSystem(new MovesRenderingSystem(this));
         engine.addSystem(new SelectionRenderingSystem(this));
         engine.addSystem(new HoverRenderingSystem(this));
         engine.addSystem(new TurnRenderingSystem(this));
+        engine.addSystem(new ControlsRenderingSystem(this));
 
         engine.addSystem(new CursorManagementSystem());
         engine.addSystem(new MapManagementSystem(this));

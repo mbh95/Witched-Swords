@@ -80,7 +80,7 @@ public class MainGame extends Game {
         batch.begin();
         batch.draw(bufferRegion, bufferX, bufferY, buffer.getWidth(), buffer.getHeight());
         if (showFPS) {
-            fpsFont.draw(batch, Gdx.graphics.getFramesPerSecond() + "", 10, Gdx.graphics.getHeight() - 10);
+            fpsFont.draw(batch, Gdx.graphics.getFramesPerSecond() + "", Gdx.graphics.getWidth() - 15, Gdx.graphics.getHeight() - 10);
         }
         batch.end();
     }

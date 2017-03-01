@@ -12,6 +12,7 @@ import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;
 import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
+import com.comp460.screens.battleECS2.BattleAssets;
 import com.comp460.screens.launcher.Button;
 import com.comp460.screens.launcher.TexturedButton;
 
@@ -32,8 +33,9 @@ public class BattlePracticeScreen extends GameScreen {
     private Button[] buttons;
     private Button selectedButton;
 
-    private boolean infoMode = false;
     private InfoUnit infoUnit = null;
+    private float infoWidth = 200;
+    private float infoHeight = 100 - 2;
 
     private BattleScreen dummyScreen = new BattleScreen(this.game, this, GameUnit.loadFromJSON("json/units/protagonists/andre.json"), GameUnit.loadFromJSON("json/units/protagonists/andre.json"), true);
 
@@ -58,31 +60,31 @@ public class BattlePracticeScreen extends GameScreen {
         CharacterButton shellButton = makeAiCharacterButton("json/units/enemies/shellgon.json", 400 - 100, 0 + bottomBorder);
 
 
-        TexturedButton fightButton = new TexturedButton(150, 50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
-            if (selectedAiButton != null && selectedPlayerButton != null) {
-                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
-            }
-        });
+//        TexturedButton fightButton = new TexturedButton(150, 50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
+//            if (selectedAiButton != null && selectedPlayerButton != null) {
+//                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
+//            }
+//        });
+//
+//        TexturedButton optionsButton = new TexturedButton(200, 50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
+//            if (selectedAiButton != null && selectedPlayerButton != null) {
+//                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
+//            }
+//        });
+//
+//        TexturedButton backButton = new TexturedButton(150, 0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
+//            if (selectedAiButton != null && selectedPlayerButton != null) {
+//                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
+//            }
+//        });
+//
+//        TexturedButton helpButton = new TexturedButton(200, 0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
+//            if (selectedAiButton != null && selectedPlayerButton != null) {
+//                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
+//            }
+//        });
 
-        TexturedButton optionsButton = new TexturedButton(200, 50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
-            if (selectedAiButton != null && selectedPlayerButton != null) {
-                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
-            }
-        });
-
-        TexturedButton backButton = new TexturedButton(150, 0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
-            if (selectedAiButton != null && selectedPlayerButton != null) {
-                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
-            }
-        });
-
-        TexturedButton helpButton = new TexturedButton(200, 0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
-            if (selectedAiButton != null && selectedPlayerButton != null) {
-                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
-            }
-        });
-
-        Button[][] buttonMap = new Button[][]{{andreButton, clarissaButton, fightButton, optionsButton, ghastButton, bulbaButton}, {yvonneButton, zaneButton, backButton, helpButton, shellButton, trixyButton}};
+        Button[][] buttonMap = new Button[][]{{andreButton, clarissaButton, ghastButton, bulbaButton}, {yvonneButton, zaneButton, shellButton, trixyButton}};
 
         for (int r = 0; r < buttonMap.length; r++) {
             for (int c = 0; c < buttonMap[0].length; c++) {
@@ -105,7 +107,7 @@ public class BattlePracticeScreen extends GameScreen {
                 }
             }
         }
-        buttons = new Button[]{andreButton, clarissaButton, yvonneButton, zaneButton, ghastButton, trixyButton, bulbaButton, shellButton, fightButton, optionsButton, helpButton, backButton};
+        buttons = new Button[]{andreButton, clarissaButton, yvonneButton, zaneButton, ghastButton, trixyButton, bulbaButton, shellButton};
         selectedButton = andreButton;
     }
 
@@ -133,9 +135,28 @@ public class BattlePracticeScreen extends GameScreen {
 
         BattlePracticeAssets.NINEPATCH_CURSOR.draw(batch, cursorPos.x, cursorPos.y, selectedButton.width, selectedButton.height);
 
-        if (infoMode) {
-            drawInfo();
+        drawInfo();
+
+        if (selectedPlayerButton != null && selectedAiButton != null) {
+//            batch.draw(BattlePracticeAssets.TEXTURE_READY_BANNER, 0, 150);
+
+            BattlePracticeAssets.FONT_READY.draw(batch, "Ready", 30 + 120 + 5, 150 + 32);
+
+            batch.draw(game.controller.startSprite(), 30 + 120 + 5, 150);
+            BattlePracticeAssets.FONT_INFO.draw(batch, " to start", 30 + 120 + 5 + game.controller.startSprite().getRegionWidth(), 150 + 8);
         }
+//
+//        batch.draw(game.controller.button1Sprite(), 30 + 120 + 5, 128);
+//        batch.draw(game.controller.button2Sprite(), 30 + 120 + 5, 114);
+//        batch.draw(game.controller.directionalSprite(), 30 + 120, 100);
+//        BattlePracticeAssets.FONT_INFO.draw(batch, " confirm", 30 + 120 + 5 + game.controller.button1Sprite().getRegionWidth(), 128 + 8);
+//        BattlePracticeAssets.FONT_INFO.draw(batch, " back", 30 + 120 + 5 + game.controller.button2Sprite().getRegionWidth(), 114 + 8);
+//        BattlePracticeAssets.FONT_INFO.draw(batch, " select", 30 + 120 + game.controller.directionalSprite().getRegionWidth(), 100 + 8);
+
+
+        batch.draw(game.controller.endSprite(), 0 + 1, 240 - game.controller.endSprite().getRegionHeight() - 1);
+//        batch.draw(BattlePracticeAssets.TEXTURE_BACK_BUTTON, 0 + 1 + game.controller.endSprite().getRegionWidth() + 1, 240 - game.controller.endSprite().getRegionHeight() - 1);
+        BattlePracticeAssets.FONT_INFO.draw(batch, " back", 0 + 1 + game.controller.endSprite().getRegionWidth() + 1, 240 - 2);
 
         batch.end();
 
@@ -146,23 +167,26 @@ public class BattlePracticeScreen extends GameScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) selectedButton = selectedButton.down;
 //        selectedButton.setHovered();
 
-        if (infoMode) {
-            if (selectedButton instanceof CharacterButton) {
-                CharacterButton sel = ((CharacterButton) selectedButton);
-                if (sel.unit != infoUnit.unit)
-                    infoUnit = new InfoUnit(sel.unit);
-            }
-            if (game.controller.button1JustPressed() || game.controller.button2JustPressed()) {
-                infoMode = false;
-            }
-        } else {
-            if (game.controller.button1JustPressed()) {
-                selectedButton.click();
-            }
-            if (game.controller.button2JustPressed() || game.controller.endJustPressed()) {
-                this.previousScreen();
-            }
+        if (game.controller.button1JustPressed()) {
+            selectedButton.click();
+
         }
+        if (game.controller.button2JustPressed() || game.controller.endJustPressed()) {
+            this.previousScreen();
+        }
+
+        if (selectedButton instanceof CharacterButton) {
+            if (selectedPlayerButton == selectedButton) {
+
+            }
+            CharacterButton sel = ((CharacterButton) selectedButton);
+            infoUnit = new InfoUnit(sel.unit);
+        }
+
+        if (selectedPlayerButton != null && selectedAiButton != null && game.controller.startJustPressed()) {
+            game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
+        }
+
         frameTime += delta;
         cursorPos.lerp(selectedButton.pos, 0.3f);
     }
@@ -177,8 +201,9 @@ public class BattlePracticeScreen extends GameScreen {
         CharacterButton button = makeGenericCharacterButton(json, x, y);
         button.action = () -> {
             if (selectedPlayerButton == button) {
-                infoMode = true;
-                infoUnit = new InfoUnit(button.unit);
+                playerUnitIdle = null;
+                selectedPlayerButton = null;
+                button.normalTexture = BattlePracticeAssets.TEXTURE_SQUARE;
             } else {
                 if (selectedPlayerButton != null) {
                     selectedPlayerButton.normalTexture = BattlePracticeAssets.TEXTURE_SQUARE;
@@ -196,8 +221,9 @@ public class BattlePracticeScreen extends GameScreen {
         CharacterButton button = makeGenericCharacterButton(json, x, y);
         button.action = () -> {
             if (selectedAiButton == button) {
-                infoMode = true;
-                infoUnit = new InfoUnit(button.unit);
+                aiUnitIdle = null;
+                selectedAiButton = null;
+                button.normalTexture = BattlePracticeAssets.TEXTURE_SQUARE;
             } else {
                 if (selectedAiButton != null) {
                     selectedAiButton.normalTexture = BattlePracticeAssets.TEXTURE_SQUARE;
@@ -212,17 +238,22 @@ public class BattlePracticeScreen extends GameScreen {
     }
 
     private void drawInfo() {
-        if (!infoMode || infoUnit == null) {
+        if (infoUnit == null) {
             return;
         }
 
         float padding = 4;
 
-        float w = infoUnit.infoLayout.width + 2 * padding;
-        float h = infoUnit.infoLayout.height + 2 * padding;
+//        float w = infoUnit.infoLayout.width + 2 * padding;
+//        float h = infoUnit.infoLayout.height + 2 * padding;
 
-        float x = 400f / 2 - w / 2;
-        float y = 240f / 2 - h / 2;
+//        float x = 400f / 2 - w / 2;
+//        float y = 240f / 2 - h / 2;
+
+        float w = infoWidth;
+        float h = infoHeight;
+        float x = 100;
+        float y = 0;
 
 
 //        batch.draw(assets.TEXTURE_INFO_BG, 0, 0);
@@ -251,9 +282,6 @@ public class BattlePracticeScreen extends GameScreen {
             super.render(batch);
             batch.draw(unitIcon, pos.x + 4, pos.y + 4);
             assets.FONT_BATTLE_PORTRAIT.draw(batch, layout, pos.x + this.normalTexture.getRegionWidth() / 2f - layout.width / 2f, pos.y + layout.height + 4);
-            if (this == selectedPlayerButton || this == selectedAiButton) {
-                batch.draw(assets.TEXTURE_i, pos.x + this.normalTexture.getRegionWidth() - 1.5f * assets.TEXTURE_i.getRegionWidth(), pos.y + this.normalTexture.getRegionHeight() - 1.5f * assets.TEXTURE_i.getRegionHeight());
-            }
         }
     }
 
@@ -266,15 +294,18 @@ public class BattlePracticeScreen extends GameScreen {
 
 
             StringBuilder text = new StringBuilder();
-            text.append("Name: \t" + unit.name);
+//            text.append("Name: \t" + unit.name);
+            text.append(unit.name);
+
             text.append("\n");
-            text.append("Description: \t" + unit.description);
-            text.append("\n");
-            text.append("Max HP: \t" + unit.maxHP);
+            text.append(unit.description);
+//            text.append("Description: \t" + unit.description);
+//            text.append("\n");
+//            text.append("Max HP: \t" + unit.maxHP);
             text.append("\n");
             text.append("\n");
 
-            text.append("Abilities:\n");
+//            text.append("Abilities:\n");
             text.append(unit.ability1.name + ":");
             text.append("\n");
             text.append(unit.ability1.description);
@@ -284,12 +315,14 @@ public class BattlePracticeScreen extends GameScreen {
             text.append("\n");
             text.append(unit.ability2.description);
 
-            float w = 300;
+            float w = infoWidth;
             float padding = 4;
 
             infoLayout = new GlyphLayout(assets.FONT_INFO, text.toString(), Color.WHITE, w - 2 * padding, Align.left, true);
         }
+
     }
+
     @Override
     public void show() {
         super.show();

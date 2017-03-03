@@ -32,6 +32,7 @@ import com.comp460.screens.tactics.systems.ui.TurnRenderingSystem;
 import com.comp460.screens.tactics.systems.unit.MapManagementSystem;
 import com.comp460.screens.tactics.systems.game.TurnManagementSystem;
 import com.comp460.screens.tactics.systems.cursor.MapCursorSelectionSystem;
+import com.comp460.screens.tactics.systems.unit.UnitAnimatorSystem;
 import com.comp460.screens.tactics.systems.unit.UnitShaderSystem;
 
 /**
@@ -93,6 +94,7 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new TurnManagementSystem(this));
         engine.addSystem(new EndConditionSystem(this));
         engine.addSystem(new UnitShaderSystem());
+        engine.addSystem(new UnitAnimatorSystem());
 
         engine.addSystem(new MapCursorSelectionSystem(this));
         engine.addSystem(new MapCursorMovementSystem(this));

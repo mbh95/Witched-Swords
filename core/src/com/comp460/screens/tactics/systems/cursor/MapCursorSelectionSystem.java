@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.tactics.TacticsScreen;
+import com.comp460.screens.tactics.components.cursor.MovementPathComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.cursor.MapCursorComponent;
 import com.comp460.screens.tactics.components.unit.*;
@@ -19,6 +20,8 @@ public class MapCursorSelectionSystem extends IteratingSystem {
 
     private static final Family mapCursorFamily = Family.all(MapCursorComponent.class, MapPositionComponent.class).get();
     private static final Family toggledUnitsFamily = Family.all(ShowValidMovesComponent.class).get();
+    private static final Family selectedUnitsFamily = Family.all(SelectedComponent.class).get();
+
     private static final Family readyPlayerControlledFamily = Family.all(PlayerControlledComponent.class, ReadyToMoveComponent.class).get();
 
     private static final Family playerControlledFamily = Family.all(PlayerControlledComponent.class).get();
@@ -59,6 +62,7 @@ public class MapCursorSelectionSystem extends IteratingSystem {
                 clearToggledUnits();
                 cursor.selection = newSelection;
                 cursor.selection.add(new ShowValidMovesComponent());
+                cursor.selection.add(new MovementPathComponent());
                 return;
             }
 
@@ -104,6 +108,7 @@ public class MapCursorSelectionSystem extends IteratingSystem {
             clearToggledUnits();
             cursor.selection = newSelection;
             cursor.selection.add(new ShowValidMovesComponent());
+            newSelection.add(new SelectedComponent());
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
@@ -115,6 +120,9 @@ public class MapCursorSelectionSystem extends IteratingSystem {
     private void clearToggledUnits() {
         this.getEngine().getEntitiesFor(toggledUnitsFamily).forEach((e) -> {
             e.remove(ShowValidMovesComponent.class);
+        });
+        this.getEngine().getEntitiesFor(selectedUnitsFamily).forEach((e) -> {
+            e.remove(SelectedComponent.class);
         });
     }
 }

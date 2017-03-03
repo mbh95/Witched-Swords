@@ -59,31 +59,6 @@ public class BattlePracticeScreen extends GameScreen {
         CharacterButton trixyButton = makeAiCharacterButton("json/units/enemies/trixy.json", 400 - 50, 0 + bottomBorder);
         CharacterButton shellButton = makeAiCharacterButton("json/units/enemies/shellgon.json", 400 - 100, 0 + bottomBorder);
 
-
-//        TexturedButton fightButton = new TexturedButton(150, 50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
-//            if (selectedAiButton != null && selectedPlayerButton != null) {
-//                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
-//            }
-//        });
-//
-//        TexturedButton optionsButton = new TexturedButton(200, 50, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
-//            if (selectedAiButton != null && selectedPlayerButton != null) {
-//                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
-//            }
-//        });
-//
-//        TexturedButton backButton = new TexturedButton(150, 0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
-//            if (selectedAiButton != null && selectedPlayerButton != null) {
-//                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
-//            }
-//        });
-//
-//        TexturedButton helpButton = new TexturedButton(200, 0, BattlePracticeAssets.TEXTURE_FIGHT_BUTTON, () -> {
-//            if (selectedAiButton != null && selectedPlayerButton != null) {
-//                game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true));
-//            }
-//        });
-
         Button[][] buttonMap = new Button[][]{{andreButton, clarissaButton, ghastButton, bulbaButton}, {yvonneButton, zaneButton, shellButton, trixyButton}};
 
         for (int r = 0; r < buttonMap.length; r++) {
@@ -145,7 +120,7 @@ public class BattlePracticeScreen extends GameScreen {
             batch.draw(game.controller.startSprite(), 30 + 120 + 5, 150);
             BattlePracticeAssets.FONT_INFO.draw(batch, " to start", 30 + 120 + 5 + game.controller.startSprite().getRegionWidth(), 150 + 8);
         }
-//
+
 //        batch.draw(game.controller.button1Sprite(), 30 + 120 + 5, 128);
 //        batch.draw(game.controller.button2Sprite(), 30 + 120 + 5, 114);
 //        batch.draw(game.controller.directionalSprite(), 30 + 120, 100);
@@ -154,9 +129,9 @@ public class BattlePracticeScreen extends GameScreen {
 //        BattlePracticeAssets.FONT_INFO.draw(batch, " select", 30 + 120 + game.controller.directionalSprite().getRegionWidth(), 100 + 8);
 
 
-        batch.draw(game.controller.endSprite(), 0 + 1, 240 - game.controller.endSprite().getRegionHeight() - 1);
+        batch.draw(game.controller.button2Sprite(), 0 + 1, 240 - game.controller.button2Sprite().getRegionHeight() - 1);
 //        batch.draw(BattlePracticeAssets.TEXTURE_BACK_BUTTON, 0 + 1 + game.controller.endSprite().getRegionWidth() + 1, 240 - game.controller.endSprite().getRegionHeight() - 1);
-        BattlePracticeAssets.FONT_INFO.draw(batch, " back", 0 + 1 + game.controller.endSprite().getRegionWidth() + 1, 240 - 2);
+        BattlePracticeAssets.FONT_INFO.draw(batch, " back", 0 + 1 + game.controller.button2Sprite().getRegionWidth() + 1, 240 - 2);
 
         batch.end();
 

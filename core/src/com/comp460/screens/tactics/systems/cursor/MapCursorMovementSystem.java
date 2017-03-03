@@ -36,9 +36,9 @@ public class MapCursorMovementSystem extends IteratingSystem {
             int oldRow = cursorPos.row;
             int oldCol = cursorPos.col;
             if ((controller.leftPressed() && cursor.countdown <= 0) || controller.leftJustPressed()) cursorPos.col--;
-            else if ((controller.rightPressed() && cursor.countdown <= 0) || controller.rightJustPressed()) cursorPos.col++;
-            else if ((controller.upPressed() && cursor.countdown <= 0) || controller.upJustPressed()) cursorPos.row++;
-            else if ((controller.downPressed() && cursor.countdown <= 0) || controller.downJustPressed()) cursorPos.row--;
+            if ((controller.rightPressed() && cursor.countdown <= 0) || controller.rightJustPressed()) cursorPos.col++;
+            if ((controller.upPressed() && cursor.countdown <= 0) || controller.upJustPressed()) cursorPos.row++;
+            if ((controller.downPressed() && cursor.countdown <= 0) || controller.downJustPressed()) cursorPos.row--;
 
             if (cursorPos.row < 0) cursorPos.row = 0;
             else if (cursorPos.row >= parentScreen.getMap().getHeight())

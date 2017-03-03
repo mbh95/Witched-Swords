@@ -158,6 +158,7 @@ public class BattleUnit implements BattleObject {
         this.curHP -= damageVector.trueDamage;
         if (curHP <= 0) {
             curHP = 0;
+            startAnimation("fallen");
         }
         if (curHP > maxHP) {
             curHP = maxHP;
@@ -166,6 +167,8 @@ public class BattleUnit implements BattleObject {
         int deltaHP = curHP - prevHP;
         if (deltaHP < 0) {
             screen.addAnimation(new FloatingText(deltaHP + "", damageFont, (float) (transform.x + 5f), transform.y + 40, 0.5f));
+            startAnimation("hurt");
+
         }
 
         if (deltaHP > 0) {

@@ -80,7 +80,39 @@ public class PathBuildingSystem extends IteratingSystem implements EntityListene
                     path.positions.get(path.positions.size() - 1).equals(new MapPositionComponent(cursorPos.row + 1, cursorPos.col)) ||
                     path.positions.get(path.positions.size() - 1).equals(new MapPositionComponent(cursorPos.row, cursorPos.col - 1)) ||
                     path.positions.get(path.positions.size() - 1).equals(new MapPositionComponent(cursorPos.row, cursorPos.col + 1))) {
-                path.positions.add(new MapPositionComponent(cursorPos.row, cursorPos.col));
+                if (path.positions.size() - 1 >= statsM.get(cursor.selection).base.moveDist) {
+                    Entity dummy = new Entity();
+                    dummy.add(cursorPos);
+                    GameUnit dummyUnit = new GameUnit();
+                    dummyUnit.moveDist = statsM.get(cursor.selection).base.moveDist;
+                    dummy.add(new UnitStatsComponent(-1, dummyUnit));
+
+                    Map<MapPositionComponent, Integer> shortestPaths = screen.getMap().shortestPaths(dummy);
+
+                    path.positions.clear();
+
+                    MapPositionComponent unitPos = posM.get(cursor.selection);
+
+                    path.positions.add(new MapPositionComponent(unitPos.row, unitPos.col));
+
+                    MapPositionComponent start = path.positions.get(path.positions.size() - 1);
+                    while (!start.equals(cursorPos)) {
+                        int cost = shortestPaths.get(start);
+                        MapPositionComponent pos = start;
+                        if (shortestPaths.getOrDefault(new MapPositionComponent(pos.row + 1, pos.col), -1) == cost + 1) {
+                            path.positions.add(new MapPositionComponent(pos.row + 1, pos.col));
+                        } else if (shortestPaths.getOrDefault(new MapPositionComponent(pos.row - 1, pos.col), -1) == cost + 1) {
+                            path.positions.add(new MapPositionComponent(pos.row - 1, pos.col));
+                        } else if (shortestPaths.getOrDefault(new MapPositionComponent(pos.row, pos.col + 1), -1) == cost + 1) {
+                            path.positions.add(new MapPositionComponent(pos.row, pos.col + 1));
+                        } else if (shortestPaths.getOrDefault(new MapPositionComponent(pos.row, pos.col - 1), -1) == cost + 1) {
+                            path.positions.add(new MapPositionComponent(pos.row, pos.col - 1));
+                        }
+                        start = path.positions.get(path.positions.size() - 1);
+                    }
+                } else {
+                    path.positions.add(new MapPositionComponent(cursorPos.row, cursorPos.col));
+                }
             } else {
                 Entity dummy = new Entity();
                 dummy.add(cursorPos);

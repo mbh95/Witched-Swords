@@ -140,13 +140,19 @@ public class TacticsMap {
             return null;
         }
         Map<MapPositionComponent, Integer> validMoves = new HashMap<>();
-        validMovesHelper(e, validMoves, mapPosM.get(e).row, mapPosM.get(e).col, statsM.get(e).base.moveDist);
+        validMovesHelper(validMoves, mapPosM.get(e).row, mapPosM.get(e).col, statsM.get(e).base.moveDist);
         Set<MapPositionComponent> finalMoves = validMoves.keySet();
 //        finalMoves.removeIf(pos->units[pos.getRow()][pos.getCol()] != null);
         return finalMoves;
     }
 
-    private void validMovesHelper(Entity e, Map<MapPositionComponent, Integer> bestSoFar, int r, int c, int countdown) {
+    public Map<MapPositionComponent, Integer> shortestPaths(Entity e) {
+        Map<MapPositionComponent, Integer> validMoves = new HashMap<>();
+        validMovesHelper(validMoves, mapPosM.get(e).row, mapPosM.get(e).col, statsM.get(e).base.moveDist);
+        return validMoves;
+    }
+
+    private void validMovesHelper(Map<MapPositionComponent, Integer> bestSoFar, int r, int c, int countdown) {
         if (countdown < 0 || r < 0 || r >= this.height || c < 0 || c >= this.width || !this.tiles[r][c].isTraversable()) {
             return;
         }
@@ -163,10 +169,10 @@ public class TacticsMap {
         }
         bestSoFar.put(new MapPositionComponent(r, c), countdown);
 
-        validMovesHelper(e, bestSoFar, r + 1, c, countdown - 1);
-        validMovesHelper(e, bestSoFar, r - 1, c, countdown - 1);
-        validMovesHelper(e, bestSoFar, r, c + 1, countdown - 1);
-        validMovesHelper(e, bestSoFar, r, c - 1, countdown - 1);
+        validMovesHelper(bestSoFar, r + 1, c, countdown - 1);
+        validMovesHelper(bestSoFar, r - 1, c, countdown - 1);
+        validMovesHelper(bestSoFar, r, c + 1, countdown - 1);
+        validMovesHelper(bestSoFar, r, c - 1, countdown - 1);
     }
 
     public Entity move(Entity selection, int row, int col) {

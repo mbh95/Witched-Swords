@@ -28,7 +28,6 @@ public class GameUnit {
 
     public BattleUnitFactory battleFactory;
 
-
     public BattleUnit buildBattleUnit(BattleScreen screen, int row, int col) {
         return battleFactory.buildUnit(screen, row, col, this);
     }

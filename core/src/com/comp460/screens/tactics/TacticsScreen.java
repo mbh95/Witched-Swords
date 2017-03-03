@@ -23,11 +23,13 @@ import com.comp460.screens.tactics.components.unit.AIControlledComponent;
 import com.comp460.screens.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.screens.tactics.systems.cursor.CursorManagementSystem;
+import com.comp460.screens.tactics.systems.cursor.PathBuildingSystem;
 import com.comp460.screens.tactics.systems.game.EndConditionSystem;
 import com.comp460.screens.tactics.systems.map.*;
 import com.comp460.screens.tactics.systems.ui.ControlsRenderingSystem;
 import com.comp460.screens.tactics.systems.ui.HoverRenderingSystem;
 import com.comp460.screens.tactics.systems.cursor.MapCursorMovementSystem;
+import com.comp460.screens.tactics.systems.ui.PathRenderingSystem;
 import com.comp460.screens.tactics.systems.ui.TurnRenderingSystem;
 import com.comp460.screens.tactics.systems.unit.MapManagementSystem;
 import com.comp460.screens.tactics.systems.game.TurnManagementSystem;
@@ -99,6 +101,8 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new MapCursorSelectionSystem(this));
         engine.addSystem(new MapCursorMovementSystem(this));
 
+        engine.addSystem(new PathBuildingSystem(this));
+        engine.addSystem(new PathRenderingSystem(this));
         engine.addSystem(new AiSystem());
 
         this.map.populate(engine);

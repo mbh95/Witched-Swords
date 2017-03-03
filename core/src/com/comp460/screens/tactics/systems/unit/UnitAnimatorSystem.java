@@ -32,6 +32,7 @@ public class UnitAnimatorSystem extends EntitySystem implements EntityListener {
 
         animM.get(entity).animation = selectedAnim;
         animM.get(entity).timer = 0f;
+        animM.get(entity).animation.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     @Override
@@ -40,5 +41,7 @@ public class UnitAnimatorSystem extends EntitySystem implements EntityListener {
 
         animM.get(entity).animation = idleAnim;
         animM.get(entity).timer = 0f;
+        animM.get(entity).animation.setPlayMode(Animation.PlayMode.LOOP);
+
     }
 }

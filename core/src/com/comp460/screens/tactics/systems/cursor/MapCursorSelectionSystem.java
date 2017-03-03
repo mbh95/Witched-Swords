@@ -30,6 +30,7 @@ public class MapCursorSelectionSystem extends IteratingSystem {
     private static final ComponentMapper<MapCursorComponent> cursorM = ComponentMapper.getFor(MapCursorComponent.class);
     private static final ComponentMapper<MapPositionComponent> mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
     private static final ComponentMapper<UnitStatsComponent> statsM = ComponentMapper.getFor(UnitStatsComponent.class);
+    private static final ComponentMapper<MovementPathComponent> pathM = ComponentMapper.getFor(MovementPathComponent.class);
 
     private TacticsScreen parentScreen;
 
@@ -62,7 +63,8 @@ public class MapCursorSelectionSystem extends IteratingSystem {
                 clearToggledUnits();
                 cursor.selection = newSelection;
                 cursor.selection.add(new ShowValidMovesComponent());
-                cursor.selection.add(new MovementPathComponent());
+                newSelection.add(new SelectedComponent());
+
                 return;
             }
 
@@ -84,6 +86,12 @@ public class MapCursorSelectionSystem extends IteratingSystem {
                                 UnitStatsComponent playerUnitStats = statsM.get(cursor.selection);
                                 UnitStatsComponent aiUnitStats = statsM.get(newSelection);
                                 cursor.selection.remove(ReadyToMoveComponent.class);
+                                MovementPathComponent path = pathM.get(cursor.selection);
+                                if (path != null) {
+                                    MapPositionComponent newPos = path.positions.get(path.positions.size()-2);
+                                    mapPosM.get(cursor.selection).row = newPos.row;
+                                    mapPosM.get(cursor.selection).col = newPos.col;
+                                }
                                 this.parentScreen.game.setScreen(new BattleScreen(this.parentScreen.game, this.parentScreen, playerUnitStats.base, aiUnitStats.base, false));
                                 return;
                             }

@@ -80,7 +80,7 @@ public class PathBuildingSystem extends IteratingSystem implements EntityListene
                     path.positions.get(path.positions.size() - 1).equals(new MapPositionComponent(cursorPos.row + 1, cursorPos.col)) ||
                     path.positions.get(path.positions.size() - 1).equals(new MapPositionComponent(cursorPos.row, cursorPos.col - 1)) ||
                     path.positions.get(path.positions.size() - 1).equals(new MapPositionComponent(cursorPos.row, cursorPos.col + 1))) {
-                if (path.positions.size() - 1 >= statsM.get(cursor.selection).base.moveDist) {
+                if (path.positions.size() - 1 >= statsM.get(cursor.selection).base.moveDist && false) {
                     Entity dummy = new Entity();
                     dummy.add(cursorPos);
                     GameUnit dummyUnit = new GameUnit();

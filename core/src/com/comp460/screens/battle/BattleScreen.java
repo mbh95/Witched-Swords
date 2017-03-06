@@ -240,8 +240,10 @@ public class BattleScreen extends GameScreen {
         batch.begin();
         p1Unit.render(batch, delta);
         p2Unit.render(batch, delta);
-        for (BattleAnimation anim : playingAnimations) {
-            anim.render(batch, delta);
+        if (curState.equals(BattleState.RUNNING)) {
+            for (BattleAnimation anim : playingAnimations) {
+                anim.render(batch, delta);
+            }
         }
         batch.end();
     }

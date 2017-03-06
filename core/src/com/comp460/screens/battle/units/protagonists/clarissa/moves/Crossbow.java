@@ -31,16 +31,17 @@ public class Crossbow extends BattleUnitAbility {
 
     @Override
     public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 1;
+        return user.curEnergy >= 0;
     }
 
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
-        if (clarissa.inventory.size() == 0) {
+        if (clarissa.inventory.size() == 0 || clarissa.curEnergy == 0) {
             clarissa.arrows.add(new Arrow(Ingredient.IngredientID.NONE, screen.colToScreenX(user.curRow, user.curCol) + 26, screen.rowToScreenY(user.curRow, user.curCol) + 22));
             return;
         }
+        clarissa.removeEnergy(1);
         clarissa.arrows.add(new Arrow(clarissa.popIngredient().id, screen.colToScreenX(user.curRow, user.curCol) + 26, screen.rowToScreenY(user.curRow, user.curCol) + 22));
     }
 

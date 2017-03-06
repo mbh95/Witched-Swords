@@ -109,7 +109,7 @@ public class Andre extends BattleUnit {
         if (shieldDuration <= 0) {
             return super.applyDamage(damageVector);
         } else if (shieldFresh) {
-            super.curEnergy += 2;
+            super.removeEnergy(-2);
             shieldFresh = false;
             screen.addAnimation(new FloatingText("Block", blockFont, transform.x, transform.y + 40, 0.2f));
         }

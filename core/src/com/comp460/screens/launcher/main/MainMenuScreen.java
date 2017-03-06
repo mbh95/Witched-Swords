@@ -42,7 +42,7 @@ public class MainMenuScreen extends GameScreen {
     }
 
     public TemplateRow[] buttonTemplates = new TemplateRow[] {
-            new TemplateRow("New Game", ()->{
+            new TemplateRow("Map Select", ()->{
                 game.setScreen(new MapSelectScreen(game, this));
             }),
             new TemplateRow("---", ()->{}),

@@ -96,7 +96,7 @@ public class MapCursorSelectionSystem extends IteratingSystem {
                                     }
                                     parentScreen.getMap().move(cursor.selection, pathPos.row, pathPos.col);
                                 }
-                                this.parentScreen.game.setScreen(new BattleScreen(this.parentScreen.game, this.parentScreen, playerUnitStats.base, aiUnitStats.base, false));
+                                this.parentScreen.game.setScreen(new BattleScreen(this.parentScreen.game, this.parentScreen, playerUnitStats.base, aiUnitStats.base, false, 10f));
                                 return;
                             }
                         } else {

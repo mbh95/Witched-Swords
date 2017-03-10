@@ -86,6 +86,7 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new ValidMoveManagementSystem(this));
         engine.addSystem(new MapToScreenSystem(this));
         engine.addSystem(new MovesRenderingSystem(this));
+        engine.addSystem(new PathRenderingSystem(this));
         engine.addSystem(new SelectionRenderingSystem(this));
         engine.addSystem(new HoverRenderingSystem(this));
         engine.addSystem(new TurnRenderingSystem(this));
@@ -102,7 +103,6 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new MapCursorMovementSystem(this));
 
         engine.addSystem(new PathBuildingSystem(this));
-        engine.addSystem(new PathRenderingSystem(this));
         engine.addSystem(new AiSystem());
 
         this.map.populate(engine);

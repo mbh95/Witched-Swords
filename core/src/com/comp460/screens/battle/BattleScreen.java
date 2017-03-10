@@ -69,7 +69,7 @@ public class BattleScreen extends GameScreen {
     private enum BattleState {COUNTOFF, RUNNING, END_P1_DIED, END_P2_DIED, END_DRAW, END_TIME}
 
     private float countOffTimer = 3;
-    private float countdownTimer = 10;
+    private float countdownTimer;
 
     private BattleState curState = BattleState.COUNTOFF;
 
@@ -91,9 +91,10 @@ public class BattleScreen extends GameScreen {
 
     public boolean exitAllowed;
 
-    public BattleScreen(MainGame game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase, boolean exitAllowed) {
+    public BattleScreen(MainGame game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase, boolean exitAllowed, float time) {
         super(game, prevScreen);
 
+        this.countdownTimer = time;
         this.exitAllowed = exitAllowed;
         tileOffsets = new Vector2[numRows][numCols];
         for (int r = 0; r < numRows; r++) {
@@ -159,8 +160,12 @@ public class BattleScreen extends GameScreen {
             case RUNNING:
                 tickTimer(delta);
                 checkEndConditions(delta);
+                if (curState != BattleState.RUNNING) {
+                    return;
+                }
                 player1.update(delta);
                 player2.update(delta);
+
                 p1Unit.update(delta);
                 p2Unit.update(delta);
                 break;
@@ -236,8 +241,10 @@ public class BattleScreen extends GameScreen {
         batch.begin();
         p1Unit.render(batch, delta);
         p2Unit.render(batch, delta);
-        for (BattleAnimation anim : playingAnimations) {
-            anim.render(batch, delta);
+        if (curState.equals(BattleState.RUNNING)) {
+            for (BattleAnimation anim : playingAnimations) {
+                anim.render(batch, delta);
+            }
         }
         batch.end();
     }

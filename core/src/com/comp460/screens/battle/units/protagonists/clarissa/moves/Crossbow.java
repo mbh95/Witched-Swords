@@ -2,6 +2,7 @@ package com.comp460.screens.battle.units.protagonists.clarissa.moves;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.comp460.assets.BattleAnimationManager;
 import com.comp460.screens.battle.BattleAnimation;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;

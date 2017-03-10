@@ -2,8 +2,11 @@ package com.comp460.screens.battle.units.protagonists.andre;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.SpriteManager;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.FloatingText;
 import com.comp460.screens.battle.units.BattleUnit;
@@ -12,10 +15,12 @@ import com.comp460.screens.battle.units.protagonists.andre.moves.Shield;
 import com.comp460.screens.battle.units.protagonists.andre.moves.Punch;
 import com.comp460.screens.battle.units.protagonists.andre.moves.Smash;
 import com.comp460.common.GameUnit;
+import com.comp460.screens.battle.units.protagonists.clarissa.Ingredient;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Created by Belinda on 2/17/17.
@@ -23,6 +28,17 @@ import java.util.List;
 public class Andre extends BattleUnit {
 
     public static final BitmapFont blockFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.CYAN);
+    public static final TextureRegion INVENTORY_SPRITE = SpriteManager.BATTLE.findRegion("ui/clarissa_inv");
+    private static BitmapFont yellowFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 10, Color.ORANGE, Color.BLACK, 2);
+    private static GlyphLayout smashReadyLayout = new GlyphLayout(yellowFont, "SMASH READY!");
+
+    public float invX = 400/2 - 2*40;
+    public float invY =  (int)screen.gridOffsetY + 3 * 40 + 2;
+    public final int invSlotWidth = 12;
+
+    public int maxCharges = 3;
+    public int charges = 0;
+
     public float shieldDuration;
     public boolean shieldFresh;
     public List<Punch> punches = new ArrayList<>();
@@ -34,7 +50,7 @@ public class Andre extends BattleUnit {
     public Andre(BattleScreen screen, int row, int col, GameUnit base) {
         super(screen, row, col, base);
 
-        this.ability1 = new Smash(this);
+        this.ability1 = new Punch(this);
         this.ability2 = new Shield(this);
     }
 
@@ -54,6 +70,9 @@ public class Andre extends BattleUnit {
 
     @Override
     public void update(float delta) {
+        if (charges == 3 && !(ability1 instanceof Smash)) ability1 = new Smash(this);
+        else if (charges < 3 && !(ability1 instanceof Punch)) ability1 = new Punch(this);
+
         super.update(delta);
         if (shieldDuration > 0) {
             shieldDuration -= delta;
@@ -84,6 +103,17 @@ public class Andre extends BattleUnit {
             opponent = this.screen.p2Unit;
         }
 
+       if (ability1 instanceof Smash) yellowFont.draw(batch, smashReadyLayout,
+               screen.colToScreenX(0,0) + (int)(screen.tileWidth*1.5) - smashReadyLayout.width / 2,
+               screen.rowToScreenY(2,0) + screen.tileHeight + INVENTORY_SPRITE.getRegionHeight() + smashReadyLayout.height / 2 + 5);
+
+       batch.draw(INVENTORY_SPRITE, invX, invY);
+       int x = invSlotWidth * (maxCharges - 1);
+       for (int i = 0; i < charges; i++) {
+           batch.draw(SpriteManager.BATTLE.findRegion("ingredients/fire_inv"), invX + x + 1, invY + 1);
+           x -= invSlotWidth;
+       }
+
         if (smashCol >= 0) {
             smashTimer -= delta;
             if (smashTimer <= 0) {
@@ -109,7 +139,8 @@ public class Andre extends BattleUnit {
         if (shieldDuration <= 0) {
             return super.applyDamage(damageVector);
         } else if (shieldFresh) {
-            super.curEnergy += 2;
+//            super.curEnergy += 2;
+            charges = Math.min(3, charges+1);
             shieldFresh = false;
             screen.addAnimation(new FloatingText("Block", blockFont, transform.x, transform.y + 40, 0.2f));
         }

@@ -39,8 +39,8 @@ public class BattleScreen extends GameScreen {
     private final TextureRegion hpBar = SpriteManager.BATTLE.findRegion("ui/hp_bar_new");
     private final TextureRegion energyBar = SpriteManager.BATTLE.findRegion("ui/energy");
 
-    private final int tileWidth = tileLHS.getRegionWidth();
-    private final int tileHeight = tileLHS.getRegionHeight();
+    public final int tileWidth = tileLHS.getRegionWidth();
+    public final int tileHeight = tileLHS.getRegionHeight();
     private final int tileSideHeight = tileSideLHS.getRegionHeight();
 
     public final float gridOffsetX = 0;
@@ -62,15 +62,14 @@ public class BattleScreen extends GameScreen {
     private static GlyphLayout fightLayout = new GlyphLayout(greenFont, "FIGHT!");
 
     private GlyphLayout drawLayout = new GlyphLayout(resultsFont, "DRAW");
-    private GlyphLayout stalemateLayout = new GlyphLayout(resultsFont, "STALEMATE");
     private GlyphLayout p1WinsLayout = new GlyphLayout(resultsFont, "YOU WIN!");
     private GlyphLayout p2WinsLayout = new GlyphLayout(resultsFont, "YOU LOSE!");
     private GlyphLayout outOfTimeLayout = new GlyphLayout(resultsFont, "OUT OF TIME");
 
-    private enum BattleState {COUNTOFF, RUNNING, END_STALEMATE, END_P1_DIED, END_P2_DIED, END_DRAW, END_TIME}
+    private enum BattleState {COUNTOFF, RUNNING, END_P1_DIED, END_P2_DIED, END_DRAW, END_TIME}
 
     private float countOffTimer = 3;
-    private float countdownTimer = 30;
+    private float countdownTimer = 10;
 
     private BattleState curState = BattleState.COUNTOFF;
 
@@ -115,7 +114,6 @@ public class BattleScreen extends GameScreen {
         drawLayout = new GlyphLayout(resultsFont, "DRAW");
         p1WinsLayout = new GlyphLayout(resultsFont, p1Unit.name + " WINS!");
         p2WinsLayout = new GlyphLayout(resultsFont, p2Unit.name + " WINS!");
-        stalemateLayout = new GlyphLayout(resultsFont, "STALEMATE");
         outOfTimeLayout = new GlyphLayout(resultsFont, "OUT OF TIME");
     }
 
@@ -166,7 +164,6 @@ public class BattleScreen extends GameScreen {
                 p1Unit.update(delta);
                 p2Unit.update(delta);
                 break;
-            case END_STALEMATE:
             case END_DRAW:
             case END_P1_DIED:
             case END_P2_DIED:
@@ -204,7 +201,6 @@ public class BattleScreen extends GameScreen {
                 break;
             case RUNNING:
                 break;
-            case END_STALEMATE:
             case END_DRAW:
             case END_P1_DIED:
             case END_P2_DIED:
@@ -312,9 +308,6 @@ public class BattleScreen extends GameScreen {
             case END_TIME:
                 layout = outOfTimeLayout;
                 break;
-            case END_STALEMATE:
-                layout = stalemateLayout;
-                break;
         }
         resultsFont.draw(batch, layout, width / 2 - layout.width / 2, 100);
 
@@ -345,13 +338,6 @@ public class BattleScreen extends GameScreen {
 
         if (countdownTimer <= 0) {
             curState = BattleState.END_TIME;
-            return;
-        }
-
-        boolean p1CanAct = p1Unit.canUseAbility();
-        boolean p2CanAct = p2Unit.canUseAbility();
-        if ((!p1CanAct) && (!p2CanAct)) {
-            curState = BattleState.END_STALEMATE;
             return;
         }
     }

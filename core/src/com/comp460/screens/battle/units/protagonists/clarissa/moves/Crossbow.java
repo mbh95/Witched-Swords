@@ -30,12 +30,13 @@ public class Crossbow extends BattleUnitAbility {
 
     @Override
     public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 1;
+        return user.curEnergy > 1;
     }
 
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
+        clarissa.removeEnergy(2);
         if (clarissa.inventory.size() == 0) {
             clarissa.arrows.add(new Arrow(Ingredient.IngredientID.NONE, screen.colToScreenX(user.curRow, user.curCol) + 26, screen.rowToScreenY(user.curRow, user.curCol) + 22));
             return;

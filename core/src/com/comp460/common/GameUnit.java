@@ -22,6 +22,7 @@ public class GameUnit {
     public int maxHP;
     public int curHP;
 
+    public float speed;
     public int moveDist;
 
     public List<String> moves;

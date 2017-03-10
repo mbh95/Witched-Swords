@@ -41,6 +41,8 @@ public class BattleUnit implements BattleObject {
     public int curRow;
     public int curCol;
 
+    public float speed;
+
     public Vector3 transform;
 
     public Queue<BattleBuff> buffs = new PriorityQueue<>();
@@ -49,6 +51,7 @@ public class BattleUnit implements BattleObject {
     private Map<String, Animation<TextureRegion>> animationCache = new HashMap<>();
     public Animation<TextureRegion> curAnim;
     public float animTimer;
+    public float restoreCntd = 0;
 
     public BattleScreen screen;
 
@@ -69,6 +72,8 @@ public class BattleUnit implements BattleObject {
         this.maxHP = base.maxHP;
         this.curHP = base.curHP;
 
+        this.speed  = base.speed;
+
         this.curEnergy = 5;
 
         if (screen != null)
@@ -79,6 +84,8 @@ public class BattleUnit implements BattleObject {
 
         this.curAnim = BattleAnimationManager.getBattleUnitAnimation(id, BattleAnimationManager.defaultBattleAnimID);
         this.animTimer = 0f;
+        if (speed != 0)
+            this.restoreCntd = 1f/speed;
     }
 
     public void render(SpriteBatch batch, float delta) {
@@ -102,6 +109,13 @@ public class BattleUnit implements BattleObject {
             if (buff.isDone()) {
                 iterator.remove();
                 buff.post();
+            }
+        }
+        if (speed != 0) {
+            restoreCntd -= delta;
+            if (restoreCntd < 0) {
+                removeEnergy(-1);
+                restoreCntd = 1f / speed;
             }
         }
     }

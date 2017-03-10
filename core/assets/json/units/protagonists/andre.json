@@ -4,7 +4,8 @@
   "description": "World class mechanist.",
   "maxHP": 150 ,
   "curHP": 150,
-  "moveDist": 5,
+  "moveDist": 3,
+  "speed": 0.5,
   "battleFactory": {
     "class": "com.comp460.screens.battle.units.protagonists.andre.AndreFactory"
   }

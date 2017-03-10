@@ -23,6 +23,7 @@ public class Punch extends BattleUnitAbility {
     public static Animation<TextureRegion> punch = BattleAnimationManager.getBattleAnimation("attacks/punch");
     public float animTimer;
     public int duration = 15;
+    public boolean damage = true;
     private Andre andre;
     private int row, col;
 
@@ -39,6 +40,7 @@ public class Punch extends BattleUnitAbility {
         user.curEnergy -= 1;
         screen.addAnimation(new BattleAnimation(punch, user.transform.x+40, user.transform.y, 0.2f));
         andre.punches.add(this);
+        this.damage = true;
     }
 
     public void update(BattleScreen screen, BattleUnit owner, float delta) {
@@ -48,9 +50,9 @@ public class Punch extends BattleUnitAbility {
         }
         duration--;
 
-        if (opponent.curRow == row && opponent.curCol == col) {
+        if (opponent.curRow == row && opponent.curCol == col && damage) {
             opponent.applyDamage(new DamageVector(20));
-            System.out.println("damage");
+            damage = false;
         }
     }
 

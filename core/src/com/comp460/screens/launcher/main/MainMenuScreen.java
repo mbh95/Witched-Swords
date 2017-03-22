@@ -31,7 +31,7 @@ public class MainMenuScreen extends GameScreen {
         public static final Color WORD_OUTLINE_COLOR = Color.BLACK;
     }
 
-    private class TemplateRow {
+    public class TemplateRow {
         public String text;
         public Runnable action;
 

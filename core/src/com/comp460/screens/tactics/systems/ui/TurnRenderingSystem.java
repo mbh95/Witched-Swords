@@ -18,7 +18,7 @@ public class TurnRenderingSystem extends EntitySystem {
     private static final BitmapFont turnFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.WHITE);
     private static final GlyphLayout playerTurnLayout = new GlyphLayout(turnFont, "Player Turn");
     private static final GlyphLayout aiTurnLayout = new GlyphLayout(turnFont, "Enemy Turn");
-    private static final GlyphLayout toEndLayout = new GlyphLayout(turnFont, " to end");
+    private static final GlyphLayout toEndLayout = new GlyphLayout(turnFont, " Menu"); // why is this not in controlsrenderingsystem
 
     private TacticsScreen screen;
 

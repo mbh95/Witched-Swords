@@ -9,9 +9,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Vector3;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
 import com.comp460.common.GameScreen;
+import com.comp460.screens.launcher.Button;
+import com.comp460.screens.launcher.NinePatchTextButton;
+import com.comp460.screens.launcher.main.MainMenuAssets;
+import com.comp460.screens.launcher.mapselect.MapSelectScreen;
+import com.comp460.screens.launcher.practice.battle.BattlePracticeScreen;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 import com.comp460.screens.tactics.factories.CursorFactory;
 import com.comp460.screens.tactics.systems.ai.AiSystem;
@@ -37,12 +43,19 @@ import com.comp460.screens.tactics.systems.cursor.MapCursorSelectionSystem;
 import com.comp460.screens.tactics.systems.unit.UnitAnimatorSystem;
 import com.comp460.screens.tactics.systems.unit.UnitShaderSystem;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.comp460.screens.tactics.TacticsScreen.TacticsState.AI_WIN;
+import static com.comp460.screens.tactics.TacticsScreen.TacticsState.MENU;
+import static com.comp460.screens.tactics.TacticsScreen.TacticsState.PLAYER_TURN;
+
 /**
  * Created by matthewhammond on 1/15/17.
  */
 public class TacticsScreen extends GameScreen {
 
-    public enum TacticsState {BATTLE_START, PLAYER_TURN_TRANSITION, PLAYER_TURN, AI_TURN_TRANSITION, AI_TURN, PLAYER_WIN, AI_WIN}
+    public enum TacticsState {BATTLE_START, PLAYER_TURN_TRANSITION, PLAYER_TURN, AI_TURN_TRANSITION, AI_TURN, PLAYER_WIN, AI_WIN, MENU, HELP}
 
     private static final Family unitsFamily = Family.all(UnitStatsComponent.class).get();
     private static final Family playerUnitsFamily = Family.all(PlayerControlledComponent.class).get();
@@ -109,6 +122,25 @@ public class TacticsScreen extends GameScreen {
 
         engine.addEntity(CursorFactory.makeCursor(this));
 
+        buttonX = (int) (width/2f - buttonWidth / 2f);
+        topButtonY = (height - 2*buttonHeight);
+
+        for (int i = 0; i < buttonTemplates.length; i++) {
+            TemplateRow template = buttonTemplates[i];
+            NinePatchTextButton newButton = new NinePatchTextButton(buttonX, topButtonY - i * buttonHeight, buttonWidth, buttonHeight, new GlyphLayout(MainMenuAssets.FONT_MENU_ITEM, template.text), MainMenuAssets.FONT_MENU_ITEM, MainMenuAssets.NINEPATCH_BUTTON, template.action);
+            buttons.add(newButton);
+        }
+
+        for (int i = 0; i < buttons.size(); i++) {
+            if (i > 0)
+                buttons.get(i).up = buttons.get(i - 1);
+            if (i < buttons.size() - 1)
+                buttons.get(i).down = buttons.get(i + 1);
+        }
+
+        curSelectedButton = buttons.get(0);
+        cursorPos = new Vector3(curSelectedButton.pos);
+
         startTransitionToPlayerTurn();
     }
 
@@ -124,6 +156,7 @@ public class TacticsScreen extends GameScreen {
         return this.camera;
     }
 
+    // also checks for enter to end turn
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -140,7 +173,26 @@ public class TacticsScreen extends GameScreen {
                 break;
             case PLAYER_TURN:
                 if (game.controller.startJustPressed()) {
-                    engine.getSystem(TurnManagementSystem.class).endTurn();
+                    curState = MENU;
+                }
+                break;
+            case MENU:
+                renderMenu(delta);
+                engine.getSystem(MapCursorMovementSystem.class).setProcessing(false);
+                engine.getSystem(MapCursorSelectionSystem.class).setProcessing(false);
+//                    engine.getSystem(TurnManagementSystem.class).endTurn();
+                if (game.controller.leftJustPressed()) curSelectedButton = curSelectedButton.left;
+                if (game.controller.rightJustPressed()) curSelectedButton = curSelectedButton.right;
+                if (game.controller.upJustPressed()) curSelectedButton = curSelectedButton.up;
+                if (game.controller.downJustPressed()) curSelectedButton = curSelectedButton.down;
+                if (game.controller.button1JustPressed()) {
+                    System.out.println(curSelectedButton.pos);
+                    curSelectedButton.click();
+                }
+                if (game.controller.button2JustPressed()) {
+                    engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
+                    engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
+                    curState = PLAYER_TURN;
                 }
                 break;
             case AI_TURN:
@@ -156,6 +208,55 @@ public class TacticsScreen extends GameScreen {
         if (game.controller.endJustPressed()) {
             this.previousScreen();
         }
+    }
+
+    public class TemplateRow {
+        public String text;
+        public Runnable action;
+
+        public TemplateRow(String text, Runnable action) {
+            this.text = text;
+            this.action = action;
+        }
+    }
+
+    public TemplateRow[] buttonTemplates = new TemplateRow[] {
+            new TemplateRow("Resume", ()->{
+                engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
+                engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
+                curState = PLAYER_TURN;
+            }),
+            new TemplateRow("Help", ()->{
+//                game.setScreen(new MapSelectScreen(game, this));
+            }),
+            new TemplateRow("End turn", () -> {
+                engine.getSystem(TurnManagementSystem.class).endTurn();
+            }),
+            new TemplateRow("Surrender", ()->{
+                aiWins();
+            })
+    };
+
+    private List<Button> buttons = new ArrayList<>(buttonTemplates.length);
+    private Button curSelectedButton;
+
+    private Vector3 cursorPos = new Vector3(0, 0, 0);
+
+    private int buttonWidth = 120;
+    private int buttonHeight = 32;
+
+    private int buttonX;
+    private int topButtonY;
+
+    private void renderMenu(float delta) {
+        uiBatch.setColor(Color.WHITE);
+        uiBatch.begin();
+        for (Button b : buttons) {
+            b.render(uiBatch);
+        }
+        MainMenuAssets.NINEPATCH_CURSOR.draw(uiBatch, cursorPos.x - 2, cursorPos.y - 2, curSelectedButton.width + 4, curSelectedButton.height + 4);
+        uiBatch.end();
+        cursorPos.slerp(curSelectedButton.pos, .3f);
     }
 
     private void startBattle() {

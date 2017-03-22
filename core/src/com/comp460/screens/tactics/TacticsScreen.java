@@ -28,16 +28,13 @@ import com.comp460.common.systems.SpriteRenderingSystem;
 import com.comp460.screens.tactics.components.unit.AIControlledComponent;
 import com.comp460.screens.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
-import com.comp460.screens.tactics.systems.cursor.CursorManagementSystem;
 import com.comp460.screens.tactics.systems.cursor.PathBuildingSystem;
 import com.comp460.screens.tactics.systems.game.EndConditionSystem;
+import com.comp460.screens.tactics.systems.game.MoveActionSystem;
 import com.comp460.screens.tactics.systems.map.*;
-import com.comp460.screens.tactics.systems.ui.ControlsRenderingSystem;
-import com.comp460.screens.tactics.systems.ui.HoverRenderingSystem;
+import com.comp460.screens.tactics.systems.rendering.*;
 import com.comp460.screens.tactics.systems.cursor.MapCursorMovementSystem;
-import com.comp460.screens.tactics.systems.ui.PathRenderingSystem;
-import com.comp460.screens.tactics.systems.ui.TurnRenderingSystem;
-import com.comp460.screens.tactics.systems.unit.MapManagementSystem;
+import com.comp460.screens.tactics.systems.map.MapManagementSystem;
 import com.comp460.screens.tactics.systems.game.TurnManagementSystem;
 import com.comp460.screens.tactics.systems.cursor.MapCursorSelectionSystem;
 import com.comp460.screens.tactics.systems.unit.UnitAnimatorSystem;
@@ -96,24 +93,25 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new CameraTrackingSystem());
         engine.addSystem(new SnapToParentSystem());
 
+        engine.addSystem(new MapCursorSelectionSystem(this));
+        engine.addSystem(new MapCursorMovementSystem(this));
+
         engine.addSystem(new ValidMoveManagementSystem(this));
         engine.addSystem(new MapToScreenSystem(this));
         engine.addSystem(new MovesRenderingSystem(this));
         engine.addSystem(new PathRenderingSystem(this));
         engine.addSystem(new SelectionRenderingSystem(this));
-        engine.addSystem(new HoverRenderingSystem(this));
+        engine.addSystem(new UnitPortraitRenderingSystem(this));
         engine.addSystem(new TurnRenderingSystem(this));
         engine.addSystem(new ControlsRenderingSystem(this));
-
-        engine.addSystem(new CursorManagementSystem());
-        engine.addSystem(new MapManagementSystem(this));
+        engine.addSystem(new MoveActionSystem(this));
+        engine.addSystem(new ActionMenuRenderingSystem(this));
         engine.addSystem(new TurnManagementSystem(this));
         engine.addSystem(new EndConditionSystem(this));
         engine.addSystem(new UnitShaderSystem());
         engine.addSystem(new UnitAnimatorSystem());
 
-        engine.addSystem(new MapCursorSelectionSystem(this));
-        engine.addSystem(new MapCursorMovementSystem(this));
+
 
         engine.addSystem(new PathBuildingSystem(this));
         engine.addSystem(new AiSystem());

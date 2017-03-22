@@ -36,8 +36,8 @@ public class BattleScreen extends GameScreen {
     private final TextureRegion tileSideLHS = SpriteManager.BATTLE.findRegion("bg/tile_plains_blue_side");
     private final TextureRegion tileSideRHS = SpriteManager.BATTLE.findRegion("bg/tile_plains_red_side");
 
-    private final TextureRegion hpBar = SpriteManager.BATTLE.findRegion("ui/hp_bar_new");
-    private final TextureRegion energyBar = SpriteManager.BATTLE.findRegion("ui/energy");
+    private final TextureRegion hpBar = SpriteManager.BATTLE.findRegion("rendering/hp_bar_new");
+    private final TextureRegion energyBar = SpriteManager.BATTLE.findRegion("rendering/energy");
 
     public final int tileWidth = tileLHS.getRegionWidth();
     public final int tileHeight = tileLHS.getRegionHeight();

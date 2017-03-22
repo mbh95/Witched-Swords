@@ -18,7 +18,7 @@ public class BattleAssets {
         public static final TextureRegion TILE_LHS_SIDE = SpriteManager.BATTLE.findRegion("bg/tile_plains_blue_side");
         public static final TextureRegion TILE_RHS_SIDE = SpriteManager.BATTLE.findRegion("bg/tile_plains_red_side");
 
-        public static final TextureRegion HP_BAR = SpriteManager.BATTLE.findRegion("ui/hp_bar_new");
+        public static final TextureRegion HP_BAR = SpriteManager.BATTLE.findRegion("rendering/hp_bar_new");
     }
 
     public static class Fonts {

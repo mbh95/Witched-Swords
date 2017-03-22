@@ -1,4 +1,4 @@
-package com.comp460.screens.tactics.systems.map;
+package com.comp460.screens.tactics.systems.rendering;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -10,14 +10,13 @@ import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.screens.tactics.components.unit.ShowValidMovesComponent;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
+import com.comp460.screens.tactics.systems.map.ValidMoveManagementSystem;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
- * Created by matthewhammond on 1/20/17.
- *
  * Renders the blue move squares.
  * commenting is my favorite!!!!!!!!!!!
  */

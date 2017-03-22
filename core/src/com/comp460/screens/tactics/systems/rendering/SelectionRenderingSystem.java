@@ -1,4 +1,4 @@
-package com.comp460.screens.tactics.systems.map;
+package com.comp460.screens.tactics.systems.rendering;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -8,36 +8,35 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.screens.tactics.TacticsScreen;
+import com.comp460.screens.tactics.components.cursor.MapCursorSelectionComponent;
 import com.comp460.screens.tactics.components.unit.AIControlledComponent;
 import com.comp460.screens.tactics.components.cursor.MapCursorComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.unit.PlayerControlledComponent;
 
 /**
- * Created by matthewhammond on 1/20/17.
- *
  * Renders the light blue/yellow square on a selected unit.
  * i love commenting!!!!!!!!
  */
 public class SelectionRenderingSystem extends IteratingSystem {
 
-    private static final Family cursorFamily = Family.all(MapCursorComponent.class).get();
+    private static final Family cursorSelectionFamily = Family.all(MapCursorComponent.class, MapCursorSelectionComponent.class).get();
 
     private static final Family playerControlledFamily = Family.all(PlayerControlledComponent.class, MapPositionComponent.class).get();
     private static final Family aiControlledFamily = Family.all(AIControlledComponent.class, MapPositionComponent.class).get();
 
-    private static final ComponentMapper<MapCursorComponent> cursorM = ComponentMapper.getFor(MapCursorComponent.class);
+    private static final ComponentMapper<MapCursorSelectionComponent> selectionM = ComponentMapper.getFor(MapCursorSelectionComponent.class);
     private static final ComponentMapper<MapPositionComponent> mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
 
     private TacticsScreen parentScreen;
 
     public SelectionRenderingSystem(TacticsScreen tacticsScreen) {
-        super(cursorFamily);
+        super(cursorSelectionFamily);
         this.parentScreen = tacticsScreen;
     }
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        Entity selection = cursorM.get(entity).selection;
+        Entity selection = selectionM.get(entity).selected;
         if (selection == null) {
             return;
         }

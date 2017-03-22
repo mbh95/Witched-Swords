@@ -1,4 +1,4 @@
-package com.comp460.screens.tactics.systems.ui;
+package com.comp460.screens.tactics.systems.rendering;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -9,12 +9,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.comp460.assets.FontManager;
 import com.comp460.screens.tactics.TacticsScreen;
+import com.comp460.screens.tactics.components.cursor.MapCursorSelectionComponent;
 import com.comp460.screens.tactics.components.cursor.MapCursorComponent;
 import com.comp460.screens.tactics.components.unit.AIControlledComponent;
 import com.comp460.screens.tactics.components.unit.PlayerControlledComponent;
 
 /**
- * Created by matthewhammond on 2/27/17.
+ * Displays context based control tooltips.
  */
 public class ControlsRenderingSystem extends IteratingSystem {
 
@@ -23,7 +24,7 @@ public class ControlsRenderingSystem extends IteratingSystem {
     private static final Family playerControlledFamily = Family.all(PlayerControlledComponent.class).get();
     private static final Family aiControlledFamily = Family.all(AIControlledComponent.class).get();
 
-    private static final ComponentMapper<MapCursorComponent> cursorM = ComponentMapper.getFor(MapCursorComponent.class);
+    private static final ComponentMapper<MapCursorSelectionComponent> selectionM = ComponentMapper.getFor(MapCursorSelectionComponent.class);
 
     private static BitmapFont controlsFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.WHITE, Color.BLACK, 1);
 
@@ -37,7 +38,7 @@ public class ControlsRenderingSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        MapCursorComponent cursor = cursorM.get(entity);
+        MapCursorSelectionComponent selection = selectionM.get(entity);
 
         int x = 2;
         int y = 2;
@@ -46,11 +47,11 @@ public class ControlsRenderingSystem extends IteratingSystem {
         String button1Action = "Select";
         String button2Action = "Deselect";
 
-        if (cursor.selection != null) { // You have a unit selected
+        if (selection != null) { // You have a unit selected
 
-            if (playerControlledFamily.matches(cursor.selection)) { // You have one of your units selected
+            if (playerControlledFamily.matches(selection.selected)) { // You have one of your units selected
                 button1Action = "Move";
-            } else if (aiControlledFamily.matches(cursor.selection)) { // You have an enemy unit selected
+            } else if (aiControlledFamily.matches(selection.selected)) { // You have an enemy unit selected
 
             }
         }

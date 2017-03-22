@@ -1,19 +1,20 @@
 package com.comp460.screens.tactics.systems.cursor;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.comp460.common.input.Controller;
 import com.comp460.screens.tactics.TacticsScreen;
 import com.comp460.screens.tactics.components.cursor.MapCursorComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
+import com.comp460.screens.tactics.components.unit.QueuedMoveComponent;
 
 /**
  * Created by matth on 2/20/2017.
  */
-public class MapCursorMovementSystem extends IteratingSystem {
+public class MapCursorMovementSystem extends IteratingSystem implements EntityListener {
     private static final Family mapCursorFamily = Family.all(MapCursorComponent.class, MapPositionComponent.class).get();
+
+    private static final Family queuedMoveFamily = Family.all(QueuedMoveComponent.class).get();
 
     private static final ComponentMapper<MapCursorComponent> cursorM = ComponentMapper.getFor(MapCursorComponent.class);
     private static final ComponentMapper<MapPositionComponent> mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
@@ -24,6 +25,12 @@ public class MapCursorMovementSystem extends IteratingSystem {
         super(mapCursorFamily);
 
         this.parentScreen = parentScreen;
+    }
+
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+        engine.addEntityListener(queuedMoveFamily, this);
     }
 
     @Override
@@ -54,7 +61,17 @@ public class MapCursorMovementSystem extends IteratingSystem {
         } else {
             cursor.countdown -= deltaTime;
         }
+    }
 
-        cursor.hovered = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col);
+    @Override
+    public void entityAdded(Entity entity) {
+        this.setProcessing(false);
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        if (getEngine().getEntitiesFor(queuedMoveFamily).size() == 0 ) {
+            this.setProcessing(true);
+        }
     }
 }

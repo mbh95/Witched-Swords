@@ -79,7 +79,7 @@ public class AssetMgr {
         loadAllBattleAnims("clarissa");
         getAnimation("shieldman", BattleAnimation.ATTACK).setFrameDuration(.5f);
 
-        Texture battleTilesTexture = new Texture(Gdx.files.internal("battle/sprites/ui/battle_tiles_plains.png"));
+        Texture battleTilesTexture = new Texture(Gdx.files.internal("battle/sprites/rendering/battle_tiles_plains.png"));
         Textures.BATTLE_TILE_BLUE = new TextureRegion(battleTilesTexture, 0, 0, battleTilesTexture.getWidth()/2, battleTilesTexture.getWidth()/2);
         Textures.BATTLE_TILE_BLUE_SIDE = new TextureRegion(battleTilesTexture, 0, battleTilesTexture.getWidth()/2, battleTilesTexture.getWidth()/2, battleTilesTexture.getHeight() - battleTilesTexture.getWidth()/2);
 
@@ -87,9 +87,9 @@ public class AssetMgr {
         Textures.BATTLE_TILE_RED_SIDE = new TextureRegion(battleTilesTexture, battleTilesTexture.getWidth()/2, battleTilesTexture.getWidth()/2, battleTilesTexture.getWidth()/2, battleTilesTexture.getHeight() - battleTilesTexture.getWidth()/2);
 
         Textures.BATTLE_BG = new Texture(Gdx.files.internal("battle/sprites/backgrounds/plains.png"));
-        Textures.HP_BAR = new Texture(Gdx.files.internal("battle/sprites/ui/hp_bar_new.png"));
-        Textures.INFO_OVERLAY = new Texture(Gdx.files.internal("battle/sprites/ui/info-overlay.png"));
-        Textures.ENERGY = new Texture(Gdx.files.internal("battle/sprites/ui/energy.png"));
+        Textures.HP_BAR = new Texture(Gdx.files.internal("battle/sprites/rendering/hp_bar_new.png"));
+        Textures.INFO_OVERLAY = new Texture(Gdx.files.internal("battle/sprites/rendering/info-overlay.png"));
+        Textures.ENERGY = new Texture(Gdx.files.internal("battle/sprites/rendering/energy.png"));
         Textures.SCRATCH = new Texture(Gdx.files.internal("battle/sprites/attacks/scratch.png"));
         Textures.LAZER = new Texture(Gdx.files.internal("battle/sprites/attacks/lazer.png"));
         Textures.SHIELD = new Texture(Gdx.files.internal("battle/sprites/attacks/shield_outline.png"));

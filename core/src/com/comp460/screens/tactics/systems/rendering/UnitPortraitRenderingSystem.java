@@ -1,4 +1,4 @@
-package com.comp460.screens.tactics.systems.ui;
+package com.comp460.screens.tactics.systems.rendering;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -17,7 +17,9 @@ import com.comp460.common.GameUnit;
 import com.comp460.assets.BattleAnimationManager;
 import com.comp460.screens.tactics.TacticsAssets;
 import com.comp460.screens.tactics.TacticsScreen;
+import com.comp460.screens.tactics.components.cursor.MapCursorSelectionComponent;
 import com.comp460.screens.tactics.components.cursor.MapCursorComponent;
+import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.unit.AIControlledComponent;
 import com.comp460.screens.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
@@ -25,14 +27,15 @@ import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 /**
  * Created by Belinda on 2/20/17.
  */
-public class SelectedRenderingSystem extends IteratingSystem {
+public class UnitPortraitRenderingSystem extends IteratingSystem {
 
     private static final Family cursorFamily = Family.all(MapCursorComponent.class).get();
 
     private static final Family playerControlledFamily = Family.all(PlayerControlledComponent.class, UnitStatsComponent.class).get();
     private static final Family aiControlledFamily = Family.all(AIControlledComponent.class, UnitStatsComponent.class).get();
 
-    private static final ComponentMapper<MapCursorComponent> cursorM = ComponentMapper.getFor(MapCursorComponent.class);
+    private static final ComponentMapper<MapCursorSelectionComponent> selectionM = ComponentMapper.getFor(MapCursorSelectionComponent.class);
+    private static final ComponentMapper<MapPositionComponent> posM = ComponentMapper.getFor(MapPositionComponent.class);
     private static final ComponentMapper<UnitStatsComponent> unitStatsM = ComponentMapper.getFor(UnitStatsComponent.class);
 
     private static BitmapFont hpFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.WHITE, Color.BLACK, 1);
@@ -44,7 +47,7 @@ public class SelectedRenderingSystem extends IteratingSystem {
     private static final int x = Settings.INTERNAL_WIDTH - TacticsAssets.HOVER_PLAYER.getRegionWidth();
     private static final int y = Settings.INTERNAL_HEIGHT - TacticsAssets.HOVER_PLAYER.getRegionHeight() - 10;
 
-    public SelectedRenderingSystem(TacticsScreen tacticsScreen) {
+    public UnitPortraitRenderingSystem(TacticsScreen tacticsScreen) {
         super(cursorFamily);
         this.parentScreen = tacticsScreen;
         batch = parentScreen.uiBatch;
@@ -53,19 +56,28 @@ public class SelectedRenderingSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        Entity hovered = cursorM.get(entity).hovered;
-        if (hovered == null) {
+//        TextureRegion bg = BattlePracticeAssets.TEXTURE_PLAYER_AREA;
+        Entity displayed = null;
+
+        if (selectionM.get(entity) != null) {
+            displayed = selectionM.get(entity).selected;
+        } else {
+            MapPositionComponent mapPos = posM.get(entity);
+            displayed = parentScreen.getMap().getUnitAt(mapPos.row, mapPos.col);
+        }
+
+        if (displayed == null) {
             return;
         }
 
-        GameUnit unit = unitStatsM.get(hovered).base;
-        TextureRegion unitIcon = BattleAnimationManager.getBattleUnitAnimation(unitStatsM.get(hovered).base.id, "attack").getKeyFrame(0f);
+        GameUnit unit = unitStatsM.get(displayed).base;
+        TextureRegion unitIcon = BattleAnimationManager.getBattleUnitAnimation(unitStatsM.get(displayed).base.id, "attack").getKeyFrame(0f);
 
         batch.begin();
 
-        if (playerControlledFamily.matches(hovered)) {
+        if (playerControlledFamily.matches(displayed)) {
             batch.draw(TacticsAssets.HOVER_PLAYER, x, y);
-        } else if (aiControlledFamily.matches(hovered)) {
+        } else if (aiControlledFamily.matches(displayed)) {
             batch.draw(TacticsAssets.HOVER_AI, x, y);
         }
 

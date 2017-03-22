@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by matthewhammond on 3/1/17.
+ * Attached to the cursor when a path is being drawn.
  */
 public class MovementPathComponent implements Component {
     public List<MapPositionComponent> positions = new ArrayList<>();

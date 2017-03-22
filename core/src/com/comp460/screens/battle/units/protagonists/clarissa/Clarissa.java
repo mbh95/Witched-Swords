@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class Clarissa extends BattleUnit {
 
-    public static final TextureRegion INVENTORY_SPRITE = SpriteManager.BATTLE.findRegion("ui/clarissa_inv");
+    public static final TextureRegion INVENTORY_SPRITE = SpriteManager.BATTLE.findRegion("rendering/clarissa_inv");
 
     public float invX = 400/2 - 2*40;
     public float invY =  (int)screen.gridOffsetY + 3 * 40 + 2;

@@ -128,13 +128,6 @@ public class TacticsMap {
         return this.units[row][col];
     }
 
-    public boolean canMoveTo(Entity unit, int row, int col) {
-        if (!isOnMap(row, col)) {
-            return false;
-        }
-        return computeValidMoves(unit).contains(new MapPositionComponent(row, col));
-    }
-
     public Set<MapPositionComponent> computeValidMoves(Entity e) {
         if (!mapUnitsFamily.matches(e)) {
             return null;
@@ -142,7 +135,7 @@ public class TacticsMap {
         Map<MapPositionComponent, Integer> validMoves = new HashMap<>();
         validMovesHelper(validMoves, mapPosM.get(e).row, mapPosM.get(e).col, statsM.get(e).base.moveDist);
         Set<MapPositionComponent> finalMoves = validMoves.keySet();
-//        finalMoves.removeIf(pos->units[pos.getRow()][pos.getCol()] != null);
+//        finalMoves.removeIf(pos->units[pos.row][pos.col] != null);
         return finalMoves;
     }
 

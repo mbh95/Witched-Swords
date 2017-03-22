@@ -28,7 +28,7 @@ import java.util.Queue;
 public class Andre extends BattleUnit {
 
     public static final BitmapFont blockFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.CYAN);
-    public static final TextureRegion INVENTORY_SPRITE = SpriteManager.BATTLE.findRegion("ui/clarissa_inv");
+    public static final TextureRegion INVENTORY_SPRITE = SpriteManager.BATTLE.findRegion("rendering/clarissa_inv");
     private static BitmapFont yellowFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 10, Color.ORANGE, Color.BLACK, 2);
     private static GlyphLayout smashReadyLayout = new GlyphLayout(yellowFont, "SMASH READY!");
 

@@ -15,5 +15,7 @@ public class TacticsAssets {
     public static final TextureRegion TURN_PLAYER = SpriteManager.TACTICS.findRegion("ui/player-turn");
     public static final TextureRegion TURN_AI = SpriteManager.TACTICS.findRegion("ui/enemy-turn");
 
+    public static final TextureRegion ACTION_ROW = SpriteManager.TACTICS.findRegion("ui/action-menu-line");
+    public static final TextureRegion ACTION_ROW_SELECTED = SpriteManager.TACTICS.findRegion("ui/action-menu-line-selected");
 
 }

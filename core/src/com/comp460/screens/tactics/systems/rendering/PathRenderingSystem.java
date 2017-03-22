@@ -1,4 +1,4 @@
-package com.comp460.screens.tactics.systems.ui;
+package com.comp460.screens.tactics.systems.rendering;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -10,13 +10,12 @@ import com.comp460.screens.tactics.TacticsScreen;
 import com.comp460.screens.tactics.components.cursor.MovementPathComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.unit.AIControlledComponent;
-import com.comp460.screens.tactics.components.unit.PlayerControlledComponent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by matth on 3/2/2017.
+ * Renders paths onthe map.
  */
 public class PathRenderingSystem extends IteratingSystem {
 

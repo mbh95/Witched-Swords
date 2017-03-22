@@ -1,4 +1,4 @@
-package com.comp460.screens.tactics.systems.ui;
+package com.comp460.screens.tactics.systems.rendering;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.Color;
@@ -11,7 +11,7 @@ import com.comp460.screens.tactics.TacticsAssets;
 import com.comp460.screens.tactics.TacticsScreen;
 
 /**
- * Created by matth on 2/24/2017.
+ * Displays which players turn it is.
  */
 public class TurnRenderingSystem extends EntitySystem {
 

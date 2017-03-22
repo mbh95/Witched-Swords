@@ -1,4 +1,4 @@
-package com.comp460.screens.tactics.systems.unit;
+package com.comp460.screens.tactics.systems.map;
 
 import com.badlogic.ashley.core.*;
 import com.comp460.screens.tactics.TacticsMap;

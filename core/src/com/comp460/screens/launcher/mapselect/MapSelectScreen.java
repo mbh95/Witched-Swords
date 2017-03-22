@@ -37,20 +37,28 @@ public class MapSelectScreen extends GameScreen {
     public MapSelectScreen(MainGame game, GameScreen prevScreen) {
         super(game, prevScreen);
 
-        MapButton bigmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Big Map", Settings.INTERNAL_WIDTH/2-50, 50, ()->{});
-        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/smallmap.tmx"), "Small Map", Settings.INTERNAL_WIDTH/2, 50, ()->{});
+        MapButton bridgemapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Bridge Map", Settings.INTERNAL_WIDTH/2-50, 50, ()->{});
+        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/smallmap.tmx"), "Small Map", Settings.INTERNAL_WIDTH/2-100, 50, ()->{});
+        MapButton cliffsmapButton = new MapButton(new TmxMapLoader().load("maps/cliffs.tmx"), "Cliffs Map", Settings.INTERNAL_WIDTH/2, 50, ()->{});
+        MapButton indoormapButton = new MapButton(new TmxMapLoader().load("maps/indoor.tmx"), "Indoor Map", Settings.INTERNAL_WIDTH/2+50, 50, ()->{});
 //        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Small Map", 50, 50, ()->{});
 
         // set button actions
-        bigmapButton.action = () -> {
-            game.setScreen(new TacticsScreen(game, prevScreen, bigmapButton.map));
+        bridgemapButton.action = () -> {
+            game.setScreen(new TacticsScreen(game, prevScreen, bridgemapButton.map));
         };
         smallmapButton.action = () -> {
             game.setScreen(new TacticsScreen(game, prevScreen, smallmapButton.map));
         };
+        cliffsmapButton.action = () -> {
+            game.setScreen(new TacticsScreen(game, prevScreen, cliffsmapButton.map));
+        };
+        indoormapButton.action = () -> {
+            game.setScreen(new TacticsScreen(game, prevScreen, indoormapButton.map));
+        };
 
         // set up button mapping
-        Button[][] buttonMap = new Button[][] {{bigmapButton, smallmapButton}};
+        Button[][] buttonMap = new Button[][] {{smallmapButton, bridgemapButton, cliffsmapButton, indoormapButton}};
         for (int r = 0; r < buttonMap.length; r++) {
             for (int c = 0; c < buttonMap[0].length; c++) {
                 if (r < buttonMap.length - 1) {
@@ -72,8 +80,8 @@ public class MapSelectScreen extends GameScreen {
                 }
             }
         }
-        buttons = new Button[] {bigmapButton, smallmapButton};
-        selectedButton = bigmapButton;
+        buttons = new Button[] {smallmapButton, bridgemapButton, cliffsmapButton, indoormapButton};
+        selectedButton = smallmapButton;
         cursorPos = new Vector3(selectedButton.pos);
     }
 

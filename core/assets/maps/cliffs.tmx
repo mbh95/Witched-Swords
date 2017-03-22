@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="15" height="20" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="buch-outdoor" tilewidth="16" tileheight="16" tilecount="288" columns="24">
+  <image source="buch-outdoor.png" width="384" height="192"/>
+  <tile id="150">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="174">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="198">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="222">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="229">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="230">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="231">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="246">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="253">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="254">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="270">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="289" name="bulba" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="units/bulba.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="id" value="bulba"/>
+    <property name="team" type="int" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="290" name="clarissa" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="units/clarissa.png" width="16" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="id" value="clarissa"/>
+    <property name="team" type="int" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="base" width="15" height="20">
+  <data encoding="csv">
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,151,151,151,151,151
+</data>
+ </layer>
+ <layer name="objects" width="15" height="20">
+  <data encoding="csv">
+231,231,231,232,0,0,0,0,0,0,0,0,0,0,0,
+231,231,232,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+231,231,232,0,0,0,0,0,0,0,0,0,0,230,231,
+231,231,231,231,232,0,0,0,0,0,0,230,231,231,231,
+231,231,231,231,231,231,231,232,0,0,230,231,231,231,231,
+231,231,232,0,0,0,0,0,0,0,0,0,0,230,231,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,254,255,0,0,0,0,0,0,
+0,0,0,230,231,231,231,231,231,231,231,232,0,0,0,
+0,0,0,230,231,231,231,231,231,231,231,231,232,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+231,231,255,0,0,0,0,0,0,0,0,0,0,0,0,
+230,231,231,231,231,231,232,0,0,0,0,0,0,0,0,
+0,0,230,231,231,231,232,0,0,0,0,0,230,231,231,
+0,0,0,0,0,0,0,0,0,0,0,0,230,231,231,
+0,0,0,0,0,0,0,0,0,0,0,230,231,231,231
+</data>
+ </layer>
+ <layer name="units" width="15" height="20">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,289,0,0,289,0,0,0,0,
+0,0,0,0,0,0,0,0,289,289,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+289,0,289,0,0,0,0,0,0,0,0,0,0,289,0,
+0,289,0,0,0,0,0,0,0,0,0,0,0,0,289,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,289,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,290,0,290,0,0,0,0,0,0,0,0,0,0,0,
+0,0,290,0,290,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

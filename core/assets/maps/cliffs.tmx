@@ -469,52 +469,220 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="579" name="cliffs_tiles" tilewidth="16" tileheight="16" tilecount="72" columns="7">
+  <image source="cliffs_tiles.png" width="112" height="160"/>
+  <tile id="14">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="29">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="39">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="42">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="43">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="44">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="45">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="46">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="47">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="48">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="49">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="50">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="51">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="52">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="56">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="57">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="58">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="59">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="63">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="64">
+   <properties>
+    <property name="traversable" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="65">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="66">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="72">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+  <tile id="73">
+   <properties>
+    <property name="traversable" type="bool" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="base" width="15" height="20">
   <data encoding="csv">
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391,
-391,391,391,391,391,391,391,391,391,391,391,391,391,391,391
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642,
+642,642,642,642,642,642,642,642,642,642,642,642,642,642,642
 </data>
  </layer>
  <layer name="objects" width="15" height="20">
   <data encoding="csv">
-325,325,326,351,0,0,0,0,0,0,0,0,0,0,0,
-421,422,133,0,0,0,0,0,0,0,0,367,0,0,0,
-0,0,0,0,572,0,0,0,0,0,0,0,0,0,0,
+629,630,588,638,0,0,0,0,0,0,0,0,0,0,0,
+636,638,0,0,0,0,608,0,0,0,0,0,0,0,0,
+0,0,0,0,572,0,0,0,0,0,0,0,0,607,0,
+0,586,0,0,0,0,0,0,0,0,0,0,0,0,0,
+615,616,617,0,0,0,0,0,0,0,0,0,0,0,0,
+622,623,624,0,0,0,0,0,0,0,0,0,0,621,622,
+629,632,631,621,624,603,0,0,0,0,0,621,622,639,639,
+632,629,631,635,589,589,0,0,0,0,621,629,630,632,631,
+636,637,638,0,0,0,0,0,0,0,0,635,589,590,630,
+0,0,0,610,0,0,0,0,0,0,0,0,0,0,635,
+0,0,0,0,0,0,0,621,624,0,0,0,0,0,0,
+0,0,0,621,622,623,622,632,632,622,623,602,0,0,0,
+0,0,0,635,636,637,636,636,637,636,637,636,637,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,367,0,0,0,0,0,0,572,0,0,
-301,302,303,0,0,0,0,0,0,0,0,0,0,298,299,
-349,350,347,299,300,301,302,303,0,0,0,298,299,348,326,
-349,349,323,419,420,421,422,133,0,0,391,128,130,34,326,
-421,422,133,0,0,0,390,0,0,0,0,0,0,128,419,
-0,0,0,0,0,572,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,298,303,0,0,0,0,0,0,
-0,0,0,298,299,300,301,348,347,301,302,303,0,0,0,
-0,0,0,128,419,420,421,422,419,420,421,133,391,0,0,
-0,0,390,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,367,0,0,0,0,0,0,0,
-301,302,303,0,0,0,367,0,0,0,0,0,0,572,0,
-421,422,372,300,301,302,303,0,0,0,0,0,0,0,0,
-0,0,128,419,420,421,133,0,0,572,0,0,298,299,300,
-0,0,0,0,0,0,0,390,0,0,0,0,322,349,350,
-0,0,0,0,0,0,0,0,0,0,0,298,348,349,350
+615,616,617,0,612,0,0,0,0,0,0,0,0,0,0,
+622,623,624,580,0,616,617,0,0,0,0,0,0,0,0,
+636,589,590,602,604,623,624,0,0,0,0,0,614,615,616,
+0,579,0,635,636,637,638,0,0,0,0,0,621,622,623,
+0,0,0,0,0,0,0,0,0,0,609,614,628,632,630,
+0,0,0,0,0,0,0,0,600,0,0,621,629,630,632
 </data>
  </layer>
  <layer name="units" width="15" height="20">

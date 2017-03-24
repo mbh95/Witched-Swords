@@ -39,7 +39,7 @@ public class MapSelectScreen extends GameScreen {
 
         MapButton bridgemapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Bridge Map", Settings.INTERNAL_WIDTH/2-50, 50, ()->{});
         MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/smallmap.tmx"), "Small Map", Settings.INTERNAL_WIDTH/2-100, 50, ()->{});
-        MapButton cliffsmapButton = new MapButton(new TmxMapLoader().load("maps/cliffs.tmx"), "Cliffs Map", Settings.INTERNAL_WIDTH/2, 50, ()->{});
+        MapButton cliffsmapButton = new MapButton(new TmxMapLoader().load("maps/cliffs red.tmx"), "Canyon Map", Settings.INTERNAL_WIDTH/2, 50, ()->{});
         MapButton indoormapButton = new MapButton(new TmxMapLoader().load("maps/indoor.tmx"), "Indoor Map", Settings.INTERNAL_WIDTH/2+50, 50, ()->{});
 //        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Small Map", 50, 50, ()->{});
 

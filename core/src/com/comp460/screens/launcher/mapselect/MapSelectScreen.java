@@ -39,7 +39,8 @@ public class MapSelectScreen extends GameScreen {
 
         MapButton bridgemapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Bridge Map", Settings.INTERNAL_WIDTH/2-50, 50, ()->{});
         MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/smallmap.tmx"), "Small Map", Settings.INTERNAL_WIDTH/2-100, 50, ()->{});
-        MapButton cliffsmapButton = new MapButton(new TmxMapLoader().load("maps/cliffs red.tmx"), "Canyon Map", Settings.INTERNAL_WIDTH/2, 50, ()->{});
+        MapButton canyonmapButton = new MapButton(new TmxMapLoader().load("maps/cliffs red.tmx"), "Canyon Map", Settings.INTERNAL_WIDTH/2, 50, ()->{});
+        MapButton cliffsmapButton = new MapButton(new TmxMapLoader().load("maps/cliffs.tmx"), "Cliffs Map", Settings.INTERNAL_WIDTH/2, 0, ()->{});
         MapButton indoormapButton = new MapButton(new TmxMapLoader().load("maps/indoor.tmx"), "Indoor Map", Settings.INTERNAL_WIDTH/2+50, 50, ()->{});
 //        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Small Map", 50, 50, ()->{});
 
@@ -50,6 +51,9 @@ public class MapSelectScreen extends GameScreen {
         smallmapButton.action = () -> {
             game.setScreen(new TacticsScreen(game, prevScreen, smallmapButton.map));
         };
+        canyonmapButton.action = () -> {
+            game.setScreen(new TacticsScreen(game, prevScreen, canyonmapButton.map));
+        };
         cliffsmapButton.action = () -> {
             game.setScreen(new TacticsScreen(game, prevScreen, cliffsmapButton.map));
         };
@@ -58,7 +62,7 @@ public class MapSelectScreen extends GameScreen {
         };
 
         // set up button mapping
-        Button[][] buttonMap = new Button[][] {{smallmapButton, bridgemapButton, cliffsmapButton, indoormapButton}};
+        Button[][] buttonMap = new Button[][] {{smallmapButton, bridgemapButton, canyonmapButton, indoormapButton}, {cliffsmapButton, cliffsmapButton, cliffsmapButton, cliffsmapButton, }};
         for (int r = 0; r < buttonMap.length; r++) {
             for (int c = 0; c < buttonMap[0].length; c++) {
                 if (r < buttonMap.length - 1) {
@@ -80,7 +84,7 @@ public class MapSelectScreen extends GameScreen {
                 }
             }
         }
-        buttons = new Button[] {smallmapButton, bridgemapButton, cliffsmapButton, indoormapButton};
+        buttons = new Button[] {smallmapButton, bridgemapButton, canyonmapButton, indoormapButton, cliffsmapButton};
         selectedButton = smallmapButton;
         cursorPos = new Vector3(selectedButton.pos);
     }

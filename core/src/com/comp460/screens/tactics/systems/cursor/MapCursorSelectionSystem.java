@@ -25,9 +25,6 @@ public class MapCursorSelectionSystem extends IteratingSystem implements EntityL
 
     private static final Family pathingFamily = Family.all(MapCursorSelectionComponent.class, MovementPathComponent.class).get();
 
-    private static final Family selectedUnitsFamily = Family.all(SelectedComponent.class).get();
-    private static final Family toggledUnitsFamily = Family.all(ShowValidMovesComponent.class).get();
-
     private static final Family playerControlledFamily = Family.all(PlayerControlledComponent.class).get();
     private static final Family aiControlledFamily = Family.all(AIControlledComponent.class).get();
 
@@ -70,9 +67,10 @@ public class MapCursorSelectionSystem extends IteratingSystem implements EntityL
 
                 MapCursorSelectionComponent newSelectionComponent = new MapCursorSelectionComponent();
                 newSelectionComponent.selected = newSelection;
-                cursor.add(newSelectionComponent);
 
-                clearToggledUnits();
+                parentScreen.clearSelections();
+
+                cursor.add(newSelectionComponent);
                 newSelection.add(new SelectedComponent());
                 newSelection.add(new ShowValidMovesComponent());
 
@@ -94,18 +92,42 @@ public class MapCursorSelectionSystem extends IteratingSystem implements EntityL
                 Set<MapPositionComponent> validMoves = this.getEngine().getSystem(ValidMoveManagementSystem.class).getValidMoves(selectionComponent.selected);
                 // You clicked on a square that you can move to
                 if (validMoves.contains(cursorPos)) {
-                    QueuedMoveComponent queuedMove = ActionMenuFactory.makeActionMenu(pathM.get(cursor).positions, selectionComponent.selected, parentScreen);
+                    selectionComponent.selected.add(pathM.get(cursor));
+
+                    PossibleAttacksComponent possibleAttacks = new PossibleAttacksComponent();
+                    Entity unit = parentScreen.getMap().getUnitAt(cursorPos.row + 1, cursorPos.col);
+                    if (unit != null && aiControlledFamily.matches(unit)) {
+                        possibleAttacks.positions.add(new MapPositionComponent(cursorPos.row + 1, cursorPos.col));
+                    }
+                    unit = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col + 1);
+                    if (unit != null && aiControlledFamily.matches(unit)) {
+                        possibleAttacks.positions.add(new MapPositionComponent(cursorPos.row, cursorPos.col + 1));
+                    }
+                    unit = parentScreen.getMap().getUnitAt(cursorPos.row - 1, cursorPos.col);
+                    if (unit != null && aiControlledFamily.matches(unit)) {
+                        possibleAttacks.positions.add(new MapPositionComponent(cursorPos.row - 1, cursorPos.col));
+                    }
+                    unit = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col - 1);
+                    if (unit != null && aiControlledFamily.matches(unit)) {
+                        possibleAttacks.positions.add(new MapPositionComponent(cursorPos.row, cursorPos.col - 1));
+                    }
+                    if (possibleAttacks.positions.size() > 0) {
+                        selectionComponent.selected.add(possibleAttacks);
+                    }
+
+                    QueuedMoveComponent queuedMove = ActionMenuFactory.makeActionMenu(selectionComponent.selected, parentScreen);
                     selectionComponent.selected.add(queuedMove);
+
                 } else {
                     cursor.remove(MapCursorSelectionComponent.class);
-                    clearToggledUnits();
+                    parentScreen.clearSelections();
                     cursor.remove(MovementPathComponent.class);
                 }
             }
         }
 
         if (parentScreen.game.controller.button2JustPressed()) {
-            clearToggledUnits();
+            parentScreen.clearSelections();
             cursor.remove(MapCursorSelectionComponent.class);
             cursor.remove(MovementPathComponent.class);
         }
@@ -199,15 +221,6 @@ public class MapCursorSelectionSystem extends IteratingSystem implements EntityL
 //        clearToggledUnits();
 //    }
 
-    }
-
-    private void clearToggledUnits() {
-        this.getEngine().getEntitiesFor(toggledUnitsFamily).forEach((e) -> {
-            e.remove(ShowValidMovesComponent.class);
-        });
-        this.getEngine().getEntitiesFor(selectedUnitsFamily).forEach((e) -> {
-            e.remove(SelectedComponent.class);
-        });
     }
 
     @Override

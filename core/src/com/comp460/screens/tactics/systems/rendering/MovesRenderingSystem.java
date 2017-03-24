@@ -47,6 +47,9 @@ public class MovesRenderingSystem extends EntitySystem {
         ValidMoveManagementSystem moveManager = getEngine().getSystem(ValidMoveManagementSystem.class);
         for (Entity e : this.getEngine().getEntitiesFor(visible)) {
             for (MapPositionComponent pos : moveManager.getValidMoves(e)) {
+                if (parentScreen.getMap().getUnitAt(pos.row, pos.col) != null) {
+                    continue;
+                }
                 if (playerControlled.matches(e)) {
                     sr.setColor(0f, 0f, 1f, 0.2f);
                 } else {

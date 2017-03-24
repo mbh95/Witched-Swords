@@ -24,6 +24,7 @@ public class TacticsMap {
     private static final ComponentMapper<MapPositionComponent> mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
     private static final ComponentMapper<UnitStatsComponent> statsM = ComponentMapper.getFor(UnitStatsComponent.class);
 
+    private TacticsScreen screen;
     private TiledMap tiledMap;
 
     private int width, height; // width and height of the map in tiles
@@ -34,8 +35,9 @@ public class TacticsMap {
 
     private Map<Integer, Set<Entity>> teamToUnits;
 
-    public TacticsMap(TiledMap tiledMap) {
+    public TacticsMap(TiledMap tiledMap, TacticsScreen screen) {
         this.tiledMap = tiledMap;
+        this.screen = screen;
 
         width = tiledMap.getProperties().get("width", Integer.class);
         height = tiledMap.getProperties().get("height", Integer.class);
@@ -189,6 +191,7 @@ public class TacticsMap {
 
         selection.remove(ReadyToMoveComponent.class);
 
+        screen.clearSelections();
         return prevUnit;
     }
 

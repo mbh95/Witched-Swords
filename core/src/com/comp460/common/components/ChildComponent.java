@@ -1,6 +1,7 @@
 package com.comp460.common.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 
 /**
@@ -11,5 +12,10 @@ public class ChildComponent implements Component {
 
     public ChildComponent(Entity parent) {
         this.parent = parent;
+    }
+
+    private static final ComponentMapper<ChildComponent> mapper = ComponentMapper.getFor(ChildComponent.class);
+    public static ChildComponent get(Entity e) {
+        return mapper.get(e);
     }
 }

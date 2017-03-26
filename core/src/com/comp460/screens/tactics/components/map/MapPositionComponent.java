@@ -1,6 +1,8 @@
 package com.comp460.screens.tactics.components.map;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
 
 /**
  * Attached to any entities which live on the map. Encodes a row and a column.
@@ -28,5 +30,11 @@ public class MapPositionComponent implements Component {
             MapPositionComponent other = (MapPositionComponent) o;
             return (other.row == this.row && other.col == this.col);
         }
+    }
+
+    private static final ComponentMapper<MapPositionComponent> mapper = ComponentMapper.getFor(MapPositionComponent.class);
+
+    public static MapPositionComponent get(Entity e) {
+        return mapper.get(e);
     }
 }

@@ -1,6 +1,8 @@
 package com.comp460.common.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -14,5 +16,10 @@ public class AnimationComponent implements Component {
     public AnimationComponent(Animation<TextureRegion> animation) {
         this.animation = animation;
         this.timer = 0f;
+    }
+
+    private static final ComponentMapper<AnimationComponent> mapper = ComponentMapper.getFor(AnimationComponent.class);
+    public static AnimationComponent get(Entity e) {
+        return mapper.get(e);
     }
 }

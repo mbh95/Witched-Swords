@@ -33,8 +33,6 @@ public class TacticsMap {
     private MapTile[][] tiles;
     private Entity[][] units;
 
-    private Map<Integer, Set<Entity>> teamToUnits;
-
     public TacticsMap(TiledMap tiledMap, TacticsScreen screen) {
         this.tiledMap = tiledMap;
         this.screen = screen;
@@ -123,6 +121,7 @@ public class TacticsMap {
     public boolean isOnMap(int row, int col) {
         return (row >= 0 && row < this.height && col >= 0 && col < this.width);
     }
+
     public Entity getUnitAt(int row, int col) {
         if (!isOnMap(row, col)) {
             return null;

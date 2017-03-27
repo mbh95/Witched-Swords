@@ -140,7 +140,10 @@ public class TacticsMap {
     }
 
     public Set<MapPositionComponent> computeValidAttacks(Entity e) {
-        Set<MapPositionComponent> validMoves = computeValidMoves(e);
+        return computeValidAttacks(e, computeValidMoves(e));
+    }
+
+    public Set<MapPositionComponent> computeValidAttacks(Entity toMove, Set<MapPositionComponent> validMoves) {
         Set<MapPositionComponent> validAttacks = new HashSet<>();
         for (MapPositionComponent basePos : validMoves) {
             MapPositionComponent up = new MapPositionComponent(basePos.row + 1, basePos.col);
@@ -255,6 +258,8 @@ public class TacticsMap {
             this.units[selectionPos.row][selectionPos.col] = null;
         }
     }
+
+
 
     class MapTile {
         private boolean traversable;

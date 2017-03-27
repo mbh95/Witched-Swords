@@ -3,12 +3,14 @@ package com.comp460.screens.tactics.systems.cursor;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.comp460.common.input.Controller;
+import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.tactics.TacticsScreen;
 import com.comp460.screens.tactics.components.cursor.LockedComponent;
 import com.comp460.screens.tactics.components.cursor.MapCursorSelectionComponent;
 import com.comp460.screens.tactics.components.cursor.MovementPathComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.cursor.QueuedMoveComponent;
+import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 
 /**
  * Created by matth on 3/27/2017.
@@ -58,13 +60,58 @@ public class ActionMenuSystem extends IteratingSystem {
             actionMenu.selectedAction--;
         }
         if (controller.button1JustPressedDestructive()) {
+            MapPositionComponent goal;
+            UnitStatsComponent playerStats = UnitStatsComponent.get(selectionComponent.selected);
+            UnitStatsComponent aiStats;
             switch (actionMenu.actions.get(actionMenu.selectedAction)) {
                 case WAIT:
-                    MapPositionComponent goal = path.positions.get(path.positions.size() - 1);
+                    goal = path.positions.get(path.positions.size() - 1);
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
                     cursor.remove(QueuedMoveComponent.class);
                     cursor.remove(LockedComponent.class);
                     screen.clearSelections();
+                    break;
+                case ATTACK_UP:
+                    goal = path.positions.get(path.positions.size() - 1);
+                    screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
+                    cursor.remove(QueuedMoveComponent.class);
+                    cursor.remove(LockedComponent.class);
+                    screen.clearSelections();
+
+                    aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row + 1, goal.col));
+                    screen.game.setScreen(new BattleScreen(screen.game, screen, playerStats.base, aiStats.base, false, 10f));
+                    break;
+                case ATTACK_DOWN:
+                    goal = path.positions.get(path.positions.size() - 1);
+                    screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
+                    cursor.remove(QueuedMoveComponent.class);
+                    cursor.remove(LockedComponent.class);
+                    screen.clearSelections();
+
+                    aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row - 1, goal.col));
+                    screen.game.setScreen(new BattleScreen(screen.game, screen, playerStats.base, aiStats.base, false, 10f));
+                    break;
+                case ATTACK_LEFT:
+                    goal = path.positions.get(path.positions.size() - 1);
+                    screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
+                    cursor.remove(QueuedMoveComponent.class);
+                    cursor.remove(LockedComponent.class);
+                    screen.clearSelections();
+                    aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row, goal.col - 1));
+                    screen.game.setScreen(new BattleScreen(screen.game, screen, playerStats.base, aiStats.base, false, 10f));
+                    break;
+                case ATTACK_RIGHT:
+                    goal = path.positions.get(path.positions.size() - 1);
+                    screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
+                    cursor.remove(QueuedMoveComponent.class);
+                    cursor.remove(LockedComponent.class);
+                    screen.clearSelections();
+                    aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row, goal.col + 1));
+                    screen.game.setScreen(new BattleScreen(screen.game, screen, playerStats.base, aiStats.base, false, 10f));
+                    break;
+                case CANCEL:
+                    cursor.remove(QueuedMoveComponent.class);
+                    cursor.remove(LockedComponent.class);
                     break;
             }
         }

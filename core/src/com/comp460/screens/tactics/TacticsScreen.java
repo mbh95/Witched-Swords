@@ -192,7 +192,7 @@ public class TacticsScreen extends GameScreen {
                 if (game.controller.upJustPressed()) curSelectedButton = curSelectedButton.up;
                 if (game.controller.downJustPressed()) curSelectedButton = curSelectedButton.down;
                 if (game.controller.button1JustPressed()) {
-                    System.out.println(curSelectedButton.pos);
+//                    System.out.println(curSelectedButton.pos);
                     curSelectedButton.click();
                 }
                 if (game.controller.button2JustPressed()) {
@@ -340,8 +340,6 @@ public class TacticsScreen extends GameScreen {
     }
 
     public void startPlayerTurn() {
-        engine.getSystem(AiSystem.class).setProcessing(false);
-
         this.curState = TacticsState.PLAYER_TURN;
 
         engine.getEntitiesFor(playerUnitsFamily).forEach(e -> {
@@ -366,8 +364,6 @@ public class TacticsScreen extends GameScreen {
         });
 
         engine.getSystem(UnitShaderSystem.class).clearAllShading();
-
-        engine.getSystem(AiSystem.class).setProcessing(true);
     }
 
     public void playerWins() {

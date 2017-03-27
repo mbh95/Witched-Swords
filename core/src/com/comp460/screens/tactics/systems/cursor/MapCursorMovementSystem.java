@@ -2,11 +2,15 @@ package com.comp460.screens.tactics.systems.cursor;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.comp460.common.input.Controller;
 import com.comp460.screens.tactics.TacticsScreen;
 import com.comp460.screens.tactics.components.cursor.LockedComponent;
 import com.comp460.screens.tactics.components.cursor.MapCursorComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
+
+import static com.comp460.assets.SoundManager.click;
 
 /**
  * Created by matth on 2/20/2017.
@@ -45,6 +49,7 @@ public class MapCursorMovementSystem extends IteratingSystem {
 
             if (cursorPos.row != oldRow || cursorPos.col != oldCol) {
                 cursor.countdown = cursor.delay;
+                click.play(1.0f);
             }
         } else {
             cursor.countdown -= deltaTime;

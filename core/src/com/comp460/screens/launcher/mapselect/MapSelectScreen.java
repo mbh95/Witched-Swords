@@ -42,7 +42,6 @@ public class MapSelectScreen extends GameScreen {
         MapButton canyonmapButton = new MapButton(new TmxMapLoader().load("maps/cliffs red.tmx"), "Canyon Map", Settings.INTERNAL_WIDTH/2, 50, ()->{});
         MapButton cliffsmapButton = new MapButton(new TmxMapLoader().load("maps/cliffs.tmx"), "Cliffs Map", Settings.INTERNAL_WIDTH/2, 0, ()->{});
         MapButton indoormapButton = new MapButton(new TmxMapLoader().load("maps/indoor.tmx"), "Indoor Map", Settings.INTERNAL_WIDTH/2+50, 50, ()->{});
-//        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Small Map", 50, 50, ()->{});
 
         // set button actions
         bridgemapButton.action = () -> {
@@ -62,9 +61,10 @@ public class MapSelectScreen extends GameScreen {
         };
 
         // set up button mapping
-        Button[][] buttonMap = new Button[][] {{smallmapButton, bridgemapButton, canyonmapButton, indoormapButton}, {cliffsmapButton, cliffsmapButton, cliffsmapButton, cliffsmapButton, }};
+        Button[][] buttonMap = new Button[][] {{smallmapButton, bridgemapButton, canyonmapButton, indoormapButton}, {null, null, cliffsmapButton, null}};
         for (int r = 0; r < buttonMap.length; r++) {
             for (int c = 0; c < buttonMap[0].length; c++) {
+                if (buttonMap[r][c] == null) continue;
                 if (r < buttonMap.length - 1) {
                     Button down = buttonMap[r + 1][c];
                     buttonMap[r][c].down = down;
@@ -118,10 +118,10 @@ public class MapSelectScreen extends GameScreen {
 
         // set button/cursor selection logic
         selectedButton.setNormal();
-        if (game.controller.leftJustPressed()) selectedButton = selectedButton.left;
-        if (game.controller.rightJustPressed()) selectedButton = selectedButton.right;
-        if (game.controller.upJustPressed()) selectedButton = selectedButton.up;
-        if (game.controller.downJustPressed()) selectedButton = selectedButton.down;
+        if (game.controller.leftJustPressed() && selectedButton.left != null) selectedButton = selectedButton.left;
+        if (game.controller.rightJustPressed() && selectedButton.right != null) selectedButton = selectedButton.right;
+        if (game.controller.upJustPressed() && selectedButton.up != null) selectedButton = selectedButton.up;
+        if (game.controller.downJustPressed() && selectedButton.down != null) selectedButton = selectedButton.down;
         selectedButton.setHovered();
 
         if (game.controller.button1JustPressed()) {

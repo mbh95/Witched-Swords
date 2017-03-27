@@ -3,19 +3,24 @@ package com.comp460.screens.tactics;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
 import com.comp460.common.GameScreen;
 import com.comp460.screens.launcher.Button;
 import com.comp460.screens.launcher.NinePatchTextButton;
 import com.comp460.screens.launcher.main.MainMenuAssets;
+import com.comp460.screens.launcher.practice.battle.BattlePracticeAssets;
 import com.comp460.screens.tactics.components.cursor.MapCursorSelectionComponent;
 import com.comp460.screens.tactics.components.cursor.MovementPathComponent;
 import com.comp460.screens.tactics.components.unit.*;
@@ -40,6 +45,7 @@ import com.comp460.screens.tactics.systems.unit.UnitShaderSystem;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.comp460.screens.tactics.TacticsScreen.TacticsState.*;
 import static com.comp460.screens.tactics.TacticsScreen.TacticsState.MENU;
 import static com.comp460.screens.tactics.TacticsScreen.TacticsState.PLAYER_TURN;
 
@@ -48,7 +54,7 @@ import static com.comp460.screens.tactics.TacticsScreen.TacticsState.PLAYER_TURN
  */
 public class TacticsScreen extends GameScreen {
 
-    public enum TacticsState {BATTLE_START, PLAYER_TURN_TRANSITION, PLAYER_TURN, AI_TURN_TRANSITION, AI_TURN, PLAYER_WIN, AI_WIN, MENU, HELP}
+    public enum TacticsState {BATTLE_START, PLAYER_TURN_TRANSITION, PLAYER_TURN, AI_TURN_TRANSITION, AI_TURN, PLAYER_WIN, AI_WIN, MENU, HELP, TACTICS_HELP}
 
     private static final Family unitsFamily = Family.all(UnitStatsComponent.class).get();
     private static final Family playerUnitsFamily = Family.all(PlayerControlledComponent.class).get();
@@ -130,25 +136,55 @@ public class TacticsScreen extends GameScreen {
 
         buttonX = (int) (width/2f - buttonWidth / 2f);
         topButtonY = (height - 2*buttonHeight);
+        menuButtons = new ArrayList<>(menuButtonTemplates.length);
+        helpButtons = new ArrayList<>(helpButtonTemplates.length);
 
-        for (int i = 0; i < buttonTemplates.length; i++) {
-            TemplateRow template = buttonTemplates[i];
+        for (int i = 0; i < menuButtonTemplates.length; i++) {
+            TemplateRow template = menuButtonTemplates[i];
             NinePatchTextButton newButton = new NinePatchTextButton(buttonX, topButtonY - i * buttonHeight, buttonWidth, buttonHeight, new GlyphLayout(MainMenuAssets.FONT_MENU_ITEM, template.text), MainMenuAssets.FONT_MENU_ITEM, MainMenuAssets.NINEPATCH_BUTTON, template.action);
-            buttons.add(newButton);
+            menuButtons.add(newButton);
         }
 
-        for (int i = 0; i < buttons.size(); i++) {
+        for (int i = 0; i < helpButtonTemplates.length; i++) {
+            TemplateRow template = helpButtonTemplates[i];
+            NinePatchTextButton newButton = new NinePatchTextButton(buttonX, topButtonY - i * 16, buttonWidth, 16, new GlyphLayout(TacticsAssets.FONT_HELP_ITEM, template.text), TacticsAssets.FONT_HELP_ITEM, MainMenuAssets.NINEPATCH_BUTTON, template.action);
+            helpButtons.add(newButton);
+        }
+
+        for (int i = 0; i < menuButtons.size(); i++) {
             if (i > 0)
-                buttons.get(i).up = buttons.get(i - 1);
-            if (i < buttons.size() - 1)
-                buttons.get(i).down = buttons.get(i + 1);
+                menuButtons.get(i).up = menuButtons.get(i - 1);
+            if (i < menuButtons.size() - 1)
+                menuButtons.get(i).down = menuButtons.get(i + 1);
         }
 
-        curSelectedButton = buttons.get(0);
+        for (int i = 0; i < helpButtons.size(); i++) {
+            if (i > 0)
+                helpButtons.get(i).up = helpButtons.get(i - 1);
+            if (i < helpButtons.size() - 1)
+                helpButtons.get(i).down = helpButtons.get(i + 1);
+        }
+
+        curSelectedButton = menuButtons.get(0);
         cursorPos = new Vector3(curSelectedButton.pos);
+
+        StringBuilder tacticstext = new StringBuilder();
+        tacticstext.append("CONTROLS\n");
+        tacticstext.append("arrow keys: move cursor\n");
+        tacticstext.append("Z: select/confirm\n");
+        tacticstext.append("X: back/cancel\n");
+        tacticstext.append("Enter: menu\n");
+        tacticstext.append("\n");
+        tacticstext.append("HOW TO PLAY\n");
+        tacticstext.append("Strategically move your party around the map and defeat all the enemy units. " +
+                "Select a unit to move it, and then select an action for the unit to take. A unit can attack only an " +
+                "adjacent unit. A turn ends after all that side's units have moved. You lose if all your units are defeated.");
+        tacticstext.append("\n\n\n\n\n\nX to close");
+        tacticsHelpLayout = new GlyphLayout(BattlePracticeAssets.FONT_INFO, tacticstext.toString(), Color.WHITE, width/2 - 2 * padding, Align.left, true);
 
         startTransitionToPlayerTurn();
     }
+    GlyphLayout tacticsHelpLayout;
 
     public TacticsMap getMap() {
         return this.map;
@@ -201,6 +237,33 @@ public class TacticsScreen extends GameScreen {
                     curState = PLAYER_TURN;
                 }
                 break;
+            case HELP:
+                renderHelp(delta);
+                if (game.controller.leftJustPressed()) curSelectedButton = curSelectedButton.left;
+                if (game.controller.rightJustPressed()) curSelectedButton = curSelectedButton.right;
+                if (game.controller.upJustPressed()) curSelectedButton = curSelectedButton.up;
+                if (game.controller.downJustPressed()) curSelectedButton = curSelectedButton.down;
+                if (game.controller.button1JustPressed()) {
+                    curSelectedButton.click();
+                }
+                if (game.controller.button2JustPressed()) {
+                    curState = MENU;
+                    curSelectedButton = menuButtons.get(1); // return to help button on menu
+                    cursorPos = new Vector3(curSelectedButton.pos);
+                }
+                break;
+            case TACTICS_HELP:
+                dim();
+                uiBatch.begin();
+                BattlePracticeAssets.NP_INFO_BG.draw(uiBatch, width/4, 20, width/2, 202);
+                BattlePracticeAssets.FONT_INFO.draw(uiBatch, tacticsHelpLayout, width/4 + padding, 20 + 202 - padding);
+                uiBatch.end();
+                if (game.controller.button2JustPressed()) {
+                    curState = HELP;
+                    curSelectedButton = helpButtons.get(1);
+                    cursorPos = new Vector3(curSelectedButton.pos);
+                }
+                break;
             case AI_TURN:
                 break;
             case PLAYER_WIN:
@@ -215,6 +278,7 @@ public class TacticsScreen extends GameScreen {
             this.previousScreen();
         }
     }
+    float padding = 4;
 
     public class TemplateRow {
         public String text;
@@ -226,14 +290,20 @@ public class TacticsScreen extends GameScreen {
         }
     }
 
-    public TemplateRow[] buttonTemplates = new TemplateRow[] {
+    private List<Button> menuButtons;
+    private List<Button> helpButtons;
+    private Button curSelectedButton;
+
+    public TemplateRow[] menuButtonTemplates = new TemplateRow[] {
             new TemplateRow("Resume", ()->{
                 engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
                 engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
                 curState = PLAYER_TURN;
             }),
             new TemplateRow("Help", ()->{
-//                game.setScreen(new MapSelectScreen(game, this));
+                curState = HELP;
+                curSelectedButton = helpButtons.get(0);
+                cursorPos = new Vector3(curSelectedButton.pos);
             }),
             new TemplateRow("End turn", () -> {
                 engine.getSystem(TurnManagementSystem.class).endTurn();
@@ -243,8 +313,25 @@ public class TacticsScreen extends GameScreen {
             })
     };
 
-    private List<Button> buttons = new ArrayList<>(buttonTemplates.length);
-    private Button curSelectedButton;
+    public TemplateRow[] helpButtonTemplates = new TemplateRow[] {
+            new TemplateRow("Back", ()->{
+                curState = MENU;
+                curSelectedButton = menuButtons.get(1); // return to help button on menu
+                cursorPos = new Vector3(curSelectedButton.pos);
+            }),
+            new TemplateRow("Tactics", ()->{
+                curState = TACTICS_HELP;
+            }),
+            new TemplateRow("Battle", ()->{
+//                curState = HELP;
+            }),
+            new TemplateRow("Clarissa", () -> {
+
+            }),
+            new TemplateRow("Andre", ()->{
+
+            })
+    };
 
     private Vector3 cursorPos = new Vector3(0, 0, 0);
 
@@ -254,10 +341,37 @@ public class TacticsScreen extends GameScreen {
     private int buttonX;
     private int topButtonY;
 
+    private void dim() {
+        // dim background
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        ShapeRenderer sr = new ShapeRenderer();
+        sr.setProjectionMatrix(uiCamera.combined);
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        sr.setColor(0f, 0f, 0f, 0.4f);
+        sr.rect(0, 0, width, height);
+        sr.end();
+        sr.dispose();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
     private void renderMenu(float delta) {
+        dim();
         uiBatch.setColor(Color.WHITE);
         uiBatch.begin();
-        for (Button b : buttons) {
+        for (Button b : menuButtons) {
+            b.render(uiBatch);
+        }
+        MainMenuAssets.NINEPATCH_CURSOR.draw(uiBatch, cursorPos.x - 2, cursorPos.y - 2, curSelectedButton.width + 4, curSelectedButton.height + 4);
+        uiBatch.end();
+        cursorPos.slerp(curSelectedButton.pos, .3f);
+    }
+
+    private void renderHelp(float delta) {
+        dim();
+        uiBatch.setColor(Color.WHITE);
+        uiBatch.begin();
+        for (Button b : helpButtons) {
             b.render(uiBatch);
         }
         MainMenuAssets.NINEPATCH_CURSOR.draw(uiBatch, cursorPos.x - 2, cursorPos.y - 2, curSelectedButton.width + 4, curSelectedButton.height + 4);

@@ -91,7 +91,7 @@ public class BattleScreen extends GameScreen {
 
     public boolean exitAllowed;
 
-    public BattleScreen(MainGame game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase, boolean exitAllowed, float time) {
+    public BattleScreen(MainGame game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase, boolean p1Initiated, boolean exitAllowed, float time) {
         super(game, prevScreen);
 
         this.countdownTimer = time;
@@ -106,6 +106,11 @@ public class BattleScreen extends GameScreen {
         this.p1Unit = p1UnitBase.buildBattleUnit(this, 1, 1);
         this.p2Unit = p2UnitBase.buildBattleUnit(this, 1, numCols - 2);
 
+        // give energy advantage
+        if (p1Initiated && !exitAllowed)
+            p2Unit.removeEnergy(3);
+        else if (!p1Initiated && !exitAllowed)
+            p1Unit.removeEnergy(3);
         this.player1 = new HumanPlayer(p1Unit);
         this.player2 = new GhastAi(p2Unit, p1Unit, this);
 

@@ -108,7 +108,7 @@ public class AiSystem extends IteratingSystem {
                     screen.getMap().move(toMove, closest.row, closest.col);
                     UnitStatsComponent playerStats = UnitStatsComponent.get(target);
                     UnitStatsComponent aiStats = UnitStatsComponent.get(toMove);
-                    screen.transitionToBattleView(playerStats.base, aiStats.base);
+                    screen.transitionToBattleView(playerStats.base, aiStats.base, false);
                 }
             }
 

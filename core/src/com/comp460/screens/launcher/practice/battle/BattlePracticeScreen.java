@@ -37,7 +37,7 @@ public class BattlePracticeScreen extends GameScreen {
     private float infoWidth = 200;
     private float infoHeight = 100 - 2;
 
-    private BattleScreen dummyScreen = new BattleScreen(this.game, this, GameUnit.loadFromJSON("json/units/protagonists/andre.json"), GameUnit.loadFromJSON("json/units/protagonists/andre.json"), true, 30f);
+    private BattleScreen dummyScreen = new BattleScreen(this.game, this, GameUnit.loadFromJSON("json/units/protagonists/andre.json"), GameUnit.loadFromJSON("json/units/protagonists/andre.json"), true, true, 30f);
 
     private Vector3 cursorPos = new Vector3(0, 0, 0);
 
@@ -159,7 +159,7 @@ public class BattlePracticeScreen extends GameScreen {
         }
 
         if (selectedPlayerButton != null && selectedAiButton != null && game.controller.startJustPressed()) {
-            game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true, 30f));
+            game.setScreen(new BattleScreen(game, this, GameUnit.loadFromJSON(selectedPlayerButton.json), GameUnit.loadFromJSON(selectedAiButton.json), true, true, 30f));
         }
 
         frameTime += delta;

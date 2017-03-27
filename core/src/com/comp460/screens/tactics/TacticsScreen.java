@@ -56,6 +56,8 @@ import static com.comp460.screens.tactics.TacticsScreen.TacticsState.PLAYER_TURN
  */
 public class TacticsScreen extends GameScreen {
 
+    private boolean playerInitiated;
+
     public enum TacticsState {BATTLE_START, PLAYER_TURN_TRANSITION, PLAYER_TURN, AI_TURN_TRANSITION, AI_TURN, PLAYER_WIN, AI_WIN, MENU, HELP, TACTICS_HELP}
 
     private static final Family unitsFamily = Family.all(UnitStatsComponent.class).get();
@@ -183,8 +185,10 @@ public class TacticsScreen extends GameScreen {
         tacticstext.append("\n");
         tacticstext.append("HOW TO PLAY\n");
         tacticstext.append("Strategically move your party around the map and defeat all the enemy units. " +
-                "Select a unit to move it, and then select an action for the unit to take. A unit can attack only an " +
-                "adjacent unit. A turn ends after all that side's units have moved. You lose if all your units are defeated.");
+                "Select a player unit to move it, and then select an action for that unit to take. Select an enemy " +
+                "unit to see its move and attack range. A unit can attack only an " +
+                "adjacent unit, and the unit that attacks has an energy advantage. A turn ends after all that side's " +
+                "units have moved. You lose if all your units are defeated.");
         tacticstext.append("\n\n\n\n\n\nX to close");
         tacticsHelpLayout = new GlyphLayout(BattlePracticeAssets.FONT_INFO, tacticstext.toString(), Color.WHITE, width / 2 - 2 * padding, Align.left, true);
 
@@ -215,7 +219,7 @@ public class TacticsScreen extends GameScreen {
         if (battleTimer > 0) {
             battleTimer-=delta;
             if (battleTimer <= 0) {
-                game.setScreen(new BattleScreen(game, this, playerUnit, aiUnit, false, 10f));
+                game.setScreen(new BattleScreen(game, this, playerUnit, aiUnit, playerInitiated, false, 10f));
             }
         } else
             switch (curState) {
@@ -499,8 +503,9 @@ public class TacticsScreen extends GameScreen {
         engine.getSystem(UnitShaderSystem.class).clearAllShading();
     }
 
-    public void transitionToBattleView(GameUnit playerUnit, GameUnit aiUnit) {
+    public void transitionToBattleView(GameUnit playerUnit, GameUnit aiUnit, boolean playerInitiated) {
         System.out.println("Transitioning");
+        this.playerInitiated = playerInitiated;
         this.playerUnit = playerUnit;
         this.aiUnit = aiUnit;
         engine.getSystem(AiSystem.class).setProcessing(false);

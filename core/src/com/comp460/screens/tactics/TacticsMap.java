@@ -9,9 +9,7 @@ import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 import com.comp460.screens.tactics.factories.UnitFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by matthewhammond on 1/18/17.
@@ -20,9 +18,6 @@ public class TacticsMap {
 
     private static final Family readyUnitsFamily = Family.all(MapPositionComponent.class, ReadyToMoveComponent.class).get();
     private static final Family mapUnitsFamily = Family.all(UnitStatsComponent.class, MapPositionComponent.class).get();
-
-    private static final ComponentMapper<MapPositionComponent> mapPosM = ComponentMapper.getFor(MapPositionComponent.class);
-    private static final ComponentMapper<UnitStatsComponent> statsM = ComponentMapper.getFor(UnitStatsComponent.class);
 
     private TacticsScreen screen;
     private TiledMap tiledMap;
@@ -133,21 +128,51 @@ public class TacticsMap {
         if (!mapUnitsFamily.matches(e)) {
             return null;
         }
-        Map<MapPositionComponent, Integer> validMoves = new HashMap<>();
-        validMovesHelper(validMoves, mapPosM.get(e).row, mapPosM.get(e).col, statsM.get(e).base.moveDist);
-        Set<MapPositionComponent> finalMoves = validMoves.keySet();
-//        finalMoves.removeIf(pos->units[pos.row][pos.col] != null);
-        return finalMoves;
-    }
+        MapPositionComponent mapPos = MapPositionComponent.get(e);
+        UnitStatsComponent stats = UnitStatsComponent.get(e);
 
-    public Map<MapPositionComponent, Integer> shortestPaths(Entity e) {
-        Map<MapPositionComponent, Integer> validMoves = new HashMap<>();
-        validMovesHelper(validMoves, mapPosM.get(e).row, mapPosM.get(e).col, statsM.get(e).base.moveDist);
+        Map<MapPositionComponent, Integer> distanceMap = new HashMap<>();
+
+        validMovesHelper(distanceMap, mapPos.row, mapPos.col, 0, stats.base.moveDist);
+        Set<MapPositionComponent> validMoves = distanceMap.keySet();
+        validMoves.removeIf(pos->units[pos.row][pos.col] != null);
         return validMoves;
     }
 
-    private void validMovesHelper(Map<MapPositionComponent, Integer> bestSoFar, int r, int c, int countdown) {
-        if (countdown < 0 || r < 0 || r >= this.height || c < 0 || c >= this.width || !this.tiles[r][c].isTraversable()) {
+    public Set<MapPositionComponent> computeValidAttacks(Entity e) {
+        Set<MapPositionComponent> validMoves = computeValidMoves(e);
+        Set<MapPositionComponent> validAttacks = new HashSet<>();
+        for (MapPositionComponent basePos : validMoves) {
+            MapPositionComponent up = new MapPositionComponent(basePos.row + 1, basePos.col);
+            MapPositionComponent down = new MapPositionComponent(basePos.row - 1, basePos.col);
+            MapPositionComponent left = new MapPositionComponent(basePos.row, basePos.col - 1);
+            MapPositionComponent right = new MapPositionComponent(basePos.row, basePos.col + 1);
+            if (isOnMap(up.row, up.col)) {
+                validAttacks.add(up);
+            }
+            if (isOnMap(down.row, down.col)) {
+                validAttacks.add(down);
+            }
+            if (isOnMap(left.row, left.col)) {
+                validAttacks.add(left);
+            }
+            if (isOnMap(right.row, right.col)) {
+                validAttacks.add(right);
+            }
+        }
+        return validAttacks;
+    }
+
+    public Map<MapPositionComponent, Integer> distanceMap(Entity e) {
+        Map<MapPositionComponent, Integer> validMoves = new HashMap<>();
+        MapPositionComponent mapPos = MapPositionComponent.get(e);
+        UnitStatsComponent stats = UnitStatsComponent.get(e);
+        validMovesHelper(validMoves, mapPos.row, mapPos.col, 0, stats.base.moveDist);
+        return validMoves;
+    }
+
+    private void validMovesHelper(Map<MapPositionComponent, Integer> bestSoFar, int r, int c, int curCost, int maxCost) {
+        if (curCost > maxCost || !isOnMap(r, c) || !this.tiles[r][c].isTraversable()) {
             return;
         }
 
@@ -156,17 +181,47 @@ public class TacticsMap {
 //            return;
 //        }
         MapPositionComponent newPos = new MapPositionComponent(r, c);
-        if (bestSoFar.containsKey(newPos)) {
-            if (bestSoFar.get(newPos) >= countdown) {
-                return;
-            }
+        if (bestSoFar.containsKey(newPos) && bestSoFar.get(newPos) <= curCost) {
+            return;
         }
-        bestSoFar.put(new MapPositionComponent(r, c), countdown);
+        bestSoFar.put(new MapPositionComponent(r, c), curCost);
 
-        validMovesHelper(bestSoFar, r + 1, c, countdown - 1);
-        validMovesHelper(bestSoFar, r - 1, c, countdown - 1);
-        validMovesHelper(bestSoFar, r, c + 1, countdown - 1);
-        validMovesHelper(bestSoFar, r, c - 1, countdown - 1);
+        validMovesHelper(bestSoFar, r + 1, c, curCost + 1, maxCost);
+        validMovesHelper(bestSoFar, r - 1, c, curCost + 1, maxCost);
+        validMovesHelper(bestSoFar, r, c + 1, curCost + 1, maxCost);
+        validMovesHelper(bestSoFar, r, c - 1, curCost + 1, maxCost);
+    }
+
+    public List<MapPositionComponent> shortestPath(Entity e, MapPositionComponent endPos) {
+
+        Map<MapPositionComponent, Integer> distanceMap = distanceMap(e);
+        MapPositionComponent unitPos = MapPositionComponent.get(e);
+
+        if (!distanceMap.containsKey(endPos)) {
+            return null;
+        }
+
+        List<MapPositionComponent> path = new ArrayList<>(distanceMap.get(endPos) + 1);
+
+        path.add(new MapPositionComponent(endPos.row, endPos.col));
+
+        MapPositionComponent pos = path.get(0);
+
+        while (!pos.equals(unitPos)) {
+            int cost = distanceMap.get(pos);
+            if (distanceMap.getOrDefault(new MapPositionComponent(pos.row + 1, pos.col), -1) == cost - 1) {
+                path.add(0, new MapPositionComponent(pos.row + 1, pos.col));
+            } else if (distanceMap.getOrDefault(new MapPositionComponent(pos.row - 1, pos.col), -1) == cost - 1) {
+                path.add(0, new MapPositionComponent(pos.row - 1, pos.col));
+            } else if (distanceMap.getOrDefault(new MapPositionComponent(pos.row, pos.col + 1), -1) == cost - 1) {
+                path.add(0, new MapPositionComponent(pos.row, pos.col + 1));
+            } else if (distanceMap.getOrDefault(new MapPositionComponent(pos.row, pos.col - 1), -1) == cost - 1) {
+                path.add(0, new MapPositionComponent(pos.row, pos.col - 1));
+            }
+            pos = path.get(0);
+        }
+//        path.add(0, new MapPositionComponent(unitPos.row, unitPos.col));
+        return path;
     }
 
     public Entity move(Entity selection, int row, int col) {
@@ -179,7 +234,7 @@ public class TacticsMap {
         if (!readyUnitsFamily.matches(selection)) {
             return null;
         }
-        MapPositionComponent selectionPos = mapPosM.get(selection);
+        MapPositionComponent selectionPos = MapPositionComponent.get(selection);
         if (selectionPos != null && isOnMap(selectionPos.row, selectionPos.col) && selection == this.units[selectionPos.row][selectionPos.col]) {
             this.units[selectionPos.row][selectionPos.col] = null;
         }
@@ -195,7 +250,7 @@ public class TacticsMap {
     }
 
     public void remove(Entity entity) {
-        MapPositionComponent selectionPos = mapPosM.get(entity);
+        MapPositionComponent selectionPos = MapPositionComponent.get(entity);
         if (selectionPos != null && isOnMap(selectionPos.row, selectionPos.col) && entity == this.units[selectionPos.row][selectionPos.col]) {
             this.units[selectionPos.row][selectionPos.col] = null;
         }

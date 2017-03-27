@@ -13,6 +13,7 @@ import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 import com.comp460.screens.tactics.systems.map.ValidMoveManagementSystem;
 
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -29,8 +30,6 @@ public class MovesRenderingSystem extends EntitySystem {
 
     private TacticsScreen parentScreen;
 
-    private Queue<Entity> visibleQueue = new ConcurrentLinkedQueue<>();
-
     public MovesRenderingSystem(TacticsScreen tacticsScreen) {
         this.parentScreen = tacticsScreen;
     }
@@ -46,6 +45,8 @@ public class MovesRenderingSystem extends EntitySystem {
 
         ValidMoveManagementSystem moveManager = getEngine().getSystem(ValidMoveManagementSystem.class);
         for (Entity e : this.getEngine().getEntitiesFor(visible)) {
+            Set<MapPositionComponent> attackSquares = parentScreen.getMap().computeValidAttacks(e);
+            Set<MapPositionComponent> moveSquares = parentScreen.getMap().computeValidMoves(e);
             for (MapPositionComponent pos : moveManager.getValidMoves(e)) {
                 if (parentScreen.getMap().getUnitAt(pos.row, pos.col) != null) {
                     continue;
@@ -57,10 +58,14 @@ public class MovesRenderingSystem extends EntitySystem {
                 }
                 sr.rect(pos.col * parentScreen.getMap().getTileWidth(), pos.row * parentScreen.getMap().getTileHeight(), parentScreen.getMap().getTileWidth(), parentScreen.getMap().getTileHeight());
             }
+            attackSquares.removeAll(moveSquares);
+            sr.setColor(1f, 0f, 0f, 0.2f);
+            for (MapPositionComponent pos : attackSquares) {
+                sr.rect(pos.col * parentScreen.getMap().getTileWidth(), pos.row * parentScreen.getMap().getTileHeight(), parentScreen.getMap().getTileWidth(), parentScreen.getMap().getTileHeight());
+            }
         }
         sr.end();
         sr.dispose();
         Gdx.gl.glDisable(GL20.GL_BLEND);
-        visibleQueue.clear();
     }
 }

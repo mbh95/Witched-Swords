@@ -6,13 +6,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.comp460.common.input.Controller;
 import com.comp460.screens.tactics.TacticsScreen;
-import com.comp460.screens.tactics.components.cursor.MapCursorSelectionComponent;
 import com.comp460.screens.tactics.components.cursor.MovementPathComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
-import com.comp460.screens.tactics.components.unit.QueuedMoveComponent;
-import com.comp460.screens.tactics.components.unit.SelectedComponent;
-import com.comp460.screens.tactics.components.unit.ShowValidMovesComponent;
-import com.comp460.screens.tactics.systems.cursor.PathBuildingSystem;
+import com.comp460.screens.tactics.components.cursor.QueuedMoveComponent;
 
 /**
  * Created by matth on 3/21/2017.

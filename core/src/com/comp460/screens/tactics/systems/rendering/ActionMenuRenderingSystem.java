@@ -11,7 +11,7 @@ import com.comp460.assets.FontManager;
 import com.comp460.screens.tactics.TacticsAssets;
 import com.comp460.screens.tactics.TacticsScreen;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
-import com.comp460.screens.tactics.components.unit.QueuedMoveComponent;
+import com.comp460.screens.tactics.components.cursor.QueuedMoveComponent;
 
 /**
  * Created by matth on 3/22/2017.

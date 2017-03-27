@@ -8,7 +8,7 @@ import com.comp460.assets.SpriteManager;
 /**
  * Created by matth on 2/19/2017.
  */
-public class KeyboardController implements Controller {
+public class KeyboardController extends Controller {
 
     public TextureRegion zSprite = SpriteManager.COMMON.findRegion("keyboard/z");
     public TextureRegion xSprite = SpriteManager.COMMON.findRegion("keyboard/x");
@@ -44,7 +44,11 @@ public class KeyboardController implements Controller {
     @Override
     public boolean startJustPressed() {
         return Gdx.input.isKeyJustPressed(Input.Keys.ENTER);
+    }
 
+    @Override
+    public boolean startJustPressedDestructive() {
+        return false;
     }
 
     @Override

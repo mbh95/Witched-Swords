@@ -40,9 +40,10 @@ public abstract class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        super.render(delta);
+        game.controller.update();
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        super.render(delta);
     }
 
     public void previousScreen() {

@@ -25,13 +25,13 @@ import com.comp460.common.systems.CameraTrackingSystem;
 import com.comp460.common.systems.SnapToParentSystem;
 import com.comp460.common.systems.SpriteAnimationSystem;
 import com.comp460.common.systems.SpriteRenderingSystem;
-import com.comp460.screens.tactics.systems.cursor.PathBuildingSystem;
+import com.comp460.screens.tactics.systems.cursor.ActionMenuSystem;
+import com.comp460.screens.tactics.systems.cursor.MapCursorPathingSystem;
 import com.comp460.screens.tactics.systems.game.EndConditionSystem;
 import com.comp460.screens.tactics.systems.game.MoveActionSystem;
 import com.comp460.screens.tactics.systems.map.*;
 import com.comp460.screens.tactics.systems.rendering.*;
 import com.comp460.screens.tactics.systems.cursor.MapCursorMovementSystem;
-import com.comp460.screens.tactics.systems.map.MapManagementSystem;
 import com.comp460.screens.tactics.systems.game.TurnManagementSystem;
 import com.comp460.screens.tactics.systems.cursor.MapCursorSelectionSystem;
 import com.comp460.screens.tactics.systems.unit.UnitAnimatorSystem;
@@ -40,7 +40,6 @@ import com.comp460.screens.tactics.systems.unit.UnitShaderSystem;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.comp460.screens.tactics.TacticsScreen.TacticsState.AI_WIN;
 import static com.comp460.screens.tactics.TacticsScreen.TacticsState.MENU;
 import static com.comp460.screens.tactics.TacticsScreen.TacticsState.PLAYER_TURN;
 
@@ -89,35 +88,41 @@ public class TacticsScreen extends GameScreen {
 
         this.map = new TacticsMap(tiledMap, this);
 
-        engine.addSystem(new MapRenderingSystem(this));
 
-        engine.addSystem(new SpriteRenderingSystem(batch, camera));
+        // Base
         engine.addSystem(new SpriteAnimationSystem());
         engine.addSystem(new CameraTrackingSystem());
         engine.addSystem(new SnapToParentSystem());
 
-        engine.addSystem(new MapCursorSelectionSystem(this));
-        engine.addSystem(new MapCursorMovementSystem(this));
-
         engine.addSystem(new ValidMoveManagementSystem(this));
         engine.addSystem(new MapToScreenSystem(this));
+
+        // Game logic
+        engine.addSystem(new TurnManagementSystem(this));
+        engine.addSystem(new EndConditionSystem(this));
+        engine.addSystem(new UnitShaderSystem());
+        engine.addSystem(new UnitAnimatorSystem());
+
+//        engine.addSystem(new PathBuildingSystem(this));
+        engine.addSystem(new AiSystem(this));
+
+        // Cursor
+        engine.addSystem(new MapCursorMovementSystem(this));
+
+        engine.addSystem(new ActionMenuSystem(this));
+        engine.addSystem(new MapCursorPathingSystem(this));
+        engine.addSystem(new MapCursorSelectionSystem(this));
+
+        // Rendering
+        engine.addSystem(new MapRenderingSystem(this));
+        engine.addSystem(new SpriteRenderingSystem(batch, camera));
         engine.addSystem(new MovesRenderingSystem(this));
         engine.addSystem(new PathRenderingSystem(this));
         engine.addSystem(new SelectionRenderingSystem(this));
         engine.addSystem(new UnitPortraitRenderingSystem(this));
         engine.addSystem(new TurnRenderingSystem(this));
         engine.addSystem(new ControlsRenderingSystem(this));
-        engine.addSystem(new MoveActionSystem(this));
         engine.addSystem(new ActionMenuRenderingSystem(this));
-        engine.addSystem(new TurnManagementSystem(this));
-        engine.addSystem(new EndConditionSystem(this));
-        engine.addSystem(new UnitShaderSystem());
-        engine.addSystem(new UnitAnimatorSystem());
-
-
-
-        engine.addSystem(new PathBuildingSystem(this));
-        engine.addSystem(new AiSystem(this));
 
         this.map.populate(engine);
 

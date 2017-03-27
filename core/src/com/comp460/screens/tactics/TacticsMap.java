@@ -133,7 +133,7 @@ public class TacticsMap {
 
         Map<MapPositionComponent, Integer> distanceMap = new HashMap<>();
 
-        validMovesHelper(distanceMap, mapPos.row, mapPos.col, 0, stats.base.moveDist);
+        validMovesHelper(distanceMap, mapPos.row, mapPos.col, 0, stats.base.moveDist, UnitStatsComponent.get(e).team);
         Set<MapPositionComponent> validMoves = distanceMap.keySet();
         validMoves.removeIf(pos->units[pos.row][pos.col] != null);
         return validMoves;
@@ -170,29 +170,29 @@ public class TacticsMap {
         Map<MapPositionComponent, Integer> validMoves = new HashMap<>();
         MapPositionComponent mapPos = MapPositionComponent.get(e);
         UnitStatsComponent stats = UnitStatsComponent.get(e);
-        validMovesHelper(validMoves, mapPos.row, mapPos.col, 0, stats.base.moveDist);
+        validMovesHelper(validMoves, mapPos.row, mapPos.col, 0, stats.base.moveDist, UnitStatsComponent.get(e).team);
         return validMoves;
     }
 
-    private void validMovesHelper(Map<MapPositionComponent, Integer> bestSoFar, int r, int c, int curCost, int maxCost) {
+    private void validMovesHelper(Map<MapPositionComponent, Integer> bestSoFar, int r, int c, int curCost, int maxCost, int team) {
         if (curCost > maxCost || !isOnMap(r, c) || !this.tiles[r][c].isTraversable()) {
             return;
         }
 
         // You can't move through enemies:
-//        if (this.units[r][c] != null && statsM.get(this.units[r][c]).team != statsM.get(e).team) {
-//            return;
-//        }
+        if (this.units[r][c] != null && UnitStatsComponent.get(this.units[r][c]).team != team) {
+            return;
+        }
         MapPositionComponent newPos = new MapPositionComponent(r, c);
         if (bestSoFar.containsKey(newPos) && bestSoFar.get(newPos) <= curCost) {
             return;
         }
         bestSoFar.put(new MapPositionComponent(r, c), curCost);
 
-        validMovesHelper(bestSoFar, r + 1, c, curCost + 1, maxCost);
-        validMovesHelper(bestSoFar, r - 1, c, curCost + 1, maxCost);
-        validMovesHelper(bestSoFar, r, c + 1, curCost + 1, maxCost);
-        validMovesHelper(bestSoFar, r, c - 1, curCost + 1, maxCost);
+        validMovesHelper(bestSoFar, r + 1, c, curCost + 1, maxCost, team);
+        validMovesHelper(bestSoFar, r - 1, c, curCost + 1, maxCost, team);
+        validMovesHelper(bestSoFar, r, c + 1, curCost + 1, maxCost, team);
+        validMovesHelper(bestSoFar, r, c - 1, curCost + 1, maxCost, team);
     }
 
     public List<MapPositionComponent> shortestPath(Entity e, MapPositionComponent endPos) {

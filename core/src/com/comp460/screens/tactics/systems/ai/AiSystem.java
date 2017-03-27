@@ -55,6 +55,8 @@ public class AiSystem extends IteratingSystem {
         if (!moveQueue.isEmpty()) {
             Entity toMove = moveQueue.poll();
 
+            System.out.println(moveQueue.size());
+
             Set<MapPositionComponent> movePositions = screen.getMap().computeValidMoves(toMove);
             Set<MapPositionComponent> attackPositions = screen.getMap().computeValidAttacks(toMove, movePositions);
 
@@ -106,8 +108,7 @@ public class AiSystem extends IteratingSystem {
                     screen.getMap().move(toMove, closest.row, closest.col);
                     UnitStatsComponent playerStats = UnitStatsComponent.get(target);
                     UnitStatsComponent aiStats = UnitStatsComponent.get(toMove);
-                    screen.game.setScreen(new BattleScreen(screen.game, screen, playerStats.base, aiStats.base, false, 10f));
-
+                    screen.transitionToBattleView(playerStats.base, aiStats.base);
                 }
             }
 

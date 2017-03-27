@@ -40,7 +40,7 @@ public class MapCursorPathingSystem extends IteratingSystem {
 
         Set<MapPositionComponent> validPositions = getEngine().getSystem(ValidMoveManagementSystem.class).getValidMoves(selectionComponent.selected);
 
-        if (validPositions.contains(cursorPos)) {
+        if (validPositions.contains(cursorPos) || cursorPos.equals(MapPositionComponent.get(selectionComponent.selected))) {
             if (!cursorPos.equals(pathComponent.positions.get(pathComponent.positions.size() - 1))) {
                 pathComponent.positions = parentScreen.getMap().shortestPath(selectionComponent.selected, cursorPos);
             }
@@ -64,7 +64,7 @@ public class MapCursorPathingSystem extends IteratingSystem {
 
                 if (playerControlledFamily.matches(newSelection)) {
                     MovementPathComponent path = new MovementPathComponent();
-                    path.positions.add(new MapPositionComponent(cursorPos.row, cursorPos.col));
+//                    path.positions.add(new MapPositionComponent(cursorPos.row, cursorPos.col));
                     cursor.add(path);
                 }
             }

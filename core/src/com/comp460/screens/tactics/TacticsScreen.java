@@ -17,6 +17,8 @@ import com.badlogic.gdx.utils.Align;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
 import com.comp460.common.GameScreen;
+import com.comp460.common.GameUnit;
+import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.launcher.Button;
 import com.comp460.screens.launcher.NinePatchTextButton;
 import com.comp460.screens.launcher.main.MainMenuAssets;
@@ -83,6 +85,10 @@ public class TacticsScreen extends GameScreen {
 
     private float timer;
 
+    private float battleTimer;
+    GameUnit playerUnit = null;
+    GameUnit aiUnit = null;
+
     public float zoom = 1f;
 
     public TacticsScreen(MainGame game, GameScreen prevScreen, TiledMap tiledMap) {
@@ -134,8 +140,8 @@ public class TacticsScreen extends GameScreen {
 
         engine.addEntity(CursorFactory.makeCursor(this));
 
-        buttonX = (int) (width/2f - buttonWidth / 2f);
-        topButtonY = (height - 2*buttonHeight);
+        buttonX = (int) (width / 2f - buttonWidth / 2f);
+        topButtonY = (height - 2 * buttonHeight);
         menuButtons = new ArrayList<>(menuButtonTemplates.length);
         helpButtons = new ArrayList<>(helpButtonTemplates.length);
 
@@ -180,10 +186,11 @@ public class TacticsScreen extends GameScreen {
                 "Select a unit to move it, and then select an action for the unit to take. A unit can attack only an " +
                 "adjacent unit. A turn ends after all that side's units have moved. You lose if all your units are defeated.");
         tacticstext.append("\n\n\n\n\n\nX to close");
-        tacticsHelpLayout = new GlyphLayout(BattlePracticeAssets.FONT_INFO, tacticstext.toString(), Color.WHITE, width/2 - 2 * padding, Align.left, true);
+        tacticsHelpLayout = new GlyphLayout(BattlePracticeAssets.FONT_INFO, tacticstext.toString(), Color.WHITE, width / 2 - 2 * padding, Align.left, true);
 
         startTransitionToPlayerTurn();
     }
+
     GlyphLayout tacticsHelpLayout;
 
     public TacticsMap getMap() {
@@ -202,82 +209,93 @@ public class TacticsScreen extends GameScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+
         engine.update(delta);
 
-        switch (curState) {
-            case BATTLE_START:
-                renderBattleStart(delta);
-            case PLAYER_TURN_TRANSITION:
-                renderPlayerTurnTransition(delta);
-                break;
-            case AI_TURN_TRANSITION:
-                renderAiTurnTransition(delta);
-                break;
-            case PLAYER_TURN:
-                if (game.controller.startJustPressed()) {
-                    curState = MENU;
-                }
-                break;
-            case MENU:
-                renderMenu(delta);
-                engine.getSystem(MapCursorMovementSystem.class).setProcessing(false);
-                engine.getSystem(MapCursorSelectionSystem.class).setProcessing(false);
+        if (battleTimer > 0) {
+            battleTimer-=delta;
+            if (battleTimer <= 0) {
+                game.setScreen(new BattleScreen(game, this, playerUnit, aiUnit, false, 10f));
+            }
+        } else
+            switch (curState) {
+                case BATTLE_START:
+                    renderBattleStart(delta);
+                case PLAYER_TURN_TRANSITION:
+                    renderPlayerTurnTransition(delta);
+                    break;
+                case AI_TURN_TRANSITION:
+                    renderAiTurnTransition(delta);
+                    break;
+                case PLAYER_TURN:
+                    if (game.controller.startJustPressed()) {
+                        curState = MENU;
+                    }
+                    break;
+                case MENU:
+                    renderMenu(delta);
+                    engine.getSystem(MapCursorMovementSystem.class).setProcessing(false);
+                    engine.getSystem(MapCursorSelectionSystem.class).setProcessing(false);
+                    engine.getSystem(MapCursorPathingSystem.class).setProcessing(false);
+                    engine.getSystem(ActionMenuSystem.class).setProcessing(false);
 //                    engine.getSystem(TurnManagementSystem.class).endTurn();
-                if (game.controller.leftJustPressed()) curSelectedButton = curSelectedButton.left;
-                if (game.controller.rightJustPressed()) curSelectedButton = curSelectedButton.right;
-                if (game.controller.upJustPressed()) curSelectedButton = curSelectedButton.up;
-                if (game.controller.downJustPressed()) curSelectedButton = curSelectedButton.down;
-                if (game.controller.button1JustPressed()) {
+                    if (game.controller.leftJustPressed()) curSelectedButton = curSelectedButton.left;
+                    if (game.controller.rightJustPressed()) curSelectedButton = curSelectedButton.right;
+                    if (game.controller.upJustPressed()) curSelectedButton = curSelectedButton.up;
+                    if (game.controller.downJustPressed()) curSelectedButton = curSelectedButton.down;
+                    if (game.controller.button1JustPressed()) {
 //                    System.out.println(curSelectedButton.pos);
-                    curSelectedButton.click();
-                }
-                if (game.controller.button2JustPressed()) {
-                    engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
-                    engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
-                    curState = PLAYER_TURN;
-                }
-                break;
-            case HELP:
-                renderHelp(delta);
-                if (game.controller.leftJustPressed()) curSelectedButton = curSelectedButton.left;
-                if (game.controller.rightJustPressed()) curSelectedButton = curSelectedButton.right;
-                if (game.controller.upJustPressed()) curSelectedButton = curSelectedButton.up;
-                if (game.controller.downJustPressed()) curSelectedButton = curSelectedButton.down;
-                if (game.controller.button1JustPressed()) {
-                    curSelectedButton.click();
-                }
-                if (game.controller.button2JustPressed()) {
-                    curState = MENU;
-                    curSelectedButton = menuButtons.get(1); // return to help button on menu
-                    cursorPos = new Vector3(curSelectedButton.pos);
-                }
-                break;
-            case TACTICS_HELP:
-                dim();
-                uiBatch.begin();
-                BattlePracticeAssets.NP_INFO_BG.draw(uiBatch, width/4, 20, width/2, 202);
-                BattlePracticeAssets.FONT_INFO.draw(uiBatch, tacticsHelpLayout, width/4 + padding, 20 + 202 - padding);
-                uiBatch.end();
-                if (game.controller.button2JustPressed()) {
-                    curState = HELP;
-                    curSelectedButton = helpButtons.get(1);
-                    cursorPos = new Vector3(curSelectedButton.pos);
-                }
-                break;
-            case AI_TURN:
-                break;
-            case PLAYER_WIN:
-                renderPlayerWin(delta);
-                break;
-            case AI_WIN:
-                renderAiWin(delta);
-                break;
-
-        }
+                        curSelectedButton.click();
+                    }
+                    if (game.controller.button2JustPressedDestructive()) {
+                        engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
+                        engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
+                        engine.getSystem(MapCursorPathingSystem.class).setProcessing(true);
+                        engine.getSystem(ActionMenuSystem.class).setProcessing(true);
+                        curState = PLAYER_TURN;
+                    }
+                    break;
+                case HELP:
+                    renderHelp(delta);
+                    if (game.controller.leftJustPressed()) curSelectedButton = curSelectedButton.left;
+                    if (game.controller.rightJustPressed()) curSelectedButton = curSelectedButton.right;
+                    if (game.controller.upJustPressed()) curSelectedButton = curSelectedButton.up;
+                    if (game.controller.downJustPressed()) curSelectedButton = curSelectedButton.down;
+                    if (game.controller.button1JustPressed()) {
+                        curSelectedButton.click();
+                    }
+                    if (game.controller.button2JustPressedDestructive()) {
+                        curState = MENU;
+                        curSelectedButton = menuButtons.get(1); // return to help button on menu
+                        cursorPos = new Vector3(curSelectedButton.pos);
+                    }
+                    break;
+                case TACTICS_HELP:
+                    dim();
+                    uiBatch.begin();
+                    BattlePracticeAssets.NP_INFO_BG.draw(uiBatch, width / 4, 20, width / 2, 202);
+                    BattlePracticeAssets.FONT_INFO.draw(uiBatch, tacticsHelpLayout, width / 4 + padding, 20 + 202 - padding);
+                    uiBatch.end();
+                    if (game.controller.button2JustPressedDestructive()) {
+                        curState = HELP;
+                        curSelectedButton = helpButtons.get(1);
+                        cursorPos = new Vector3(curSelectedButton.pos);
+                    }
+                    break;
+                case AI_TURN:
+                    break;
+                case PLAYER_WIN:
+                    renderPlayerWin(delta);
+                    break;
+                case AI_WIN:
+                    renderAiWin(delta);
+                    break;
+            }
         if (game.controller.endJustPressed()) {
             this.previousScreen();
         }
     }
+
     float padding = 4;
 
     public class TemplateRow {
@@ -294,13 +312,13 @@ public class TacticsScreen extends GameScreen {
     private List<Button> helpButtons;
     private Button curSelectedButton;
 
-    public TemplateRow[] menuButtonTemplates = new TemplateRow[] {
-            new TemplateRow("Resume", ()->{
+    public TemplateRow[] menuButtonTemplates = new TemplateRow[]{
+            new TemplateRow("Resume", () -> {
                 engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
                 engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
                 curState = PLAYER_TURN;
             }),
-            new TemplateRow("Help", ()->{
+            new TemplateRow("Help", () -> {
                 curState = HELP;
                 curSelectedButton = helpButtons.get(0);
                 cursorPos = new Vector3(curSelectedButton.pos);
@@ -308,27 +326,27 @@ public class TacticsScreen extends GameScreen {
             new TemplateRow("End turn", () -> {
                 engine.getSystem(TurnManagementSystem.class).endTurn();
             }),
-            new TemplateRow("Surrender", ()->{
+            new TemplateRow("Surrender", () -> {
                 aiWins();
             })
     };
 
-    public TemplateRow[] helpButtonTemplates = new TemplateRow[] {
-            new TemplateRow("Back", ()->{
+    public TemplateRow[] helpButtonTemplates = new TemplateRow[]{
+            new TemplateRow("Back", () -> {
                 curState = MENU;
                 curSelectedButton = menuButtons.get(1); // return to help button on menu
                 cursorPos = new Vector3(curSelectedButton.pos);
             }),
-            new TemplateRow("Tactics", ()->{
+            new TemplateRow("Tactics", () -> {
                 curState = TACTICS_HELP;
             }),
-            new TemplateRow("Battle", ()->{
+            new TemplateRow("Battle", () -> {
 //                curState = HELP;
             }),
             new TemplateRow("Clarissa", () -> {
 
             }),
-            new TemplateRow("Andre", ()->{
+            new TemplateRow("Andre", () -> {
 
             })
     };
@@ -383,6 +401,7 @@ public class TacticsScreen extends GameScreen {
         this.curState = TacticsState.BATTLE_START;
         this.timer = 2f;
     }
+
     private void renderBattleStart(float delta) {
         timer -= delta;
         if (timer <= 0) {
@@ -480,6 +499,14 @@ public class TacticsScreen extends GameScreen {
         engine.getSystem(UnitShaderSystem.class).clearAllShading();
     }
 
+    public void transitionToBattleView(GameUnit playerUnit, GameUnit aiUnit) {
+        System.out.println("Transitioning");
+        this.playerUnit = playerUnit;
+        this.aiUnit = aiUnit;
+        engine.getSystem(AiSystem.class).setProcessing(false);
+        battleTimer = 1f;
+    }
+
     public void playerWins() {
         timer = 2f;
         this.curState = TacticsState.PLAYER_WIN;
@@ -500,6 +527,7 @@ public class TacticsScreen extends GameScreen {
                 engine.removeEntity(e);
             }
         });
+        engine.getSystem(AiSystem.class).setProcessing(true);
     }
 
     @Override

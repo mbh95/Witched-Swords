@@ -79,7 +79,7 @@ public class ActionMenuSystem extends IteratingSystem {
                     screen.clearSelections();
 
                     aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row + 1, goal.col));
-                    screen.game.setScreen(new BattleScreen(screen.game, screen, playerStats.base, aiStats.base, false, 10f));
+                    screen.transitionToBattleView(playerStats.base, aiStats.base);
                     break;
                 case ATTACK_DOWN:
                     goal = path.positions.get(path.positions.size() - 1);
@@ -89,7 +89,7 @@ public class ActionMenuSystem extends IteratingSystem {
                     screen.clearSelections();
 
                     aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row - 1, goal.col));
-                    screen.game.setScreen(new BattleScreen(screen.game, screen, playerStats.base, aiStats.base, false, 10f));
+                    screen.transitionToBattleView(playerStats.base, aiStats.base);
                     break;
                 case ATTACK_LEFT:
                     goal = path.positions.get(path.positions.size() - 1);
@@ -98,7 +98,7 @@ public class ActionMenuSystem extends IteratingSystem {
                     cursor.remove(LockedComponent.class);
                     screen.clearSelections();
                     aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row, goal.col - 1));
-                    screen.game.setScreen(new BattleScreen(screen.game, screen, playerStats.base, aiStats.base, false, 10f));
+                    screen.transitionToBattleView(playerStats.base, aiStats.base);
                     break;
                 case ATTACK_RIGHT:
                     goal = path.positions.get(path.positions.size() - 1);
@@ -107,7 +107,7 @@ public class ActionMenuSystem extends IteratingSystem {
                     cursor.remove(LockedComponent.class);
                     screen.clearSelections();
                     aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row, goal.col + 1));
-                    screen.game.setScreen(new BattleScreen(screen.game, screen, playerStats.base, aiStats.base, false, 10f));
+                    screen.transitionToBattleView(playerStats.base, aiStats.base);
                     break;
                 case CANCEL:
                     cursor.remove(QueuedMoveComponent.class);

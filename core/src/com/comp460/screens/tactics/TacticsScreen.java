@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -149,7 +150,6 @@ public class TacticsScreen extends GameScreen {
         cameraTarget.add(new CameraTargetComponent(camera, 0.1f));
 
         cursor = CursorFactory.makeCursor(this);
-        engine.addEntity(cursor);
 
         buttonX = (int) (width / 2f - buttonWidth / 2f);
         topButtonY = (height - 2 * buttonHeight);
@@ -498,15 +498,30 @@ public class TacticsScreen extends GameScreen {
     }
 
     public void startTransitionToPlayerTurn() {
-        engine.getSystem(MapCursorSelectionSystem.class).setProcessing(false);
-        engine.getSystem(MapCursorMovementSystem.class).setProcessing(false);
         timer = 1f;
         curState = TacticsState.PLAYER_TURN_TRANSITION;
+
+        ImmutableArray<Entity> playerUnits = engine.getEntitiesFor(playerUnitsFamily);
+        int minDist = Integer.MAX_VALUE;
+        MapPositionComponent minPos = null;
+        for (Entity unit : playerUnits) {
+            MapPositionComponent pos = MapPositionComponent.get(unit);
+            int dist = (pos.row *pos.row) + (pos.col*pos.col);
+            if (dist < minDist) {
+                minDist = dist;
+                minPos = pos;
+            }
+        }
+        if (minPos != null) {
+            MapPositionComponent cursorPos = MapPositionComponent.get(cursor);
+            cursorPos.row = minPos.row;
+            cursorPos.col = minPos.col;
+        }
+        engine.addEntity(cursor);
     }
 
     public void startTransitionToAiTurn() {
-        engine.getSystem(MapCursorSelectionSystem.class).setProcessing(false);
-        engine.getSystem(MapCursorMovementSystem.class).setProcessing(false);
+        engine.removeEntity(cursor);
         timer = 1f;
         curState = TacticsState.AI_TURN_TRANSITION;
     }
@@ -519,15 +534,9 @@ public class TacticsScreen extends GameScreen {
         });
 
         engine.getSystem(UnitShaderSystem.class).clearAllShading();
-
-        engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
-        engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
-
     }
 
     public void startAiTurn() {
-        engine.getSystem(MapCursorSelectionSystem.class).setProcessing(false);
-        engine.getSystem(MapCursorMovementSystem.class).setProcessing(false);
 
         this.curState = TacticsState.AI_TURN;
 
@@ -536,6 +545,8 @@ public class TacticsScreen extends GameScreen {
         });
 
         engine.getSystem(UnitShaderSystem.class).clearAllShading();
+
+        engine.removeEntity(cursor);
     }
 
     public void transitionToBattleView(Entity playerEntity, Entity aiEntity, boolean playerInitiated) {

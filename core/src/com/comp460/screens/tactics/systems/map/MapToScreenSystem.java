@@ -29,8 +29,18 @@ public class MapToScreenSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        MapPositionComponent mapPos = mapPosM.get(entity);
         TransformComponent transform = transformM.get(entity);
-        transform.pos.lerp(new Vector3(mapPos.col * parentScreen.getMap().getTileWidth(), mapPos.row *  parentScreen.getMap().getTileHeight(), transform.pos.z), 0.3f);
+        transform.pos.lerp(goal(entity), 0.3f);
+    }
+
+    public boolean isDone(Entity entity, float epsilon) {
+        TransformComponent transform = transformM.get(entity);
+        return goal(entity).epsilonEquals(transform.pos, epsilon);
+    }
+
+    public Vector3 goal(Entity entity) {
+        TransformComponent transform = transformM.get(entity);
+        MapPositionComponent mapPos = mapPosM.get(entity);
+        return new Vector3(mapPos.col * parentScreen.getMap().getTileWidth(), mapPos.row *  parentScreen.getMap().getTileHeight(), transform.pos.z);
     }
 }

@@ -14,6 +14,10 @@ import java.util.List;
 public class MovementPathComponent implements Component {
     public List<MapPositionComponent> positions = new ArrayList<>();
 
+    public MovementPathComponent(int startRow, int startCol) {
+        this.positions.add(new MapPositionComponent(startRow, startCol));
+    }
+
     private static final ComponentMapper<MovementPathComponent> mapper = ComponentMapper.getFor(MovementPathComponent.class);
 
     public static MovementPathComponent get(Entity e) {

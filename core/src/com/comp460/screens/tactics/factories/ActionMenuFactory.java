@@ -3,7 +3,7 @@ package com.comp460.screens.tactics.factories;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.comp460.screens.tactics.TacticsScreen;
-import com.comp460.screens.tactics.components.cursor.QueuedMoveComponent;
+import com.comp460.screens.tactics.components.cursor.ActionMenuComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.unit.AIControlledComponent;
 import com.comp460.screens.tactics.systems.cursor.ActionMenuSystem;
@@ -16,9 +16,9 @@ public class ActionMenuFactory {
 
     private static final Family aiControlledFamily = Family.all(AIControlledComponent.class).get();
 
-    public static QueuedMoveComponent makeActionMenu(Entity cursor, TacticsScreen screen) {
+    public static ActionMenuComponent makeActionMenu(Entity cursor, TacticsScreen screen) {
 
-        QueuedMoveComponent moveComponent = new QueuedMoveComponent();
+        ActionMenuComponent moveComponent = new ActionMenuComponent();
 
         moveComponent.actions.add(ActionMenuSystem.Action.CANCEL);
         moveComponent.actions.add(ActionMenuSystem.Action.WAIT);

@@ -3,13 +3,12 @@ package com.comp460.screens.tactics.systems.cursor;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.comp460.common.input.Controller;
-import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.tactics.TacticsScreen;
 import com.comp460.screens.tactics.components.cursor.LockedComponent;
 import com.comp460.screens.tactics.components.cursor.MapCursorSelectionComponent;
 import com.comp460.screens.tactics.components.cursor.MovementPathComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
-import com.comp460.screens.tactics.components.cursor.QueuedMoveComponent;
+import com.comp460.screens.tactics.components.cursor.ActionMenuComponent;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 
 /**
@@ -17,7 +16,7 @@ import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
  */
 public class ActionMenuSystem extends IteratingSystem {
 
-    private static final Family actionMenuFamily = Family.all(QueuedMoveComponent.class, MovementPathComponent.class, MapCursorSelectionComponent.class).get();
+    private static final Family actionMenuFamily = Family.all(ActionMenuComponent.class, MovementPathComponent.class, MapCursorSelectionComponent.class).get();
 
     public TacticsScreen screen;
 
@@ -52,7 +51,7 @@ public class ActionMenuSystem extends IteratingSystem {
             return;
         }
         Controller controller = screen.game.controller;
-        QueuedMoveComponent actionMenu = QueuedMoveComponent.get(cursor);
+        ActionMenuComponent actionMenu = ActionMenuComponent.get(cursor);
         MovementPathComponent path = MovementPathComponent.get(cursor);
         MapCursorSelectionComponent selectionComponent = MapCursorSelectionComponent.get(cursor);
 
@@ -63,63 +62,39 @@ public class ActionMenuSystem extends IteratingSystem {
             actionMenu.selectedAction--;
         }
         if (controller.button1JustPressedDestructive()) {
-            MapPositionComponent goal;
+            MapPositionComponent goal = path.positions.get(path.positions.size() - 1);
             UnitStatsComponent playerStats = UnitStatsComponent.get(selectionComponent.selected);
             UnitStatsComponent aiStats;
             switch (actionMenu.actions.get(actionMenu.selectedAction)) {
                 case WAIT:
-                    goal = path.positions.get(path.positions.size() - 1);
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
-                    cursor.remove(QueuedMoveComponent.class);
-                    cursor.remove(LockedComponent.class);
-                    screen.clearSelections();
                     break;
                 case ATTACK_UP:
-                    goal = path.positions.get(path.positions.size() - 1);
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
-                    cursor.remove(QueuedMoveComponent.class);
-                    cursor.remove(LockedComponent.class);
-                    screen.clearSelections();
-
-                    aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row + 1, goal.col));
-                    screen.transitionToBattleView(playerStats.base, aiStats.base, true);
+                    screen.transitionToBattleView(selectionComponent.selected, screen.getMap().getUnitAt(goal.row + 1, goal.col), true);
                     break;
                 case ATTACK_DOWN:
-                    goal = path.positions.get(path.positions.size() - 1);
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
-                    cursor.remove(QueuedMoveComponent.class);
-                    cursor.remove(LockedComponent.class);
-                    screen.clearSelections();
-
-                    aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row - 1, goal.col));
-                    screen.transitionToBattleView(playerStats.base, aiStats.base, true);
+                    screen.transitionToBattleView(selectionComponent.selected, screen.getMap().getUnitAt(goal.row - 1, goal.col), true);
                     break;
                 case ATTACK_LEFT:
-                    goal = path.positions.get(path.positions.size() - 1);
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
-                    cursor.remove(QueuedMoveComponent.class);
-                    cursor.remove(LockedComponent.class);
-                    screen.clearSelections();
-                    aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row, goal.col - 1));
-                    screen.transitionToBattleView(playerStats.base, aiStats.base, true);
+                    screen.transitionToBattleView(selectionComponent.selected, screen.getMap().getUnitAt(goal.row, goal.col - 1), true);
+
                     break;
                 case ATTACK_RIGHT:
-                    goal = path.positions.get(path.positions.size() - 1);
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
-                    cursor.remove(QueuedMoveComponent.class);
-                    cursor.remove(LockedComponent.class);
-                    screen.clearSelections();
-                    aiStats = UnitStatsComponent.get(screen.getMap().getUnitAt(goal.row, goal.col + 1));
-                    screen.transitionToBattleView(playerStats.base, aiStats.base, true);
+                    screen.transitionToBattleView(selectionComponent.selected, screen.getMap().getUnitAt(goal.row, goal.col + 1), true);
                     break;
                 case CANCEL:
-                    cursor.remove(QueuedMoveComponent.class);
-                    cursor.remove(LockedComponent.class);
                     break;
             }
+            CursorManager.deselect(cursor);
+            cursor.remove(ActionMenuComponent.class);
+            cursor.remove(LockedComponent.class);
         }
         if (controller.button2JustPressedDestructive()) {
-            cursor.remove(QueuedMoveComponent.class);
+            cursor.remove(ActionMenuComponent.class);
             cursor.remove(LockedComponent.class);
         }
     }

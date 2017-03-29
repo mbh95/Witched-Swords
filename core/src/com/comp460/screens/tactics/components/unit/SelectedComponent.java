@@ -5,10 +5,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 
 /**
- * Attached to units which are selected by a cursor.
+ * Created by matthewhammond on 3/29/17.
  */
 public class SelectedComponent implements Component {
-
     private static final ComponentMapper<SelectedComponent> mapper = ComponentMapper.getFor(SelectedComponent.class);
 
     public static SelectedComponent get(Entity e) {

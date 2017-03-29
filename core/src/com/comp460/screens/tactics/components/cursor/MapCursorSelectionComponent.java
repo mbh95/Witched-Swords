@@ -8,8 +8,11 @@ import com.badlogic.ashley.core.Entity;
  * Attached to the map cursor when a unit is selected
  */
 public class MapCursorSelectionComponent implements Component {
-    public Entity selected;
+    public final Entity selected;
 
+    public MapCursorSelectionComponent(Entity selected) {
+        this.selected = selected;
+    }
     private static final ComponentMapper<MapCursorSelectionComponent> mapper = ComponentMapper.getFor(MapCursorSelectionComponent.class);
 
     public static MapCursorSelectionComponent get(Entity e) {

@@ -8,8 +8,6 @@ import com.comp460.common.components.AnimationComponent;
 import com.comp460.screens.tactics.components.unit.SelectedComponent;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 
-import java.awt.event.ComponentListener;
-
 /**
  * Switches tactics unit animations if a unit becomes selected or deselected.
  */

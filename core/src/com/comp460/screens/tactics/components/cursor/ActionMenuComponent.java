@@ -11,13 +11,13 @@ import java.util.List;
 /**
  * Created by matth on 3/21/2017.
  */
-public class QueuedMoveComponent implements Component {
+public class ActionMenuComponent implements Component {
     public List<ActionMenuSystem.Action> actions = new ArrayList<>();
     public int selectedAction;
 
-    private static final ComponentMapper<QueuedMoveComponent> mapper = ComponentMapper.getFor(QueuedMoveComponent.class);
+    private static final ComponentMapper<ActionMenuComponent> mapper = ComponentMapper.getFor(ActionMenuComponent.class);
 
-    public static QueuedMoveComponent get(Entity e) {
+    public static ActionMenuComponent get(Entity e) {
         return mapper.get(e);
     }
 }

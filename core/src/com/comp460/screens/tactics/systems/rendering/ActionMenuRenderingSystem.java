@@ -11,16 +11,16 @@ import com.comp460.assets.FontManager;
 import com.comp460.screens.tactics.TacticsAssets;
 import com.comp460.screens.tactics.TacticsScreen;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
-import com.comp460.screens.tactics.components.cursor.QueuedMoveComponent;
+import com.comp460.screens.tactics.components.cursor.ActionMenuComponent;
 
 /**
  * Created by matth on 3/22/2017.
  */
 public class ActionMenuRenderingSystem extends IteratingSystem {
 
-    private static final Family actingUnitFamily = Family.all(QueuedMoveComponent.class, MapPositionComponent.class).get();
+    private static final Family actingUnitFamily = Family.all(ActionMenuComponent.class, MapPositionComponent.class).get();
 
-    private static final ComponentMapper<QueuedMoveComponent> actionM = ComponentMapper.getFor(QueuedMoveComponent.class);
+    private static final ComponentMapper<ActionMenuComponent> actionM = ComponentMapper.getFor(ActionMenuComponent.class);
 
     private static final BitmapFont actionFont = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.WHITE);
 
@@ -35,7 +35,7 @@ public class ActionMenuRenderingSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
-        QueuedMoveComponent queuedMove = actionM.get(entity);
+        ActionMenuComponent queuedMove = actionM.get(entity);
 
         float x = 0f;
         float y = Settings.INTERNAL_HEIGHT;

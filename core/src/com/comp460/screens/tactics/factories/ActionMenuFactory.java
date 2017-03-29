@@ -40,6 +40,7 @@ public class ActionMenuFactory {
         if (unit != null && aiControlledFamily.matches(unit)) {
             moveComponent.actions.add(ActionMenuSystem.Action.ATTACK_LEFT);
         }
+        moveComponent.selectedAction = moveComponent.actions.size()-1;
         return moveComponent;
     }
 }

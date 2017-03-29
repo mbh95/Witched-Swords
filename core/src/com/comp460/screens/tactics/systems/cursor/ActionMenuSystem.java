@@ -48,6 +48,9 @@ public class ActionMenuSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity cursor, float deltaTime) {
+        if (screen.curState == TacticsScreen.TacticsState.MENU) {
+            return;
+        }
         Controller controller = screen.game.controller;
         QueuedMoveComponent actionMenu = QueuedMoveComponent.get(cursor);
         MovementPathComponent path = MovementPathComponent.get(cursor);

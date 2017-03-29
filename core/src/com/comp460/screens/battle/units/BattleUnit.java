@@ -173,6 +173,7 @@ public class BattleUnit implements BattleObject {
         if (curHP <= 0) {
             curHP = 0;
             startAnimation("fallen");
+
         }
         if (curHP > maxHP) {
             curHP = maxHP;

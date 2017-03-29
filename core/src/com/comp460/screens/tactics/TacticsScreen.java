@@ -35,7 +35,6 @@ import com.comp460.common.systems.SpriteRenderingSystem;
 import com.comp460.screens.tactics.systems.cursor.ActionMenuSystem;
 import com.comp460.screens.tactics.systems.cursor.MapCursorPathingSystem;
 import com.comp460.screens.tactics.systems.game.EndConditionSystem;
-import com.comp460.screens.tactics.systems.game.MoveActionSystem;
 import com.comp460.screens.tactics.systems.map.*;
 import com.comp460.screens.tactics.systems.rendering.*;
 import com.comp460.screens.tactics.systems.cursor.MapCursorMovementSystem;
@@ -127,9 +126,9 @@ public class TacticsScreen extends GameScreen {
 
         // Rendering
         engine.addSystem(new MapRenderingSystem(this));
-        engine.addSystem(new SpriteRenderingSystem(batch, camera));
         engine.addSystem(new MovesRenderingSystem(this));
         engine.addSystem(new PathRenderingSystem(this));
+        engine.addSystem(new SpriteRenderingSystem(batch, camera));
         engine.addSystem(new SelectionRenderingSystem(this));
         engine.addSystem(new UnitPortraitRenderingSystem(this));
         engine.addSystem(new TurnRenderingSystem(this));
@@ -234,10 +233,10 @@ public class TacticsScreen extends GameScreen {
                     break;
                 case MENU:
                     renderMenu(delta);
-                    engine.getSystem(MapCursorMovementSystem.class).setProcessing(false);
-                    engine.getSystem(MapCursorSelectionSystem.class).setProcessing(false);
-                    engine.getSystem(MapCursorPathingSystem.class).setProcessing(false);
-                    engine.getSystem(ActionMenuSystem.class).setProcessing(false);
+//                    engine.getSystem(MapCursorMovementSystem.class).setProcessing(false);
+//                    engine.getSystem(MapCursorSelectionSystem.class).setProcessing(false);
+//                    engine.getSystem(MapCursorPathingSystem.class).setProcessing(false);
+//                    engine.getSystem(ActionMenuSystem.class).setProcessing(false);
 //                    engine.getSystem(TurnManagementSystem.class).endTurn();
                     if (game.controller.leftJustPressed()) curSelectedButton = curSelectedButton.left;
                     if (game.controller.rightJustPressed()) curSelectedButton = curSelectedButton.right;
@@ -248,10 +247,10 @@ public class TacticsScreen extends GameScreen {
                         curSelectedButton.click();
                     }
                     if (game.controller.button2JustPressedDestructive()) {
-                        engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
-                        engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
-                        engine.getSystem(MapCursorPathingSystem.class).setProcessing(true);
-                        engine.getSystem(ActionMenuSystem.class).setProcessing(true);
+//                        engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
+//                        engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
+//                        engine.getSystem(MapCursorPathingSystem.class).setProcessing(true);
+//                        engine.getSystem(ActionMenuSystem.class).setProcessing(true);
                         curState = PLAYER_TURN;
                     }
                     break;
@@ -525,8 +524,10 @@ public class TacticsScreen extends GameScreen {
             UnitStatsComponent stats = e.getComponent(UnitStatsComponent.class);
             if (stats.base.curHP <= 0) {
                 engine.removeEntity(e);
+                map.remove(e);
             }
         });
+        engine.getSystem(ValidMoveManagementSystem.class).rebuildMoves();
         engine.getSystem(AiSystem.class).setProcessing(true);
     }
 

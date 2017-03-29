@@ -10,6 +10,7 @@ import com.comp460.screens.tactics.components.cursor.MapCursorSelectionComponent
 import com.comp460.screens.tactics.components.cursor.MovementPathComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.unit.PlayerControlledComponent;
+import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.screens.tactics.components.unit.SelectedComponent;
 import com.comp460.screens.tactics.components.unit.ShowValidMovesComponent;
 import com.comp460.screens.tactics.factories.ActionMenuFactory;
@@ -22,7 +23,7 @@ import java.util.Set;
  */
 public class MapCursorPathingSystem extends IteratingSystem {
     private static final Family mapCursorFamily = Family.all(MapCursorComponent.class, MapPositionComponent.class, MovementPathComponent.class, MapCursorSelectionComponent.class).exclude(LockedComponent.class).get();
-    private static final Family playerControlledFamily = Family.all(PlayerControlledComponent.class).get();
+    private static final Family playerControlledFamily = Family.all(PlayerControlledComponent.class, ReadyToMoveComponent.class).get();
 
     private TacticsScreen parentScreen;
 
@@ -33,7 +34,9 @@ public class MapCursorPathingSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity cursor, float deltaTime) {
-
+        if (parentScreen.curState == TacticsScreen.TacticsState.MENU) {
+            return;
+        }
         MovementPathComponent pathComponent = MovementPathComponent.get(cursor);
         MapPositionComponent cursorPos = MapPositionComponent.get(cursor);
         MapCursorSelectionComponent selectionComponent = MapCursorSelectionComponent.get(cursor);
@@ -41,7 +44,7 @@ public class MapCursorPathingSystem extends IteratingSystem {
         Set<MapPositionComponent> validPositions = getEngine().getSystem(ValidMoveManagementSystem.class).getValidMoves(selectionComponent.selected);
 
         if (validPositions.contains(cursorPos) || cursorPos.equals(MapPositionComponent.get(selectionComponent.selected))) {
-            if (!cursorPos.equals(pathComponent.positions.get(pathComponent.positions.size() - 1))) {
+            if (pathComponent.positions.size() != 0 && !cursorPos.equals(pathComponent.positions.get(pathComponent.positions.size() - 1))) {
                 pathComponent.positions = parentScreen.getMap().shortestPath(selectionComponent.selected, cursorPos);
             }
             if (parentScreen.game.controller.button1JustPressedDestructive()) {
@@ -64,7 +67,7 @@ public class MapCursorPathingSystem extends IteratingSystem {
 
                 if (playerControlledFamily.matches(newSelection)) {
                     MovementPathComponent path = new MovementPathComponent();
-//                    path.positions.add(new MapPositionComponent(cursorPos.row, cursorPos.col));
+                    path.positions.add(new MapPositionComponent(cursorPos.row, cursorPos.col));
                     cursor.add(path);
                 }
             }

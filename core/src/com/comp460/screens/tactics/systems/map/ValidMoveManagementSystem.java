@@ -28,7 +28,7 @@ public class ValidMoveManagementSystem extends EntitySystem implements EntityLis
         this.screen = screen;
     }
 
-    private void rebuildMoves() {
+    public void rebuildMoves() {
         this.getEngine().getEntitiesFor(unitFamily).forEach(e->{
             this.unitToMoves.put(e, this.screen.getMap().computeValidMoves(e));
         });

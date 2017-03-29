@@ -33,6 +33,9 @@ public class MapCursorSelectionSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity cursor, float deltaTime) {
+        if (parentScreen.curState == TacticsScreen.TacticsState.MENU) {
+            return;
+        }
         MapPositionComponent cursorPos = MapPositionComponent.get(cursor);
 
         if (parentScreen.game.controller.button1JustPressedDestructive()) {

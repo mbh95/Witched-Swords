@@ -12,7 +12,6 @@ import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;
 import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
-import com.comp460.screens.battleECS2.BattleAssets;
 import com.comp460.screens.launcher.Button;
 import com.comp460.screens.launcher.TexturedButton;
 

@@ -28,6 +28,9 @@ public class MapCursorMovementSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
+        if (parentScreen.curState == TacticsScreen.TacticsState.MENU) {
+            return;
+        }
         MapCursorComponent cursor = MapCursorComponent.get(entity);
         MapPositionComponent cursorPos = MapPositionComponent.get(entity);
         Controller controller = this.parentScreen.game.controller;

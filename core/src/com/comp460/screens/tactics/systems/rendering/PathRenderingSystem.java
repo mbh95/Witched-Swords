@@ -135,7 +135,7 @@ public class PathRenderingSystem extends IteratingSystem {
                 }
                 sprite = spriteTable.get(inDir).get(outDir);
                 if (sprite == null) {
-                    System.out.println(inDir+ ", " + outDir);
+//                    System.out.println(inDir+ ", " + outDir);
                 } else {
                     screen.batch.draw(sprite, screen.getMap().getTileX(curr.row, curr.col), screen.getMap().getTileY(curr.row, curr.col));
                 }

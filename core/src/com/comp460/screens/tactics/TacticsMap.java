@@ -223,7 +223,7 @@ public class TacticsMap {
             }
             pos = path.get(0);
         }
-//        path.add(0, new MapPositionComponent(unitPos.row, unitPos.col));
+        path.add(0, new MapPositionComponent(unitPos.row, unitPos.col));
         return path;
     }
 

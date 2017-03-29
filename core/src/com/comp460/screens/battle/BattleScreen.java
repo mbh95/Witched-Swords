@@ -39,6 +39,8 @@ public class BattleScreen extends GameScreen {
     private final TextureRegion hpBar = SpriteManager.BATTLE.findRegion("ui/hp_bar_new");
     private final TextureRegion energyBar = SpriteManager.BATTLE.findRegion("ui/energy");
 
+    private final TextureRegion moveBG = SpriteManager.BATTLE.findRegion("ui/move-bg");
+
     public final int tileWidth = tileLHS.getRegionWidth();
     public final int tileHeight = tileLHS.getRegionHeight();
     private final int tileSideHeight = tileSideLHS.getRegionHeight();
@@ -114,7 +116,7 @@ public class BattleScreen extends GameScreen {
         this.player1 = new HumanPlayer(p1Unit);
         this.player2 = new GhastAi(p2Unit, p1Unit, this);
 
-        this.p1MovesLayout = new GlyphLayout(movesFont, "Z: " + p1Unit.ability1.name + "\nX: " + p1Unit.ability2.name);
+        this.p1MovesLayout = new GlyphLayout(movesFont, "" + p1Unit.ability1.name + "\n" + p1Unit.ability2.name);
         this.p2MovesLayout = new GlyphLayout(movesFont, "1: " + p2Unit.ability1.name + "\n2: " + p2Unit.ability2.name);
 
         drawLayout = new GlyphLayout(resultsFont, "DRAW");
@@ -260,8 +262,17 @@ public class BattleScreen extends GameScreen {
         renderHealthBar(p2Unit, width / 2 + 10, 3);
 
         batch.begin();
-        movesFont.draw(batch, p1MovesLayout, 10, 220);
-        movesFont.draw(batch, p2MovesLayout, 400 - p2MovesLayout.width - 10, 220);
+        int y = 24;
+//        int y = 220;
+        batch.draw(moveBG, 0, 0);
+        batch.draw(moveBG, 400 - moveBG.getRegionWidth(), 0);
+
+        batch.draw(game.controller.button1Sprite(), 4, y - 8);
+        batch.draw(game.controller.button2Sprite(), 4, y - 8 - 14);
+
+
+        movesFont.draw(batch, p1MovesLayout, 18, y);
+        movesFont.draw(batch, p2MovesLayout, 400 - p2MovesLayout.width - 10, y);
         batch.end();
 
         renderTimer(width / 2, 200);

@@ -550,7 +550,7 @@ public class TacticsScreen extends GameScreen {
     }
 
     public void transitionToBattleView(Entity playerEntity, Entity aiEntity, boolean playerInitiated) {
-        System.out.println("Transitioning");
+        System.out.println("Starting battle!");
         this.playerInitiated = playerInitiated;
         this.playerEntity = playerEntity;
         this.aiEntity = aiEntity;

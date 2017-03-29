@@ -55,8 +55,6 @@ public class AiSystem extends IteratingSystem {
         if (!moveQueue.isEmpty()) {
             Entity toMove = moveQueue.poll();
 
-            System.out.println(moveQueue.size());
-
             Set<MapPositionComponent> movePositions = screen.getMap().computeValidMoves(toMove);
             Set<MapPositionComponent> attackPositions = screen.getMap().computeValidAttacks(toMove, movePositions);
 

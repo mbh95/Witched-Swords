@@ -145,11 +145,30 @@ public class TacticsMap {
 
     public Set<MapPositionComponent> computeValidAttacks(Entity toMove, Set<MapPositionComponent> validMoves) {
         Set<MapPositionComponent> validAttacks = new HashSet<>();
+
+        MapPositionComponent curPos = MapPositionComponent.get(toMove);
+        MapPositionComponent up = new MapPositionComponent(curPos.row + 1, curPos.col);
+        MapPositionComponent down = new MapPositionComponent(curPos.row - 1, curPos.col);
+        MapPositionComponent left = new MapPositionComponent(curPos.row, curPos.col - 1);
+        MapPositionComponent right = new MapPositionComponent(curPos.row, curPos.col + 1);
+        if (isOnMap(up.row, up.col)) {
+            validAttacks.add(up);
+        }
+        if (isOnMap(down.row, down.col)) {
+            validAttacks.add(down);
+        }
+        if (isOnMap(left.row, left.col)) {
+            validAttacks.add(left);
+        }
+        if (isOnMap(right.row, right.col)) {
+            validAttacks.add(right);
+        }
+
         for (MapPositionComponent basePos : validMoves) {
-            MapPositionComponent up = new MapPositionComponent(basePos.row + 1, basePos.col);
-            MapPositionComponent down = new MapPositionComponent(basePos.row - 1, basePos.col);
-            MapPositionComponent left = new MapPositionComponent(basePos.row, basePos.col - 1);
-            MapPositionComponent right = new MapPositionComponent(basePos.row, basePos.col + 1);
+            up = new MapPositionComponent(basePos.row + 1, basePos.col);
+            down = new MapPositionComponent(basePos.row - 1, basePos.col);
+            left = new MapPositionComponent(basePos.row, basePos.col - 1);
+            right = new MapPositionComponent(basePos.row, basePos.col + 1);
             if (isOnMap(up.row, up.col)) {
                 validAttacks.add(up);
             }

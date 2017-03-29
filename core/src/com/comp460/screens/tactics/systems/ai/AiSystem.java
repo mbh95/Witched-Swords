@@ -75,19 +75,20 @@ public class AiSystem extends IteratingSystem {
             }
             if (target != null) {
                 MapPositionComponent targetPos = posM.get(target);
+                MapPositionComponent curPos = MapPositionComponent.get(toMove);
                 Set<MapPositionComponent> options = new HashSet<>();
                 MapPositionComponent up = new MapPositionComponent(targetPos.row + 1, targetPos.col);
                 MapPositionComponent down = new MapPositionComponent(targetPos.row - 1, targetPos.col);
                 MapPositionComponent left = new MapPositionComponent(targetPos.row, targetPos.col - 1);
                 MapPositionComponent right = new MapPositionComponent(targetPos.row, targetPos.col + 1);
 
-                if (movePositions.contains(up)) {
+                if (movePositions.contains(up) || curPos.equals(up)) {
                     options.add(up);
-                } else if (movePositions.contains(down)) {
+                } else if (movePositions.contains(down) || curPos.equals(down)) {
                     options.add(down);
-                } else if (movePositions.contains(left)) {
+                } else if (movePositions.contains(left) || curPos.equals(left)) {
                     options.add(left);
-                } else if (movePositions.contains(right)) {
+                } else if (movePositions.contains(right) || curPos.equals(right)) {
                     options.add(right);
                 }
 

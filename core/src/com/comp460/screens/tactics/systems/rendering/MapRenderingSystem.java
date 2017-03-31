@@ -18,13 +18,15 @@ public class MapRenderingSystem extends EntitySystem {
 
     public MapRenderingSystem(TacticsScreen tacticsScreen) {
         this.parentScreen = tacticsScreen;
-        this.renderer = new OrthogonalTiledMapRenderer(parentScreen.getMap().getTiledMap());
     }
 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
 
+        if (renderer == null) {
+            this.renderer = new OrthogonalTiledMapRenderer(parentScreen.getMap().getTiledMap());
+        }
         renderer.setView(parentScreen.getCamera());
         renderer.render();
 

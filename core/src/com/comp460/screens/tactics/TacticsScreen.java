@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Json;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
 import com.comp460.common.GameScreen;
@@ -103,12 +104,10 @@ public class TacticsScreen extends GameScreen {
 
     public Entity cursor;
 
-    public TacticsScreen(MainGame game, GameScreen prevScreen, TiledMap tiledMap) {
+    public TacticsScreen(MainGame game, GameScreen prevScreen, String mapJSONFile) {
         super(game, prevScreen);
 
         this.engine = new PooledEngine();
-
-        this.map = new TacticsMap(tiledMap, this);
 
         // Base
         engine.addSystem(new SpriteAnimationSystem());
@@ -145,7 +144,10 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new ControlsRenderingSystem(this));
         engine.addSystem(new ActionMenuRenderingSystem(this));
 
-        this.map.populate(engine);
+        Json json = new Json();
+        this.map = json.fromJson(TacticsMap.class, Gdx.files.internal(mapJSONFile));
+
+        this.map.init(this);
 
         cameraTarget.add(new CameraTargetComponent(camera, 0.1f));
 
@@ -206,6 +208,10 @@ public class TacticsScreen extends GameScreen {
 
     GlyphLayout tacticsHelpLayout;
 
+    public Engine getEngine() {
+        return this.engine;
+    }
+
     public TacticsMap getMap() {
         return this.map;
     }
@@ -223,7 +229,7 @@ public class TacticsScreen extends GameScreen {
             if (engine.getSystem(MapToScreenSystem.class).isDone(playerEntity, 0.01f) && engine.getSystem(MapToScreenSystem.class).isDone(aiEntity, 0.01f)) {
                 battleTimer -= delta;
                 float t = (battleTransitionLen - battleTimer) / battleTransitionLen;
-                zoom = (1f - (t*t)) + 0.25f * (t*t);
+                zoom = (1f - (t * t)) + 0.25f * (t * t);
             }
 
             if (battleTimer <= 0 && playerEntity != null && aiEntity != null) {
@@ -506,7 +512,7 @@ public class TacticsScreen extends GameScreen {
         MapPositionComponent minPos = null;
         for (Entity unit : playerUnits) {
             MapPositionComponent pos = MapPositionComponent.get(unit);
-            int dist = (pos.row *pos.row) + (pos.col*pos.col);
+            int dist = (pos.row * pos.row) + (pos.col * pos.col);
             if (dist < minDist) {
                 minDist = dist;
                 minPos = pos;
@@ -565,13 +571,13 @@ public class TacticsScreen extends GameScreen {
         battleTimer = battleTransitionLen;
 
         Vector3 playerVec = engine.getSystem(MapToScreenSystem.class).goal(playerEntity);
-        playerVec.x += map.getTileWidth()/2f;
-        playerVec.y += map.getTileHeight()/2f;
+        playerVec.x += map.getTileWidth() / 2f;
+        playerVec.y += map.getTileHeight() / 2f;
 
         Vector3 aiVec = engine.getSystem(MapToScreenSystem.class).goal(aiEntity);
-        aiVec.x += map.getTileWidth()/2f;
-        aiVec.y += map.getTileHeight()/2f;
-        cameraTarget.add(new TransformComponent((playerVec.x + aiVec.x)/2f, (playerVec.y + aiVec.y)/2f, 0f));
+        aiVec.x += map.getTileWidth() / 2f;
+        aiVec.y += map.getTileHeight() / 2f;
+        cameraTarget.add(new TransformComponent((playerVec.x + aiVec.x) / 2f, (playerVec.y + aiVec.y) / 2f, 0f));
         engine.addEntity(cameraTarget);
     }
 
@@ -588,7 +594,7 @@ public class TacticsScreen extends GameScreen {
     @Override
     public void show() {
         super.show();
-        game.playMusic("music/beeball.mp3");
+        game.playMusic(this.getMap().bgMusicFile);
         engine.getEntitiesFor(unitsFamily).forEach(e -> {
             UnitStatsComponent stats = e.getComponent(UnitStatsComponent.class);
             if (stats.base.curHP <= 0) {

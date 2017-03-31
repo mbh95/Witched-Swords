@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
@@ -19,18 +20,27 @@ public class TacticsMap {
     private static final Family readyUnitsFamily = Family.all(MapPositionComponent.class, ReadyToMoveComponent.class).get();
     private static final Family mapUnitsFamily = Family.all(UnitStatsComponent.class, MapPositionComponent.class).get();
 
-    private TacticsScreen screen;
-    private TiledMap tiledMap;
+    public String title;
+    public String tiledMapFile;
+    public String bgMusicFile;
 
-    private int width, height; // width and height of the map in tiles
-    private int tileWidth, tileHeight; // width and height of one tile in pixels
+    private transient TacticsScreen screen;
+    private transient TiledMap tiledMap;
 
-    private MapTile[][] tiles;
-    private Entity[][] units;
+    private transient int width, height; // width and height of the map in tiles
+    private transient int tileWidth, tileHeight; // width and height of one tile in pixels
 
-    public TacticsMap(TiledMap tiledMap, TacticsScreen screen) {
-        this.tiledMap = tiledMap;
+    private transient MapTile[][] tiles;
+    private transient Entity[][] units;
+
+    public TacticsMap() {
+
+    }
+
+    public void init(TacticsScreen screen) {
         this.screen = screen;
+
+        this.tiledMap = new TmxMapLoader().load(this.tiledMapFile);
 
         width = tiledMap.getProperties().get("width", Integer.class);
         height = tiledMap.getProperties().get("height", Integer.class);
@@ -55,15 +65,9 @@ public class TacticsMap {
                     }
                 }
             } else {
-                ml.setVisible(false);
-            }
-        }
-    }
-
-    public void populate(Engine engine) {
-        for (MapLayer ml : tiledMap.getLayers()) {
-            if (ml.getName().equals("units")) {
                 // Process units
+                ml.setVisible(false);
+
                 TiledMapTileLayer tl = (TiledMapTileLayer) ml;
                 for (int r = 0; r < height; r++) {
                     for (int c = 0; c < width; c++) {
@@ -77,7 +81,7 @@ public class TacticsMap {
 
                         Entity unit = UnitFactory.makeUnit(this, id, team, r, c);
 
-                        engine.addEntity(unit);
+                        screen.getEngine().addEntity(unit);
                         this.units[r][c] = unit;
                     }
                 }
@@ -135,7 +139,7 @@ public class TacticsMap {
 
         validMovesHelper(distanceMap, mapPos.row, mapPos.col, 0, stats.base.moveDist, UnitStatsComponent.get(e).team);
         Set<MapPositionComponent> validMoves = distanceMap.keySet();
-        validMoves.removeIf(pos->units[pos.row][pos.col] != null);
+        validMoves.removeIf(pos -> units[pos.row][pos.col] != null);
         return validMoves;
     }
 
@@ -277,7 +281,6 @@ public class TacticsMap {
             this.units[selectionPos.row][selectionPos.col] = null;
         }
     }
-
 
 
     class MapTile {

@@ -76,6 +76,10 @@ public class BattleScreen extends GameScreen {
     private BattleState curState = BattleState.COUNTOFF;
 
     private float endDelay = 2.0f;
+    private boolean zToContinueVisible = true;
+    private float zToContinuePhaseLen = 0.5f;
+    private float zToContinuePhase = zToContinuePhaseLen;
+
 
     public BattleUnit p1Unit;
     public BattleUnit p2Unit;
@@ -332,12 +336,19 @@ public class BattleScreen extends GameScreen {
                 layout = outOfTimeLayout;
                 break;
         }
-        resultsFont.draw(batch, layout, width / 2 - layout.width / 2, 100);
 
-        if (this.endDelay <= 0) {
+        int shift = 50;
+        resultsFont.draw(batch, layout, width / 2 - layout.width / 2, 100 + shift);
+
+        if (this.endDelay <= 0 && zToContinueVisible) {
             layout = new GlyphLayout(continueFont, "z to continue");
-            continueFont.draw(batch, "z to continue", width / 2 - layout.width / 2, 50);
+            continueFont.draw(batch, "z to continue", width / 2 - layout.width / 2, 50 + shift);
         }
+        if (zToContinuePhase <= 0) {
+            zToContinueVisible = !zToContinueVisible;
+            zToContinuePhase = 0.5f;
+        }
+        zToContinuePhase -= delta;
         batch.end();
     }
 

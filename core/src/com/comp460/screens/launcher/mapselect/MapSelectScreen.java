@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Json;
 import com.comp460.MainGame;
 import com.comp460.Settings;
 import com.comp460.assets.FontManager;
@@ -18,7 +19,10 @@ import com.comp460.common.GameScreen;
 import com.comp460.screens.launcher.Button;
 import com.comp460.screens.launcher.TexturedButton;
 import com.comp460.screens.launcher.practice.battle.BattlePracticeAssets;
+import com.comp460.screens.tactics.TacticsMap;
 import com.comp460.screens.tactics.TacticsScreen;
+
+import static com.comp460.Settings.INTERNAL_WIDTH;
 
 public class MapSelectScreen extends GameScreen {
 
@@ -37,31 +41,31 @@ public class MapSelectScreen extends GameScreen {
     public MapSelectScreen(MainGame game, GameScreen prevScreen) {
         super(game, prevScreen);
 
-        MapButton bridgemapButton = new MapButton(new TmxMapLoader().load("maps/testmap.tmx"), "Bridge Map", Settings.INTERNAL_WIDTH/2-50, 50, ()->{});
-        MapButton smallmapButton = new MapButton(new TmxMapLoader().load("maps/smallmap.tmx"), "Small Map", Settings.INTERNAL_WIDTH/2-100, 50, ()->{});
-        MapButton canyonmapButton = new MapButton(new TmxMapLoader().load("maps/cliffs red.tmx"), "Canyon Map", Settings.INTERNAL_WIDTH/2, 50, ()->{});
-        MapButton cliffsmapButton = new MapButton(new TmxMapLoader().load("maps/cliffs.tmx"), "Cliffs Map", Settings.INTERNAL_WIDTH/2, 0, ()->{});
-        MapButton indoormapButton = new MapButton(new TmxMapLoader().load("maps/indoor.tmx"), "Indoor Map", Settings.INTERNAL_WIDTH/2+50, 50, ()->{});
+        MapButton bridgemapButton = new MapButton("maps/bridge.json", Settings.INTERNAL_WIDTH/2-50, 50, ()->{});
+        MapButton smallmapButton = new MapButton("maps/small.json", Settings.INTERNAL_WIDTH/2-100, 50, ()->{});
+//        MapButton canyonmapButton = new MapButton("maps/bridge.json", Settings.INTERNAL_WIDTH/2, 50, ()->{});
+        MapButton cliffsmapButton = new MapButton("maps/cliffs.json", Settings.INTERNAL_WIDTH/2, 0, ()->{});
+        MapButton indoormapButton = new MapButton("maps/indoor.json", Settings.INTERNAL_WIDTH/2+50, 50, ()->{});
 
         // set button actions
         bridgemapButton.action = () -> {
-            game.setScreen(new TacticsScreen(game, prevScreen, bridgemapButton.map));
+            game.setScreen(new TacticsScreen(game, prevScreen, bridgemapButton.mapJSONFile));
         };
         smallmapButton.action = () -> {
-            game.setScreen(new TacticsScreen(game, prevScreen, smallmapButton.map));
+            game.setScreen(new TacticsScreen(game, prevScreen, smallmapButton.mapJSONFile));
         };
-        canyonmapButton.action = () -> {
-            game.setScreen(new TacticsScreen(game, prevScreen, canyonmapButton.map));
-        };
+//        canyonmapButton.action = () -> {
+//            game.setScreen(new TacticsScreen(game, prevScreen, canyonmapButton.map));
+//        };
         cliffsmapButton.action = () -> {
-            game.setScreen(new TacticsScreen(game, prevScreen, cliffsmapButton.map));
+            game.setScreen(new TacticsScreen(game, prevScreen, cliffsmapButton.mapJSONFile));
         };
         indoormapButton.action = () -> {
-            game.setScreen(new TacticsScreen(game, prevScreen, indoormapButton.map));
+            game.setScreen(new TacticsScreen(game, prevScreen, indoormapButton.mapJSONFile));
         };
 
         // set up button mapping
-        Button[][] buttonMap = new Button[][] {{smallmapButton, bridgemapButton, canyonmapButton, indoormapButton}, {null, null, cliffsmapButton, null}};
+        Button[][] buttonMap = new Button[][] {{smallmapButton, bridgemapButton, cliffsmapButton, indoormapButton}, {null, null, null, null}};
         for (int r = 0; r < buttonMap.length; r++) {
             for (int c = 0; c < buttonMap[0].length; c++) {
                 if (buttonMap[r][c] == null) continue;
@@ -84,7 +88,7 @@ public class MapSelectScreen extends GameScreen {
                 }
             }
         }
-        buttons = new Button[] {smallmapButton, bridgemapButton, canyonmapButton, indoormapButton, cliffsmapButton};
+        buttons = new Button[] {smallmapButton, bridgemapButton, /*canyonmapButton,*/ indoormapButton, cliffsmapButton};
         selectedButton = smallmapButton;
         cursorPos = new Vector3(selectedButton.pos);
     }
@@ -97,7 +101,7 @@ public class MapSelectScreen extends GameScreen {
         batch.begin();
 
         batch.draw(BattlePracticeAssets.TEXTURE_BG, 0, 0);
-        BattlePracticeAssets.FONT_BATTLE_PORTRAIT.draw(batch, layout, Settings.INTERNAL_WIDTH/2 - layout.width/2, Settings.INTERNAL_HEIGHT - 50);
+        BattlePracticeAssets.FONT_BATTLE_PORTRAIT.draw(batch, layout, INTERNAL_WIDTH/2 - layout.width/2, Settings.INTERNAL_HEIGHT - 50);
 
         // draw controls
         batch.draw(game.controller.button1Sprite(), inputHintX, inputHintY + 2 * inputHintLineHeight);
@@ -135,12 +139,14 @@ public class MapSelectScreen extends GameScreen {
     }
 
     private class MapButton extends TexturedButton {
-        public TiledMap map;
+        public String mapJSONFile;
         private GlyphLayout layout;
 
-        public MapButton(TiledMap map, String name, float x, float y, Runnable action) {
+        public MapButton(String mapJSONFile, float x, float y, Runnable action) {
             super(x, y, BattlePracticeAssets.TEXTURE_SQUARE, action);
-            this.map = map;
+            this.mapJSONFile = mapJSONFile;
+            Json json = new Json();
+            String name = json.fromJson(TacticsMap.class, Gdx.files.internal(mapJSONFile)).title;
             this.layout = new GlyphLayout(BattlePracticeAssets.FONT_BATTLE_PORTRAIT, name);
         }
 

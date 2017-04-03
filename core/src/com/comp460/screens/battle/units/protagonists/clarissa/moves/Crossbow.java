@@ -7,6 +7,7 @@ import com.comp460.screens.battle.BattleAnimation;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;
 import com.comp460.screens.battle.units.BattleUnitAbility;
+import com.comp460.screens.battle.units.DamageVector;
 import com.comp460.screens.battle.units.protagonists.clarissa.Clarissa;
 import com.comp460.screens.battle.units.protagonists.clarissa.Ingredient;
 
@@ -66,7 +67,9 @@ public class Crossbow extends BattleUnitAbility {
             }
             if (tipPos.x >= opponent.transform.x + 15 && tipPos.x <= opponent.transform.x + 30) {
                 if (tipPos.y >= opponent.transform.y && tipPos.y <= opponent.transform.y + 40) {
-                    opponent.applyDamage(ingredient.damageVector);
+                    DamageVector dmg = new DamageVector(ingredient.damageVector);
+                    dmg.source = clarissa;
+                    opponent.applyDamage(dmg);
                     screen.addAnimation(new BattleAnimation(ingredient.impactAnim, tipPos.x - 20, tipPos.y - 10, 0.1f));
                     return true;
                 }

@@ -12,9 +12,9 @@ import com.comp460.screens.battle.units.DamageVector;
  */
 public class Ingredient {
     public enum IngredientID{
-        NONE("", "", "attacks/arrow_normal", "attacks/impact", new DamageVector(10)),
-        POISON("ingredients/poison_inv", "ingredients/poison_field", "attacks/arrow_poison", "attacks/impact",  new DamageVector(20)),
-        FIRE("ingredients/fire_inv", "ingredients/fire_field", "attacks/arrow_fire", "attacks/impact", new DamageVector(30));
+        NONE("", "", "attacks/arrow_normal", "attacks/impact", new DamageVector(10, null)),
+        POISON("ingredients/poison_inv", "ingredients/poison_field", "attacks/arrow_poison", "attacks/impact",  new DamageVector(20, null)),
+        FIRE("ingredients/fire_inv", "ingredients/fire_field", "attacks/arrow_fire", "attacks/impact", new DamageVector(30, null));
 
         public Animation<TextureRegion> fieldAnim;
         public Animation<TextureRegion> impactAnim;

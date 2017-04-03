@@ -51,7 +51,7 @@ public class Punch extends BattleUnitAbility {
         duration--;
 
         if (opponent.curRow == row && opponent.curCol == col && damage) {
-            opponent.applyDamage(new DamageVector(20));
+            opponent.applyDamage(new DamageVector(20, andre));
             damage = false;
         }
     }

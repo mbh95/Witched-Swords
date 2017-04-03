@@ -180,9 +180,9 @@ public class BattleScreen extends GameScreen {
                 p1Unit.update(delta);
                 p2Unit.update(delta);
                 break;
+            case END_P2_DIED:
             case END_DRAW:
             case END_P1_DIED:
-            case END_P2_DIED:
             case END_TIME:
                 endDelay -= delta;
                 if (endDelay <= 0) {
@@ -217,9 +217,9 @@ public class BattleScreen extends GameScreen {
                 break;
             case RUNNING:
                 break;
-            case END_DRAW:
-            case END_P1_DIED:
             case END_P2_DIED:
+            case END_P1_DIED:
+            case END_DRAW:
             case END_TIME:
                 renderEnd(delta);
                 break;

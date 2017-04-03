@@ -90,7 +90,7 @@ class Spike extends BattleUnitAbility {
             }
             if (tipPos.x >= opponent.transform.x + 15 && tipPos.x <= opponent.transform.x + 30) {
                 if (tipPos.y >= opponent.transform.y && tipPos.y <= opponent.transform.y + 40) {
-                    opponent.applyDamage(new DamageVector(20));
+                    opponent.applyDamage(new DamageVector(20, baddie));
                     return true;
                 }
             }

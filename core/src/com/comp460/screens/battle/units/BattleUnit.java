@@ -48,9 +48,13 @@ public class BattleUnit implements BattleObject {
     public Queue<BattleBuff> buffs = new PriorityQueue<>();
 
     private boolean idleAnim;
+    private boolean fallenAnim;
+    private boolean victoryAnim;
     private Map<String, Animation<TextureRegion>> animationCache = new HashMap<>();
+
     public Animation<TextureRegion> curAnim;
     public float animTimer;
+
     public float restoreCntd = 0;
 
     public BattleScreen screen;
@@ -82,8 +86,8 @@ public class BattleUnit implements BattleObject {
             this.transform = new Vector3(0, 0, 0f);
 
 
-        this.curAnim = BattleAnimationManager.getBattleUnitAnimation(id, BattleAnimationManager.defaultBattleAnimID);
-        this.animTimer = 0f;
+        this.startAnimation("idle");
+
         if (speed != 0)
             this.restoreCntd = 1f/speed;
     }
@@ -92,11 +96,7 @@ public class BattleUnit implements BattleObject {
         transform.slerp(new Vector3(screen.colToScreenX(curRow, curCol), screen.rowToScreenY(curRow, curCol), transform.z), 0.3f);
         animTimer += delta;
         if (!idleAnim && curAnim.isAnimationFinished(animTimer)) {
-            curAnim = BattleAnimationManager.getBattleUnitAnimation(id, BattleAnimationManager.defaultBattleAnimID);
-            curAnim.setPlayMode(Animation.PlayMode.LOOP);
-            animTimer = 0f;
-            idleAnim = true;
-
+            startAnimation("idle");
         }
         batch.draw(curAnim.getKeyFrame(animTimer), transform.x, transform.y);
     }
@@ -121,14 +121,39 @@ public class BattleUnit implements BattleObject {
     }
 
     public void startAnimation(String animId) {
+        if (fallenAnim || victoryAnim || (idleAnim && animId.equals("idle"))) {
+            return;
+        }
+
+        animTimer = 0f;
+
         if (animationCache.containsKey(animId)) {
             curAnim = animationCache.get(animId);
         } else {
             curAnim = BattleAnimationManager.getBattleUnitAnimation(id, animId);
             animationCache.put(animId, curAnim);
         }
-        animTimer = 0f;
-        idleAnim = false;
+
+        if (animId.equals("idle")) {
+            idleAnim = true;
+        } else {
+            idleAnim = false;
+        }
+
+        if (animId.equals("fallen")) {
+            fallenAnim = true;
+            curAnim.setPlayMode(Animation.PlayMode.NORMAL);
+        } else {
+            fallenAnim = false;
+        }
+
+        if (animId.equals("victory")) {
+            victoryAnim = true;
+            curAnim.setPlayMode(Animation.PlayMode.LOOP);
+
+        } else {
+            victoryAnim = false;
+        }
     }
 
     public void move(int dr, int dc) {
@@ -173,6 +198,10 @@ public class BattleUnit implements BattleObject {
         if (curHP <= 0) {
             curHP = 0;
             startAnimation("fallen");
+            if (damageVector.source != null) {
+                damageVector.source.startAnimation("victory");
+            }
+            return curHP-prevHP;
 
         }
         if (curHP > maxHP) {

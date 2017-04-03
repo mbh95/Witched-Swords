@@ -125,7 +125,7 @@ public class Andre extends BattleUnit {
                     return;
                 }
                 if (opponent.curCol == smashCol) {
-                    opponent.applyDamage(new DamageVector(smashPower));
+                    opponent.applyDamage(new DamageVector(smashPower, this));
                 }
                 for (int r = 0; r < this.screen.numRows; r++) {
                     this.screen.tileOffsets[r][smashCol].y = smashPower;

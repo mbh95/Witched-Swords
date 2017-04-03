@@ -66,7 +66,7 @@ class Puff extends BattleUnitAbility {
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
-        user.applyDamage(new DamageVector(10));
+        user.applyDamage(new DamageVector(10, ghast));
 
         int gap = rng.nextInt(screen.numRows);
 
@@ -110,8 +110,8 @@ class Puff extends BattleUnitAbility {
             }
 
             if (opponent.curRow == row && opponent.curCol == col) {
-                float damageDealt = opponent.applyDamage(new DamageVector(1));
-                owner.applyDamage(new DamageVector((int)(2*damageDealt)));
+                float damageDealt = opponent.applyDamage(new DamageVector(1, ghast));
+                owner.applyDamage(new DamageVector((int)(2*damageDealt), ghast));
             }
         }
 

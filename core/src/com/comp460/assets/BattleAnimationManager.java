@@ -25,6 +25,9 @@ public class BattleAnimationManager {
         Animation<TextureRegion> anim = new Animation<TextureRegion>(0.25f, frames);
         if (animID.equals(defaultBattleAnimID)) {
             anim.setPlayMode(Animation.PlayMode.LOOP);
+        } else {
+            anim.setPlayMode(Animation.PlayMode.NORMAL);
+//            anim.setPlayMode(Animation.PlayMode.LOOP);
         }
         return anim;
     }

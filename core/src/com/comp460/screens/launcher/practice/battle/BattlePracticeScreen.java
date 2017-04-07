@@ -12,8 +12,8 @@ import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;
 import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
-import com.comp460.screens.launcher.Button;
-import com.comp460.screens.launcher.TexturedButton;
+import com.comp460.common.ui.Button;
+import com.comp460.common.ui.TexturedButton;
 
 /**
  * Created by matthewhammond on 2/11/17.

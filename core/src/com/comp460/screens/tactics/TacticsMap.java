@@ -79,7 +79,10 @@ public class TacticsMap {
                         int team = cell.getTile().getProperties().get("team", Integer.class);
                         String id = cell.getTile().getProperties().get("id", String.class);
 
-                        Entity unit = UnitFactory.makeUnit(this, id, team, r, c);
+                        boolean canHeal = (cell.getTile().getProperties().containsKey("canHeal") &&
+                                cell.getTile().getProperties().get("canHeal", Boolean.class));
+
+                        Entity unit = UnitFactory.makeUnit(this, id, team, r, c, canHeal);
 
                         screen.getEngine().addEntity(unit);
                         this.units[r][c] = unit;

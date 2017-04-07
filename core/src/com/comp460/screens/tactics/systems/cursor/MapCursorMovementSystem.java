@@ -2,15 +2,13 @@ package com.comp460.screens.tactics.systems.cursor;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.comp460.common.input.Controller;
 import com.comp460.screens.tactics.TacticsScreen;
 import com.comp460.screens.tactics.components.cursor.LockedComponent;
 import com.comp460.screens.tactics.components.cursor.MapCursorComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
 
-import static com.comp460.assets.SoundManager.click;
+import static com.comp460.assets.SoundManager.cursorMoveClick;
 
 /**
  * Created by matth on 2/20/2017.
@@ -41,7 +39,7 @@ public class MapCursorMovementSystem extends IteratingSystem {
             if ((controller.rightPressed() && cursor.countdown <= 0) || controller.rightJustPressed()) cursorPos.col++;
             if ((controller.upPressed() && cursor.countdown <= 0) || controller.upJustPressed()) cursorPos.row++;
             if ((controller.downPressed() && cursor.countdown <= 0) || controller.downJustPressed()) cursorPos.row--;
-;
+
             if (cursorPos.row < 0) cursorPos.row = 0;
             else if (cursorPos.row >= parentScreen.getMap().getHeight())
                 cursorPos.row = parentScreen.getMap().getHeight() - 1;
@@ -52,7 +50,7 @@ public class MapCursorMovementSystem extends IteratingSystem {
 
             if (cursorPos.row != oldRow || cursorPos.col != oldCol) {
                 cursor.countdown = cursor.delay;
-                click.play(1.0f);
+                cursorMoveClick.play();
             }
         } else {
             cursor.countdown -= deltaTime;

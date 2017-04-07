@@ -12,6 +12,8 @@ import com.comp460.screens.tactics.components.cursor.ActionMenuComponent;
 import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 
+import static com.comp460.assets.SoundManager.selectionClick;
+
 /**
  * Created by matth on 3/27/2017.
  */
@@ -32,6 +34,10 @@ public class ActionMenuSystem extends IteratingSystem {
         ATTACK_DOWN("Attack Down"),
         ATTACK_LEFT("Attack Left"),
         ATTACK_RIGHT("Attack Right"),
+        HEAL_UP("Heal Up"),
+        HEAL_DOWN("Heal Down"),
+        HEAL_LEFT("Heal Left"),
+        HEAL_RIGHT("Heal Right"),
         CANCEL("Cancel");
 
         private final String name;
@@ -66,6 +72,7 @@ public class ActionMenuSystem extends IteratingSystem {
             MapPositionComponent goal = path.positions.get(path.positions.size() - 1);
             UnitStatsComponent playerStats = UnitStatsComponent.get(selectionComponent.selected);
             UnitStatsComponent aiStats;
+            selectionClick.play();
             switch (actionMenu.actions.get(actionMenu.selectedAction)) {
                 case WAIT:
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);

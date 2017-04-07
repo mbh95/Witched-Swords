@@ -1,15 +1,22 @@
 package com.comp460.common;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 /**
  * Created by matthewhammond on 2/25/17.
  */
-public interface GameState {
+public abstract class GameState {
 
-    void init();
+    private GameScreen parentScreen;
+    private GameState prevState;
 
-    void update(float delta);
+    public abstract void init();
 
-    void render(SpriteBatch batch, SpriteBatch uiBatch);
+    public abstract void update(float delta);
+    public abstract void render();
+
+    public abstract void dispose();
+
+    public void prevState() {
+        parentScreen.setState(prevState);
+        this.dispose();
+    }
 }

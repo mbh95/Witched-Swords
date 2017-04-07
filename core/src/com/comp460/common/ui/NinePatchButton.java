@@ -1,4 +1,4 @@
-package com.comp460.screens.launcher;
+package com.comp460.common.ui;
 
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

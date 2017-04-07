@@ -39,10 +39,13 @@ public class MapCursorPathingSystem extends IteratingSystem {
         Entity oldSelection = selectionComponent.selected;
         Entity newSelection = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col);
 
+
+        MapPositionComponent selectionPos = MapPositionComponent.get(oldSelection);
+
         Set<MapPositionComponent> validPositions = getEngine().getSystem(ValidMoveManagementSystem.class).getValidMoves(selectionComponent.selected);
 
         // Recalculate the path if the cursor moved and is still in range of the selected unit
-        if (!cursorPos.equals(pathComponent.positions.get(pathComponent.positions.size() - 1)) && validPositions.contains(cursorPos)) {
+        if (!cursorPos.equals(pathComponent.positions.get(pathComponent.positions.size() - 1)) && (validPositions.contains(cursorPos) || cursorPos.equals(selectionPos))) {
             pathComponent.positions = parentScreen.getMap().shortestPath(selectionComponent.selected, cursorPos);
         }
 

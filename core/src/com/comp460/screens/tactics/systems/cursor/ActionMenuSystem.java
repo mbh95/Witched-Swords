@@ -9,6 +9,7 @@ import com.comp460.screens.tactics.components.cursor.MapCursorSelectionComponent
 import com.comp460.screens.tactics.components.cursor.MovementPathComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.cursor.ActionMenuComponent;
+import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 
 /**
@@ -68,6 +69,7 @@ public class ActionMenuSystem extends IteratingSystem {
             switch (actionMenu.actions.get(actionMenu.selectedAction)) {
                 case WAIT:
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
                     break;
                 case ATTACK_UP:
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
@@ -80,7 +82,6 @@ public class ActionMenuSystem extends IteratingSystem {
                 case ATTACK_LEFT:
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
                     screen.transitionToBattleView(selectionComponent.selected, screen.getMap().getUnitAt(goal.row, goal.col - 1), true);
-
                     break;
                 case ATTACK_RIGHT:
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);

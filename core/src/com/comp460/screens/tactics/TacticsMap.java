@@ -269,8 +269,6 @@ public class TacticsMap {
         Entity prevUnit = this.units[row][col];
         this.units[row][col] = selection;
 
-        selection.remove(ReadyToMoveComponent.class);
-
         screen.clearSelections();
         return prevUnit;
     }
@@ -281,6 +279,8 @@ public class TacticsMap {
             this.units[selectionPos.row][selectionPos.col] = null;
         }
     }
+
+
 
 
     class MapTile {

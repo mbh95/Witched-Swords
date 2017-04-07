@@ -107,10 +107,9 @@ public class AiSystem extends IteratingSystem {
                     screen.getMap().move(toMove, closest.row, closest.col);
                     screen.transitionToBattleView(target, toMove, false);
                 }
+            } else {
+                toMove.remove(ReadyToMoveComponent.class);
             }
-
-
-            toMove.remove(ReadyToMoveComponent.class);
 
             moveQueue.clear();
         }

@@ -238,8 +238,6 @@ public class TacticsScreen extends GameScreen {
                 GameUnit aiUnit = UnitStatsComponent.get(aiEntity).base;
                 game.setScreen(new BattleScreen(game, this, playerUnit, aiUnit, playerInitiated, false, 10f));
                 cursor.add(new CameraTargetComponent(camera, 0.3f));
-                playerEntity.remove(CameraTargetComponent.class);
-                aiEntity.remove(CameraTargetComponent.class);
 
                 zoom = 1f;
                 return;
@@ -503,7 +501,6 @@ public class TacticsScreen extends GameScreen {
         aiTurnFont.draw(uiBatch, aiTurnLayout, width / 2 - aiTurnLayout.width / 2, height / 2 + aiTurnLayout.height / 2);
 
         uiBatch.end();
-
     }
 
     public void startTransitionToPlayerTurn() {
@@ -564,11 +561,10 @@ public class TacticsScreen extends GameScreen {
         this.playerEntity = playerEntity;
         this.aiEntity = aiEntity;
 
+        engine.removeEntity(cursor);
 //        engine.getEntitiesFor(unitsFamily).forEach(entity -> entity.add(new InvisibleComponent()));
         playerEntity.remove(InvisibleComponent.class);
         aiEntity.remove(InvisibleComponent.class);
-
-        cursor.remove(CameraTargetComponent.class);
 
         engine.getSystem(AiSystem.class).setProcessing(false);
         battleTimer = battleTransitionLen;
@@ -605,6 +601,17 @@ public class TacticsScreen extends GameScreen {
                 map.remove(e);
             }
         });
+
+        if (playerEntity != null) {
+            playerEntity.remove(ReadyToMoveComponent.class);
+            playerEntity = null;
+        }
+        if (aiEntity != null) {
+            aiEntity.remove(ReadyToMoveComponent.class);
+            aiEntity = null;
+        }
+
+//        engine.addEntity(cursor);
 //        engine.getEntitiesFor(invisibleFamily).forEach(entity -> entity.remove(InvisibleComponent.class));
 
         engine.getSystem(ValidMoveManagementSystem.class).rebuildMoves();

@@ -42,8 +42,8 @@ public class MapSelectScreen extends GameScreen {
         super(game, prevScreen);
 
         MapButton bridgemapButton = new MapButton("maps/bridge.json", Settings.INTERNAL_WIDTH/2-50, 50, ()->{});
-        MapButton smallmapButton = new MapButton("maps/small.json", Settings.INTERNAL_WIDTH/2-100, 50, ()->{});
-        MapButton smallmapButton = new MapButton("maps/jo.json", Settings.INTERNAL_WIDTH/2-100, 50, ()->{});
+//        MapButton smallmapButton = new MapButton("maps/small.json", Settings.INTERNAL_WIDTH/2-100, 50, ()->{});
+        MapButton smallmapButton = new MapButton("maps/joe.json", Settings.INTERNAL_WIDTH/2-100, 50, ()->{});
 
 //        MapButton canyonmapButton = new MapButton("maps/bridge.json", Settings.INTERNAL_WIDTH/2, 50, ()->{});
         MapButton cliffsmapButton = new MapButton("maps/cliffs.json", Settings.INTERNAL_WIDTH/2, 50, ()->{});

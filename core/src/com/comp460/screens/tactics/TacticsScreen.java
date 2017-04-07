@@ -237,8 +237,11 @@ public class TacticsScreen extends GameScreen {
                 GameUnit playerUnit = UnitStatsComponent.get(playerEntity).base;
                 GameUnit aiUnit = UnitStatsComponent.get(aiEntity).base;
                 game.setScreen(new BattleScreen(game, this, playerUnit, aiUnit, playerInitiated, false, 10f));
-                cursor.add(new CameraTargetComponent(camera, 0.3f));
-
+                engine.getSystem(AiSystem.class).setProcessing(true);
+                engine.removeEntity(cameraTarget);
+                if (curState == PLAYER_TURN) {
+                    engine.addEntity(cursor);
+                }
                 zoom = 1f;
                 return;
             }
@@ -298,6 +301,8 @@ public class TacticsScreen extends GameScreen {
     // also checks for enter to end turn
     @Override
     public void render(float delta) {
+
+//        System.out.println(curState.toString());
         this.camera.zoom = zoom;
         super.render(delta);
 
@@ -356,8 +361,8 @@ public class TacticsScreen extends GameScreen {
 
     public TemplateRow[] menuButtonTemplates = new TemplateRow[]{
             new TemplateRow("Resume", () -> {
-                engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
-                engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
+//                engine.getSystem(MapCursorMovementSystem.class).setProcessing(true);
+//                engine.getSystem(MapCursorSelectionSystem.class).setProcessing(true);
                 curState = PLAYER_TURN;
                 engine.addEntity(cursor);
 
@@ -561,10 +566,9 @@ public class TacticsScreen extends GameScreen {
         this.playerEntity = playerEntity;
         this.aiEntity = aiEntity;
 
-        engine.removeEntity(cursor);
 //        engine.getEntitiesFor(unitsFamily).forEach(entity -> entity.add(new InvisibleComponent()));
-        playerEntity.remove(InvisibleComponent.class);
-        aiEntity.remove(InvisibleComponent.class);
+//        playerEntity.remove(InvisibleComponent.class);
+//        aiEntity.remove(InvisibleComponent.class);
 
         engine.getSystem(AiSystem.class).setProcessing(false);
         battleTimer = battleTransitionLen;
@@ -576,8 +580,12 @@ public class TacticsScreen extends GameScreen {
         Vector3 aiVec = engine.getSystem(MapToScreenSystem.class).goal(aiEntity);
         aiVec.x += map.getTileWidth() / 2f;
         aiVec.y += map.getTileHeight() / 2f;
+
+        cameraTarget = new Entity();
+        cameraTarget.add(new CameraTargetComponent(camera, 0.1f));
         cameraTarget.add(new TransformComponent((playerVec.x + aiVec.x) / 2f, (playerVec.y + aiVec.y) / 2f, 0f));
         engine.addEntity(cameraTarget);
+        engine.removeEntity(cursor);
     }
 
     public void playerWins() {
@@ -610,14 +618,10 @@ public class TacticsScreen extends GameScreen {
             aiEntity.remove(ReadyToMoveComponent.class);
             aiEntity = null;
         }
-
-//        engine.addEntity(cursor);
 //        engine.getEntitiesFor(invisibleFamily).forEach(entity -> entity.remove(InvisibleComponent.class));
 
         engine.getSystem(ValidMoveManagementSystem.class).rebuildMoves();
-        engine.getSystem(AiSystem.class).setProcessing(true);
-        engine.removeEntity(cameraTarget);
-
+//        engine.getSystem(AiSystem.class).setProcessing(true);
     }
 
     @Override

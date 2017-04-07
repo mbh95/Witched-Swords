@@ -16,32 +16,32 @@
   </terraintypes>
   <tile id="0">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="1">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="2">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="3">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="4">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="5">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="6">
@@ -136,32 +136,32 @@
   </tile>
   <tile id="24">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="25">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="26">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="27">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="28">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="29">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="30">
@@ -256,32 +256,32 @@
   </tile>
   <tile id="48">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="49">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="50">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="51">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="52">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="53">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="54">
@@ -376,32 +376,32 @@
   </tile>
   <tile id="72">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="73">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="74">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="75">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="76">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="77">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="78">
@@ -496,32 +496,32 @@
   </tile>
   <tile id="96">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="97">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="98">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="99">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="100">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="101">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="102">
@@ -616,32 +616,32 @@
   </tile>
   <tile id="120">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="121">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="122">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="123">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="124">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="125">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="126">
@@ -831,7 +831,7 @@
   </tile>
   <tile id="163">
    <properties>
-    <property name="traversable" type="bool" value="false"/>
+    <property name="traversable" type="bool" value="true"/>
    </properties>
   </tile>
   <tile id="164">
@@ -1496,37 +1496,37 @@
 151,151,151,151,151,151,151,151,151,151,
 151,151,151,151,151,151,151,151,151,151,
 151,151,151,151,151,151,151,151,151,151,
-147,146,148,149,148,148,146,148,147,146,
-172,172,172,172,172,172,172,172,172,172,
-170,268,267,266,267,267,268,267,268,171,
-270,151,151,151,151,151,151,151,151,265,
 151,151,151,151,151,151,151,151,151,151,
 151,151,151,151,151,151,151,151,151,151,
-151,151,151,151,151,151,151,151,151,151
+151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,
+151,151,151,151,151,151,151,151,151,151,
+151,151,1,2,3,4,5,6,151,151,
+151,151,25,76,77,53,100,30,151,151
 </data>
  </layer>
- <layer name="layer1" width="10" height="10">
+ <layer name="decoration" width="10" height="10">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
-0,0,0,7,0,0,0,0,0,0,
-0,0,0,0,0,0,103,0,0,0,
-0,0,0,0,119,120,0,0,0,0,
-0,0,0,0,119,120,0,0,0,0,
-0,0,0,0,119,120,0,0,0,0,
-0,0,0,79,0,0,79,0,0,0,
-0,0,0,0,0,0,0,55,0,0,
-0,79,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,31,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,55,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,103,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,7,0,
+0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="layer2" width="10" height="10">
+ <layer name="objects" width="10" height="10">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
+0,0,0,158,159,0,0,0,0,0,
+0,0,0,182,183,0,0,0,0,0,
+0,207,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,278,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
@@ -1536,15 +1536,15 @@
  <layer name="units" width="10" height="10">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,
-0,0,0,290,0,290,0,0,0,0,
-0,0,290,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,290,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,289,0,292,0,0,0,
-0,0,0,0,0,291,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,289,292,0,0,0,0
 </data>
  </layer>
 </map>

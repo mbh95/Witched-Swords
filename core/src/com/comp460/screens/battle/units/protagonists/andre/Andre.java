@@ -60,7 +60,7 @@ public class Andre extends BattleUnit {
         }
         this.smashTimer = 0.1f;
         this.smashCol = 0;
-        this.smashPower = 50;
+        this.smashPower = 100;
     }
 
     public void raiseShield(float duration) {
@@ -94,9 +94,6 @@ public class Andre extends BattleUnit {
    @Override
     public void render(SpriteBatch batch, float delta) {
         super.render(batch, delta);
-        for (Punch punch : punches)  {
-            punch.render(batch, screen);
-        }
 
         BattleUnit opponent = this.screen.p1Unit;
         if (this == opponent) {

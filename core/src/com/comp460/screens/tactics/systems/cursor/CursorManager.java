@@ -2,6 +2,7 @@ package com.comp460.screens.tactics.systems.cursor;
 
 import com.badlogic.ashley.core.Entity;
 import com.comp460.screens.tactics.components.cursor.MapCursorSelectionComponent;
+import com.comp460.screens.tactics.components.cursor.MovementPathComponent;
 import com.comp460.screens.tactics.components.unit.SelectedComponent;
 import com.comp460.screens.tactics.components.unit.ShowValidMovesComponent;
 
@@ -17,7 +18,7 @@ public class CursorManager {
             Entity selection = selectionComponent.selected;
             selection.remove(SelectedComponent.class);
             selection.remove(ShowValidMovesComponent.class);
-
+            cursor.remove(MovementPathComponent.class);
             cursor.remove(MapCursorSelectionComponent.class);
         }
     }

@@ -1,4 +1,4 @@
-package com.comp460.screens.battle.units.protagonists.andre.moves;
+package com.comp460.screens.battle.units.protagonists.yvonne.moves;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,22 +9,22 @@ import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;
 import com.comp460.screens.battle.units.BattleUnitAbility;
 import com.comp460.screens.battle.units.DamageVector;
-import com.comp460.screens.battle.units.protagonists.andre.Andre;
+import com.comp460.screens.battle.units.protagonists.yvonne.Yvonne;
 
 /**
- * Created by Belinda on 2/17/17.
+ * Created by matthewhammond on 4/7/17.
  */
-public class Punch extends BattleUnitAbility {
-    public Punch(Andre andre) {
-        super("punch", "Punch", "attack", "A rocket powered punch.");
+public class Slice extends BattleUnitAbility {
+    public Slice(Yvonne yvonne) {
+        super("slice", "Slice", "attack", "A reckless and deadly swing from a scythe.");
         this.animTimer = 0;
-        this.andre = andre;
+        this.yvonne = yvonne;
     }
-    public static Animation<TextureRegion> punch = BattleAnimationManager.getBattleAnimation("attacks/punch");
+    public static Animation<TextureRegion> slice = BattleAnimationManager.getBattleAnimation("attacks/slice");
     public float animTimer;
     public int duration = 15;
     public boolean damage = true;
-    private Andre andre;
+    private Yvonne yvonne;
     private int row, col;
 
     @Override
@@ -35,11 +35,11 @@ public class Punch extends BattleUnitAbility {
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
-        this.row = andre.curRow;
-        this.col = andre.curCol+1;
+        this.row = yvonne.curRow;
+        this.col = yvonne.curCol+3;
         user.curEnergy -= 1;
-        screen.addAnimation(new BattleAnimation(punch, user.transform.x+40, user.transform.y, 0.2f));
-        andre.punches.add(this);
+        screen.addAnimation(new BattleAnimation(slice, screen.colToScreenX(0, col), screen.rowToScreenY(0, col), 0.2f));
+        yvonne.slices.add(this);
         this.damage = true;
     }
 
@@ -50,8 +50,8 @@ public class Punch extends BattleUnitAbility {
         }
         duration--;
 
-        if (opponent.curRow == row && opponent.curCol == col && damage) {
-            opponent.applyDamage(new DamageVector(20, andre));
+        if (opponent.curCol == col && damage) {
+            opponent.applyDamage(new DamageVector(20, yvonne));
             damage = false;
         }
     }

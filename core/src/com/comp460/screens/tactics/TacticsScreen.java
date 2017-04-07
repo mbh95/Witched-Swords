@@ -93,6 +93,7 @@ public class TacticsScreen extends GameScreen {
     public TacticsState curState;
 
     private float timer;
+    private boolean dangerToggled = false;
 
     private float battleTransitionLen = 1.0f;
     private float battleTimer;
@@ -250,6 +251,8 @@ public class TacticsScreen extends GameScreen {
                         curState = MENU;
                         engine.removeEntity(cursor);
                     }
+                    if (game.controller.cJustPressed())
+                        toggleEnemySelections();
                     break;
                 case MENU:
                     if (game.controller.leftJustPressed()) curSelectedButton = curSelectedButton.left;
@@ -627,6 +630,27 @@ public class TacticsScreen extends GameScreen {
         });
         engine.getEntitiesFor(pathingFamily).forEach(e -> {
             e.remove(MovementPathComponent.class);
+        });
+    }
+
+    public void toggleEnemySelections() {
+        if (dangerToggled)
+            hideEnemySelections();
+        else
+            showEnemySelections();
+
+        dangerToggled = !dangerToggled;
+    }
+
+    public void showEnemySelections() {
+        engine.getEntitiesFor(aiUnitsFamily).forEach((e) -> {
+            e.add(new ShowValidMovesComponent());
+        });
+    }
+
+    public void hideEnemySelections() {
+        engine.getEntitiesFor(aiUnitsFamily).forEach((e) -> {
+            e.remove(ShowValidMovesComponent.class);
         });
     }
 }

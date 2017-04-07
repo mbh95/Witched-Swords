@@ -103,6 +103,18 @@ public abstract class Controller {
         return returnVal;
     }
 
+    public abstract boolean cPressed();
+    public abstract boolean cJustPressed();
+
+    private boolean cToggle = true;
+    public boolean cJustPressedDestructive() {
+        boolean returnVal = cToggle && cJustPressed();
+        if (returnVal) {
+            cToggle = false;
+        }
+        return returnVal;
+    }
+
     public abstract TextureRegion button1Sprite();
     public abstract TextureRegion button2Sprite();
     public abstract TextureRegion startSprite();

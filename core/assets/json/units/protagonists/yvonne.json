@@ -2,9 +2,10 @@
   "id": "yvonne",
   "name": "Yvonne",
   "description": "A monster hunter.",
-  "maxHP": 300,
-  "curHP": 50,
+  "maxHP": 200,
+  "curHP": 100,
   "moveDist": 5,
+  "speed": 0.7,
   "battleFactory": {
     "class": "com.comp460.screens.battle.units.protagonists.yvonne.YvonneFactory"
   }

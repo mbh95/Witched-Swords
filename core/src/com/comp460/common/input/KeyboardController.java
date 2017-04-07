@@ -102,6 +102,16 @@ public class KeyboardController extends Controller {
     }
 
     @Override
+    public boolean cPressed() {
+        return Gdx.input.isKeyPressed(Input.Keys.C);
+    }
+
+    @Override
+    public boolean cJustPressed() {
+        return Gdx.input.isKeyJustPressed(Input.Keys.C);
+    }
+
+    @Override
     public TextureRegion button1Sprite() {
         return zSprite;
     }

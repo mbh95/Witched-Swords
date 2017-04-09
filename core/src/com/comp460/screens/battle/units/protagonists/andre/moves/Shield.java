@@ -15,7 +15,6 @@ import com.comp460.screens.battle.units.protagonists.andre.Andre;
 public class Shield extends BattleUnitAbility {
 
     public static float duration = 1f;
-    public static Animation<TextureRegion> shieldFlare = BattleAnimationManager.getBattleAnimation("attacks/shield_outline");
 
     public Andre andre;
     public Shield(Andre andre) {
@@ -31,7 +30,7 @@ public class Shield extends BattleUnitAbility {
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
-        screen.addAnimation(new BattleAnimation(shieldFlare, user.transform.x, user.transform.y, 0.2f));
+//        screen.addAnimation(new BattleAnimation(shieldFlare, user.transform.x, user.transform.y, 0.2f));
         user.curEnergy-=1;
         andre.raiseShield(0.5f);
     }

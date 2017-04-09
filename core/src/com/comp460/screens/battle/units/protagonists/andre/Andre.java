@@ -1,10 +1,8 @@
 package com.comp460.screens.battle.units.protagonists.andre;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.comp460.assets.BattleAnimationManager;
 import com.comp460.assets.FontManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.screens.battle.BattleScreen;
@@ -27,13 +25,21 @@ import java.util.Queue;
  */
 public class Andre extends BattleUnit {
 
+    public static Animation<TextureRegion> shieldFlare = BattleAnimationManager.getBattleAnimation("attacks/shield_outline");
+
     public static final BitmapFont blockFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.CYAN);
-    public static final TextureRegion INVENTORY_SPRITE = SpriteManager.BATTLE.findRegion("ui/clarissa_inv");
+    public static final TextureRegion ENERGY_0_SPRITE = SpriteManager.BATTLE.findRegion("andre-power/empty");
+    public static final TextureRegion ENERGY_1_SPRITE = SpriteManager.BATTLE.findRegion("andre-power/1");
+    public static final TextureRegion ENERGY_2_SPRITE = SpriteManager.BATTLE.findRegion("andre-power/2");
+    public static final TextureRegion ENERGY_3_SPRITE = SpriteManager.BATTLE.findRegion("andre-power/3");
+
     private static BitmapFont yellowFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 10, Color.ORANGE, Color.BLACK, 2);
     private static GlyphLayout smashReadyLayout = new GlyphLayout(yellowFont, "SMASH READY!");
+    private static BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
+    private static GlyphLayout hintLayout = new GlyphLayout(hintFont, "Shield attacks to charge up!");
 
-    public float invX = 400/2 - 2*40;
-    public float invY =  (int)screen.gridOffsetY + 3 * 40 + 2;
+    public float invX = 400 / 2 - 2 * 40;
+    public float invY = (int) screen.gridOffsetY + 3 * 40 + 2;
     public final int invSlotWidth = 12;
 
     public int maxCharges = 3;
@@ -82,7 +88,7 @@ public class Andre extends BattleUnit {
             }
         }
 
-        for (Iterator<Punch> iter = punches.iterator(); iter.hasNext();) {
+        for (Iterator<Punch> iter = punches.iterator(); iter.hasNext(); ) {
             Punch punch = iter.next();
             punch.update(screen, this, delta);
             if (punch.duration <= 0) {
@@ -91,25 +97,46 @@ public class Andre extends BattleUnit {
         }
     }
 
-   @Override
+    @Override
     public void render(SpriteBatch batch, float delta) {
         super.render(batch, delta);
 
+        if (shieldFresh)
+            batch.draw(shieldFlare.getKeyFrame(0), screen.colToScreenX(this.curRow, this.curCol), screen.rowToScreenY(this.curRow, this.curCol));
         BattleUnit opponent = this.screen.p1Unit;
         if (this == opponent) {
             opponent = this.screen.p2Unit;
         }
 
-       if (ability1 instanceof Smash) yellowFont.draw(batch, smashReadyLayout,
-               screen.colToScreenX(0,0) + (int)(screen.tileWidth*1.5) - smashReadyLayout.width / 2,
-               screen.rowToScreenY(2,0) + screen.tileHeight + INVENTORY_SPRITE.getRegionHeight() + smashReadyLayout.height / 2 + 5);
+        if (ability1 instanceof Smash) {
+            yellowFont.draw(batch, smashReadyLayout,
+                    screen.colToScreenX(0, 0) + (int) (screen.tileWidth * 1.5) - smashReadyLayout.width / 2,
+                    screen.rowToScreenY(2, 0) + screen.tileHeight + ENERGY_0_SPRITE.getRegionHeight() + smashReadyLayout.height / 2 + 10);
+        } else {
+            hintFont.draw(batch, hintLayout,
+                    screen.colToScreenX(0, 0) + (int) (screen.tileWidth * 1.5) - hintLayout.width / 2,
+                    screen.rowToScreenY(2, 0) + screen.tileHeight + ENERGY_0_SPRITE.getRegionHeight() + hintLayout.height / 2 + 5);
+        }
 
-       batch.draw(INVENTORY_SPRITE, invX, invY);
-       int x = invSlotWidth * (maxCharges - 1);
-       for (int i = 0; i < charges; i++) {
-           batch.draw(SpriteManager.BATTLE.findRegion("ingredients/fire_inv"), invX + x + 1, invY + 1);
-           x -= invSlotWidth;
-       }
+        switch (charges) {
+            case 0:
+                batch.draw(ENERGY_0_SPRITE, invX, invY);
+                break;
+            case 1:
+                batch.draw(ENERGY_1_SPRITE, invX, invY);
+                break;
+            case 2:
+                batch.draw(ENERGY_2_SPRITE, invX, invY);
+                break;
+            case 3:
+                batch.draw(ENERGY_3_SPRITE, invX, invY);
+                break;
+        }
+//       int x = invSlotWidth * (maxCharges - 1);
+//       for (int i = 0; i < charges; i++) {
+//           batch.draw(SpriteManager.BATTLE.findRegion("ingredients/fire_inv"), invX + x + 1, invY + 1);
+//           x -= invSlotWidth;
+//       }
 
         if (smashCol >= 0) {
             smashTimer -= delta;
@@ -137,7 +164,7 @@ public class Andre extends BattleUnit {
             return super.applyDamage(damageVector);
         } else if (shieldFresh) {
 //            super.curEnergy += 2;
-            charges = Math.min(3, charges+1);
+            charges = Math.min(3, charges + 1);
             shieldFresh = false;
             screen.addAnimation(new FloatingText("Block", blockFont, transform.x, transform.y + 40, 0.2f));
         }

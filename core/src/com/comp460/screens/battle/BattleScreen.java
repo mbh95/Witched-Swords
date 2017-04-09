@@ -279,7 +279,7 @@ public class BattleScreen extends GameScreen {
         movesFont.draw(batch, p2MovesLayout, 400 - p2MovesLayout.width - 10, y);
         batch.end();
 
-        renderTimer(width / 2, 200);
+        renderTimer(width / 2, 210);
     }
 
     private void renderTimer(float x, float y) {

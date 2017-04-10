@@ -76,17 +76,17 @@ public class Yvonne extends BattleUnit {
             }
         }
 
-//        if (attackUpOn) {
-//            hurtTimer -= delta;
-//            if (hurtTimer <= 0) {
-//                hurtBuffer += 1;
-//                if (hurtBuffer == 5) {
-//                    hurtBuffer = 0;
-//                    this.applyDamage(new DamageVector(5, this));
-//                }
-//                hurtTimer = hurtDelay;
-//            }
-//        }
+        if (attackUpOn) {
+            hurtTimer -= delta;
+            if (hurtTimer <= 0) {
+                hurtBuffer += 1;
+                if (hurtBuffer == 5) {
+                    hurtBuffer = 0;
+                    this.applyDamage(new DamageVector(5, this));
+                }
+                hurtTimer = hurtDelay;
+            }
+        }
     }
 
     @Override

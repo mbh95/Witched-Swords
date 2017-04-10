@@ -5,6 +5,7 @@
   "maxHP": 150,
   "curHP": 150,
   "moveDist": 5,
+  "speed": 1.0,
   "battleFactory": {
     "class": "com.comp460.screens.battle.units.protagonists.zane.ZaneFactory"
   }

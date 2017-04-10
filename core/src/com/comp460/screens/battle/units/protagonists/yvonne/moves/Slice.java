@@ -20,7 +20,7 @@ public class Slice extends BattleUnitAbility {
     public Yvonne yvonne;
 
     public Slice(Yvonne yvonne) {
-        super("slice", "Slice", "attack", "A reckless and deadly swing from a scythe.");
+        super("slice", "Slice", "attack", "A bloodthirsty swing from a scythe spanning an entire column.");
         this.yvonne = yvonne;
     }
 

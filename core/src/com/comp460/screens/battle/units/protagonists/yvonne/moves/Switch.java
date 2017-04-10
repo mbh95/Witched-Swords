@@ -20,7 +20,7 @@ public class Switch extends BattleUnitAbility {
     private static BitmapFont notifyFontGreen = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.GREEN, Color.BLACK, 1);
 
     public Switch(Yvonne yvonne) {
-        super("switch", "Rage", "attack", "Toggle that raises attack but increases incoming damage.");
+        super("switch", "Rage", "attack", "Toggle that raises attack but increases incoming damage and drains health.");
         this.yvonne = yvonne;
     }
 

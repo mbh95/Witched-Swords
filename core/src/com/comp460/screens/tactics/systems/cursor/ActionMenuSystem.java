@@ -100,21 +100,26 @@ public class ActionMenuSystem extends IteratingSystem {
                 case HEAL_UP:
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
                     heal(screen.getMap().getUnitAt(goal.row + 1, goal.col));
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
                     break;
                 case HEAL_DOWN:
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
                     heal(screen.getMap().getUnitAt(goal.row - 1, goal.col));
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
                     break;
                 case HEAL_LEFT:
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
                     heal(screen.getMap().getUnitAt(goal.row, goal.col - 1));
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
                     break;
                 case HEAL_RIGHT:
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
                     heal(screen.getMap().getUnitAt(goal.row, goal.col + 1));
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
                     break;
                 case HEAL_SELF:
                     heal(selectionComponent.selected);
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
                     selectionComponent.selected.remove(ReadyToMoveComponent.class);
                     break;
                 case CANCEL:

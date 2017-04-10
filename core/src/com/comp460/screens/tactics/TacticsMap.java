@@ -273,6 +273,7 @@ public class TacticsMap {
         this.units[row][col] = selection;
 
         screen.clearSelections();
+        screen.recalculateMoves();
         return prevUnit;
     }
 

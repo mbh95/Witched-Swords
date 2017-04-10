@@ -228,7 +228,7 @@ public class BattlePracticeScreen extends GameScreen {
 //        float y = 240f / 2 - h / 2;
 
         float w = infoWidth;
-        float h = infoHeight;
+        float h = Math.max(infoHeight, infoUnit.infoLayout.height + 2 * padding);
         float x = 100;
         float y = 0;
 

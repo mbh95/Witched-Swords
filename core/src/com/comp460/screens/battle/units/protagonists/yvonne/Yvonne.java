@@ -76,17 +76,17 @@ public class Yvonne extends BattleUnit {
             }
         }
 
-        if (attackUpOn) {
-            hurtTimer -= delta;
-            if (hurtTimer <= 0) {
-                hurtBuffer += 1;
-                if (hurtBuffer == 5) {
-                    hurtBuffer = 0;
-                    this.applyDamage(new DamageVector(5, this));
-                }
-                hurtTimer = hurtDelay;
-            }
-        }
+//        if (attackUpOn) {
+//            hurtTimer -= delta;
+//            if (hurtTimer <= 0) {
+//                hurtBuffer += 1;
+//                if (hurtBuffer == 5) {
+//                    hurtBuffer = 0;
+//                    this.applyDamage(new DamageVector(5, this));
+//                }
+//                hurtTimer = hurtDelay;
+//            }
+//        }
     }
 
     @Override
@@ -140,11 +140,12 @@ public class Yvonne extends BattleUnit {
 
     @Override
     public float applyDamage(DamageVector damageVector) {
+        DamageVector adjusted = new DamageVector(damageVector.trueDamage * ((attackUpOn) ? 2 : 1), damageVector.source);
         if (tranceActive) {
-            DamageVector reversed = new DamageVector(-damageVector.trueDamage, damageVector.source);
+            DamageVector reversed = new DamageVector(-adjusted.trueDamage, damageVector.source);
             return -super.applyDamage(reversed);
         } else {
-            return super.applyDamage(damageVector);
+            return super.applyDamage(adjusted);
         }
     }
 

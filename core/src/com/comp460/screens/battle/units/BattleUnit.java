@@ -21,8 +21,8 @@ import java.util.*;
  */
 public class BattleUnit implements BattleObject {
 
-    public static BitmapFont damageFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.RED);
-    public static BitmapFont healingFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.GREEN);
+    public static BitmapFont damageFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.RED, Color.BLACK, 1);
+    public static BitmapFont healingFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.GREEN, Color.BLACK, 1);
 
     public String id;
     public String name;

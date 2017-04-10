@@ -16,11 +16,11 @@ public class Switch extends BattleUnitAbility {
 
     private Yvonne yvonne;
 
-    private static BitmapFont notifyFontRed = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.RED);
-    private static BitmapFont notifyFontGreen = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.GREEN);
+    private static BitmapFont notifyFontRed = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.RED, Color.BLACK, 1);
+    private static BitmapFont notifyFontGreen = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.GREEN, Color.BLACK, 1);
 
     public Switch(Yvonne yvonne) {
-        super("switch", "Rage", "attack", "Raise attack, drains health.");
+        super("switch", "Rage", "attack", "Toggle that raises attack but increases incoming damage.");
         this.yvonne = yvonne;
     }
 
@@ -36,12 +36,11 @@ public class Switch extends BattleUnitAbility {
         yvonne.attackUpOn = !yvonne.attackUpOn;
 //        yvonne.startTrance();
         if (yvonne.attackUpOn) {
-            screen.addAnimation(new FloatingText("+ATK", notifyFontGreen, (float) (yvonne.transform.x + 16f), yvonne.transform.y, 0.5f));
-            screen.addAnimation(new FloatingText("+HP DRAIN", notifyFontRed, (float) (yvonne.transform.x + 16f), yvonne.transform.y + 10, 0.5f));
-
+            screen.addAnimation(new FloatingText("x2 ATK", notifyFontGreen, (float) (yvonne.transform.x + 20f), yvonne.transform.y, 0.5f));
+            screen.addAnimation(new FloatingText("x2 DMG", notifyFontRed, (float) (yvonne.transform.x + 20f), yvonne.transform.y + 10, 0.5f));
         } else {
-            screen.addAnimation(new FloatingText("-ATK", notifyFontRed, (float) (yvonne.transform.x + 16f), yvonne.transform.y, 0.5f));
-            screen.addAnimation(new FloatingText("-HP DRAIN", notifyFontGreen, (float) (yvonne.transform.x + 16f), yvonne.transform.y + 10, 0.5f));
+            screen.addAnimation(new FloatingText("x1 ATK", notifyFontRed, (float) (yvonne.transform.x + 20f), yvonne.transform.y, 0.5f));
+            screen.addAnimation(new FloatingText("x1 DMG", notifyFontGreen, (float) (yvonne.transform.x + 20f), yvonne.transform.y + 10, 0.5f));
         }
 
     }

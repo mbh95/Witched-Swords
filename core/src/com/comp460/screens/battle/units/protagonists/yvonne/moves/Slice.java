@@ -32,7 +32,7 @@ public class Slice extends BattleUnitAbility {
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
-        SliceInstance sliceInstance = new SliceInstance(yvonne.curRow, yvonne.curCol + 3, 2f, yvonne.attackUpOn ? 20 : 10, yvonne, !yvonne.attackUpOn);
+        SliceInstance sliceInstance = new SliceInstance(yvonne.curRow, yvonne.curCol + 3, .2f, 10, yvonne, true);
         user.removeEnergy(1);
         yvonne.slices.add(sliceInstance);
         screen.addAnimation(new BattleAnimation(sliceAnim, screen.colToScreenX(0, yvonne.curCol + 3), screen.rowToScreenY(0, yvonne.curCol + 3), 0.2f));
@@ -51,9 +51,10 @@ public class Slice extends BattleUnitAbility {
             this.col = col;
             this.timer = duration;
             this.doneDamage = false;
-            this.damageAmt = damage;
             this.yvonne = yvonne;
             this.lifesteal = lifesteal;
+            this.damageAmt = yvonne.attackUpOn ? damage * 2 : damage;
+
         }
 
         public void update(BattleScreen screen, BattleUnit owner, float delta) {

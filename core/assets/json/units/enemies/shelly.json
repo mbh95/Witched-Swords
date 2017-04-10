@@ -6,6 +6,6 @@
   "curHP": 250,
   "moveDist": 5,
   "battleFactory": {
-    "class": "com.comp460.screens.battle.units.enemies.ghast.GhastFactory"
+    "class": "com.comp460.screens.battle.units.enemies.shelly.ShellyFactory"
   }
 }

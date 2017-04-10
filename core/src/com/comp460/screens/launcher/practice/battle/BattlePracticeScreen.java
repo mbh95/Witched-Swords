@@ -59,7 +59,7 @@ public class BattlePracticeScreen extends GameScreen {
         CharacterButton bulbaButton = makeAiCharacterButton("json/units/enemies/bulba.json", 400 - 50, 50 + bottomBorder);
         CharacterButton ghastButton = makeAiCharacterButton("json/units/enemies/ghast.json", 400 - 100, 50 + bottomBorder);
         CharacterButton trixyButton = makeAiCharacterButton("json/units/enemies/trixy.json", 400 - 50, 0 + bottomBorder);
-        CharacterButton shellButton = makeAiCharacterButton("json/units/enemies/shellgon.json", 400 - 100, 0 + bottomBorder);
+        CharacterButton shellButton = makeAiCharacterButton("json/units/enemies/shelly.json", 400 - 100, 0 + bottomBorder);
 
         Button[][] buttonMap = new Button[][]{{andreButton, clarissaButton, ghastButton, bulbaButton}, {yvonneButton, zaneButton, shellButton, trixyButton}};
 

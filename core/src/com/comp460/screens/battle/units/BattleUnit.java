@@ -13,6 +13,7 @@ import com.comp460.assets.BattleAnimationManager;
 import com.comp460.screens.battle.FloatingText;
 import com.comp460.screens.battle.buffs.BattleBuff;
 import com.comp460.common.GameUnit;
+import com.comp460.screens.battle.units.enemies.baddie.moves.Vines;
 
 import java.util.*;
 
@@ -60,6 +61,7 @@ public class BattleUnit implements BattleObject {
     public BattleScreen screen;
 
     public GameUnit base;
+    public List<Vines.VinesInstance> rooted = new ArrayList<>();
 
     public BattleUnit(BattleScreen screen, int row, int col, GameUnit base) {
 
@@ -103,6 +105,7 @@ public class BattleUnit implements BattleObject {
 
     @Override
     public void update(float delta) {
+        canMove = rooted.isEmpty();
         for (Iterator<BattleBuff> iterator = buffs.iterator(); iterator.hasNext(); ) {
             BattleBuff buff = iterator.next();
             buff.tick(delta);

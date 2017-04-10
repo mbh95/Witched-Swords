@@ -18,7 +18,7 @@ public class Shield extends BattleUnitAbility {
 
     public Andre andre;
     public Shield(Andre andre) {
-        super("shield", "Energy Shield", "attack", "A powerful shield.");
+        super("shield", "Block", "attack", "A powerful shield.");
         this.andre = andre;
     }
 

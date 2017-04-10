@@ -50,7 +50,7 @@ public class SplashScreen extends GameScreen {
     private Vector3 titleScalePercent = new Vector3(100f, 100f, 0f);
 
     public SplashScreen(MainGame game) {
-        super(game, null);
+        super(game);
 
         topPos = new Vector3(-SplashAssets.TITLE.getRegionWidth(), Constants.TITLE_GOAL_POS.y, 0f);
         botPos = new Vector3(Settings.INTERNAL_WIDTH, Constants.TITLE_GOAL_POS.y, 0f);

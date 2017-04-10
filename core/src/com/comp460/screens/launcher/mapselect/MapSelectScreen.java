@@ -35,8 +35,12 @@ public class MapSelectScreen extends GameScreen {
 
     private NinePatch cursorSprite = new NinePatch(SpriteManager.MAIN_MENU.findRegion("cursor-tiny"), 2, 2, 2, 2);
 
+    GameScreen prevScreen;
+
     public MapSelectScreen(MainGame game, GameScreen prevScreen) {
-        super(game, prevScreen);
+        super(game);
+
+        this.prevScreen = prevScreen;
 
         MapButton bridgemapButton = new MapButton("maps/bridge.json", Settings.INTERNAL_WIDTH/2-50, 50, ()->{});
 //        MapButton smallmapButton = new MapButton("maps/small.json", Settings.INTERNAL_WIDTH/2-100, 50, ()->{});
@@ -131,7 +135,7 @@ public class MapSelectScreen extends GameScreen {
             selectedButton.click();
         }
         if (game.controller.button2JustPressed() || game.controller.endJustPressed()) {
-            this.previousScreen();
+            this.game.setScreen(prevScreen);
         }
 
         cursorPos.slerp(selectedButton.pos, 0.3f);

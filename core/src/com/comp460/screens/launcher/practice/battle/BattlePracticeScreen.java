@@ -42,8 +42,11 @@ public class BattlePracticeScreen extends GameScreen {
 
     private int bottomBorder = 0;
 
+    public GameScreen prevScreen;
     public BattlePracticeScreen(MainGame game, GameScreen prevScreen) {
-        super(game, prevScreen);
+        super(game);
+
+        this.prevScreen = prevScreen;
 
         CharacterButton andreButton = makePlayerCharacterButton("json/units/protagonists/andre.json", 0, 50 + bottomBorder);
         CharacterButton clarissaButton = makePlayerCharacterButton("json/units/protagonists/clarissa.json", 50, 50 + bottomBorder);
@@ -146,7 +149,7 @@ public class BattlePracticeScreen extends GameScreen {
 
         }
         if (game.controller.button2JustPressed() || game.controller.endJustPressed()) {
-            this.previousScreen();
+            this.game.setScreen(prevScreen);
         }
 
         if (selectedButton instanceof CharacterButton) {

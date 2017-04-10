@@ -71,7 +71,7 @@ public class MainMenuScreen extends GameScreen {
     private BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
 
     public MainMenuScreen(MainGame game, GameScreen prevScreen) {
-        super(game, prevScreen);
+        super(game);
         curMenuState = MainMenuState.BUILD_MENU;
 
         buttonX = (int) (Constants.TITLE_POS.x + (Constants.TITLE_SCALE.y / 100f) * MainMenuAssets.TEXTURE_TITLE.getRegionWidth() / 2f - buttonWidth / 2f);
@@ -82,7 +82,6 @@ public class MainMenuScreen extends GameScreen {
             NinePatchTextButton newButton = new NinePatchTextButton(buttonX, topButtonY - i * buttonHeight, buttonWidth, buttonHeight, new GlyphLayout(MainMenuAssets.FONT_MENU_ITEM, template.text), MainMenuAssets.FONT_MENU_ITEM, MainMenuAssets.NINEPATCH_BUTTON, template.action);
             buttons.add(newButton);
         }
-
 
         for (int i = 0; i < buttons.size(); i++) {
             if (i > 0)

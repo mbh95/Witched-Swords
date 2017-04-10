@@ -104,8 +104,12 @@ public class TacticsScreen extends GameScreen {
 
     public Entity cursor;
 
+    public GameScreen prevScreen;
+
     public TacticsScreen(MainGame game, GameScreen prevScreen, String mapJSONFile) {
-        super(game, prevScreen);
+        super(game);
+
+        this.prevScreen = prevScreen;
 
         this.engine = new PooledEngine();
 
@@ -291,7 +295,7 @@ public class TacticsScreen extends GameScreen {
                     break;
             }
             if (game.controller.endJustPressed()) {
-                this.previousScreen();
+                this.game.setScreen(prevScreen);
             }
         }
         engine.update(delta);
@@ -463,7 +467,7 @@ public class TacticsScreen extends GameScreen {
         timer -= delta;
         if (timer <= 0) {
             dispose();
-            this.previousScreen();
+            this.game.setScreen(prevScreen);
         }
         uiBatch.begin();
 //        playerTurnFont.draw(uiBatch, "You Win!", 0, 16);
@@ -475,7 +479,7 @@ public class TacticsScreen extends GameScreen {
         timer -= delta;
         if (timer <= 0) {
             dispose();
-            this.previousScreen();
+            this.game.setScreen(prevScreen);
         }
         uiBatch.begin();
 //        aiTurnFont.draw(uiBatch, "Computer Wins", 0, 16);

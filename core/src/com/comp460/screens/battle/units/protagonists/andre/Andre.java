@@ -36,7 +36,7 @@ public class Andre extends BattleUnit {
     private static BitmapFont yellowFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 10, Color.ORANGE, Color.BLACK, 2);
     private static GlyphLayout smashReadyLayout = new GlyphLayout(yellowFont, "SMASH READY!");
     private static BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
-    private static GlyphLayout hintLayout = new GlyphLayout(hintFont, "Shield attacks to charge up!");
+    private static GlyphLayout hintLayout = new GlyphLayout(hintFont, "Block to charge up!");
 
     public float invX = 400 / 2 - 2 * 40;
     public float invY = (int) screen.gridOffsetY + 3 * 40 + 2;

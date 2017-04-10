@@ -87,9 +87,6 @@ public class BattleScreen extends GameScreen {
     public BattlePlayer player1;
     public BattlePlayer player2;
 
-    public GlyphLayout p1MovesLayout;
-    public GlyphLayout p2MovesLayout;
-
     public List<BattleAnimation> playingAnimations = new ArrayList<>();
 
     public Vector2[][] tileOffsets;
@@ -97,8 +94,12 @@ public class BattleScreen extends GameScreen {
 
     public boolean exitAllowed;
 
+    public GameScreen prevScreen;
+
     public BattleScreen(MainGame game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase, boolean p1Initiated, boolean exitAllowed, float time) {
-        super(game, prevScreen);
+        super(game);
+
+        this.prevScreen = prevScreen;
 
         this.countdownTimer = time;
         this.exitAllowed = exitAllowed;
@@ -119,9 +120,6 @@ public class BattleScreen extends GameScreen {
             p1Unit.removeEnergy(3);
         this.player1 = new HumanPlayer(p1Unit);
         this.player2 = new GhastAi(p2Unit, p1Unit, this);
-
-        this.p1MovesLayout = new GlyphLayout(movesFont, "" + p1Unit.ability1.name + "\n" + p1Unit.ability2.name);
-        this.p2MovesLayout = new GlyphLayout(movesFont, "1: " + p2Unit.ability1.name + "\n2: " + p2Unit.ability2.name);
 
         drawLayout = new GlyphLayout(resultsFont, "DRAW");
         p1WinsLayout = new GlyphLayout(resultsFont, p1Unit.name + " WINS!");
@@ -275,8 +273,9 @@ public class BattleScreen extends GameScreen {
         batch.draw(game.controller.button2Sprite(), 4, y - 8 - 14);
 
 
-        movesFont.draw(batch, p1MovesLayout, 18, y);
-        movesFont.draw(batch, p2MovesLayout, 400 - p2MovesLayout.width - 10, y);
+        movesFont.draw(batch, "" + p1Unit.ability1.name + "\n" + p1Unit.ability2.name, 18, y);
+        GlyphLayout p2MovesLayout = new GlyphLayout(movesFont, "1: " + p2Unit.ability1.name + "\n2: " + p2Unit.ability2.name);
+        movesFont.draw(batch,  p2MovesLayout, 400 - p2MovesLayout.width - 10, y);
         batch.end();
 
         renderTimer(width / 2, 210);
@@ -397,13 +396,12 @@ public class BattleScreen extends GameScreen {
         batch.end();
     }
 
-    @Override
     public void previousScreen() {
 
         this.p1Unit.updateBase();
         this.p2Unit.updateBase();
 
-        super.previousScreen();
+        this.game.setScreen(prevScreen);
     }
 
     @Override

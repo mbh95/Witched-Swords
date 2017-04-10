@@ -106,7 +106,7 @@ class Puff extends BattleUnitAbility {
 
             BattleUnit opponent = screen.p1Unit;
             if (opponent == owner) {
-                owner = screen.p2Unit;
+                opponent = screen.p2Unit;
             }
 
             if (opponent.curRow == row && opponent.curCol == col) {

@@ -1,7 +1,11 @@
 package com.comp460.screens.battle.units.enemies.baddie.moves;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.assets.BattleAnimationManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.screens.battle.BattleAnimation;
@@ -39,20 +43,23 @@ public class Vines extends BattleUnitAbility {
         VinesInstance vinesInstance = new VinesInstance(baddie.curRow, col, 2.0f, 10, baddie);
 //        user.removeEnergy(1);
         baddie.vines.add(vinesInstance);
-        screen.addAnimation(new BattleAnimation(vinesAnim, screen.colToScreenX(baddie.curRow, col), screen.rowToScreenY(baddie.curRow, col), 2.0f));
     }
 
     public class VinesInstance {
+        public float warningTimer;
         public float timer;
         public boolean doneDamage = false;
         public int damageAmt;
         private Baddie baddie;
         public int row, col;
+        public boolean shown = false;
 
         public VinesInstance(int row, int col, float duration, int damage, Baddie baddie) {
             this.row = row;
             this.col = col;
+            this.warningTimer = 0.25f;
             this.timer = duration;
+
             this.doneDamage = false;
             this.baddie = baddie;
             this.damageAmt = damage;
@@ -60,6 +67,17 @@ public class Vines extends BattleUnitAbility {
         }
 
         public void update(BattleScreen screen, BattleUnit owner, float delta) {
+
+            float x = screen.colToScreenX(baddie.curRow, col);
+            float y = screen.rowToScreenY(baddie.curRow, col);
+            if (warningTimer > 0) {
+                warningTimer -= delta;
+                return;
+            } else if (!shown){
+                screen.addAnimation(new BattleAnimation(vinesAnim, x, y, 2.0f));
+                shown = true;
+            }
+
             BattleUnit opponent = screen.p2Unit;
             if (opponent == owner) {
                 opponent = screen.p1Unit;

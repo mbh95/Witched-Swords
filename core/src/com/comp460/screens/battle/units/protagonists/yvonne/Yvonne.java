@@ -42,6 +42,7 @@ public class Yvonne extends BattleUnit {
 
     public float hurtDelay = 0.05f;
     public float hurtTimer = 0f;
+    public int hurtBuffer = 0;
 
     public Yvonne(BattleScreen screen, int row, int col, GameUnit base) {
         super(screen, row, col, base);
@@ -78,7 +79,11 @@ public class Yvonne extends BattleUnit {
         if (attackUpOn) {
             hurtTimer -= delta;
             if (hurtTimer <= 0) {
-                this.applyDamage(new DamageVector(1, this));
+                hurtBuffer += 1;
+                if (hurtBuffer == 5) {
+                    hurtBuffer = 0;
+                    this.applyDamage(new DamageVector(5, this));
+                }
                 hurtTimer = hurtDelay;
             }
         }

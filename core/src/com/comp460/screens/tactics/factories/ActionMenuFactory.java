@@ -50,9 +50,11 @@ public class ActionMenuFactory {
             moveComponent.actions.add(ActionMenuSystem.Action.ATTACK_LEFT);
         }
 
-        System.out.println("BUILDING ACTION MENU");
-        if (selection.getComponent(CanHealComponent.class) != null) {
-            System.out.println("BUILDING ACTION MENU");
+        if (CanHealComponent.get(selection) != null) {
+
+            if (UnitStatsComponent.get(selection).base.curHP < UnitStatsComponent.get(selection).base.maxHP) {
+                moveComponent.actions.add(ActionMenuSystem.Action.HEAL_SELF);
+            }
 
             unit = screen.getMap().getUnitAt(cursorPos.row + 1, cursorPos.col);
             if (unit != null && playerControlledFamily.matches(unit) && UnitStatsComponent.get(unit).base.curHP < UnitStatsComponent.get(unit).base.maxHP) {

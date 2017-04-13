@@ -60,11 +60,12 @@ public class UnitPortraitRenderingSystem extends IteratingSystem {
 //        TextureRegion bg = BattlePracticeAssets.TEXTURE_PLAYER_AREA;
         Entity displayed = null;
 
-        if (selectionM.get(entity) != null) {
-            displayed = selectionM.get(entity).selected;
-        } else {
-            MapPositionComponent mapPos = posM.get(entity);
-            displayed = parentScreen.getMap().getUnitAt(mapPos.row, mapPos.col);
+        MapPositionComponent mapPos = posM.get(entity);
+        displayed = parentScreen.getMap().getUnitAt(mapPos.row, mapPos.col);
+
+        MapCursorSelectionComponent selectionComponent = selectionM.get(entity);
+        if (displayed == null && selectionComponent != null && selectionComponent.selected != null) {
+            displayed = selectionComponent.selected;
         }
 
         if (displayed == null) {

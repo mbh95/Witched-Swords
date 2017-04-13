@@ -84,7 +84,9 @@ public class TacticsMap {
 
                         Entity unit = UnitFactory.makeUnit(this, id, team, r, c, canHeal);
 
-                        screen.getEngine().addEntity(unit);
+                        if (screen != null) {
+                            screen.getEngine().addEntity(unit);
+                        }
                         this.units[r][c] = unit;
                     }
                 }
@@ -273,6 +275,7 @@ public class TacticsMap {
         this.units[row][col] = selection;
 
         screen.clearSelections();
+        screen.recalculateMoves();
         return prevUnit;
     }
 

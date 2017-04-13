@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.SpriteManager;
 import com.comp460.screens.battle.BattleObject;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.assets.BattleAnimationManager;
@@ -22,6 +23,7 @@ import java.util.*;
  */
 public class BattleUnit implements BattleObject {
 
+    public static TextureRegion CONFUSION_SPRITE = SpriteManager.BATTLE.findRegion("confusion");
     public static BitmapFont damageFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.RED, Color.BLACK, 1);
     public static BitmapFont healingFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.GREEN, Color.BLACK, 1);
 
@@ -58,6 +60,8 @@ public class BattleUnit implements BattleObject {
 
     public float restoreCntd = 0;
 
+    public float confuseTimer = 0f;
+
     public BattleScreen screen;
 
     public GameUnit base;
@@ -78,7 +82,7 @@ public class BattleUnit implements BattleObject {
         this.maxHP = base.maxHP;
         this.curHP = base.curHP;
 
-        this.speed  = base.speed;
+        this.speed = base.speed;
 
         this.curEnergy = 5;
 
@@ -91,7 +95,7 @@ public class BattleUnit implements BattleObject {
         this.startAnimation("idle");
 
         if (speed != 0)
-            this.restoreCntd = 1f/speed;
+            this.restoreCntd = 1f / speed;
     }
 
     public void render(SpriteBatch batch, float delta) {
@@ -101,6 +105,10 @@ public class BattleUnit implements BattleObject {
             startAnimation("idle");
         }
         batch.draw(curAnim.getKeyFrame(animTimer), transform.x, transform.y);
+
+        if (confuseTimer > 0) {
+            batch.draw(CONFUSION_SPRITE, transform.x, transform.y + 40);
+        }
     }
 
     @Override
@@ -120,6 +128,10 @@ public class BattleUnit implements BattleObject {
                 removeEnergy(-1);
                 restoreCntd = 1f / speed;
             }
+        }
+
+        if (confuseTimer > 0) {
+            confuseTimer -= delta;
         }
     }
 
@@ -160,11 +172,19 @@ public class BattleUnit implements BattleObject {
     }
 
     public void move(int dr, int dc) {
+
         if (!canMove) {
             return;
         }
+
         int newRow = curRow + dr;
         int newCol = curCol + dc;
+
+        if (confuseTimer > 0) {
+            newRow = curRow - dc;
+            newCol = curCol + dr;
+        }
+
         if (!screen.isOnGrid(newRow, newCol)) {
             // Can't move off the grid
             return;
@@ -175,6 +195,10 @@ public class BattleUnit implements BattleObject {
         }
         this.curRow = newRow;
         this.curCol = newCol;
+    }
+
+    public void confuse(float duration) {
+        this.confuseTimer = duration;
     }
 
     public void useAbility1() {
@@ -204,7 +228,7 @@ public class BattleUnit implements BattleObject {
             if (damageVector.source != null) {
                 damageVector.source.startAnimation("victory");
             }
-            return curHP-prevHP;
+            return curHP - prevHP;
 
         }
         if (curHP > maxHP) {

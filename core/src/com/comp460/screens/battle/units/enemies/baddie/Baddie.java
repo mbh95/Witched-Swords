@@ -1,6 +1,9 @@
 package com.comp460.screens.battle.units.enemies.baddie;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.comp460.common.GameUnit;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;
@@ -51,6 +54,25 @@ public class Baddie extends BattleUnit {
         super.render(batch, delta);
         for (Spike.SpikeProjectile spike : activeSpikes)  {
             spike.render(batch);
+        }
+        for (Vines.VinesInstance vine : vines) {
+            if (vine.warningTimer > 0) {
+
+                float x = screen.colToScreenX(vine.row, vine.col);
+                float y = screen.rowToScreenY(vine.row, vine.col);
+                batch.end();
+                Gdx.gl.glEnable(GL20.GL_BLEND);
+                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+                ShapeRenderer sr = new ShapeRenderer();
+                sr.setProjectionMatrix(screen.camera.combined);
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                sr.setColor(1f, 0f, 0f, 0.2f);
+                sr.rect(x, y, screen.tileWidth, screen.tileHeight);
+                sr.end();
+                sr.dispose();
+                Gdx.gl.glDisable(GL20.GL_BLEND);
+                batch.begin();
+            }
         }
     }
 }

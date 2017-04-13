@@ -20,7 +20,7 @@ import static com.comp460.assets.SoundManager.selectionClick;
 public class ActionMenuSystem extends IteratingSystem {
 
     private static final Family actionMenuFamily = Family.all(ActionMenuComponent.class, MovementPathComponent.class, MapCursorSelectionComponent.class).get();
-
+    private static final Family unitFamily = Family.all(UnitStatsComponent.class).get();
     public TacticsScreen screen;
 
     public ActionMenuSystem(TacticsScreen screen) {
@@ -38,6 +38,7 @@ public class ActionMenuSystem extends IteratingSystem {
         HEAL_DOWN("Heal Down"),
         HEAL_LEFT("Heal Left"),
         HEAL_RIGHT("Heal Right"),
+        HEAL_SELF("Heal Self"),
         CANCEL("Cancel");
 
         private final String name;
@@ -73,6 +74,8 @@ public class ActionMenuSystem extends IteratingSystem {
             UnitStatsComponent playerStats = UnitStatsComponent.get(selectionComponent.selected);
             UnitStatsComponent aiStats;
             selectionClick.play();
+            Entity healTarget;
+            UnitStatsComponent healTargetStats;
             switch (actionMenu.actions.get(actionMenu.selectedAction)) {
                 case WAIT:
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
@@ -94,6 +97,31 @@ public class ActionMenuSystem extends IteratingSystem {
                     screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
                     screen.transitionToBattleView(selectionComponent.selected, screen.getMap().getUnitAt(goal.row, goal.col + 1), true);
                     break;
+                case HEAL_UP:
+                    screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
+                    heal(screen.getMap().getUnitAt(goal.row + 1, goal.col));
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
+                    break;
+                case HEAL_DOWN:
+                    screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
+                    heal(screen.getMap().getUnitAt(goal.row - 1, goal.col));
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
+                    break;
+                case HEAL_LEFT:
+                    screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
+                    heal(screen.getMap().getUnitAt(goal.row, goal.col - 1));
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
+                    break;
+                case HEAL_RIGHT:
+                    screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
+                    heal(screen.getMap().getUnitAt(goal.row, goal.col + 1));
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
+                    break;
+                case HEAL_SELF:
+                    heal(selectionComponent.selected);
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
+                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
+                    break;
                 case CANCEL:
                     break;
             }
@@ -104,6 +132,13 @@ public class ActionMenuSystem extends IteratingSystem {
         if (controller.button2JustPressedDestructive()) {
             cursor.remove(ActionMenuComponent.class);
             cursor.remove(LockedComponent.class);
+        }
+    }
+
+    public void heal(Entity healTarget) {
+        if (healTarget != null && unitFamily.matches(healTarget)) {
+            UnitStatsComponent healTargetStats = UnitStatsComponent.get(healTarget);
+            healTargetStats.base.curHP = Math.min(healTargetStats.base.curHP + 40, healTargetStats.base.maxHP);
         }
     }
 }

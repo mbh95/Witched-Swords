@@ -94,8 +94,12 @@ public class TacticsScreen extends GameScreen {
     private float timer;
     private boolean dangerToggled = false;
 
-    private float battleTransitionLen = 1.0f;
-    private float battleTimer;
+    private float battleTransitionZoomLen = 1f;
+    private float battleTransitionStayLen = 0.5f;
+
+    private float battleZoomTimer;
+    private float battleStayTimer;
+
     Entity playerEntity = null;
     Entity aiEntity = null;
     Entity cameraTarget = new Entity();
@@ -229,14 +233,18 @@ public class TacticsScreen extends GameScreen {
     }
 
     public void update(float delta) {
-        if (battleTimer > 0) {
+        if (battleZoomTimer > 0) {
             if (engine.getSystem(MapToScreenSystem.class).isDone(playerEntity, 0.01f) && engine.getSystem(MapToScreenSystem.class).isDone(aiEntity, 0.01f)) {
-                battleTimer -= delta;
-                float t = (battleTransitionLen - battleTimer) / battleTransitionLen;
+                battleZoomTimer -= delta;
+                float t = (battleTransitionZoomLen - battleZoomTimer) / battleTransitionZoomLen;
                 zoom = (1f - (t * t)) + 0.25f * (t * t);
+                if (battleZoomTimer <= 0) {
+                    battleStayTimer = battleTransitionStayLen;
+                }
             }
-
-            if (battleTimer <= 0 && playerEntity != null && aiEntity != null) {
+        } else if (battleStayTimer > 0) {
+            battleStayTimer -= delta;
+            if (battleStayTimer <= 0 && playerEntity != null && aiEntity != null) {
                 GameUnit playerUnit = UnitStatsComponent.get(playerEntity).base;
                 GameUnit aiUnit = UnitStatsComponent.get(aiEntity).base;
                 game.setScreen(new BattleScreen(game, this, playerUnit, aiUnit, playerInitiated, false, 10f));
@@ -574,7 +582,7 @@ public class TacticsScreen extends GameScreen {
 //        aiEntity.remove(InvisibleComponent.class);
 
         engine.getSystem(AiSystem.class).setProcessing(false);
-        battleTimer = battleTransitionLen;
+        battleZoomTimer = battleTransitionZoomLen;
 
         Vector3 playerVec = engine.getSystem(MapToScreenSystem.class).goal(playerEntity);
         playerVec.x += map.getTileWidth() / 2f;
@@ -622,9 +630,12 @@ public class TacticsScreen extends GameScreen {
             aiEntity = null;
         }
 //        engine.getEntitiesFor(invisibleFamily).forEach(entity -> entity.remove(InvisibleComponent.class));
-
-        engine.getSystem(ValidMoveManagementSystem.class).rebuildMoves();
+        recalculateMoves();
 //        engine.getSystem(AiSystem.class).setProcessing(true);
+    }
+
+    public void recalculateMoves() {
+        engine.getSystem(ValidMoveManagementSystem.class).rebuildMoves();
     }
 
     @Override

@@ -67,6 +67,7 @@ public class Counterattack extends BattleUnitAbility {
 
             if (opponent.curRow == row && (opponent.curCol == col || opponent.curCol == col+1) && !doneDamage) {
                 float dealt = opponent.applyDamage(new DamageVector(damageAmt, zane));
+                zane.addCharge();
                 doneDamage = true;
             }
         }

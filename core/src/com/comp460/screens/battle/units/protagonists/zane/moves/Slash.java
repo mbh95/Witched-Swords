@@ -21,7 +21,7 @@ public class Slash extends BattleUnitAbility {
     public Zane zane;
 
     public Slash(Zane zane) {
-        super("slash", "Slash", "attack", "A quick and strong sword slash spanning an entire row on the enemy side.");
+        super("slash", "Slash", "attack", "A quick and strong sword slash.");
         this.zane = zane;
     }
 
@@ -67,8 +67,9 @@ public class Slash extends BattleUnitAbility {
                 return;
             }
 
-            if (opponent.curRow == row && !doneDamage) {
+            if (opponent.curRow == row && !doneDamage && opponent.curCol <= zane.curCol + 3) {
                 float dealt = opponent.applyDamage(new DamageVector(damageAmt, zane));
+                zane.addCharge();
                 doneDamage = true;
             }
         }

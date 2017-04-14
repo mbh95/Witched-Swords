@@ -31,8 +31,6 @@ public class BattleUnit implements BattleObject {
     public String name;
     public String description;
 
-    public boolean canMove = true;
-
     public BattleUnitAbility ability1 = BattleUnitAbility.getNullMove();
     public BattleUnitAbility ability2 = BattleUnitAbility.getNullMove();
 
@@ -61,11 +59,12 @@ public class BattleUnit implements BattleObject {
     public float restoreCntd = 0;
 
     public float confuseTimer = 0f;
+    public float rootedTimer = 0f;
+
 
     public BattleScreen screen;
 
     public GameUnit base;
-    public List<Vines.VinesInstance> rooted = new ArrayList<>();
 
     public BattleUnit(BattleScreen screen, int row, int col, GameUnit base) {
 
@@ -113,7 +112,6 @@ public class BattleUnit implements BattleObject {
 
     @Override
     public void update(float delta) {
-        canMove = rooted.isEmpty();
         for (Iterator<BattleBuff> iterator = buffs.iterator(); iterator.hasNext(); ) {
             BattleBuff buff = iterator.next();
             buff.tick(delta);
@@ -132,6 +130,10 @@ public class BattleUnit implements BattleObject {
 
         if (confuseTimer > 0) {
             confuseTimer -= delta;
+        }
+
+        if (rootedTimer > 0) {
+            rootedTimer -= delta;
         }
     }
 
@@ -173,7 +175,7 @@ public class BattleUnit implements BattleObject {
 
     public void move(int dr, int dc) {
 
-        if (!canMove) {
+        if (rootedTimer > 0) {
             return;
         }
 
@@ -198,9 +200,13 @@ public class BattleUnit implements BattleObject {
     }
 
     public void confuse(float duration) {
-        this.confuseTimer = duration;
+        this.confuseTimer = Math.max(duration, this.confuseTimer);
     }
 
+    public void root(float duration) {
+        this.rootedTimer = Math.max(duration, this.rootedTimer);
+    }
+    
     public void useAbility1() {
         if (this.ability1.canUse(this, screen)) {
             this.ability1.use(this, screen);

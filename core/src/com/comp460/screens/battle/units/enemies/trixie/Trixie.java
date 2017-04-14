@@ -118,8 +118,10 @@ class Scratch extends BattleUnitAbility {
                 }
 
                 if (opponent.curRow == this.row && opponent.curCol == this.col) {
-                    opponent.applyDamage(new DamageVector(damage, owner));
-                    opponent.confuse(confuseDuration);
+                    float dealt = opponent.applyDamage(new DamageVector(damage, owner));
+                    if (dealt < 0) {
+                        opponent.confuse(confuseDuration);
+                    }
                     this.active = false;
                 }
             }

@@ -23,7 +23,7 @@ import java.util.Random;
 public class Vines extends BattleUnitAbility {
 
     public Baddie baddie;
-    public static Animation<TextureRegion> vinesAnim = BattleAnimationManager.getBattleAnimation("attacks/vines");
+    public static TextureRegion vineSprite = SpriteManager.BATTLE.findRegion("attacks/vines");
     Random rng = new Random();
 
     public Vines(Baddie baddie) {
@@ -52,12 +52,11 @@ public class Vines extends BattleUnitAbility {
         public int damageAmt;
         private Baddie baddie;
         public int row, col;
-        public boolean shown = false;
 
         public VinesInstance(int row, int col, float duration, int damage, Baddie baddie) {
             this.row = row;
             this.col = col;
-            this.warningTimer = 0.25f;
+            this.warningTimer = 0.4f;
             this.timer = duration;
 
             this.doneDamage = false;
@@ -68,14 +67,9 @@ public class Vines extends BattleUnitAbility {
 
         public void update(BattleScreen screen, BattleUnit owner, float delta) {
 
-            float x = screen.colToScreenX(baddie.curRow, col);
-            float y = screen.rowToScreenY(baddie.curRow, col);
             if (warningTimer > 0) {
                 warningTimer -= delta;
                 return;
-            } else if (!shown){
-                screen.addAnimation(new BattleAnimation(vinesAnim, x, y, 2.0f));
-                shown = true;
             }
 
             BattleUnit opponent = screen.p2Unit;
@@ -84,15 +78,39 @@ public class Vines extends BattleUnitAbility {
             }
             timer -= delta;
 
-            if (timer <= 0) {
-                opponent.rooted.remove(this);
-                return;
-            }
-
             if (opponent.curCol == col && opponent.curRow == row && !doneDamage) {
                 float dealt = opponent.applyDamage(new DamageVector(damageAmt, baddie));
                 doneDamage = true;
-                opponent.rooted.add(this);
+                if (dealt < 0) {
+                    opponent.root(timer);
+                } else {
+                    timer = 0;
+                }
+            }
+        }
+
+        public void render(SpriteBatch batch, BattleScreen screen) {
+
+            if (warningTimer > 0) {
+                float x = screen.colToScreenX(row, col);
+                float y = screen.rowToScreenY(row, col);
+                batch.end();
+                Gdx.gl.glEnable(GL20.GL_BLEND);
+                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+                ShapeRenderer sr = new ShapeRenderer();
+                sr.setProjectionMatrix(screen.camera.combined);
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                sr.setColor(1f, 0f, 0f, 0.2f);
+                sr.rect(x, y, screen.tileWidth, screen.tileHeight);
+                sr.end();
+                sr.dispose();
+                Gdx.gl.glDisable(GL20.GL_BLEND);
+                batch.begin();
+            } else if (timer > 0){
+                float x = screen.colToScreenX(row, col);
+                float y = screen.rowToScreenY(row, col);
+
+                batch.draw(vineSprite, x, y);
             }
         }
     }

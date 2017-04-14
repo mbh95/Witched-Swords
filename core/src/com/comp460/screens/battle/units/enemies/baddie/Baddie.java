@@ -56,23 +56,7 @@ public class Baddie extends BattleUnit {
             spike.render(batch);
         }
         for (Vines.VinesInstance vine : vines) {
-            if (vine.warningTimer > 0) {
-
-                float x = screen.colToScreenX(vine.row, vine.col);
-                float y = screen.rowToScreenY(vine.row, vine.col);
-                batch.end();
-                Gdx.gl.glEnable(GL20.GL_BLEND);
-                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-                ShapeRenderer sr = new ShapeRenderer();
-                sr.setProjectionMatrix(screen.camera.combined);
-                sr.begin(ShapeRenderer.ShapeType.Filled);
-                sr.setColor(1f, 0f, 0f, 0.2f);
-                sr.rect(x, y, screen.tileWidth, screen.tileHeight);
-                sr.end();
-                sr.dispose();
-                Gdx.gl.glDisable(GL20.GL_BLEND);
-                batch.begin();
-            }
+            vine.render(batch, screen);
         }
     }
 }

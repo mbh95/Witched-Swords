@@ -30,7 +30,7 @@ public class TacticsMap {
     private transient int width, height; // width and height of the map in tiles
     private transient int tileWidth, tileHeight; // width and height of one tile in pixels
 
-    private transient MapTile[][] tiles;
+    public transient MapTile[][] tiles;
     private transient Entity[][] units;
 
     public TacticsMap() {
@@ -286,11 +286,8 @@ public class TacticsMap {
         }
     }
 
-
-
-
-    class MapTile {
-        private boolean traversable;
+    public class MapTile {
+        public boolean traversable;
 
         public MapTile(boolean traversable) {
             this.traversable = traversable;

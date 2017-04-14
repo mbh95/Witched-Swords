@@ -10,7 +10,7 @@ import com.comp460.assets.SpriteManager;
  */
 public class BattlePracticeAssets {
 
-    public static final BitmapFont FONT_BATTLE_PORTRAIT = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
+    public static final BitmapFont FONT_BATTLE_PORTRAIT = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE, Color.BLACK, 1);
     public static final BitmapFont FONT_VS = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 48, Color.RED);
     public static final BitmapFont FONT_INFO = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
     public static final BitmapFont FONT_READY = FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 20, Color.ORANGE, Color.BLACK, 2);

@@ -14,6 +14,9 @@ import com.comp460.assets.FontManager;
 import com.comp460.common.input.Controller;
 import com.comp460.common.input.KeyboardController;
 import com.comp460.screens.launcher.splash.SplashScreen;
+import com.comp460.util.MapIconGeneratorUtil;
+
+import java.io.IOException;
 
 
 public class MainGame extends Game {
@@ -62,6 +65,11 @@ public class MainGame extends Game {
 //		this.setScreen(ts);
 
 //		this.setScreen(new BattleScreen(this, null, new BattleUnitFactory(GameUnit.loadFromJSON("json/units/clarissa.json")), new BattleUnitFactory(GameUnit.loadFromJSON("json/units/ghast.json"))));
+        try {
+            MapIconGeneratorUtil.generate();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // i'm matt and i want to be mean to ms poops <3

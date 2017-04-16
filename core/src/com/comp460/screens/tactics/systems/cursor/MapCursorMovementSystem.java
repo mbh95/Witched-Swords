@@ -8,7 +8,7 @@ import com.comp460.screens.tactics.components.cursor.LockedComponent;
 import com.comp460.screens.tactics.components.cursor.MapCursorComponent;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
 
-import static com.comp460.assets.SoundManager.cursorMoveClick;
+import static com.comp460.assets.SoundManager.cursorMoveSound;
 
 /**
  * Created by matth on 2/20/2017.
@@ -50,7 +50,7 @@ public class MapCursorMovementSystem extends IteratingSystem {
 
             if (cursorPos.row != oldRow || cursorPos.col != oldCol) {
                 cursor.countdown = cursor.delay;
-                cursorMoveClick.play();
+                cursorMoveSound.play();
             }
         } else {
             cursor.countdown -= deltaTime;

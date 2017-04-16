@@ -9,7 +9,7 @@ import com.comp460.screens.tactics.components.map.MapPositionComponent;
 import com.comp460.screens.tactics.components.cursor.MapCursorComponent;
 import com.comp460.screens.tactics.components.unit.*;
 
-import static com.comp460.assets.SoundManager.selectionClick;
+import static com.comp460.assets.SoundManager.selectionSound;
 
 /**
  * Created by matthewhammond on 1/15/17.
@@ -37,7 +37,7 @@ public class MapCursorSelectionSystem extends IteratingSystem {
                 return;
             }
             CursorManager.select(cursor, newSelection);
-            selectionClick.play(0.7f);
+            selectionSound.play(0.7f);
 
             if (readyPlayerControlledFamily.matches(newSelection)) {
                 cursor.add(new MovementPathComponent(cursorPos.row, cursorPos.col));

@@ -18,12 +18,14 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.SpriteManager;
 import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
 import com.comp460.common.components.CameraTargetComponent;
 import com.comp460.common.components.InvisibleComponent;
 import com.comp460.common.components.TransformComponent;
 import com.comp460.common.ui.Button;
+import com.comp460.common.ui.DialogueBox;
 import com.comp460.common.ui.NinePatchTextButton;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.launcher.main.MainMenuAssets;
@@ -309,6 +311,8 @@ public class TacticsScreen extends GameScreen {
         engine.update(delta);
     }
 
+    DialogueBox tip = new DialogueBox(SpriteManager.BATTLE.findRegion("attacks/poof"), "test", game);
+
     // also checks for enter to end turn
     @Override
     public void render(float delta) {
@@ -318,6 +322,7 @@ public class TacticsScreen extends GameScreen {
         super.render(delta);
 
         update(delta);
+        tip.render(uiBatch);
 
         switch (curState) {
             case BATTLE_START:

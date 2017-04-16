@@ -18,6 +18,9 @@ import com.comp460.screens.battle.units.enemies.baddie.moves.Vines;
 
 import java.util.*;
 
+import static com.comp460.assets.SoundManager.hitSound;
+import static com.comp460.assets.SoundManager.monsterFallenSound;
+
 /**
  * Created by matthewhammond on 2/15/17.
  */
@@ -223,6 +226,7 @@ public class BattleUnit implements BattleObject {
         int prevHP = curHP;
         this.curHP -= damageVector.trueDamage;
         if (curHP <= 0) {
+//            monsterFallenSound.play();
             curHP = 0;
             startAnimation("fallen");
             if (damageVector.source != null) {
@@ -237,6 +241,7 @@ public class BattleUnit implements BattleObject {
 
         int deltaHP = curHP - prevHP;
         if (deltaHP < 0) {
+//            hitSound.play();
             screen.addAnimation(new FloatingText(deltaHP + "", damageFont, (float) (transform.x + 5f), transform.y + 40, 0.5f));
             startAnimation("hurt");
 

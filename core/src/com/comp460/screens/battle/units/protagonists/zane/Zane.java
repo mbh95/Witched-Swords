@@ -35,14 +35,14 @@ public class Zane extends BattleUnit {
     private static BitmapFont yellowFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 10, Color.ORANGE, Color.BLACK, 2);
     private static GlyphLayout smashReadyLayout = new GlyphLayout(yellowFont, "FLURRY READY!");
     private static BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
-    private static GlyphLayout hintLayout = new GlyphLayout(hintFont, "Attack and parry!");
+    private static GlyphLayout hintLayout = new GlyphLayout(hintFont, "Attack and parry, don't get hit!");
     public float invX = 400 / 2 - 2 * 40;
     public float invY = (int) screen.gridOffsetY + 3 * 40 + 2;
     public float parryDuration;
     public boolean parryFresh;
     public List<Slash.SlashInstance> slashes = new ArrayList<>();
     public List<Counterattack.CounterattackInstance> counterattacks = new ArrayList<>();
-    public int charges = 3;
+    public int charges = 0;
     public Flurry flurry;
 
     public Zane(BattleScreen screen, int row, int col, GameUnit base) {

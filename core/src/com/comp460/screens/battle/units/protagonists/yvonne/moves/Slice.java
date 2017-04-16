@@ -31,7 +31,6 @@ public class Slice extends BattleUnitAbility {
 
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
-        super.use(user, screen);
         SliceInstance sliceInstance = new SliceInstance(yvonne.curRow, yvonne.curCol + 3, .2f, 10, yvonne, true);
         user.removeEnergy(1);
         yvonne.slices.add(sliceInstance);

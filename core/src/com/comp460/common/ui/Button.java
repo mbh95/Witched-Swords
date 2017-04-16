@@ -3,7 +3,7 @@ package com.comp460.common.ui;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
-import static com.comp460.assets.SoundManager.selectionClick;
+import static com.comp460.assets.SoundManager.selectionSound;
 
 /**
  * Created by matth on 2/8/2017.
@@ -41,7 +41,7 @@ public abstract class Button {
     }
 
     public void click() {
-        selectionClick.play(0.7f);
+        selectionSound.play(0.7f);
         this.action.run();
     }
 

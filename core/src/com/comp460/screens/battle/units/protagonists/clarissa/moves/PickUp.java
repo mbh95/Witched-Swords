@@ -8,6 +8,8 @@ import com.comp460.screens.battle.units.protagonists.clarissa.Ingredient;
 
 import java.util.Iterator;
 
+import static com.comp460.assets.SoundManager.pickupSound;
+
 /**
  * Created by Belinda on 2/17/17.
  */
@@ -33,6 +35,7 @@ public class PickUp extends BattleUnitAbility {
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
+        pickupSound.play();
         if (clarissa.inventory.size() >= clarissa.maxIngredients) {
             return;
         }

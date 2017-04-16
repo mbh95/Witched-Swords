@@ -12,7 +12,7 @@ import com.comp460.screens.tactics.components.cursor.ActionMenuComponent;
 import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 
-import static com.comp460.assets.SoundManager.selectionClick;
+import static com.comp460.assets.SoundManager.selectionSound;
 
 /**
  * Created by matth on 3/27/2017.
@@ -73,7 +73,7 @@ public class ActionMenuSystem extends IteratingSystem {
             MapPositionComponent goal = path.positions.get(path.positions.size() - 1);
             UnitStatsComponent playerStats = UnitStatsComponent.get(selectionComponent.selected);
             UnitStatsComponent aiStats;
-            selectionClick.play();
+            selectionSound.play();
             Entity healTarget;
             UnitStatsComponent healTargetStats;
             switch (actionMenu.actions.get(actionMenu.selectedAction)) {

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.comp460.assets.SoundManager.monsterHurtSound;
+
 /**
  * Created by matthewhammond on 3/5/17.
  */
@@ -32,7 +34,7 @@ public class Baddie extends BattleUnit {
     public void update(float delta) {
         super.update(delta);
 
-        for (Iterator<Spike.SpikeProjectile> iter = activeSpikes.iterator(); iter.hasNext();) {
+        for (Iterator<Spike.SpikeProjectile> iter = activeSpikes.iterator(); iter.hasNext(); ) {
             Spike.SpikeProjectile spike = iter.next();
             boolean collide = spike.updateAndReturnCollided(delta, screen);
             if (spike.tipPos.x < -Spike.sprite.getRegionWidth() || collide) {
@@ -52,7 +54,7 @@ public class Baddie extends BattleUnit {
     @Override
     public void render(SpriteBatch batch, float delta) {
         super.render(batch, delta);
-        for (Spike.SpikeProjectile spike : activeSpikes)  {
+        for (Spike.SpikeProjectile spike : activeSpikes) {
             spike.render(batch);
         }
         for (Vines.VinesInstance vine : vines) {
@@ -76,4 +78,3 @@ public class Baddie extends BattleUnit {
         }
     }
 }
-

@@ -11,6 +11,8 @@ import com.comp460.screens.battle.units.DamageVector;
 import com.comp460.screens.battle.units.protagonists.clarissa.Clarissa;
 import com.comp460.screens.battle.units.protagonists.clarissa.Ingredient;
 
+import static com.comp460.assets.SoundManager.arrowSound;
+
 /**
  * Created by Belinda on 2/17/17.
  */
@@ -38,6 +40,7 @@ public class Crossbow extends BattleUnitAbility {
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
+        arrowSound.play();
         clarissa.removeEnergy(2);
         if (clarissa.inventory.size() == 0) {
             clarissa.arrows.add(new Arrow(Ingredient.IngredientID.NONE, screen.colToScreenX(user.curRow, user.curCol) + 26, screen.rowToScreenY(user.curRow, user.curCol) + 22));

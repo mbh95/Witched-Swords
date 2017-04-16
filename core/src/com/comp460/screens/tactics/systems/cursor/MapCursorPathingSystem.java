@@ -13,7 +13,7 @@ import com.comp460.screens.tactics.systems.map.ValidMoveManagementSystem;
 
 import java.util.Set;
 
-import static com.comp460.assets.SoundManager.selectionClick;
+import static com.comp460.assets.SoundManager.selectionSound;
 
 /**
  * Created by matth on 3/26/2017.
@@ -54,7 +54,7 @@ public class MapCursorPathingSystem extends IteratingSystem {
         if (parentScreen.game.controller.button1JustPressedDestructive()) {
             if (cursorPos.equals(MapPositionComponent.get(selectionComponent.selected)) || validPositions.contains(cursorPos)) { // Clicked on the selected unit or within the unit's range
                 cursor.add(new LockedComponent());
-                selectionClick.play(0.7f);
+                selectionSound.play(0.7f);
                 cursor.add(ActionMenuFactory.makeActionMenu(cursor, parentScreen));
 
             } else if (newSelection != null) { // Clicked on another unit

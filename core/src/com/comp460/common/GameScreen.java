@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.comp460.MainGame;
 import com.comp460.Settings;
+import com.comp460.common.ui.DialogueBox;
 
 /**
  * Created by matthewhammond on 2/11/17.
@@ -30,7 +31,6 @@ public abstract class GameScreen extends ScreenAdapter {
 
         this.uiCamera = new OrthographicCamera();
         this.uiCamera.setToOrtho(false, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT);
-
 
         this.uiCamera.update();
         this.uiBatch.setProjectionMatrix(uiCamera.combined);

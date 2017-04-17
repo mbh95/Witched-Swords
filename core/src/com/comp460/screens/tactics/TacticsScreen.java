@@ -87,6 +87,8 @@ public class TacticsScreen extends GameScreen {
     private static final GlyphLayout playerWinLayout = new GlyphLayout(playerTurnFont, "You Win!");
     private static final GlyphLayout aiWinLayout = new GlyphLayout(aiTurnFont, "You Lose");
 
+    public DialogueBox currentDialogueBox;
+
     public Engine engine;
 
     private TacticsMap map;
@@ -214,6 +216,8 @@ public class TacticsScreen extends GameScreen {
         tacticsHelpLayout = new GlyphLayout(BattlePracticeAssets.FONT_INFO, tacticstext.toString(), Color.WHITE, width / 2 - 2 * padding, Align.left, true);
 
         startTransitionToPlayerTurn();
+
+        currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(SpriteManager.BATTLE.findRegion("attacks/poof"), "test1"), new DialogueBox.DialogueBoxTemplate(SpriteManager.BATTLE.findRegion("attacks/puff"), "test2"));
     }
 
     GlyphLayout tacticsHelpLayout;
@@ -235,6 +239,9 @@ public class TacticsScreen extends GameScreen {
     }
 
     public void update(float delta) {
+        if (currentDialogueBox != null) {
+            currentDialogueBox = currentDialogueBox.update();
+        }
         if (battleZoomTimer > 0) {
             if (engine.getSystem(MapToScreenSystem.class).isDone(playerEntity, 0.01f) && engine.getSystem(MapToScreenSystem.class).isDone(aiEntity, 0.01f)) {
                 battleZoomTimer -= delta;
@@ -311,8 +318,6 @@ public class TacticsScreen extends GameScreen {
         engine.update(delta);
     }
 
-    DialogueBox tip = new DialogueBox(SpriteManager.BATTLE.findRegion("attacks/poof"), "test", game);
-
     // also checks for enter to end turn
     @Override
     public void render(float delta) {
@@ -322,7 +327,6 @@ public class TacticsScreen extends GameScreen {
         super.render(delta);
 
         update(delta);
-        tip.render(uiBatch);
 
         switch (curState) {
             case BATTLE_START:
@@ -356,6 +360,10 @@ public class TacticsScreen extends GameScreen {
             case AI_WIN:
                 renderAiWin(delta);
                 break;
+        }
+
+        if (currentDialogueBox != null) {
+            currentDialogueBox.render(uiBatch);
         }
     }
 

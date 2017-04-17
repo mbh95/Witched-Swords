@@ -28,6 +28,10 @@ public class DialogueBox {
     private float y = 0;
     private DialogueBox next;
 
+    private float phaseLen = 0.5f;
+    private float timer = phaseLen;
+    private boolean buttonVisible = true;
+
     public DialogueBox(TextureRegion character, String text, GameScreen parentScreen) {
         this(character, text, parentScreen, null);
     }
@@ -45,10 +49,21 @@ public class DialogueBox {
         BattlePracticeAssets.NP_INFO_BG.draw(batch, (int) x, (int) y, (int) w, (int) h);
         BattlePracticeAssets.FONT_INFO.draw(batch, layout, x + padding + character.getRegionWidth(), y + h - padding);
         batch.draw(character, x + padding, y + h - padding - character.getRegionHeight());
+        if (buttonVisible) {
+            TextureRegion buttonSprite = parentScreen.game.controller.button1Sprite();
+            batch.draw(buttonSprite, x + w - buttonSprite.getRegionWidth() - 4, y + 4);
+        }
         batch.end();
     }
 
-    public DialogueBox update() {
+    public DialogueBox update(float delta) {
+
+        this.timer -= delta;
+        if (this.timer <= 0) {
+            this.timer = this.phaseLen;
+            this.buttonVisible = !this.buttonVisible;
+        }
+
         if (parentScreen.game.controller.button1JustPressedDestructive()) {
             return next;
         } else {
@@ -68,9 +83,10 @@ public class DialogueBox {
     public static class DialogueBoxTemplate {
         public TextureRegion icon;
         public String text;
+
         public DialogueBoxTemplate(TextureRegion icon, String text) {
             this.icon = icon;
-            this.text=  text;
+            this.text = text;
         }
     }
 }

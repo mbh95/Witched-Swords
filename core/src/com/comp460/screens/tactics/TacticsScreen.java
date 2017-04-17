@@ -279,7 +279,7 @@ public class TacticsScreen extends GameScreen {
                 return;
             }
         } else if (currentDialogueBox != null) {
-            currentDialogueBox = currentDialogueBox.update();
+            currentDialogueBox = currentDialogueBox.update(delta);
         } else if (currentDialogueBox == null) {
             switch (curState) {
                 case PLAYER_TURN:

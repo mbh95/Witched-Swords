@@ -55,7 +55,7 @@ public class ActionMenuSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity cursor, float deltaTime) {
-        if (screen.curState == TacticsScreen.TacticsState.MENU || screen.currentDialogueBox != null) {
+        if (screen.curState != TacticsScreen.TacticsState.PLAYER_TURN || screen.currentDialogueBox != null) {
             return;
         }
         Controller controller = screen.game.controller;

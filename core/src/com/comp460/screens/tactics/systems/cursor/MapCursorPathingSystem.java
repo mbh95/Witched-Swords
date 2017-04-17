@@ -31,9 +31,9 @@ public class MapCursorPathingSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity cursor, float deltaTime) {
-//        if (parentScreen.curState == TacticsScreen.TacticsState.MENU) {
-//            return;
-//        }
+        if (parentScreen.curState != TacticsScreen.TacticsState.PLAYER_TURN || parentScreen.currentDialogueBox != null) {
+            return;
+        }
         MovementPathComponent pathComponent = MovementPathComponent.get(cursor);
         MapPositionComponent cursorPos = MapPositionComponent.get(cursor);
         MapCursorSelectionComponent selectionComponent = MapCursorSelectionComponent.get(cursor);

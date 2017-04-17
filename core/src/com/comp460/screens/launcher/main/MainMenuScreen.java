@@ -12,6 +12,8 @@ import com.comp460.common.ui.NinePatchTextButton;
 import com.comp460.screens.launcher.mapselect.MapSelectScreen;
 import com.comp460.screens.launcher.practice.battle.BattlePracticeScreen;
 import com.comp460.screens.launcher.splash.SplashScreen;
+import com.comp460.screens.tactics.TacticsScreen;
+import com.comp460.screens.tactics.TacticsTutorialScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +44,18 @@ public class MainMenuScreen extends GameScreen {
     }
 
     public TemplateRow[] buttonTemplates = new TemplateRow[] {
+            new TemplateRow("Gauntlet", ()->{
+                game.setScreen(new TacticsTutorialScreen(game,
+                        new TacticsScreen(game,
+                                new TacticsScreen(game,
+                                        new TacticsScreen(game, this, "maps/indoor.json"),
+                                this, "maps/cliffs.json"),
+                        this, "maps/bridge.json"),
+                this, "maps/joe.json"));
+            }),
             new TemplateRow("Map Select", ()->{
                 game.setScreen(new MapSelectScreen(game, this));
             }),
-            new TemplateRow("---", ()->{}),
             new TemplateRow("Practice", () -> {
                 game.setScreen(new BattlePracticeScreen(game, this));
             })

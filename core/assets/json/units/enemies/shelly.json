@@ -5,6 +5,7 @@
   "maxHP": 250,
   "curHP": 250,
   "moveDist": 5,
+  "speed": 0.5,
   "battleFactory": {
     "class": "com.comp460.screens.battle.units.enemies.shelly.ShellyFactory"
   }

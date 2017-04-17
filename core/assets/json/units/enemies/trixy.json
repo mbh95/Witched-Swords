@@ -5,6 +5,7 @@
   "maxHP": 50,
   "curHP": 50,
   "moveDist": 5,
+  "speed": 1.0,
   "battleFactory": {
     "class": "com.comp460.screens.battle.units.enemies.trixie.TrixieFactory"
   }

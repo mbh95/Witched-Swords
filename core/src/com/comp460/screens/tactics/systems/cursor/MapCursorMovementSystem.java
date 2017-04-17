@@ -26,7 +26,7 @@ public class MapCursorMovementSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        if (parentScreen.curState == TacticsScreen.TacticsState.MENU || parentScreen.currentDialogueBox != null) {
+        if (parentScreen.curState != TacticsScreen.TacticsState.PLAYER_TURN || parentScreen.currentDialogueBox != null) {
             return;
         }
         MapCursorComponent cursor = MapCursorComponent.get(entity);

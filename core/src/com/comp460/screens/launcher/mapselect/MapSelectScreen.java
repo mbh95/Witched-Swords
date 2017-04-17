@@ -16,6 +16,7 @@ import com.comp460.common.ui.TexturedButton;
 import com.comp460.screens.launcher.practice.battle.BattlePracticeAssets;
 import com.comp460.screens.tactics.TacticsMap;
 import com.comp460.screens.tactics.TacticsScreen;
+import com.comp460.screens.tactics.TacticsTutorialScreen;
 
 import static com.comp460.Settings.INTERNAL_WIDTH;
 
@@ -57,7 +58,7 @@ public class MapSelectScreen extends GameScreen {
             game.setScreen(new TacticsScreen(game, prevScreen, bridgemapButton.mapJSONFile));
         };
         smallmapButton.action = () -> {
-            game.setScreen(new TacticsScreen(game, prevScreen, smallmapButton.mapJSONFile));
+            game.setScreen(new TacticsTutorialScreen(game, prevScreen, smallmapButton.mapJSONFile));
         };
 //        canyonmapButton.action = () -> {
 //            game.setScreen(new TacticsScreen(game, prevScreen, canyonmapButton.map));

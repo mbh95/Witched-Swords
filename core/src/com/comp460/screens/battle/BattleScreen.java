@@ -68,6 +68,8 @@ public class BattleScreen extends GameScreen {
     private GlyphLayout p2WinsLayout = new GlyphLayout(resultsFont, "YOU LOSE!");
     private GlyphLayout outOfTimeLayout = new GlyphLayout(resultsFont, "OUT OF TIME");
 
+    private GlyphLayout continueLayout = new GlyphLayout(continueFont, "z to continue");
+
     private enum BattleState {COUNTOFF, RUNNING, END_P1_DIED, END_P2_DIED, END_DRAW, END_TIME}
 
     private float countOffTimer = 3;
@@ -113,11 +115,16 @@ public class BattleScreen extends GameScreen {
         this.p1Unit = p1UnitBase.buildBattleUnit(this, 1, 1);
         this.p2Unit = p2UnitBase.buildBattleUnit(this, 1, numCols - 2);
 
-        // give energy advantage
-        if (p1Initiated && !exitAllowed)
-            p2Unit.removeEnergy(3);
-        else if (!p1Initiated && !exitAllowed)
-            p1Unit.removeEnergy(3);
+        // give energy and regen advantage
+        if (p1Initiated && !exitAllowed) {
+            p2Unit.speed /= 2;
+            p2Unit.removeEnergy(5);
+
+        } else if (!exitAllowed) {
+            p1Unit.speed /= 2;
+            p1Unit.removeEnergy(5);
+        }
+
         this.player1 = new HumanPlayer(p1Unit);
         this.player2 = new GhastAi(p2Unit, p1Unit, this);
 
@@ -275,7 +282,7 @@ public class BattleScreen extends GameScreen {
 
         movesFont.draw(batch, "" + p1Unit.ability1.name + "\n" + p1Unit.ability2.name, 18, y);
         GlyphLayout p2MovesLayout = new GlyphLayout(movesFont, "1: " + p2Unit.ability1.name + "\n2: " + p2Unit.ability2.name);
-        movesFont.draw(batch,  p2MovesLayout, 400 - p2MovesLayout.width - 10, y);
+        movesFont.draw(batch, p2MovesLayout, 400 - p2MovesLayout.width - 10, y);
         batch.end();
 
         renderTimer(width / 2, 210);
@@ -340,8 +347,7 @@ public class BattleScreen extends GameScreen {
         resultsFont.draw(batch, layout, width / 2 - layout.width / 2, 100 + shift);
 
         if (this.endDelay <= 0 && zToContinueVisible) {
-            layout = new GlyphLayout(continueFont, "z to continue");
-            continueFont.draw(batch, "z to continue", width / 2 - layout.width / 2, 50 + shift);
+            continueFont.draw(batch, continueLayout, width / 2 - continueLayout.width / 2, 50 + shift);
         }
         if (zToContinuePhase <= 0) {
             zToContinueVisible = !zToContinueVisible;

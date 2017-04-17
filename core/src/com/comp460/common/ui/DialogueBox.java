@@ -18,7 +18,7 @@ public class DialogueBox {
     private GlyphLayout layout;
     private GameScreen parentScreen;
 
-    private float infoWidth = 350;
+    private float infoWidth = 400;
     private float infoHeight = 50 - 2;
 
     private float padding = 4;

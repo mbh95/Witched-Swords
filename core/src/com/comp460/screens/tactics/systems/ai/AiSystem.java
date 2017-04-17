@@ -54,64 +54,66 @@ public class AiSystem extends IteratingSystem {
 
         if (!moveQueue.isEmpty()) {
             Entity toMove = moveQueue.poll();
-
-            Set<MapPositionComponent> movePositions = screen.getMap().computeValidMoves(toMove);
-            Set<MapPositionComponent> attackPositions = screen.getMap().computeValidAttacks(toMove, movePositions);
-
-            Entity target = null;
-            int targetHP = Integer.MAX_VALUE;
-
-            for (Entity e : getEngine().getEntitiesFor(playerUnitsFamily)) {
-                MapPositionComponent playerPosition = posM.get(e);
-                UnitStatsComponent playerStats = statsM.get(e);
-                if (attackPositions.contains(playerPosition)) {
-                    if (target == null || playerStats.base.curHP < targetHP) {
-                        target = e;
-                        targetHP = playerStats.base.curHP;
-                    }
-                }
-            }
-            if (target != null) {
-                MapPositionComponent targetPos = posM.get(target);
-                MapPositionComponent curPos = MapPositionComponent.get(toMove);
-                Set<MapPositionComponent> options = new HashSet<>();
-                MapPositionComponent up = new MapPositionComponent(targetPos.row + 1, targetPos.col);
-                MapPositionComponent down = new MapPositionComponent(targetPos.row - 1, targetPos.col);
-                MapPositionComponent left = new MapPositionComponent(targetPos.row, targetPos.col - 1);
-                MapPositionComponent right = new MapPositionComponent(targetPos.row, targetPos.col + 1);
-
-                if (movePositions.contains(up) || curPos.equals(up)) {
-                    options.add(up);
-                } else if (movePositions.contains(down) || curPos.equals(down)) {
-                    options.add(down);
-                } else if (movePositions.contains(left) || curPos.equals(left)) {
-                    options.add(left);
-                } else if (movePositions.contains(right) || curPos.equals(right)) {
-                    options.add(right);
-                }
-
-                Map<MapPositionComponent, Integer> distances = screen.getMap().distanceMap(toMove);
-
-                MapPositionComponent closest = null;
-                int closestDist = Integer.MAX_VALUE;
-
-                for (MapPositionComponent option : options) {
-                    int dist = distances.getOrDefault(option, Integer.MAX_VALUE);
-                    if (dist <= closestDist) {
-                        closestDist = dist;
-                        closest = option;
-                    }
-                }
-
-                if (closest != null) {
-                    screen.getMap().move(toMove, closest.row, closest.col);
-                    screen.transitionToBattleView(target, toMove, false);
-                }
-            } else {
-                toMove.remove(ReadyToMoveComponent.class);
-            }
-
+            makeMove(toMove);
             moveQueue.clear();
+        }
+    }
+
+    public void makeMove(Entity toMove) {
+        Set<MapPositionComponent> movePositions = screen.getMap().computeValidMoves(toMove);
+        Set<MapPositionComponent> attackPositions = screen.getMap().computeValidAttacks(toMove, movePositions);
+
+        Entity target = null;
+        int targetHP = Integer.MAX_VALUE;
+
+        for (Entity e : getEngine().getEntitiesFor(playerUnitsFamily)) {
+            MapPositionComponent playerPosition = posM.get(e);
+            UnitStatsComponent playerStats = statsM.get(e);
+            if (attackPositions.contains(playerPosition)) {
+                if (target == null || playerStats.base.curHP < targetHP) {
+                    target = e;
+                    targetHP = playerStats.base.curHP;
+                }
+            }
+        }
+        if (target != null) {
+            MapPositionComponent targetPos = posM.get(target);
+            MapPositionComponent curPos = MapPositionComponent.get(toMove);
+            Set<MapPositionComponent> options = new HashSet<>();
+            MapPositionComponent up = new MapPositionComponent(targetPos.row + 1, targetPos.col);
+            MapPositionComponent down = new MapPositionComponent(targetPos.row - 1, targetPos.col);
+            MapPositionComponent left = new MapPositionComponent(targetPos.row, targetPos.col - 1);
+            MapPositionComponent right = new MapPositionComponent(targetPos.row, targetPos.col + 1);
+
+            if (movePositions.contains(up) || curPos.equals(up)) {
+                options.add(up);
+            } else if (movePositions.contains(down) || curPos.equals(down)) {
+                options.add(down);
+            } else if (movePositions.contains(left) || curPos.equals(left)) {
+                options.add(left);
+            } else if (movePositions.contains(right) || curPos.equals(right)) {
+                options.add(right);
+            }
+
+            Map<MapPositionComponent, Integer> distances = screen.getMap().distanceMap(toMove);
+
+            MapPositionComponent closest = null;
+            int closestDist = Integer.MAX_VALUE;
+
+            for (MapPositionComponent option : options) {
+                int dist = distances.getOrDefault(option, Integer.MAX_VALUE);
+                if (dist <= closestDist) {
+                    closestDist = dist;
+                    closest = option;
+                }
+            }
+
+            if (closest != null) {
+                screen.getMap().move(toMove, closest.row, closest.col);
+                screen.transitionToBattleView(target, toMove, false);
+            }
+        } else {
+            toMove.remove(ReadyToMoveComponent.class);
         }
     }
 }

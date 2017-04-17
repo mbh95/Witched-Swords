@@ -5,6 +5,7 @@
   "maxHP": 100,
   "curHP": 100,
   "moveDist": 5,
+  "speed": 0.75,
   "battleFactory": {
     "class": "com.comp460.screens.battle.units.enemies.baddie.BaddieFactory"
   }

@@ -6,6 +6,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.comp460.screens.tactics.components.map.MapPositionComponent;
+import com.comp460.screens.tactics.components.unit.AIControlledComponent;
+import com.comp460.screens.tactics.components.unit.PlayerControlledComponent;
 import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
 import com.comp460.screens.tactics.components.unit.UnitStatsComponent;
 import com.comp460.screens.tactics.factories.UnitFactory;
@@ -32,6 +34,9 @@ public class TacticsMap {
 
     public transient MapTile[][] tiles;
     private transient Entity[][] units;
+
+    public Set<Entity> playerUnits = new HashSet<>();
+    public Set<Entity> aiUnits = new HashSet<>();
 
     public TacticsMap() {
 
@@ -88,6 +93,12 @@ public class TacticsMap {
                             screen.getEngine().addEntity(unit);
                         }
                         this.units[r][c] = unit;
+
+                        if (unit.getComponent(PlayerControlledComponent.class) != null) {
+                            this.playerUnits.add(unit);
+                        } else if (unit.getComponent(AIControlledComponent.class) != null) {
+                            this.aiUnits.add(unit);
+                        }
                     }
                 }
             }
@@ -283,6 +294,11 @@ public class TacticsMap {
         MapPositionComponent selectionPos = MapPositionComponent.get(entity);
         if (selectionPos != null && isOnMap(selectionPos.row, selectionPos.col) && entity == this.units[selectionPos.row][selectionPos.col]) {
             this.units[selectionPos.row][selectionPos.col] = null;
+        }
+        if (entity.getComponent(PlayerControlledComponent.class) != null) {
+            this.playerUnits.remove(entity);
+        } else if (entity.getComponent(AIControlledComponent.class) != null) {
+            this.aiUnits.remove(entity);
         }
     }
 

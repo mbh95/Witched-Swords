@@ -81,11 +81,15 @@ public class TacticsScreen extends GameScreen {
     private static final BitmapFont playerTurnFont = FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 32, Color.BLACK, new Color(0x3232acFF), 4); //FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 16, Color.BLUE);
     private static final BitmapFont aiTurnFont = FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 32, Color.BLACK, new Color(0xac3232FF), 4); //FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 16, Color.RED);
 
+    private static BitmapFont continueFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 16, Color.WHITE, Color.BLACK, 1);
+
     private static final GlyphLayout playerTurnLayout = new GlyphLayout(playerTurnFont, "Player Turn");
     private static final GlyphLayout aiTurnLayout = new GlyphLayout(aiTurnFont, "Computer Turn");
 
     private static final GlyphLayout playerWinLayout = new GlyphLayout(playerTurnFont, "You Win!");
     private static final GlyphLayout aiWinLayout = new GlyphLayout(aiTurnFont, "You Lose");
+
+    private static final GlyphLayout continueLayout = new GlyphLayout(continueFont, "z to continue");
 
     public DialogueBox currentDialogueBox;
 
@@ -101,6 +105,10 @@ public class TacticsScreen extends GameScreen {
     private float battleTransitionZoomLen = 1f;
     private float battleTransitionStayLen = 0.5f;
 
+    private float zToContinuePhaseLen = 0.5f;
+    private float zToContinuePhase = zToContinuePhaseLen;
+    private boolean zToContinueVisible = true;
+
     private float battleZoomTimer;
     private float battleStayTimer;
 
@@ -112,12 +120,17 @@ public class TacticsScreen extends GameScreen {
 
     public Entity cursor;
 
-    public GameScreen prevScreen;
-
+    public GameScreen onWinScreen;
+    public GameScreen onLoseScreen;
     public TacticsScreen(MainGame game, GameScreen prevScreen, String mapJSONFile) {
+        this(game, prevScreen, prevScreen, mapJSONFile);
+    }
+
+    public TacticsScreen(MainGame game, GameScreen onWinScreen, GameScreen onLoseScreen, String mapJSONFile) {
         super(game);
 
-        this.prevScreen = prevScreen;
+        this.onWinScreen = onWinScreen;
+        this.onLoseScreen = onLoseScreen;
 
         this.engine = new PooledEngine();
 
@@ -217,7 +230,7 @@ public class TacticsScreen extends GameScreen {
 
         startTransitionToPlayerTurn();
 
-        currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(SpriteManager.BATTLE.findRegion("attacks/poof"), "test1"), new DialogueBox.DialogueBoxTemplate(SpriteManager.BATTLE.findRegion("attacks/puff"), "test2"));
+//        currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(SpriteManager.BATTLE.findRegion("attacks/poof"), "test1"), new DialogueBox.DialogueBoxTemplate(SpriteManager.BATTLE.findRegion("attacks/puff"), "test2"));
     }
 
     GlyphLayout tacticsHelpLayout;
@@ -239,9 +252,7 @@ public class TacticsScreen extends GameScreen {
     }
 
     public void update(float delta) {
-        if (currentDialogueBox != null) {
-            currentDialogueBox = currentDialogueBox.update();
-        }
+//        System.out.println(curState);
         if (battleZoomTimer > 0) {
             if (engine.getSystem(MapToScreenSystem.class).isDone(playerEntity, 0.01f) && engine.getSystem(MapToScreenSystem.class).isDone(aiEntity, 0.01f)) {
                 battleZoomTimer -= delta;
@@ -257,7 +268,9 @@ public class TacticsScreen extends GameScreen {
                 GameUnit playerUnit = UnitStatsComponent.get(playerEntity).base;
                 GameUnit aiUnit = UnitStatsComponent.get(aiEntity).base;
                 game.setScreen(new BattleScreen(game, this, playerUnit, aiUnit, playerInitiated, false, 10f));
-                engine.getSystem(AiSystem.class).setProcessing(true);
+                if (engine.getSystem(AiSystem.class) != null) {
+                    engine.getSystem(AiSystem.class).setProcessing(true);
+                }
                 engine.removeEntity(cameraTarget);
                 if (curState == PLAYER_TURN) {
                     engine.addEntity(cursor);
@@ -265,7 +278,9 @@ public class TacticsScreen extends GameScreen {
                 zoom = 1f;
                 return;
             }
-        } else {
+        } else if (currentDialogueBox != null) {
+            currentDialogueBox = currentDialogueBox.update();
+        } else if (currentDialogueBox == null) {
             switch (curState) {
                 case PLAYER_TURN:
                     if (game.controller.startJustPressed()) {
@@ -312,7 +327,7 @@ public class TacticsScreen extends GameScreen {
                     break;
             }
             if (game.controller.endJustPressed()) {
-                this.game.setScreen(prevScreen);
+                this.game.setScreen(onLoseScreen);
             }
         }
         engine.update(delta);
@@ -326,6 +341,7 @@ public class TacticsScreen extends GameScreen {
         this.camera.zoom = zoom;
         super.render(delta);
 
+//        System.out.println(curState);
         update(delta);
 
         switch (curState) {
@@ -362,7 +378,7 @@ public class TacticsScreen extends GameScreen {
                 break;
         }
 
-        if (currentDialogueBox != null) {
+        if (currentDialogueBox != null && !inBattleTransition()) {
             currentDialogueBox.render(uiBatch);
         }
     }
@@ -485,28 +501,53 @@ public class TacticsScreen extends GameScreen {
     }
 
     private void renderPlayerWin(float delta) {
-        timer -= delta;
-        if (timer <= 0) {
+        if (timer > 0) {
+            timer -= delta;
+        } else if (currentDialogueBox == null && game.controller.button1JustPressed()) {
             dispose();
-            this.game.setScreen(prevScreen);
+            this.game.setScreen(onWinScreen);
         }
         uiBatch.begin();
 //        playerTurnFont.draw(uiBatch, "You Win!", 0, 16);
         playerTurnFont.draw(uiBatch, playerWinLayout, width / 2 - playerWinLayout.width / 2, height / 2 + playerWinLayout.height / 2);
+
+        if (timer <= 0) {
+            zToContinuePhase -= delta;
+            if (zToContinuePhase <= 0) {
+                zToContinuePhase = zToContinuePhaseLen;
+                zToContinueVisible = !zToContinueVisible;
+            }
+            if (zToContinueVisible && currentDialogueBox == null) {
+                continueFont.draw(uiBatch, continueLayout, width / 2 - continueLayout.width / 2, 85);
+            }
+        }
         uiBatch.end();
+
     }
 
     private void renderAiWin(float delta) {
-        timer -= delta;
-        if (timer <= 0) {
+        if (timer > 0) {
+            timer -= delta;
+        } else if (currentDialogueBox == null && game.controller.button1JustPressed()) {
             dispose();
-            this.game.setScreen(prevScreen);
+            this.game.setScreen(onLoseScreen);
         }
         uiBatch.begin();
 //        aiTurnFont.draw(uiBatch, "Computer Wins", 0, 16);
         aiTurnFont.draw(uiBatch, aiWinLayout, width / 2 - aiWinLayout.width / 2, height / 2 + aiWinLayout.height / 2);
 
+        if (timer <= 0) {
+            zToContinuePhase -= delta;
+            if (zToContinuePhase <= 0) {
+                zToContinuePhase = zToContinuePhaseLen;
+                zToContinueVisible = !zToContinueVisible;
+            }
+            if (zToContinueVisible && currentDialogueBox == null) {
+                continueFont.draw(uiBatch, continueLayout, width / 2 - continueLayout.width / 2, 85);
+            }
+        }
         uiBatch.end();
+
     }
 
     public void renderPlayerTurnTransition(float delta) {
@@ -594,7 +635,10 @@ public class TacticsScreen extends GameScreen {
 //        playerEntity.remove(InvisibleComponent.class);
 //        aiEntity.remove(InvisibleComponent.class);
 
-        engine.getSystem(AiSystem.class).setProcessing(false);
+        if (engine.getSystem(AiSystem.class) != null) {
+            engine.getSystem(AiSystem.class).setProcessing(false);
+        }
+
         battleZoomTimer = battleTransitionZoomLen;
 
         Vector3 playerVec = engine.getSystem(MapToScreenSystem.class).goal(playerEntity);
@@ -626,6 +670,9 @@ public class TacticsScreen extends GameScreen {
     public void show() {
         super.show();
         game.playMusic(this.getMap().bgMusicFile);
+
+
+
         engine.getEntitiesFor(unitsFamily).forEach(e -> {
             UnitStatsComponent stats = e.getComponent(UnitStatsComponent.class);
             if (stats.base.curHP <= 0) {
@@ -634,14 +681,21 @@ public class TacticsScreen extends GameScreen {
             }
         });
 
-        if (playerEntity != null) {
-            playerEntity.remove(ReadyToMoveComponent.class);
-            playerEntity = null;
+        if (map.aiUnits.size() == 0) {
+            this.playerWins();
+        } else if (map.playerUnits.size() == 0) {
+            this.aiWins();
+        } else {
+            if (playerEntity != null) {
+                playerEntity.remove(ReadyToMoveComponent.class);
+                playerEntity = null;
+            }
+            if (aiEntity != null) {
+                aiEntity.remove(ReadyToMoveComponent.class);
+                aiEntity = null;
+            }
         }
-        if (aiEntity != null) {
-            aiEntity.remove(ReadyToMoveComponent.class);
-            aiEntity = null;
-        }
+
 //        engine.getEntitiesFor(invisibleFamily).forEach(entity -> entity.remove(InvisibleComponent.class));
         recalculateMoves();
 //        engine.getSystem(AiSystem.class).setProcessing(true);
@@ -690,5 +744,9 @@ public class TacticsScreen extends GameScreen {
         engine.getEntitiesFor(aiUnitsFamily).forEach((e) -> {
             e.remove(ShowValidMovesComponent.class);
         });
+    }
+
+    public boolean inBattleTransition() {
+        return battleZoomTimer > 0 || battleStayTimer > 0;
     }
 }

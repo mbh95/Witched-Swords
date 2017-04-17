@@ -69,7 +69,7 @@ public class ActionMenuSystem extends IteratingSystem {
         if (controller.downJustPressed() && actionMenu.selectedAction > 0) {
             actionMenu.selectedAction--;
         }
-        if (controller.button1JustPressedDestructive()) {
+        if (controller.button1JustPressedDestructive() || controller.startJustPressedDestructive()) {
             MapPositionComponent goal = path.positions.get(path.positions.size() - 1);
             UnitStatsComponent playerStats = UnitStatsComponent.get(selectionComponent.selected);
             UnitStatsComponent aiStats;
@@ -118,8 +118,8 @@ public class ActionMenuSystem extends IteratingSystem {
                     selectionComponent.selected.remove(ReadyToMoveComponent.class);
                     break;
                 case HEAL_SELF:
+                    screen.getMap().move(selectionComponent.selected, goal.row, goal.col);
                     heal(selectionComponent.selected);
-                    selectionComponent.selected.remove(ReadyToMoveComponent.class);
                     selectionComponent.selected.remove(ReadyToMoveComponent.class);
                     break;
                 case CANCEL:

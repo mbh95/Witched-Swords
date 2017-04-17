@@ -51,7 +51,7 @@ public class MapCursorPathingSystem extends IteratingSystem {
             pathComponent.positions = parentScreen.getMap().shortestPath(selectionComponent.selected, cursorPos);
         }
 
-        if (parentScreen.game.controller.button1JustPressedDestructive()) {
+        if (parentScreen.game.controller.button1JustPressedDestructive() || parentScreen.game.controller.startJustPressedDestructive()) {
             if (cursorPos.equals(MapPositionComponent.get(selectionComponent.selected)) || validPositions.contains(cursorPos)) { // Clicked on the selected unit or within the unit's range
                 cursor.add(new LockedComponent());
                 selectionSound.play(0.7f);

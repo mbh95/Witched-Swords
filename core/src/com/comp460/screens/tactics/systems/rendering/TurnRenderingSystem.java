@@ -48,8 +48,8 @@ public class TurnRenderingSystem extends EntitySystem {
         turnFont.draw(screen.uiBatch, layout, x + 4, y + bg.getRegionHeight() / 2 + 8 + 1);
 
         if (screen.curState == TacticsScreen.TacticsState.PLAYER_TURN) {
-            screen.uiBatch.draw(screen.game.controller.startSprite(), x + 2, y + 2);
-            turnFont.draw(screen.uiBatch, toEndLayout, x + 2 + screen.game.controller.startSprite().getRegionWidth() + 2, 2 + 8);
+            screen.uiBatch.draw(screen.game.controller.endSprite(), x + 2, y + 2);
+            turnFont.draw(screen.uiBatch, toEndLayout, x + 2 + screen.game.controller.endSprite().getRegionWidth() + 2, 2 + 8);
         }
         screen.uiBatch.end();
     }

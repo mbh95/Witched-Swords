@@ -122,6 +122,7 @@ public class TacticsScreen extends GameScreen {
 
     public GameScreen onWinScreen;
     public GameScreen onLoseScreen;
+
     public TacticsScreen(MainGame game, GameScreen prevScreen, String mapJSONFile) {
         this(game, prevScreen, prevScreen, mapJSONFile);
     }
@@ -230,7 +231,7 @@ public class TacticsScreen extends GameScreen {
 
         startTransitionToPlayerTurn();
 
-//        currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(SpriteManager.BATTLE.findRegion("attacks/poof"), "test1"), new DialogueBox.DialogueBoxTemplate(SpriteManager.BATTLE.findRegion("attacks/puff"), "test2"));
+        currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(SpriteManager.BATTLE.findRegion("attacks/puff"), "Defeat all enemies!"));
     }
 
     GlyphLayout tacticsHelpLayout;
@@ -283,7 +284,7 @@ public class TacticsScreen extends GameScreen {
         } else if (currentDialogueBox == null) {
             switch (curState) {
                 case PLAYER_TURN:
-                    if (game.controller.startJustPressed()) {
+                    if (game.controller.endJustPressed()) {
                         curState = MENU;
                         engine.removeEntity(cursor);
                     }
@@ -295,7 +296,7 @@ public class TacticsScreen extends GameScreen {
                     if (game.controller.rightJustPressed()) curSelectedButton = curSelectedButton.right;
                     if (game.controller.upJustPressed()) curSelectedButton = curSelectedButton.up;
                     if (game.controller.downJustPressed()) curSelectedButton = curSelectedButton.down;
-                    if (game.controller.button1JustPressedDestructive()) {
+                    if (game.controller.button1JustPressedDestructive() || game.controller.startJustPressedDestructive()) {
 //                    System.out.println(curSelectedButton.pos);
                         curSelectedButton.click();
                     }
@@ -309,7 +310,7 @@ public class TacticsScreen extends GameScreen {
                     if (game.controller.rightJustPressed()) curSelectedButton = curSelectedButton.right;
                     if (game.controller.upJustPressed()) curSelectedButton = curSelectedButton.up;
                     if (game.controller.downJustPressed()) curSelectedButton = curSelectedButton.down;
-                    if (game.controller.button1JustPressedDestructive()) {
+                    if (game.controller.button1JustPressedDestructive() || game.controller.startJustPressedDestructive()) {
                         curSelectedButton.click();
                     }
                     if (game.controller.button2JustPressedDestructive()) {
@@ -326,9 +327,9 @@ public class TacticsScreen extends GameScreen {
                     }
                     break;
             }
-            if (game.controller.endJustPressed()) {
-                this.game.setScreen(onLoseScreen);
-            }
+//            if (game.controller.endJustPressed()) {
+//                this.game.setScreen(onLoseScreen);
+//            }
         }
         engine.update(delta);
     }
@@ -503,7 +504,7 @@ public class TacticsScreen extends GameScreen {
     private void renderPlayerWin(float delta) {
         if (timer > 0) {
             timer -= delta;
-        } else if (currentDialogueBox == null && game.controller.button1JustPressed()) {
+        } else if (currentDialogueBox == null && (game.controller.button1JustPressed() || game.controller.startJustPressed())) {
             dispose();
             this.game.setScreen(onWinScreen);
         }
@@ -528,7 +529,7 @@ public class TacticsScreen extends GameScreen {
     private void renderAiWin(float delta) {
         if (timer > 0) {
             timer -= delta;
-        } else if (currentDialogueBox == null && game.controller.button1JustPressed()) {
+        } else if (currentDialogueBox == null && (game.controller.button1JustPressed() || game.controller.startJustPressed())) {
             dispose();
             this.game.setScreen(onLoseScreen);
         }
@@ -670,7 +671,6 @@ public class TacticsScreen extends GameScreen {
     public void show() {
         super.show();
         game.playMusic(this.getMap().bgMusicFile);
-
 
 
         engine.getEntitiesFor(unitsFamily).forEach(e -> {

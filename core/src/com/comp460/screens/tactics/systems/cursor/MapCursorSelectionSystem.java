@@ -33,7 +33,7 @@ public class MapCursorSelectionSystem extends IteratingSystem {
         }
         MapPositionComponent cursorPos = MapPositionComponent.get(cursor);
 
-        if (parentScreen.game.controller.button1JustPressedDestructive()) {
+        if (parentScreen.game.controller.button1JustPressedDestructive() || parentScreen.game.controller.startJustPressedDestructive()) {
             Entity newSelection = parentScreen.getMap().getUnitAt(cursorPos.row, cursorPos.col);
 
             if (newSelection == null) {

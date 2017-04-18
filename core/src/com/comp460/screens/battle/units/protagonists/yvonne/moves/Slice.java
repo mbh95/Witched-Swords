@@ -20,19 +20,13 @@ public class Slice extends BattleUnitAbility {
     public Yvonne yvonne;
 
     public Slice(Yvonne yvonne) {
-        super("slice", "Slice", "attack", "A bloodthirsty swing from a scythe spanning an entire column.");
+        super("slice", "Slice", "attack", "A bloodthirsty swing from a scythe spanning an entire column.", 1, 0);
         this.yvonne = yvonne;
-    }
-
-    @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 1;
     }
 
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         SliceInstance sliceInstance = new SliceInstance(yvonne.curRow, yvonne.curCol + 3, .2f, 10, yvonne, true);
-        user.removeEnergy(1);
         yvonne.slices.add(sliceInstance);
         screen.addAnimation(new BattleAnimation(sliceAnim, screen.colToScreenX(0, yvonne.curCol + 3), screen.rowToScreenY(0, yvonne.curCol + 3), 0.2f));
     }

@@ -15,20 +15,14 @@ public class Parry extends BattleUnitAbility {
     public Counterattack counterattack;
 
     public Parry(Zane zane) {
-        super("parry", "Parry", "attack", "A parry to an incoming enemy attack followed by a counterattack.");
+        super("parry", "Parry", "attack", "A parry to an incoming enemy attack followed by a counterattack.", 1, 0);
         this.zane = zane;
         counterattack = new Counterattack(zane);
     }
 
     @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 1;
-    }
-
-    @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
-        user.curEnergy-=1;
         zane.parry(0.5f);
     }
 }

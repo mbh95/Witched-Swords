@@ -20,13 +20,8 @@ public class Counterattack extends BattleUnitAbility {
     public Zane zane;
 
     public Counterattack(Zane zane) {
-        super("slash", "Slash", "attack", "A quick and strong sword slash spanning an entire row on the enemy side.");
+        super("slash", "Slash", "attack", "A quick and strong sword slash spanning an entire row on the enemy side.", 1, 0);
         this.zane = zane;
-    }
-
-    @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 1;
     }
 
     @Override

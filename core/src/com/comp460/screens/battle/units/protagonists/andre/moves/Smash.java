@@ -13,7 +13,7 @@ public class Smash extends BattleUnitAbility {
     Andre andre;
 
     public Smash(Andre andre) {
-        super("smash", "Smash!", "attack", "Punch the ground and create a shockwave that damages enemies.");
+        super("smash", "Smash!", "attack", "Punch the ground and create a shockwave that damages enemies.", 3, 0);
         this.andre = andre;
     }
 
@@ -28,7 +28,6 @@ public class Smash extends BattleUnitAbility {
         if (andre.smashCol >= 0) {
             return;
         }
-        user.removeEnergy(3);
         andre.charges = 0;
         andre.smash();
     }

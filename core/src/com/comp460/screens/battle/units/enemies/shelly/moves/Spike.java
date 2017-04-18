@@ -18,13 +18,8 @@ public class Spike extends BattleUnitAbility {
     public static TextureRegion sprite = SpriteManager.BATTLE.findRegion("attacks/spike");
 
     public Spike(Shelly baddie) {
-        super("spike", "Spike Shot", "attack", "Shoot a razor sharp spike.");
+        super("spike", "Spike Shot", "attack", "Shoot a razor sharp spike.", 1, 0);
         this.baddie = baddie;
-    }
-
-    @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 1;
     }
 
     @Override

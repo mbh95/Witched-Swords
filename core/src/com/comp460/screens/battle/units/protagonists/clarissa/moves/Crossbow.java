@@ -19,7 +19,7 @@ import static com.comp460.assets.SoundManager.arrowSound;
 public class Crossbow extends BattleUnitAbility {
 
     public static final String idString = "crossbow";
-    public static final String nameString = "Ready aim Fire!";
+    public static final String nameString = "Crossbow!";
     public static final String animationString = "attack";
     public static final String descriptionString = "Fire a crossbow bolt infused with highlighted ingredient.";
 
@@ -28,20 +28,14 @@ public class Crossbow extends BattleUnitAbility {
     public float arrowSpeed = 300f;
 
     public Crossbow(Clarissa clarissa) {
-        super(idString, nameString, animationString, descriptionString);
+        super(idString, nameString, animationString, descriptionString, 2, 0);
         this.clarissa = clarissa;
-    }
-
-    @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy > 1;
     }
 
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
         arrowSound.play();
-        clarissa.removeEnergy(2);
         if (clarissa.inventory.size() == 0) {
             clarissa.arrows.add(new Arrow(Ingredient.IngredientID.NONE, screen.colToScreenX(user.curRow, user.curCol) + 26, screen.rowToScreenY(user.curRow, user.curCol) + 22));
             return;

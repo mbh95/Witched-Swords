@@ -16,7 +16,7 @@ import com.comp460.screens.battle.units.protagonists.andre.Andre;
  */
 public class Punch extends BattleUnitAbility {
     public Punch(Andre andre) {
-        super("punch", "Punch", "attack", "A rocket powered punch.");
+        super("punch", "Punch", "attack", "A rocket powered punch.", 1, 0);
         this.animTimer = 0;
         this.andre = andre;
     }
@@ -28,16 +28,10 @@ public class Punch extends BattleUnitAbility {
     private int row, col;
 
     @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 1;
-    }
-
-    @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
         this.row = andre.curRow;
         this.col = andre.curCol+1;
-        user.curEnergy -= 1;
         screen.addAnimation(new BattleAnimation(punch, user.transform.x+40, user.transform.y, 0.2f));
         andre.punches.add(this);
         this.damage = true;

@@ -7,6 +7,6 @@ import com.comp460.screens.battle.units.BattleUnitAbility;
  */
 public class Disabled extends BattleUnitAbility {
     public Disabled() {
-        super("disabled", "Disabled (Switch)", "idle", "---");
+        super("disabled", "Disabled (Switch)", "idle", "---", 0, 0);
     }
 }

@@ -211,17 +211,11 @@ public class BattleUnit implements BattleObject {
     }
     
     public void useAbility1() {
-        if (this.ability1.canUse(this, screen)) {
-            this.ability1.use(this, screen);
-            this.startAnimation(this.ability1.animationId);
-        }
+        this.ability1.attempt(this, screen);
     }
 
     public void useAbility2() {
-        if (this.ability2.canUse(this, screen)) {
-            this.ability2.use(this, screen);
-            this.startAnimation(this.ability2.animationId);
-        }
+        this.ability2.attempt(this, screen);
     }
 
     public boolean canUseAbility() {

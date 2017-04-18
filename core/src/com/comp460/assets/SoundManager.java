@@ -14,5 +14,6 @@ public class SoundManager {
     public static final Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("sound/hit.ogg"));
     public static final Sound monsterHurtSound = Gdx.audio.newSound(Gdx.files.internal("sound/monster_hurt.ogg"));
     public static final Sound monsterFallenSound = Gdx.audio.newSound(Gdx.files.internal("sound/monster_death.ogg"));
+    public static final Sound failSound = Gdx.audio.newSound(Gdx.files.internal("sound/fail.wav"));
 
 }

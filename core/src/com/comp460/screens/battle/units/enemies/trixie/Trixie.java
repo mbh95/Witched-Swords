@@ -63,7 +63,7 @@ class Scratch extends BattleUnitAbility {
     public Random rng = new Random();
 
     public Scratch(Trixie trixie) {
-        super("scratch", "Scratch", "attack", "A scratch attack that confuses the target.");
+        super("scratch", "Scratch", "attack", "A scratch attack that confuses the target.", 1, 0);
         this.trixie = trixie;
     }
 
@@ -71,17 +71,13 @@ class Scratch extends BattleUnitAbility {
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
 
+        user.removeEnergy(1);
         for (int r = 0; r < screen.numRows; r++) {
             int col = rng.nextInt(screen.numRows);
 
             trixie.scratches.add(new ScratchInstance(r, col));
         }
 
-    }
-
-    @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy > 1;
     }
 
     class ScratchInstance {

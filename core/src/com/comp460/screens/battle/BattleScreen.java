@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.SoundManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.screens.battle.players.BattlePlayer;
 import com.comp460.screens.battle.players.HumanPlayer;
@@ -15,6 +16,7 @@ import com.comp460.screens.battle.players.ai.GhastAi;
 import com.comp460.screens.battle.units.BattleUnit;
 import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
+import com.comp460.screens.battle.units.BattleUnitAbility;
 import com.sun.javafx.binding.StringFormatter;
 
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ public class BattleScreen extends GameScreen {
 
     private final TextureRegion hpBar = SpriteManager.BATTLE.findRegion("ui/hp_bar_new");
     private final TextureRegion energyBar = SpriteManager.BATTLE.findRegion("ui/energy");
+    private final TextureRegion energyBarRed = SpriteManager.BATTLE.findRegion("ui/energy-red");
+    private final TextureRegion energyBarMini = SpriteManager.BATTLE.findRegion("ui/energy-mini");
 
     private final TextureRegion moveBG = SpriteManager.BATTLE.findRegion("ui/move-bg");
 
@@ -70,6 +74,15 @@ public class BattleScreen extends GameScreen {
 
     private GlyphLayout continueLayout = new GlyphLayout(continueFont, "z to continue");
 
+    public void flashAbilityReq(BattleUnit user, BattleUnitAbility battleUnitAbility) {
+        if (user == p1Unit) {
+            SoundManager.failSound.play();
+            this.energyFlashTimer = this.energyFlashLen;
+            this.energyFlash = battleUnitAbility.energyCost;
+        } else {
+        }
+    }
+
     private enum BattleState {COUNTOFF, RUNNING, END_P1_DIED, END_P2_DIED, END_DRAW, END_TIME}
 
     private float countOffTimer = 3;
@@ -82,6 +95,9 @@ public class BattleScreen extends GameScreen {
     private float zToContinuePhaseLen = 0.5f;
     private float zToContinuePhase = zToContinuePhaseLen;
 
+    private int energyFlash = 0;
+    private float energyFlashTimer = 0f;
+    private float energyFlashLen = 0.5f;
 
     public BattleUnit p1Unit;
     public BattleUnit p2Unit;
@@ -165,6 +181,9 @@ public class BattleScreen extends GameScreen {
             if (anim.duration <= 0) {
                 iter.remove();
             }
+        }
+        if (energyFlashTimer > 0) {
+            energyFlashTimer -= delta;
         }
         if (game.controller.endJustPressed() && exitAllowed) {
             previousScreen();
@@ -270,20 +289,41 @@ public class BattleScreen extends GameScreen {
         renderHealthBar(p1Unit, width / 2 - hpBar.getRegionWidth() - 10, 3);
         renderHealthBar(p2Unit, width / 2 + 10, 3);
 
-        batch.begin();
-        int y = 24;
+        uiBatch.begin();
+        int y = 0;
+        int x = 0;
+        int w = moveBG.getRegionWidth();
+        int h = moveBG.getRegionHeight();
+
 //        int y = 220;
-        batch.draw(moveBG, 0, 0);
-        batch.draw(moveBG, 400 - moveBG.getRegionWidth(), 0);
+        uiBatch.draw(moveBG, x, y);
+        TextureRegion button1Sprite = game.controller.button1Sprite();
+        int button1X = 8;
+        int button1Y = y + h - 2 - button1Sprite.getRegionHeight();
+        uiBatch.draw(game.controller.button1Sprite(), button1X, button1Y);
 
-        batch.draw(game.controller.button1Sprite(), 4, y - 8);
-        batch.draw(game.controller.button2Sprite(), 4, y - 8 - 14);
+        TextureRegion button2Sprite = game.controller.button2Sprite();
+        int button2X = 8;
+        int button2Y = button1Y - 2 - button2Sprite.getRegionHeight();
+        uiBatch.draw(button2Sprite, button2X, button2Y);
 
+        movesFont.draw(uiBatch, p1Unit.ability1.name, button1X + button1Sprite.getRegionWidth() + 2, button1Y + button1Sprite.getRegionHeight() - 2);
+        movesFont.draw(uiBatch, p1Unit.ability2.name, button2X + button2Sprite.getRegionWidth() + 2, button2Y + button2Sprite.getRegionHeight() - 2);
 
-        movesFont.draw(batch, "" + p1Unit.ability1.name + "\n" + p1Unit.ability2.name, 18, y);
+//        movesFont.draw(uiBatch, "" + p1Unit.ability1.name + "\n" + p1Unit.ability2.name, x + 8 + game.controller.button1Sprite().getRegionWidth() + 2, y + h - 3);
+
+        for (int i = 0; i < p1Unit.ability1.energyCost; i++) {
+            uiBatch.draw(energyBarMini, button1X - energyBarMini.getRegionWidth() - 2, button1Y + button1Sprite.getRegionHeight() - 4 - i * 2);
+        }
+        for (int i = 0; i < p1Unit.ability2.energyCost; i++) {
+            uiBatch.draw(energyBarMini, button2X - energyBarMini.getRegionWidth() - 2, button2Y + button2Sprite.getRegionHeight() - 4 - i * 2);
+        }
+
+        uiBatch.draw(moveBG, 400 - moveBG.getRegionWidth(), 0);
+
         GlyphLayout p2MovesLayout = new GlyphLayout(movesFont, "1: " + p2Unit.ability1.name + "\n2: " + p2Unit.ability2.name);
-        movesFont.draw(batch, p2MovesLayout, 400 - p2MovesLayout.width - 10, y);
-        batch.end();
+        movesFont.draw(uiBatch, p2MovesLayout, 400 - p2MovesLayout.width - 10, y);
+        uiBatch.end();
 
         renderTimer(width / 2, 210);
     }
@@ -302,8 +342,13 @@ public class BattleScreen extends GameScreen {
 
         batch.draw(hpBar, x, y);
 
-        for (int i = unit.curEnergy; i > 0; i--)
-            batch.draw(energyBar, 51 + x - (i - 1) * 11, y + 2);
+        if (unit == p1Unit && energyFlashTimer > 0) {
+            for (int i = this.energyFlash - 1; i >= 0; i--)
+                batch.draw(energyBarRed, 51 + x - i * 11, y + 2);
+        }
+
+        for (int i = unit.curEnergy - 1; i >= 0; i--)
+            batch.draw(energyBar, 51 + x - i * 11, y + 2);
 
         String hpString = String.format("%03d/%03d", unit.curHP, unit.maxHP);
         GlyphLayout hpLayout = new GlyphLayout(hpFont, hpString);

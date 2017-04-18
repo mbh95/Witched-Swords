@@ -36,7 +36,7 @@ public class Flurry extends BattleUnitAbility {
     private GunbladeShot shot;
 
     public Flurry(Zane zane) {
-        super("flurry", "Flurry!", "attack", "Insert description of flurry here.");
+        super("flurry", "Flurry!", "attack", "Insert description of flurry here.", 3, 0);
         this.zane = zane;
         this.animTimer = 0;
     }
@@ -49,7 +49,6 @@ public class Flurry extends BattleUnitAbility {
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
-        user.removeEnergy(3);
         zane.charges = 0;
         this.row = zane.curRow;
         this.col = zane.curCol + 1;

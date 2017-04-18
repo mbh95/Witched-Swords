@@ -23,7 +23,7 @@ public class PickUp extends BattleUnitAbility {
     public Clarissa clarissa;
 
     public PickUp(Clarissa clarissa) {
-        super(idString, nameString, animationString, descriptionString);
+        super(idString, nameString, animationString, descriptionString, 0, 0);
         this.clarissa = clarissa;
     }
 
@@ -35,7 +35,6 @@ public class PickUp extends BattleUnitAbility {
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
-        pickupSound.play();
         if (clarissa.inventory.size() >= clarissa.maxIngredients) {
             return;
         }
@@ -44,6 +43,7 @@ public class PickUp extends BattleUnitAbility {
             if (clarissa.curRow == cur.row && clarissa.curCol == cur.col) {
                 iter.remove();
                 clarissa.pushIngredient(cur);
+                pickupSound.play();
             }
         }
     }

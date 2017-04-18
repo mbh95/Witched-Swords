@@ -59,7 +59,7 @@ class Puff extends BattleUnitAbility {
     public Random rng = new Random();
 
     public Puff(Ghast ghast) {
-        super("puff", "Noxious Fumes", "attack", "Release toxic fumes that damage enemies over time and restore user's health.");
+        super("puff", "Noxious Fumes", "attack", "Release toxic fumes that damage enemies over time and restore user's health.", 0, 10);
         this.ghast = ghast;
     }
 
@@ -77,11 +77,6 @@ class Puff extends BattleUnitAbility {
             ghast.clouds.add(new PuffCloud(r, user.curCol));
         }
 
-    }
-
-    @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curHP > 10;
     }
 
     class PuffCloud {

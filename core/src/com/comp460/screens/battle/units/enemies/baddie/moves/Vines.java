@@ -27,13 +27,8 @@ public class Vines extends BattleUnitAbility {
     Random rng = new Random();
 
     public Vines(Baddie baddie) {
-        super("vines", "Ensnare", "attack", "Vines ensnare the opponent.");
+        super("vines", "Ensnare", "attack", "Vines ensnare the opponent.", 1, 0);
         this.baddie = baddie;
-    }
-
-    @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 1;
     }
 
     @Override

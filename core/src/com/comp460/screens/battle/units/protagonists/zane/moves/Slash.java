@@ -21,20 +21,14 @@ public class Slash extends BattleUnitAbility {
     public Zane zane;
 
     public Slash(Zane zane) {
-        super("slash", "Slash", "attack", "A quick and strong sword slash.");
+        super("slash", "Slash", "attack", "A quick and strong sword slash.", 2, 0);
         this.zane = zane;
-    }
-
-    @Override
-    public boolean canUse(BattleUnit user, BattleScreen screen) {
-        return user.curEnergy >= 1;
     }
 
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
         SlashInstance slashInstance = new SlashInstance(zane.curRow, zane.curCol + 1, .2f, 10, zane);
-        user.removeEnergy(2);
         zane.slashes.add(slashInstance);
         screen.addAnimation(new BattleAnimation(slashAnim, screen.colToScreenX(zane.curRow, zane.curCol + 1), screen.rowToScreenY(zane.curRow, zane.curCol + 1), 0.2f));
     }

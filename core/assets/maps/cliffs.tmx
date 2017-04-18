@@ -739,70 +739,14 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="651" name="bulba" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="units/bulba.png" width="16" height="16"/>
-  <tile id="0">
-   <properties>
-    <property name="id" value="bulba"/>
-    <property name="team" type="int" value="1"/>
-   </properties>
-  </tile>
- </tileset>
- <tileset firstgid="652" name="clarissa" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="units/clarissa.png" width="16" height="16"/>
-  <tile id="0">
-   <properties>
-    <property name="canHeal" type="bool" value="true"/>
-    <property name="id" value="clarissa"/>
-    <property name="team" type="int" value="0"/>
-   </properties>
-  </tile>
- </tileset>
- <tileset firstgid="653" name="yvonne" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="units/yvonne.png" width="16" height="16"/>
-  <tile id="0">
-   <properties>
-    <property name="id" value="yvonne"/>
-    <property name="team" type="int" value="0"/>
-   </properties>
-  </tile>
- </tileset>
- <tileset firstgid="654" name="andre" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="units/andre.png" width="16" height="16"/>
-  <tile id="0">
-   <properties>
-    <property name="id" value="andre"/>
-    <property name="team" type="int" value="0"/>
-   </properties>
-  </tile>
- </tileset>
- <tileset firstgid="655" name="zane" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="units/zane.png" width="16" height="16"/>
-  <tile id="0">
-   <properties>
-    <property name="id" value="zane"/>
-    <property name="team" type="int" value="0"/>
-   </properties>
-  </tile>
- </tileset>
- <tileset firstgid="656" name="ghast" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="units/ghast.png" width="16" height="16"/>
-  <tile id="0">
-   <properties>
-    <property name="id" value="ghast"/>
-    <property name="team" type="int" value="1"/>
-   </properties>
-  </tile>
- </tileset>
- <tileset firstgid="657" name="shelly" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="units/shelly.png" width="16" height="16"/>
-  <tile id="0">
-   <properties>
-    <property name="id" value="shelly"/>
-    <property name="team" type="int" value="1"/>
-   </properties>
-  </tile>
- </tileset>
+ <tileset firstgid="651" source="clarissa.tsx"/>
+ <tileset firstgid="652" source="andre.tsx"/>
+ <tileset firstgid="653" source="yvonne.tsx"/>
+ <tileset firstgid="654" source="zane.tsx"/>
+ <tileset firstgid="655" source="bulba.tsx"/>
+ <tileset firstgid="656" source="ghast.tsx"/>
+ <tileset firstgid="657" source="shelly.tsx"/>
+ <tileset firstgid="658" source="trixy.tsx"/>
  <layer name="base" width="15" height="20">
   <data encoding="csv">
 352,352,352,352,352,352,352,352,352,352,352,352,352,352,352,
@@ -856,23 +800,23 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,657,0,0,656,0,0,0,0,
-0,0,0,0,0,0,0,0,651,651,0,0,0,0,0,
+0,0,0,0,0,0,656,0,0,656,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-651,0,657,0,0,0,0,0,0,0,0,0,0,657,0,
-0,651,0,0,0,0,0,0,0,0,0,0,0,0,651,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,651,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,655,0,654,0,0,0,0,0,0,0,0,0,0,0,
-0,0,653,0,652,0,0,0,0,0,0,0,0,0,0
+0,657,0,0,0,0,0,0,0,0,0,0,0,657,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,655,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,654,0,652,0,0,0,0,0,0,0,0,0,0,0,
+0,0,651,0,653,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
 </map>

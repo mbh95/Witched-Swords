@@ -48,7 +48,6 @@ public class ControlsRenderingSystem extends IteratingSystem {
         String button2Action = "Deselect";
 
         if (selection != null) { // You have a unit selected
-
             if (playerControlledFamily.matches(selection.selected)) { // You have one of your units selected
                 button1Action = "Move";
             } else if (aiControlledFamily.matches(selection.selected)) { // You have an enemy unit selected

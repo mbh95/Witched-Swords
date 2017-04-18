@@ -47,11 +47,6 @@ public class KeyboardController extends Controller {
     }
 
     @Override
-    public boolean startJustPressedDestructive() {
-        return false;
-    }
-
-    @Override
     public boolean endPressed() {
         return Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE);
     }

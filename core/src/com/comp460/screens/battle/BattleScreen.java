@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
 import com.comp460.assets.SpriteManager;
+import com.comp460.common.ui.DialogueBox;
 import com.comp460.screens.battle.players.BattlePlayer;
 import com.comp460.screens.battle.players.HumanPlayer;
 import com.comp460.screens.battle.players.ai.GhastAi;
@@ -71,6 +72,7 @@ public class BattleScreen extends GameScreen {
     private GlyphLayout continueLayout = new GlyphLayout(continueFont, "z to continue");
 
     private enum BattleState {COUNTOFF, RUNNING, END_P1_DIED, END_P2_DIED, END_DRAW, END_TIME}
+    public DialogueBox currentDialogueBox;
 
     private float countOffTimer = 3;
     private float countdownTimer;

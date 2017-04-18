@@ -2,8 +2,8 @@
   "id": "shellgon",
   "name": "Shelly",
   "description": "One tough cookie.",
-  "maxHP": 250,
-  "curHP": 250,
+  "maxHP": 150,
+  "curHP": 150,
   "moveDist": 5,
   "speed": 0.5,
   "battleFactory": {

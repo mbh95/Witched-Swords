@@ -60,7 +60,7 @@ public class TacticsTutorialScreen extends TacticsScreen {
             case OPEN_ACTION_MENU:
                 if (cursor.getComponent(ActionMenuComponent.class) != null) {
                     waitingOnThisUnit = MapCursorSelectionComponent.get(cursor).selected;
-                    this.currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Awesome! The action menu is the little menu that just popped up in the top left corner of the screen. You use it to tell a unit what to do once it gets to the square you told it to move to."), new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Tell your unit to 'Wait' and it will simply move to the new square and end it's action."));
+                    this.currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Awesome! The action menu is the little menu that just popped up in the top left corner of the screen. You use it to tell a unit what to do once it gets to the square you told it to move to."), new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Tell your unit to 'Wait' and it will simply move to the new square and end its action."));
                     curTutState = TutorialState.MAKE_FIRST_MOVE;
                 }
                 break;

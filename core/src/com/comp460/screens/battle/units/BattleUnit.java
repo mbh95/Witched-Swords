@@ -95,9 +95,6 @@ public class BattleUnit implements BattleObject {
 
 
         this.startAnimation("idle");
-
-        if (speed != 0)
-            this.restoreCntd = 1f / speed;
     }
 
     public void render(SpriteBatch batch, float delta) {
@@ -123,9 +120,9 @@ public class BattleUnit implements BattleObject {
                 buff.post();
             }
         }
-        if (speed != 0) {
+        if (speed != 0 && restoreCntd > 0) {
             restoreCntd -= delta;
-            if (restoreCntd < 0) {
+            if (restoreCntd <= 0) {
                 removeEnergy(-1);
                 restoreCntd = 1f / speed;
             }
@@ -259,6 +256,9 @@ public class BattleUnit implements BattleObject {
             curEnergy = 0;
         } else if (this.curEnergy > 5) {
             curEnergy = 5;
+        }
+        if (this.speed != 0) {
+            this.restoreCntd = 1f / speed;
         }
     }
 

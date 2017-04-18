@@ -42,6 +42,7 @@ public class BattleScreen extends GameScreen {
     private final TextureRegion hpBar = SpriteManager.BATTLE.findRegion("ui/hp_bar_new");
     private final TextureRegion energyBar = SpriteManager.BATTLE.findRegion("ui/energy");
     private final TextureRegion energyBarRed = SpriteManager.BATTLE.findRegion("ui/energy-red");
+    private final TextureRegion energyBarYellow = SpriteManager.BATTLE.findRegion("ui/energy-yellow");
     private final TextureRegion energyBarMini = SpriteManager.BATTLE.findRegion("ui/energy-mini");
 
     private final TextureRegion moveBG = SpriteManager.BATTLE.findRegion("ui/move-bg");
@@ -85,6 +86,7 @@ public class BattleScreen extends GameScreen {
     }
 
     private enum BattleState {COUNTOFF, RUNNING, END_P1_DIED, END_P2_DIED, END_DRAW, END_TIME}
+
     public DialogueBox currentDialogueBox;
 
     private float countOffTimer = 3;
@@ -340,22 +342,29 @@ public class BattleScreen extends GameScreen {
     }
 
     private void renderHealthBar(BattleUnit unit, float x, float y) {
-        batch.begin();
+        uiBatch.begin();
 
-        batch.draw(hpBar, x, y);
+        uiBatch.draw(hpBar, x, y);
 
         if (unit == p1Unit && energyFlashTimer > 0) {
             for (int i = this.energyFlash - 1; i >= 0; i--)
-                batch.draw(energyBarRed, 51 + x - i * 11, y + 2);
+                uiBatch.draw(energyBarRed, 51 + x - i * 11, y + 2);
         }
 
         for (int i = unit.curEnergy - 1; i >= 0; i--)
-            batch.draw(energyBar, 51 + x - i * 11, y + 2);
+            uiBatch.draw(energyBar, 51 + x - i * 11, y + 2);
 
+        if (unit.curEnergy < 5) {
+            float percent = 1f - unit.restoreCntd / (1f / unit.speed);
+//            System.out.println(percent);
+            int srcX = Math.round((1f - percent) * energyBarYellow.getRegionWidth());
+            uiBatch.draw(energyBarYellow.getTexture(), 51 + x - unit.curEnergy * 11 + srcX, y + 2, srcX + energyBarYellow.getRegionX(), energyBarYellow.getRegionY(), energyBarYellow.getRegionWidth() - srcX, energyBarYellow.getRegionHeight());
+
+        }
         String hpString = String.format("%03d/%03d", unit.curHP, unit.maxHP);
         GlyphLayout hpLayout = new GlyphLayout(hpFont, hpString);
-        hpFont.draw(batch, hpString, x + hpBar.getRegionWidth() - hpLayout.width - 2, y + 22);
-        batch.end();
+        hpFont.draw(uiBatch, hpString, x + hpBar.getRegionWidth() - hpLayout.width - 2, y + 22);
+        uiBatch.end();
 
         ShapeRenderer sr = new ShapeRenderer();
         sr.setProjectionMatrix(camera.combined);
@@ -374,7 +383,7 @@ public class BattleScreen extends GameScreen {
 
     private void renderEnd(float delta) {
         GlyphLayout layout = drawLayout;
-        batch.begin();
+        uiBatch.begin();
         switch (curState) {
             case END_DRAW:
                 layout = drawLayout;
@@ -391,17 +400,17 @@ public class BattleScreen extends GameScreen {
         }
 
         int shift = 50;
-        resultsFont.draw(batch, layout, width / 2 - layout.width / 2, 100 + shift);
+        resultsFont.draw(uiBatch, layout, width / 2 - layout.width / 2, 100 + shift);
 
         if (this.endDelay <= 0 && zToContinueVisible) {
-            continueFont.draw(batch, continueLayout, width / 2 - continueLayout.width / 2, 50 + shift);
+            continueFont.draw(uiBatch, continueLayout, width / 2 - continueLayout.width / 2, 50 + shift);
         }
         if (zToContinuePhase <= 0) {
             zToContinueVisible = !zToContinueVisible;
             zToContinuePhase = 0.5f;
         }
         zToContinuePhase -= delta;
-        batch.end();
+        uiBatch.end();
     }
 
     //endregion

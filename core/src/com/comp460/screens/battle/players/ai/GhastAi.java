@@ -12,20 +12,21 @@ import java.util.Random;
  */
 public class GhastAi extends AiPlayer {
 
-    private static final float attackDelay = 5 * Ghast.cloudSpeed;
+    private float attackDelay;
     private float attackTimer = attackDelay;
     private float moveTimer = getNewMoveTimer();
     private Random rng = new Random();
 
     public GhastAi(BattleUnit myUnit, BattleUnit opponentUnit, BattleScreen screen) {
         super(myUnit, opponentUnit, screen);
+        attackDelay = 1f/myUnit.speed;
     }
 
     @Override
     public void update(float delta) {
         attackTimer -= delta;
         if (attackTimer <= 0) {
-            myUnit.useAbility1();
+            myUnit.ability1.attempt(myUnit, screen);
             attackTimer = attackDelay;
         }
 

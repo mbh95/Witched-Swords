@@ -36,7 +36,6 @@ public class Vines extends BattleUnitAbility {
         super.use(user, screen);
         int col = rng.nextInt(3);
         VinesInstance vinesInstance = new VinesInstance(baddie.curRow, col, 2.0f, 10, baddie);
-        user.removeEnergy(1);
         baddie.vines.add(vinesInstance);
     }
 

@@ -43,4 +43,8 @@ public abstract class GameScreen extends ScreenAdapter {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
     }
+
+    public void resetCamera() {
+        this.camera.setToOrtho(false, Settings.INTERNAL_WIDTH, Settings.INTERNAL_HEIGHT);
+    }
 }

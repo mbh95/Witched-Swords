@@ -71,7 +71,6 @@ class Scratch extends BattleUnitAbility {
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
 
-        user.removeEnergy(1);
         for (int r = 0; r < screen.numRows; r++) {
             int col = rng.nextInt(screen.numRows);
 

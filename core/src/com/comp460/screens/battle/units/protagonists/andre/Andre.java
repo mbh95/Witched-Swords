@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.comp460.assets.BattleAnimationManager;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.SoundManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.FloatingText;
@@ -67,11 +68,14 @@ public class Andre extends BattleUnit {
         this.smashTimer = 0.1f;
         this.smashCol = 0;
         this.smashPower = 100;
+        SoundManager.boom.play();
+        this.screen.shakeCamera(20f);
     }
 
     public void raiseShield(float duration) {
         this.shieldDuration = duration;
         shieldFresh = true;
+        SoundManager.shieldSound.play(0.3f);
     }
 
     @Override
@@ -167,6 +171,7 @@ public class Andre extends BattleUnit {
             charges = Math.min(3, charges + 1);
             shieldFresh = false;
             screen.addAnimation(new FloatingText("Block", blockFont, transform.x, transform.y + 40, 0.2f));
+            SoundManager.block.play();
         }
         return 0;
     }

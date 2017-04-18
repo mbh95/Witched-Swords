@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.comp460.assets.BattleAnimationManager;
+import com.comp460.assets.SoundManager;
 import com.comp460.screens.battle.BattleAnimation;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;
@@ -46,6 +47,7 @@ public class Punch extends BattleUnitAbility {
 
         if (opponent.curRow == row && opponent.curCol == col && damage) {
             opponent.applyDamage(new DamageVector(20, andre));
+            SoundManager.metalImpactSound.play();
             damage = false;
         }
     }

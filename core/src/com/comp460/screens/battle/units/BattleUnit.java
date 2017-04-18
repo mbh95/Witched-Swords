@@ -222,6 +222,11 @@ public class BattleUnit implements BattleObject {
     public float applyDamage(DamageVector damageVector) {
         int prevHP = curHP;
         this.curHP -= damageVector.trueDamage;
+
+        if (screen.p1Unit == this && damageVector.trueDamage > 0) {
+            screen.shakeCamera(damageVector.trueDamage/2);
+        }
+
         if (curHP <= 0) {
 //            monsterFallenSound.play();
             curHP = 0;
@@ -230,7 +235,6 @@ public class BattleUnit implements BattleObject {
                 damageVector.source.startAnimation("victory");
             }
             return curHP - prevHP;
-
         }
         if (curHP > maxHP) {
             curHP = maxHP;
@@ -241,6 +245,7 @@ public class BattleUnit implements BattleObject {
 //            hitSound.play();
             screen.addAnimation(new FloatingText(deltaHP + "", damageFont, (float) (transform.x + 5f), transform.y + 40, 0.5f));
             startAnimation("hurt");
+
 
         }
 

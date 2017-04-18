@@ -3,6 +3,7 @@ package com.comp460.screens.battle.units.protagonists.clarissa.moves;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.assets.BattleAnimationManager;
+import com.comp460.assets.SoundManager;
 import com.comp460.screens.battle.BattleAnimation;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;
@@ -68,6 +69,7 @@ public class Crossbow extends BattleUnitAbility {
                     dmg.source = clarissa;
                     opponent.applyDamage(dmg);
                     screen.addAnimation(new BattleAnimation(ingredient.impactAnim, tipPos.x - 20, tipPos.y - 10, 0.1f));
+                    SoundManager.impactSound.play();
                     return true;
                 }
             }

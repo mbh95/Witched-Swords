@@ -66,7 +66,6 @@ class Puff extends BattleUnitAbility {
     @Override
     public void use(BattleUnit user, BattleScreen screen) {
         super.use(user, screen);
-        user.applyDamage(new DamageVector(10, ghast));
 
         int gap = rng.nextInt(screen.numRows);
 

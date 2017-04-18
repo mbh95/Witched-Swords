@@ -23,6 +23,7 @@ import com.sun.javafx.binding.StringFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by matthewhammond on 2/15/17.
@@ -103,6 +104,8 @@ public class BattleScreen extends GameScreen {
     private float energyFlashTimer = 0f;
     private float energyFlashLen = 0.5f;
 
+    private float cameraShakeRadius = 0f;
+
     public BattleUnit p1Unit;
     public BattleUnit p2Unit;
 
@@ -117,6 +120,8 @@ public class BattleScreen extends GameScreen {
     public boolean exitAllowed;
 
     public GameScreen prevScreen;
+
+    private Random rng = new Random();
 
     public BattleScreen(MainGame game, GameScreen prevScreen, GameUnit p1UnitBase, GameUnit p2UnitBase, boolean p1Initiated, boolean exitAllowed, float time) {
         super(game);
@@ -189,6 +194,18 @@ public class BattleScreen extends GameScreen {
         if (energyFlashTimer > 0) {
             energyFlashTimer -= delta;
         }
+        if (Math.abs(cameraShakeRadius) >= 1) {
+            cameraShakeRadius *= 0.9f;
+            double theta = (Math.random() * 2*Math.PI);
+            double dx = cameraShakeRadius * Math.cos(theta);
+            double dy = cameraShakeRadius * Math.sin(theta);
+            resetCamera();
+            this.camera.translate((float)dx, (float)dy);
+            if (Math.abs(cameraShakeRadius) < 1) {
+                resetCamera();
+                cameraShakeRadius = 0;
+            }
+        }
         if (game.controller.endJustPressed() && exitAllowed) {
             previousScreen();
         }
@@ -202,11 +219,11 @@ public class BattleScreen extends GameScreen {
                 if (curState != BattleState.RUNNING) {
                     return;
                 }
-                player1.update(delta);
-                player2.update(delta);
-
                 p1Unit.update(delta);
                 p2Unit.update(delta);
+
+                player1.update(delta);
+                player2.update(delta);
                 break;
             case END_P2_DIED:
             case END_DRAW:
@@ -314,8 +331,6 @@ public class BattleScreen extends GameScreen {
         movesFont.draw(uiBatch, p1Unit.ability1.name, button1X + button1Sprite.getRegionWidth() + 2, button1Y + button1Sprite.getRegionHeight() - 2);
         movesFont.draw(uiBatch, p1Unit.ability2.name, button2X + button2Sprite.getRegionWidth() + 2, button2Y + button2Sprite.getRegionHeight() - 2);
 
-//        movesFont.draw(uiBatch, "" + p1Unit.ability1.name + "\n" + p1Unit.ability2.name, x + 8 + game.controller.button1Sprite().getRegionWidth() + 2, y + h - 3);
-
         for (int i = 0; i < p1Unit.ability1.energyCost; i++) {
             uiBatch.draw(energyBarMini, button1X - energyBarMini.getRegionWidth() - 2, button1Y + button1Sprite.getRegionHeight() - 4 - i * 2);
         }
@@ -325,8 +340,12 @@ public class BattleScreen extends GameScreen {
 
         uiBatch.draw(moveBG, 400 - moveBG.getRegionWidth(), 0);
 
-        GlyphLayout p2MovesLayout = new GlyphLayout(movesFont, "1: " + p2Unit.ability1.name + "\n2: " + p2Unit.ability2.name);
-        movesFont.draw(uiBatch, p2MovesLayout, 400 - p2MovesLayout.width - 10, y);
+//        GlyphLayout p2MovesLayout = new GlyphLayout(movesFont, "" + p2Unit.ability1.name + "\n" + p2Unit.ability2.name);
+//        movesFont.draw(uiBatch, p2MovesLayout, 400 - moveBG.getRegionWidth() + 10, y + p2MovesLayout.height + 8);
+
+        movesFont.draw(uiBatch, p2Unit.ability1.name, 400 - moveBG.getRegionWidth() + 8, button1Y + button1Sprite.getRegionHeight() - 2);
+        movesFont.draw(uiBatch, p2Unit.ability2.name, 400 - moveBG.getRegionWidth() + 8, button2Y + button2Sprite.getRegionHeight() - 2);
+
         uiBatch.end();
 
         renderTimer(width / 2, 210);
@@ -456,6 +475,10 @@ public class BattleScreen extends GameScreen {
             curState = BattleState.RUNNING;
         }
         batch.end();
+    }
+
+    public void shakeCamera(float radius) {
+        this.cameraShakeRadius += radius;
     }
 
     public void previousScreen() {

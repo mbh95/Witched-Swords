@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.comp460.MainGame;
 import com.comp460.assets.BattleAnimationManager;
+import com.comp460.assets.SoundManager;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;
 import com.comp460.common.GameScreen;
@@ -137,12 +138,16 @@ public class BattlePracticeScreen extends GameScreen {
 
         batch.end();
 
+        Button oldButton = selectedButton;
 //        selectedButton.setNormal();
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) selectedButton = selectedButton.left;
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) selectedButton = selectedButton.right;
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) selectedButton = selectedButton.up;
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) selectedButton = selectedButton.down;
 //        selectedButton.setHovered();
+        if (selectedButton != oldButton) {
+            SoundManager.cursorMoveSound.play();
+        }
 
         if (game.controller.button1JustPressed()) {
             selectedButton.click();

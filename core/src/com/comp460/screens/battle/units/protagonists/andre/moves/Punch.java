@@ -35,6 +35,7 @@ public class Punch extends BattleUnitAbility {
         this.col = andre.curCol+1;
         screen.addAnimation(new BattleAnimation(punch, user.transform.x+40, user.transform.y, 0.2f));
         andre.punches.add(this);
+        SoundManager.arrowSound.play();
         this.damage = true;
     }
 

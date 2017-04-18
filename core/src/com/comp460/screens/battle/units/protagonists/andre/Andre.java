@@ -75,7 +75,7 @@ public class Andre extends BattleUnit {
     public void raiseShield(float duration) {
         this.shieldDuration = duration;
         shieldFresh = true;
-        SoundManager.shieldSound.play(0.3f);
+//        SoundManager.shieldSound.play(0.3f);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.SoundManager;
 import com.comp460.common.GameScreen;
 import com.comp460.common.ui.Button;
 import com.comp460.common.ui.NinePatchTextButton;
@@ -142,10 +143,15 @@ public class MainMenuScreen extends GameScreen {
 
         batch.end();
 
+        Button oldButton = curSelectedButton;
         if (game.controller.leftJustPressed()) curSelectedButton = curSelectedButton.left;
         if (game.controller.rightJustPressed()) curSelectedButton = curSelectedButton.right;
         if (game.controller.upJustPressed()) curSelectedButton = curSelectedButton.up;
         if (game.controller.downJustPressed()) curSelectedButton = curSelectedButton.down;
+        if (oldButton != curSelectedButton) {
+            SoundManager.cursorMoveSound.play();
+        }
+
         if (game.controller.button1JustPressed()) {
             curSelectedButton.click();
         }

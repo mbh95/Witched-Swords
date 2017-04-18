@@ -111,8 +111,15 @@ public class TacticsScreen extends GameScreen {
     private boolean zToContinueVisible = true;
 
     private boolean battleMoveWait = false;
+    private boolean battleTransitionSoundPlayed = false;
     private float battleZoomTimer = 0f;
     private float battleStayTimer = 0f;
+
+    private float healAnimLen = 2f;
+    private float healAnimTimer = 0f;
+    private GameUnit healTarget = null;
+    private int healFrom = 0;
+    private int healTo = 0;
 
     Entity playerEntity = null;
     Entity aiEntity = null;
@@ -171,6 +178,7 @@ public class TacticsScreen extends GameScreen {
         engine.addSystem(new TurnRenderingSystem(this));
         engine.addSystem(new ControlsRenderingSystem(this));
         engine.addSystem(new ActionMenuRenderingSystem(this));
+        engine.addSystem(new HealAnimRenderingSystem(this));
 
         Json json = new Json();
         this.map = json.fromJson(TacticsMap.class, Gdx.files.internal(mapJSONFile));
@@ -260,16 +268,17 @@ public class TacticsScreen extends GameScreen {
             if (engine.getSystem(MapToScreenSystem.class).isDone(playerEntity, 0.01f) && engine.getSystem(MapToScreenSystem.class).isDone(aiEntity, 0.01f)) {
                 battleMoveWait = false;
                 battleZoomTimer = battleTransitionZoomLen;
-                SoundManager.battleTransition.play();
             }
         } else if (battleZoomTimer > 0) {
-            if (engine.getSystem(MapToScreenSystem.class).isDone(playerEntity, 0.01f) && engine.getSystem(MapToScreenSystem.class).isDone(aiEntity, 0.01f)) {
-                battleZoomTimer -= delta;
-                float t = (battleTransitionZoomLen - battleZoomTimer) / battleTransitionZoomLen;
-                zoom = (1f - (t * t)) + 0.25f * (t * t);
-                if (battleZoomTimer <= 0) {
-                    battleStayTimer = battleTransitionStayLen;
-                }
+            battleZoomTimer -= delta;
+            float t = (battleTransitionZoomLen - battleZoomTimer) / battleTransitionZoomLen;
+            zoom = (1f - (t * t)) + 0.25f * (t * t);
+            if (battleZoomTimer <= 0.3f && !battleTransitionSoundPlayed) {
+                SoundManager.battleTransition.play();
+                battleTransitionSoundPlayed = true;
+            }
+            if (battleZoomTimer <= 0) {
+                battleStayTimer = battleTransitionStayLen;
             }
         } else if (battleStayTimer > 0) {
             battleStayTimer -= delta;
@@ -289,7 +298,9 @@ public class TacticsScreen extends GameScreen {
             }
         } else if (currentDialogueBox != null) {
             currentDialogueBox = currentDialogueBox.update(delta);
-        } else if (currentDialogueBox == null) {
+        } else if (healAnimTimer > 0) {
+            healAnimTimer -= delta;
+        } else {
             switch (curState) {
                 case PLAYER_TURN:
                     if (game.controller.endJustPressed()) {
@@ -387,7 +398,7 @@ public class TacticsScreen extends GameScreen {
                 break;
         }
 
-        if (currentDialogueBox != null && !inBattleTransition()) {
+        if (currentDialogueBox != null && !cursorLocked()) {
             currentDialogueBox.render(uiBatch);
         }
     }
@@ -649,6 +660,7 @@ public class TacticsScreen extends GameScreen {
         }
 
         battleMoveWait = true;
+        battleTransitionSoundPlayed = false;
 
         Vector3 playerVec = engine.getSystem(MapToScreenSystem.class).goal(playerEntity);
         playerVec.x += map.getTileWidth() / 2f;
@@ -754,7 +766,7 @@ public class TacticsScreen extends GameScreen {
         });
     }
 
-    public boolean inBattleTransition() {
+    public boolean cursorLocked() {
         return battleZoomTimer > 0 || battleStayTimer > 0;
     }
 }

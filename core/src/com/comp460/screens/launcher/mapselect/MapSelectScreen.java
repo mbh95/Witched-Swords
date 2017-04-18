@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Json;
 import com.comp460.MainGame;
 import com.comp460.Settings;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.SoundManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.common.GameScreen;
 import com.comp460.common.ui.Button;
@@ -127,12 +128,17 @@ public class MapSelectScreen extends GameScreen {
         batch.end();
 
         // set button/cursor selection logic
+        Button oldButton = selectedButton;
         selectedButton.setNormal();
         if (game.controller.leftJustPressed() && selectedButton.left != null) selectedButton = selectedButton.left;
         if (game.controller.rightJustPressed() && selectedButton.right != null) selectedButton = selectedButton.right;
         if (game.controller.upJustPressed() && selectedButton.up != null) selectedButton = selectedButton.up;
         if (game.controller.downJustPressed() && selectedButton.down != null) selectedButton = selectedButton.down;
         selectedButton.setHovered();
+
+        if (selectedButton != oldButton) {
+            SoundManager.cursorMoveSound.play();
+        }
 
         if (game.controller.button1JustPressed()) {
             selectedButton.click();

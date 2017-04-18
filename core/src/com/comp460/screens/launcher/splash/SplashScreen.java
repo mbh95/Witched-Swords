@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.MainGame;
+import com.comp460.assets.SoundManager;
 import com.comp460.common.GameScreen;
 import com.comp460.assets.FontManager;
 import com.comp460.Settings;
@@ -66,6 +67,7 @@ public class SplashScreen extends GameScreen {
 
         pressStartFont = FontManager.getFont(FontManager.KEN_PIXEL_BLOCKS, 8, Color.BLACK);
         pressStartLayout = new GlyphLayout(pressStartFont, "Press ");
+        SoundManager.introSound.play();
     }
 
     @Override
@@ -176,6 +178,7 @@ public class SplashScreen extends GameScreen {
                 if (game.controller.button1JustPressed()) {
                     curSplashState = SplashState.POST;
                     timer = 0;
+                    SoundManager.mainMenuSound.play();
                 }
                 break;
             case POST:

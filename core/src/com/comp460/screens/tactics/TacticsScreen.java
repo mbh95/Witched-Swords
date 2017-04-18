@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.SoundManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
@@ -109,8 +110,9 @@ public class TacticsScreen extends GameScreen {
     private float zToContinuePhase = zToContinuePhaseLen;
     private boolean zToContinueVisible = true;
 
-    private float battleZoomTimer;
-    private float battleStayTimer;
+    private boolean battleMoveWait = false;
+    private float battleZoomTimer = 0f;
+    private float battleStayTimer = 0f;
 
     Entity playerEntity = null;
     Entity aiEntity = null;
@@ -254,7 +256,13 @@ public class TacticsScreen extends GameScreen {
 
     public void update(float delta) {
 //        System.out.println(curState);
-        if (battleZoomTimer > 0) {
+        if (battleMoveWait) {
+            if (engine.getSystem(MapToScreenSystem.class).isDone(playerEntity, 0.01f) && engine.getSystem(MapToScreenSystem.class).isDone(aiEntity, 0.01f)) {
+                battleMoveWait = false;
+                battleZoomTimer = battleTransitionZoomLen;
+                SoundManager.battleTransition.play();
+            }
+        } else if (battleZoomTimer > 0) {
             if (engine.getSystem(MapToScreenSystem.class).isDone(playerEntity, 0.01f) && engine.getSystem(MapToScreenSystem.class).isDone(aiEntity, 0.01f)) {
                 battleZoomTimer -= delta;
                 float t = (battleTransitionZoomLen - battleZoomTimer) / battleTransitionZoomLen;
@@ -640,7 +648,7 @@ public class TacticsScreen extends GameScreen {
             engine.getSystem(AiSystem.class).setProcessing(false);
         }
 
-        battleZoomTimer = battleTransitionZoomLen;
+        battleMoveWait = true;
 
         Vector3 playerVec = engine.getSystem(MapToScreenSystem.class).goal(playerEntity);
         playerVec.x += map.getTileWidth() / 2f;

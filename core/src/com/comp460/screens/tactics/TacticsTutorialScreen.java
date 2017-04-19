@@ -66,7 +66,7 @@ public class TacticsTutorialScreen extends TacticsScreen {
                 break;
             case MAKE_FIRST_MOVE:
                 if (waitingOnThisUnit != null && waitingOnThisUnit.getComponent(ReadyToMoveComponent.class) == null) {
-                    this.currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Nice one! Now end your turn by either moving all of your units or pressing 'enter' to open the pause menu and selecting 'End Turn'"));
+                    this.currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Nice one! Now end your turn by either moving all of your units or pressing 'esc' to open the pause menu and selecting 'End Turn'"));
                     curTutState = TutorialState.END_YOUR_TURN;
                 }
                 break;

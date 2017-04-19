@@ -8,6 +8,7 @@ import com.comp460.assets.SoundManager;
 import com.comp460.common.GameScreen;
 import com.comp460.assets.FontManager;
 import com.comp460.Settings;
+import com.comp460.screens.launcher.main.MainMenuAssets;
 import com.comp460.screens.launcher.main.MainMenuScreen;
 
 /**
@@ -78,7 +79,10 @@ public class SplashScreen extends GameScreen {
 
         batch.setColor(Color.WHITE);
         batch.begin();
-        batch.draw(SplashAssets.BG, 0f, 0f);
+        batch.draw(MainMenuAssets.TEXTURE_BG, 0f, 0f);
+        batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam, 0f);
+        batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam - MainMenuAssets.TEXTURE_BG.getRegionWidth(), 0f);
+        MainMenuScreen.seam += MainMenuScreen.gridSpeed;
         batch.end();
 
         batch.setColor(swordColor);

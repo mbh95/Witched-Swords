@@ -69,8 +69,8 @@ public class MainMenuScreen extends GameScreen {
 
     private Vector3 cursorPos = new Vector3(0, 0, 0);
 
-    private int buttonWidth = 120;
-    private int buttonHeight = 32;
+    private int buttonWidth = 100;
+    private int buttonHeight = 24;
 
     private int buttonX;
     private int topButtonY;
@@ -79,6 +79,9 @@ public class MainMenuScreen extends GameScreen {
     private int inputHintY = 2;
     private int inputHintLineHeight = 16;
 
+    public static float seam = 0f;
+    public static float gridSpeed = 0.2f;
+
     private BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
 
     public MainMenuScreen(MainGame game, GameScreen prevScreen) {
@@ -86,7 +89,7 @@ public class MainMenuScreen extends GameScreen {
         curMenuState = MainMenuState.BUILD_MENU;
 
         buttonX = (int) (Constants.TITLE_POS.x + (Constants.TITLE_SCALE.y / 100f) * MainMenuAssets.TEXTURE_TITLE.getRegionWidth() / 2f - buttonWidth / 2f);
-        topButtonY = (int) (Constants.TITLE_POS.y - buttonHeight - buttonHeight/2);
+        topButtonY = (int) (Constants.TITLE_POS.y - 2.5*buttonHeight);
 
         for (int i = 0; i < buttonTemplates.length; i++) {
             TemplateRow template = buttonTemplates[i];
@@ -112,7 +115,13 @@ public class MainMenuScreen extends GameScreen {
         batch.setColor(Color.WHITE);
         batch.begin();
         batch.draw(MainMenuAssets.TEXTURE_BG, 0f, 0f);
+        batch.draw(MainMenuAssets.TEXTURE_GRID, seam, 0f);
+        batch.draw(MainMenuAssets.TEXTURE_GRID, seam - MainMenuAssets.TEXTURE_BG.getRegionWidth(), 0f);
         batch.end();
+        seam += gridSpeed;
+        if (seam >= width) {
+            seam = 0f;
+        }
 
         batch.setColor(Constants.WORD_OUTLINE_COLOR);
         batch.begin();

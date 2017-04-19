@@ -14,6 +14,8 @@ import com.comp460.assets.SpriteManager;
 import com.comp460.common.GameScreen;
 import com.comp460.common.ui.Button;
 import com.comp460.common.ui.TexturedButton;
+import com.comp460.screens.launcher.main.MainMenuAssets;
+import com.comp460.screens.launcher.main.MainMenuScreen;
 import com.comp460.screens.launcher.practice.battle.BattlePracticeAssets;
 import com.comp460.screens.tactics.TacticsMap;
 import com.comp460.screens.tactics.TacticsScreen;
@@ -107,7 +109,10 @@ public class MapSelectScreen extends GameScreen {
         GlyphLayout layout = new GlyphLayout(BattlePracticeAssets.FONT_BATTLE_PORTRAIT, "SELECT A MAP!");
         batch.begin();
 
-        batch.draw(BattlePracticeAssets.TEXTURE_BG, 0, 0);
+        batch.draw(MainMenuAssets.TEXTURE_BG, 0f, 0f);
+        batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam, 0f);
+        batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam - MainMenuAssets.TEXTURE_BG.getRegionWidth(), 0f);
+        MainMenuScreen.seam += MainMenuScreen.gridSpeed;
         BattlePracticeAssets.FONT_BATTLE_PORTRAIT.draw(batch, layout, INTERNAL_WIDTH / 2 - layout.width / 2, Settings.INTERNAL_HEIGHT - 50);
 
         // draw controls

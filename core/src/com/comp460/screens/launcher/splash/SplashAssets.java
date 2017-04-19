@@ -20,5 +20,6 @@ public class SplashAssets {
     public static final TextureRegion TITLE = SpriteManager.COMMON.findRegion("title");
     public static final TextureRegion TITLE_BG = SpriteManager.COMMON.findRegion("title-outline");
 
-    public static final TextureRegion BG = SpriteManager.COMMON.findRegion("bg");
+    public static final TextureRegion BG = SpriteManager.COMMON.findRegion("bg"); //SpriteManager.COMMON.findRegion("bg");
+    public static final TextureRegion GRID = SpriteManager.COMMON.findRegion("grid"); //SpriteManager.COMMON.findRegion("bg");
 }

@@ -171,7 +171,7 @@ public class Andre extends BattleUnit {
             charges = Math.min(3, charges + 1);
             shieldFresh = false;
             screen.addAnimation(new FloatingText("Block", blockFont, transform.x, transform.y + 40, 0.2f));
-            SoundManager.block.play();
+            SoundManager.block.play(0.4f);
         }
         return 0;
     }

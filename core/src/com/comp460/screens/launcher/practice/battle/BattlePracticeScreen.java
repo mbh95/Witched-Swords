@@ -15,6 +15,8 @@ import com.comp460.common.GameScreen;
 import com.comp460.common.GameUnit;
 import com.comp460.common.ui.Button;
 import com.comp460.common.ui.TexturedButton;
+import com.comp460.screens.launcher.main.MainMenuAssets;
+import com.comp460.screens.launcher.main.MainMenuScreen;
 
 /**
  * Created by matthewhammond on 2/11/17.
@@ -94,7 +96,10 @@ public class BattlePracticeScreen extends GameScreen {
         super.render(delta);
 
         batch.begin();
-        batch.draw(assets.TEXTURE_BG, 0, 0);
+        batch.draw(MainMenuAssets.TEXTURE_BG, 0f, 0f);
+        batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam, 0f);
+        batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam - MainMenuAssets.TEXTURE_BG.getRegionWidth(), 0f);
+        MainMenuScreen.seam += MainMenuScreen.gridSpeed;
         for (Button button : buttons) {
             button.render(batch);
         }

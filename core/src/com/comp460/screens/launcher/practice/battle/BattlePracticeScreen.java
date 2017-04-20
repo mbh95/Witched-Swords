@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.comp460.MainGame;
 import com.comp460.assets.BattleAnimationManager;
+import com.comp460.assets.MusicManager;
 import com.comp460.assets.SoundManager;
 import com.comp460.screens.battle.BattleScreen;
 import com.comp460.screens.battle.units.BattleUnit;
@@ -100,6 +101,9 @@ public class BattlePracticeScreen extends GameScreen {
         batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam, 0f);
         batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam - MainMenuAssets.TEXTURE_BG.getRegionWidth(), 0f);
         MainMenuScreen.seam += MainMenuScreen.gridSpeed;
+        if (MainMenuScreen.seam >= width) {
+            MainMenuScreen.seam = 0f;
+        }
         for (Button button : buttons) {
             button.render(batch);
         }
@@ -313,6 +317,6 @@ public class BattlePracticeScreen extends GameScreen {
     @Override
     public void show() {
         super.show();
-        game.playMusic("music/old-city-theme.ogg");
+        game.playMusic(MusicManager.MENU_THEME);
     }
 }

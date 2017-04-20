@@ -24,8 +24,8 @@ public class MapCursorPathingSystem extends IteratingSystem {
 
     private TacticsScreen parentScreen;
 
-    public MapCursorPathingSystem(TacticsScreen parentScreen) {
-        super(pathingCursorFamily);
+    public MapCursorPathingSystem(TacticsScreen parentScreen, int priority) {
+        super(pathingCursorFamily, priority);
         this.parentScreen = parentScreen;
     }
 

@@ -30,8 +30,8 @@ public class SelectionRenderingSystem extends IteratingSystem {
 
     private TacticsScreen parentScreen;
 
-    public SelectionRenderingSystem(TacticsScreen tacticsScreen) {
-        super(cursorSelectionFamily);
+    public SelectionRenderingSystem(TacticsScreen tacticsScreen, int priority) {
+        super(cursorSelectionFamily, priority);
         this.parentScreen = tacticsScreen;
     }
     @Override

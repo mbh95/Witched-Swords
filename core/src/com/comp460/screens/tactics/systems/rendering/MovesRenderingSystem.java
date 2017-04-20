@@ -30,7 +30,8 @@ public class MovesRenderingSystem extends EntitySystem {
 
     private TacticsScreen parentScreen;
 
-    public MovesRenderingSystem(TacticsScreen tacticsScreen) {
+    public MovesRenderingSystem(TacticsScreen tacticsScreen, int priority) {
+        super(priority);
         this.parentScreen = tacticsScreen;
     }
 

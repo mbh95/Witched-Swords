@@ -29,8 +29,8 @@ public class SpriteRenderingSystem extends IteratingSystem {
     private OrthographicCamera camera;
     private SpriteBatch batch;
 
-    public SpriteRenderingSystem(SpriteBatch batch, OrthographicCamera camera) {
-        super(renderableFamily);
+    public SpriteRenderingSystem(SpriteBatch batch, OrthographicCamera camera, int priority) {
+        super(renderableFamily, priority);
         this.camera = camera;
         this.batch = batch;
         renderQueue = new PriorityQueue<>((Entity o1, Entity o2) ->

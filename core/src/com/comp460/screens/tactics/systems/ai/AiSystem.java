@@ -34,8 +34,9 @@ public class AiSystem extends IteratingSystem {
 
     private PriorityQueue<Entity> moveQueue;
 
-    public AiSystem(TacticsScreen screen) {
-        super(readyAiUnitsFamily);
+    public AiSystem(TacticsScreen screen, int priority) {
+        super(readyAiUnitsFamily, priority);
+//        super(readyAiUnitsFamily);
         this.screen = screen;
 
         moveQueue = new PriorityQueue<>((e1, e2) -> {

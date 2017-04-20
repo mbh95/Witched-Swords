@@ -18,8 +18,8 @@ public class SpriteAnimationSystem extends IteratingSystem {
     private static final ComponentMapper<AnimationComponent> animationM = ComponentMapper.getFor(AnimationComponent.class);
     private static final ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
 
-    public SpriteAnimationSystem() {
-        super(animationFamily);
+    public SpriteAnimationSystem(int priority) {
+        super(animationFamily, priority);
     }
 
     @Override

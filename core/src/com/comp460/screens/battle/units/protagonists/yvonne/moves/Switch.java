@@ -37,6 +37,5 @@ public class Switch extends BattleUnitAbility {
             screen.addAnimation(new FloatingText("x1 ATK", notifyFontRed, (float) (yvonne.transform.x + 20f), yvonne.transform.y, 0.5f));
             screen.addAnimation(new FloatingText("x1 DMG", notifyFontGreen, (float) (yvonne.transform.x + 20f), yvonne.transform.y + 10, 0.5f));
         }
-
     }
 }

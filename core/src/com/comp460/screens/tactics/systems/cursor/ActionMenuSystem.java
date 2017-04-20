@@ -25,8 +25,8 @@ public class ActionMenuSystem extends IteratingSystem {
     private static final Family unitFamily = Family.all(UnitStatsComponent.class).get();
     public TacticsScreen screen;
 
-    public ActionMenuSystem(TacticsScreen screen) {
-        super(actionMenuFamily);
+    public ActionMenuSystem(TacticsScreen screen, int priority) {
+        super(actionMenuFamily, priority);
         this.screen = screen;
     }
 

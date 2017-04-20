@@ -19,8 +19,8 @@ public class CameraTrackingSystem extends IteratingSystem {
     private static final ComponentMapper<CameraTargetComponent> cameraTargetM = ComponentMapper.getFor(CameraTargetComponent.class);
     private static final ComponentMapper<TransformComponent> transformM = ComponentMapper.getFor(TransformComponent.class);
 
-    public CameraTrackingSystem() {
-        super(cameraTargetFamily);
+    public CameraTrackingSystem(int priority) {
+        super(cameraTargetFamily, priority);
     }
 
     @Override

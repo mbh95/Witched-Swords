@@ -19,6 +19,10 @@ public class UnitAnimatorSystem extends EntitySystem implements EntityListener {
     private ComponentMapper<UnitStatsComponent> unitM = ComponentMapper.getFor(UnitStatsComponent.class);
     private ComponentMapper<AnimationComponent> animM = ComponentMapper.getFor(AnimationComponent.class);
 
+    public UnitAnimatorSystem(int priority) {
+        super(priority);
+    }
+
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);

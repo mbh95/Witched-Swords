@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Json;
 import com.comp460.MainGame;
 import com.comp460.Settings;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.MusicManager;
 import com.comp460.assets.SoundManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.common.GameScreen;
@@ -27,7 +28,7 @@ public class MapSelectScreen extends GameScreen {
 
     private Button[] buttons;
     private Button selectedButton;
-    private BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
+    private BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE, Color.BLACK, 1);
 
     private int inputHintX = 2;
     private int inputHintY = 2;
@@ -113,6 +114,9 @@ public class MapSelectScreen extends GameScreen {
         batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam, 0f);
         batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam - MainMenuAssets.TEXTURE_BG.getRegionWidth(), 0f);
         MainMenuScreen.seam += MainMenuScreen.gridSpeed;
+        if (MainMenuScreen.seam >= width) {
+            MainMenuScreen.seam = 0f;
+        }
         BattlePracticeAssets.FONT_BATTLE_PORTRAIT.draw(batch, layout, INTERNAL_WIDTH / 2 - layout.width / 2, Settings.INTERNAL_HEIGHT - 50);
 
         // draw controls
@@ -188,6 +192,6 @@ public class MapSelectScreen extends GameScreen {
     @Override
     public void show() {
         super.show();
-        game.playMusic("music/old-city-theme.ogg");
+        game.playMusic(MusicManager.MENU_THEME);
     }
 }

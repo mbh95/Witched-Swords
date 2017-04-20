@@ -26,8 +26,8 @@ public class ActionMenuRenderingSystem extends IteratingSystem {
 
     public TacticsScreen screen;
 
-    public ActionMenuRenderingSystem(TacticsScreen screen) {
-        super(actingUnitFamily);
+    public ActionMenuRenderingSystem(TacticsScreen screen, int priority) {
+        super(actingUnitFamily, priority);
 
         this.screen = screen;
     }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.MusicManager;
 import com.comp460.assets.SoundManager;
 import com.comp460.common.GameScreen;
 import com.comp460.common.ui.Button;
@@ -82,7 +83,7 @@ public class MainMenuScreen extends GameScreen {
     public static float seam = 0f;
     public static float gridSpeed = 0.2f;
 
-    private BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE);
+    private BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE, Color.BLACK, 1);
 
     public MainMenuScreen(MainGame game, GameScreen prevScreen) {
         super(game);
@@ -184,6 +185,6 @@ public class MainMenuScreen extends GameScreen {
     @Override
     public void show() {
         super.show();
-        game.playMusic("music/old-city-theme.ogg");
+        game.playMusic(MusicManager.MENU_THEME);
     }
 }

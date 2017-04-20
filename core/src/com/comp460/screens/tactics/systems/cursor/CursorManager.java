@@ -11,7 +11,6 @@ import com.comp460.screens.tactics.components.unit.ShowValidMovesComponent;
  */
 public class CursorManager {
 
-
     public static void deselect(Entity cursor) {
         MapCursorSelectionComponent selectionComponent = MapCursorSelectionComponent.get(cursor);
         if (selectionComponent != null) {

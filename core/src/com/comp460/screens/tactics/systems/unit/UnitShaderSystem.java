@@ -16,6 +16,10 @@ public class UnitShaderSystem extends EntitySystem implements EntityListener {
 
     private ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
 
+    public UnitShaderSystem(int priority) {
+        super(priority);
+    }
+
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);

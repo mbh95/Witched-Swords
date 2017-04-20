@@ -18,8 +18,8 @@ public class MapCursorMovementSystem extends IteratingSystem {
 
     private TacticsScreen parentScreen;
 
-    public MapCursorMovementSystem(TacticsScreen parentScreen) {
-        super(mapCursorFamily);
+    public MapCursorMovementSystem(TacticsScreen parentScreen, int priority) {
+        super(mapCursorFamily, priority);
 
         this.parentScreen = parentScreen;
     }

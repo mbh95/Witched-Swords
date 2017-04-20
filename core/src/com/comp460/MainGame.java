@@ -36,8 +36,7 @@ public class MainGame extends Game {
 
     public Controller controller;
 
-    public Music music;
-    public String playingNow = "";
+    public Music playingNow;
 
     @Override
     public void create() {
@@ -111,8 +110,8 @@ public class MainGame extends Game {
             this.height = Math.round(width / goalAspect);
         }
 
-        this.bufferX = width/2 - this.width/2;
-        this.bufferY = height/2 - this.height/2;
+        this.bufferX = width / 2 - this.width / 2;
+        this.bufferY = height / 2 - this.height / 2;
 
         if (buffer != null) {
             buffer.dispose();
@@ -128,17 +127,19 @@ public class MainGame extends Game {
         batch.dispose();
     }
 
-    public void playMusic(String string) {
-        if (playingNow.equals(string)) {
+    public void playMusic(Music toPlay) {
+        this.playMusic(toPlay, true);
+    }
+
+    public void playMusic(Music toPlay, boolean looping) {
+        if (playingNow == toPlay) {
             return;
+        } else if (playingNow != null) {
+            playingNow.stop();
+            playingNow.dispose();
         }
-        if (music != null) {
-            music.stop();
-            music.dispose();
-        }
-        music = Gdx.audio.newMusic(Gdx.files.internal(string));
-        music.setLooping(true);
-        music.play();
-        playingNow = string;
+        playingNow = toPlay;
+        playingNow.setLooping(looping);
+        playingNow.play();
     }
 }

@@ -19,7 +19,8 @@ public class EndConditionSystem extends EntitySystem implements EntityListener {
 
     private TacticsScreen screen;
 
-    public EndConditionSystem(TacticsScreen screen) {
+    public EndConditionSystem(TacticsScreen screen, int priority) {
+        super(priority);
         this.screen = screen;
     }
 

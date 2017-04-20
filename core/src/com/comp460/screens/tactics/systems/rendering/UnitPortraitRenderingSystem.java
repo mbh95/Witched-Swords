@@ -48,8 +48,8 @@ public class UnitPortraitRenderingSystem extends IteratingSystem {
     private static final int x = Settings.INTERNAL_WIDTH - TacticsAssets.HOVER_PLAYER.getRegionWidth();
     private static final int y = Settings.INTERNAL_HEIGHT - TacticsAssets.HOVER_PLAYER.getRegionHeight() - 10;
 
-    public UnitPortraitRenderingSystem(TacticsScreen tacticsScreen) {
-        super(cursorFamily);
+    public UnitPortraitRenderingSystem(TacticsScreen tacticsScreen, int priority) {
+        super(cursorFamily, priority);
         this.parentScreen = tacticsScreen;
         batch = parentScreen.uiBatch;
         camera = parentScreen.uiCamera;

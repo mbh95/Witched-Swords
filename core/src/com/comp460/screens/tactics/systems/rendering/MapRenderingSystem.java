@@ -16,7 +16,8 @@ public class MapRenderingSystem extends EntitySystem {
     private OrthogonalTiledMapRenderer renderer;
     private boolean gridLinesVisible = true;
 
-    public MapRenderingSystem(TacticsScreen tacticsScreen) {
+    public MapRenderingSystem(TacticsScreen tacticsScreen, int priority) {
+        super(priority);
         this.parentScreen = tacticsScreen;
     }
 

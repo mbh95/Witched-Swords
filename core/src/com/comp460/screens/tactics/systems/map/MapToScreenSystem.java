@@ -22,8 +22,8 @@ public class MapToScreenSystem extends IteratingSystem {
 
     private TacticsScreen parentScreen;
 
-    public MapToScreenSystem(TacticsScreen tacticsScreen) {
-        super(trackingToMapFamily);
+    public MapToScreenSystem(TacticsScreen tacticsScreen, int priority) {
+        super(trackingToMapFamily, priority);
         this.parentScreen = tacticsScreen;
     }
 

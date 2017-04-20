@@ -18,8 +18,8 @@ public class SnapToParentSystem extends IteratingSystem {
     private static final ComponentMapper<ChildComponent> childM = ComponentMapper.getFor(ChildComponent.class);
     private static final ComponentMapper<TransformComponent> transformM = ComponentMapper.getFor(TransformComponent.class);
 
-    public SnapToParentSystem() {
-        super(childFamily);
+    public SnapToParentSystem(int priority) {
+        super(childFamily, priority);
     }
 
     @Override

@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.MusicManager;
 import com.comp460.assets.SoundManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.common.GameScreen;
@@ -83,6 +84,7 @@ public class TacticsScreen extends GameScreen {
     private static final BitmapFont aiTurnFont = FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 32, Color.BLACK, new Color(0xac3232FF), 4); //FontManager.getFont(FontManager.KEN_VECTOR_FUTURE, 16, Color.RED);
 
     private static BitmapFont continueFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 16, Color.WHITE, Color.BLACK, 1);
+    private static BitmapFont hintFont = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE, Color.BLACK, 1);
 
     private static final GlyphLayout playerTurnLayout = new GlyphLayout(playerTurnFont, "Player Turn");
     private static final GlyphLayout aiTurnLayout = new GlyphLayout(aiTurnFont, "Computer Turn");
@@ -145,40 +147,39 @@ public class TacticsScreen extends GameScreen {
         this.engine = new PooledEngine();
 
         // Base
-        engine.addSystem(new SpriteAnimationSystem());
-        engine.addSystem(new CameraTrackingSystem());
-        engine.addSystem(new SnapToParentSystem());
+        engine.addSystem(new SpriteAnimationSystem(0));
+        engine.addSystem(new CameraTrackingSystem(1));
+        engine.addSystem(new SnapToParentSystem(2));
 
-        engine.addSystem(new ValidMoveManagementSystem(this));
-        engine.addSystem(new MapToScreenSystem(this));
+        engine.addSystem(new ValidMoveManagementSystem(this, 3));
+        engine.addSystem(new MapToScreenSystem(this, 4));
 
         // Game logic
-        engine.addSystem(new TurnManagementSystem(this));
-        engine.addSystem(new EndConditionSystem(this));
-        engine.addSystem(new UnitShaderSystem());
-        engine.addSystem(new UnitAnimatorSystem());
+        engine.addSystem(new TurnManagementSystem(this, 5));
+        engine.addSystem(new EndConditionSystem(this, 6));
+        engine.addSystem(new UnitShaderSystem(7));
+        engine.addSystem(new UnitAnimatorSystem(8));
 
-//        engine.addSystem(new PathBuildingSystem(this));
-        engine.addSystem(new AiSystem(this));
+        engine.addSystem(new AiSystem(this, 9));
 
         // Cursor
-        engine.addSystem(new MapCursorMovementSystem(this));
+        engine.addSystem(new MapCursorMovementSystem(this, 10));
 
-        engine.addSystem(new MapCursorSelectionSystem(this));
-        engine.addSystem(new MapCursorPathingSystem(this));
-        engine.addSystem(new ActionMenuSystem(this));
+        engine.addSystem(new MapCursorSelectionSystem(this, 11));
+        engine.addSystem(new MapCursorPathingSystem(this, 12));
+        engine.addSystem(new ActionMenuSystem(this, 13));
 
         // Rendering
-        engine.addSystem(new MapRenderingSystem(this));
-        engine.addSystem(new MovesRenderingSystem(this));
-        engine.addSystem(new PathRenderingSystem(this));
-        engine.addSystem(new SpriteRenderingSystem(batch, camera));
-        engine.addSystem(new SelectionRenderingSystem(this));
-        engine.addSystem(new UnitPortraitRenderingSystem(this));
-        engine.addSystem(new TurnRenderingSystem(this));
-        engine.addSystem(new ControlsRenderingSystem(this));
-        engine.addSystem(new ActionMenuRenderingSystem(this));
-        engine.addSystem(new HealAnimRenderingSystem(this));
+        engine.addSystem(new MapRenderingSystem(this, 14));
+        engine.addSystem(new MovesRenderingSystem(this, 15));
+        engine.addSystem(new PathRenderingSystem(this, 16));
+        engine.addSystem(new SpriteRenderingSystem(batch, camera, 17));
+        engine.addSystem(new SelectionRenderingSystem(this, 18));
+        engine.addSystem(new UnitPortraitRenderingSystem(this, 19));
+        engine.addSystem(new TurnRenderingSystem(this, 20));
+        engine.addSystem(new ControlsRenderingSystem(this, 21));
+        engine.addSystem(new ActionMenuRenderingSystem(this, 22));
+        engine.addSystem(new HealAnimRenderingSystem(this, 23));
 
         Json json = new Json();
         this.map = json.fromJson(TacticsMap.class, Gdx.files.internal(mapJSONFile));
@@ -190,7 +191,7 @@ public class TacticsScreen extends GameScreen {
         cursor = CursorFactory.makeCursor(this);
 
         buttonX = (int) (width / 2f - buttonWidth / 2f);
-        topButtonY = (height - 2 * buttonHeight);
+        topButtonY = (height - 4 * buttonHeight);
         menuButtons = new ArrayList<>(menuButtonTemplates.length);
         helpButtons = new ArrayList<>(helpButtonTemplates.length);
 
@@ -202,7 +203,7 @@ public class TacticsScreen extends GameScreen {
 
         for (int i = 0; i < helpButtonTemplates.length; i++) {
             TemplateRow template = helpButtonTemplates[i];
-            NinePatchTextButton newButton = new NinePatchTextButton(buttonX, topButtonY - i * 16, buttonWidth, 16, new GlyphLayout(TacticsAssets.FONT_HELP_ITEM, template.text), TacticsAssets.FONT_HELP_ITEM, MainMenuAssets.NINEPATCH_BUTTON, template.action);
+            NinePatchTextButton newButton = new NinePatchTextButton(buttonX, topButtonY - i * buttonHeight, buttonWidth, buttonHeight, new GlyphLayout(TacticsAssets.FONT_HELP_ITEM, template.text), TacticsAssets.FONT_HELP_ITEM, MainMenuAssets.NINEPATCH_BUTTON, template.action);
             helpButtons.add(newButton);
         }
 
@@ -464,8 +465,8 @@ public class TacticsScreen extends GameScreen {
 
     private Vector3 cursorPos = new Vector3(0, 0, 0);
 
-    private int buttonWidth = 120;
-    private int buttonHeight = 32;
+    private int buttonWidth = 100;
+    private int buttonHeight = 24;
 
     private int buttonX;
     private int topButtonY;
@@ -492,7 +493,22 @@ public class TacticsScreen extends GameScreen {
             b.render(uiBatch);
         }
         MainMenuAssets.NINEPATCH_CURSOR.draw(uiBatch, cursorPos.x - 2, cursorPos.y - 2, curSelectedButton.width + 4, curSelectedButton.height + 4);
+
+// draw controls
+        int inputHintX = 2;
+        int inputHintY = 2;
+        int inputHintLineHeight = 16;
+
+        uiBatch.draw(game.controller.button1Sprite(), inputHintX, inputHintY + 2 * inputHintLineHeight);
+        hintFont.draw(uiBatch, "Confirm", inputHintX + game.controller.button1Sprite().getRegionWidth() + 2, inputHintY + 2 * inputHintLineHeight + 8);
+
+        uiBatch.draw(game.controller.button2Sprite(), inputHintX, inputHintY + inputHintLineHeight);
+        hintFont.draw(uiBatch, "Back", inputHintX + game.controller.button1Sprite().getRegionWidth() + 2, inputHintY + 1 * inputHintLineHeight + 8);
+
+        uiBatch.draw(game.controller.directionalSprite(), inputHintX, inputHintY);
+        hintFont.draw(uiBatch, "Select", inputHintX + game.controller.directionalSprite().getRegionWidth() + 2, inputHintY + 8);
         uiBatch.end();
+
         cursorPos.slerp(curSelectedButton.pos, .3f);
     }
 
@@ -504,6 +520,19 @@ public class TacticsScreen extends GameScreen {
             b.render(uiBatch);
         }
         MainMenuAssets.NINEPATCH_CURSOR.draw(uiBatch, cursorPos.x - 2, cursorPos.y - 2, curSelectedButton.width + 4, curSelectedButton.height + 4);
+
+        int inputHintX = 2;
+        int inputHintY = 2;
+        int inputHintLineHeight = 16;
+
+        uiBatch.draw(game.controller.button1Sprite(), inputHintX, inputHintY + 2 * inputHintLineHeight);
+        hintFont.draw(uiBatch, "Confirm", inputHintX + game.controller.button1Sprite().getRegionWidth() + 2, inputHintY + 2 * inputHintLineHeight + 8);
+
+        uiBatch.draw(game.controller.button2Sprite(), inputHintX, inputHintY + inputHintLineHeight);
+        hintFont.draw(uiBatch, "Back", inputHintX + game.controller.button1Sprite().getRegionWidth() + 2, inputHintY + 1 * inputHintLineHeight + 8);
+
+        uiBatch.draw(game.controller.directionalSprite(), inputHintX, inputHintY);
+        hintFont.draw(uiBatch, "Select", inputHintX + game.controller.directionalSprite().getRegionWidth() + 2, inputHintY + 8);
         uiBatch.end();
         cursorPos.slerp(curSelectedButton.pos, .3f);
     }
@@ -523,7 +552,7 @@ public class TacticsScreen extends GameScreen {
     private void renderPlayerWin(float delta) {
         if (timer > 0) {
             timer -= delta;
-        } else if (currentDialogueBox == null && (game.controller.button1JustPressed() || game.controller.startJustPressed())) {
+        } else if (currentDialogueBox == null && (game.controller.button1JustPressedDestructive() || game.controller.startJustPressedDestructive())) {
             dispose();
             this.game.setScreen(onWinScreen);
         }
@@ -548,7 +577,7 @@ public class TacticsScreen extends GameScreen {
     private void renderAiWin(float delta) {
         if (timer > 0) {
             timer -= delta;
-        } else if (currentDialogueBox == null && (game.controller.button1JustPressed() || game.controller.startJustPressed())) {
+        } else if (currentDialogueBox == null && (game.controller.button1JustPressedDestructive() || game.controller.startJustPressedDestructive())) {
             dispose();
             this.game.setScreen(onLoseScreen);
         }
@@ -680,18 +709,19 @@ public class TacticsScreen extends GameScreen {
     public void playerWins() {
         timer = 2f;
         this.curState = TacticsState.PLAYER_WIN;
+        game.playMusic(MusicManager.VICTORY_THEME, false);
     }
 
     public void aiWins() {
         timer = 2f;
         this.curState = TacticsState.AI_WIN;
+        game.playMusic(MusicManager.DEFEAT_THEME, false);
     }
 
     @Override
     public void show() {
         super.show();
-        game.playMusic(this.getMap().bgMusicFile);
-
+        game.playMusic(MusicManager.getMusicFromPath(this.getMap().bgMusicFile));
 
         engine.getEntitiesFor(unitsFamily).forEach(e -> {
             UnitStatsComponent stats = e.getComponent(UnitStatsComponent.class);
@@ -767,6 +797,6 @@ public class TacticsScreen extends GameScreen {
     }
 
     public boolean cursorLocked() {
-        return battleZoomTimer > 0 || battleStayTimer > 0;
+        return battleZoomTimer > 0 || battleStayTimer > 0 || battleMoveWait;
     }
 }

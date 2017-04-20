@@ -22,7 +22,8 @@ public class TurnRenderingSystem extends EntitySystem {
 
     private TacticsScreen screen;
 
-    public TurnRenderingSystem(TacticsScreen screen) {
+    public TurnRenderingSystem(TacticsScreen screen, int priority) {
+        super(priority);
         this.screen = screen;
     }
 

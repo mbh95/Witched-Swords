@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.comp460.MainGame;
 import com.comp460.assets.FontManager;
+import com.comp460.assets.MusicManager;
 import com.comp460.assets.SoundManager;
 import com.comp460.assets.SpriteManager;
 import com.comp460.common.ui.DialogueBox;
@@ -492,6 +493,6 @@ public class BattleScreen extends GameScreen {
     @Override
     public void show() {
         super.show();
-        game.playMusic("music/battle-in-the-winter.mp3");
+        game.playMusic(MusicManager.BATTLE_THEME);
     }
 }

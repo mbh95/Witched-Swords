@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector3;
 import com.comp460.MainGame;
+import com.comp460.assets.MusicManager;
 import com.comp460.assets.SoundManager;
 import com.comp460.common.GameScreen;
 import com.comp460.assets.FontManager;
@@ -83,6 +84,9 @@ public class SplashScreen extends GameScreen {
         batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam, 0f);
         batch.draw(MainMenuAssets.TEXTURE_GRID, MainMenuScreen.seam - MainMenuAssets.TEXTURE_BG.getRegionWidth(), 0f);
         MainMenuScreen.seam += MainMenuScreen.gridSpeed;
+        if (MainMenuScreen.seam >= width) {
+            MainMenuScreen.seam = 0f;
+        }
         batch.end();
 
         batch.setColor(swordColor);
@@ -211,6 +215,6 @@ public class SplashScreen extends GameScreen {
     @Override
     public void show() {
         super.show();
-        game.playMusic("music/old-city-theme.ogg");
+        game.playMusic(MusicManager.MENU_THEME);
     }
 }

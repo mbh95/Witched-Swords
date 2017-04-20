@@ -23,8 +23,8 @@ public class HealAnimRenderingSystem extends IteratingSystem {
 
     TacticsScreen parentScreen;
 
-    public HealAnimRenderingSystem(TacticsScreen parentScreen) {
-        super(healAnimFamily);
+    public HealAnimRenderingSystem(TacticsScreen parentScreen, int priority) {
+        super(healAnimFamily, priority);
         this.parentScreen = parentScreen;
     }
 

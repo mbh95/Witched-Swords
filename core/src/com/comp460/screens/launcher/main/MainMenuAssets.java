@@ -23,6 +23,6 @@ public class MainMenuAssets {
 
     public static final NinePatch NINEPATCH_CURSOR = new NinePatch(SpriteManager.MAIN_MENU.findRegion("cursor-tiny"), 2, 2, 2, 2);
 
-    public static final BitmapFont FONT_MENU_ITEM = FontManager.getFont(FontManager.KEN_PIXEL_MINI, 8, Color.WHITE, Color.BLACK, 1);
+    public static final BitmapFont FONT_MENU_ITEM = FontManager.getFont(FontManager.KEN_PIXEL, 8, Color.WHITE, Color.BLACK, 1);
 
 }

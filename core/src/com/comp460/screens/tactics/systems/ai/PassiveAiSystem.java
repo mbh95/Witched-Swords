@@ -8,8 +8,8 @@ import com.comp460.screens.tactics.components.unit.ReadyToMoveComponent;
  * Created by matth on 4/17/2017.
  */
 public class PassiveAiSystem extends AiSystem {
-    public PassiveAiSystem(TacticsScreen screen) {
-        super(screen);
+    public PassiveAiSystem(TacticsScreen screen, int priority) {
+        super(screen, priority);
     }
 
     @Override

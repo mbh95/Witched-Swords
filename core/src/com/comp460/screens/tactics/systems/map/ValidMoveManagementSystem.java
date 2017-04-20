@@ -24,7 +24,8 @@ public class ValidMoveManagementSystem extends EntitySystem implements EntityLis
 
     public TacticsScreen screen;
 
-    public ValidMoveManagementSystem(TacticsScreen screen) {
+    public ValidMoveManagementSystem(TacticsScreen screen, int priority) {
+        super(priority);
         this.screen = screen;
     }
 

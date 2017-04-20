@@ -13,7 +13,8 @@ public class TurnManagementSystem extends EntitySystem implements EntityListener
 
     private TacticsScreen screen;
 
-    public TurnManagementSystem(TacticsScreen screen) {
+    public TurnManagementSystem(TacticsScreen screen, int priority) {
+        super(priority);
         this.screen = screen;
     }
 

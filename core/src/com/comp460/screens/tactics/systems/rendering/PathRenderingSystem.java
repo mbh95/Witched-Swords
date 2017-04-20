@@ -55,8 +55,8 @@ public class PathRenderingSystem extends IteratingSystem {
 
     private Map<Direction, Map<Direction, TextureRegion>> spriteTable = new HashMap<>();
 
-    public PathRenderingSystem(TacticsScreen screen) {
-        super(pathingUnitFamily);
+    public PathRenderingSystem(TacticsScreen screen, int priority) {
+        super(pathingUnitFamily, priority);
         this.screen = screen;
 
         spriteTable.put(Direction.NORTH, new HashMap<>());

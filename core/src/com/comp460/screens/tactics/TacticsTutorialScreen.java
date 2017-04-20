@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.comp460.MainGame;
 import com.comp460.assets.SpriteManager;
+import com.comp460.assets.TacticsAnimationManager;
 import com.comp460.common.GameScreen;
 import com.comp460.common.ui.DialogueBox;
 import com.comp460.screens.launcher.main.MainMenuScreen;
@@ -37,8 +38,9 @@ public class TacticsTutorialScreen extends TacticsScreen {
     public TacticsTutorialScreen(MainGame game, GameScreen onWinScreen, GameScreen onLoseScreen, String mapJSONFile) {
         super(game, onWinScreen, onLoseScreen, mapJSONFile);
 
-        engine.removeSystem(engine.getSystem(AiSystem.class));
-        engine.addSystem(new PassiveAiSystem(this));
+        AiSystem aiSystem = engine.getSystem(AiSystem.class);
+        engine.removeSystem(aiSystem);
+        engine.addSystem(new PassiveAiSystem(this, aiSystem.priority));
         this.currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Welcome to your first tactics battle! In these turn based battles you control a small band of heroes fighting a horde of monsters. Defeat all of the monsters to win. You lose if all of your heroes fall."),
                 new DialogueBox.DialogueBoxTemplate(tutorialSprite, "The first thing you'll want to do is select a unit that you want to move. Move your cursor over one of your units and press 'z' to select it."));
 
@@ -77,7 +79,7 @@ public class TacticsTutorialScreen extends TacticsScreen {
                 }
                 break;
             case RESUME:
-                this.currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Damage dealt during the battle is reflected in the unit's health bars here on the tactics map. When a unit's HP reaches zero it is removed from the tactics map altogether."), new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Keep attacking the enemy unit until you defeat it."));
+                this.currentDialogueBox = DialogueBox.buildList(this, new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Damage dealt during the battle is reflected in the unit's health bars here on the tactics map. When a unit's HP reaches zero it is removed from the tactics map altogether."), new DialogueBox.DialogueBoxTemplate(tutorialSprite, "When your units get low on HP Clarissa can heal herself and any adjacent, damaged, units others when she moves next to them."), new DialogueBox.DialogueBoxTemplate(tutorialSprite, "Now keep attacking the enemy unit until you defeat it."));
                 curTutState = TutorialState.WIN;
             case WIN:
                 if (this.curState == TacticsState.PLAYER_WIN) {

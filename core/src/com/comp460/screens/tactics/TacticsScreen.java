@@ -108,6 +108,8 @@ public class TacticsScreen extends GameScreen {
     private float battleTransitionZoomLen = 1f;
     private float battleTransitionStayLen = 0.5f;
 
+    private float turnTransistionLen = 1.5f;
+
     private float zToContinuePhaseLen = 0.5f;
     private float zToContinuePhase = zToContinuePhaseLen;
     private boolean zToContinueVisible = true;
@@ -606,7 +608,26 @@ public class TacticsScreen extends GameScreen {
         }
         uiBatch.begin();
 //        playerTurnFont.draw(uiBatch, "Player Turn", 0, 16);
-        playerTurnFont.draw(uiBatch, playerTurnLayout, width / 2 - playerTurnLayout.width / 2, height / 2 + playerTurnLayout.height / 2);
+
+        float flyTime = 0.25f;
+
+        float startX = -playerTurnLayout.width;
+        float goalPosX = width / 2 - playerTurnLayout.width / 2;
+        float goalPosY = height / 2 + playerTurnLayout.height / 2;
+        float finalX = width;
+
+        float x;
+
+        if (turnTransistionLen - timer < flyTime) {
+            float t = 1f - ((turnTransistionLen - timer) / flyTime); // varies 1 to 0
+            x = t * startX + (1f - t) * goalPosX;
+        } else if (timer < flyTime) {
+            float t = timer / flyTime; // varies 1 to 0
+            x = t * goalPosX + (1f - t) * finalX;
+        } else {
+            x = goalPosX;
+        }
+        playerTurnFont.draw(uiBatch, playerTurnLayout, x, goalPosY);
         uiBatch.end();
     }
 
@@ -617,13 +638,34 @@ public class TacticsScreen extends GameScreen {
         }
         uiBatch.begin();
 //        aiTurnFont.draw(uiBatch, "Computer Turn", 0, 16);
-        aiTurnFont.draw(uiBatch, aiTurnLayout, width / 2 - aiTurnLayout.width / 2, height / 2 + aiTurnLayout.height / 2);
+
+        float flyTime = 0.25f;
+
+        float startX = -aiTurnLayout.width;
+        float goalPosX = width / 2 - aiTurnLayout.width / 2;
+        float goalPosY = height / 2 + aiTurnLayout.height / 2;
+        float finalX = width;
+
+        float x;
+
+        if (turnTransistionLen - timer < flyTime) {
+            float t = 1f - ((turnTransistionLen - timer) / flyTime); // varies 1 to 0
+            x = t * startX + (1f - t) * goalPosX;
+        } else if (timer < flyTime) {
+            float t = timer / flyTime; // varies 1 to 0
+            x = t * goalPosX + (1f - t) * finalX;
+        } else {
+            x = goalPosX;
+        }
+        aiTurnFont.draw(uiBatch, aiTurnLayout, x, goalPosY);
+
+//        aiTurnFont.draw(uiBatch, aiTurnLayout, width / 2 - aiTurnLayout.width / 2, height / 2 + aiTurnLayout.height / 2);
 
         uiBatch.end();
     }
 
     public void startTransitionToPlayerTurn() {
-        timer = 1f;
+        timer = turnTransistionLen;
         curState = TacticsState.PLAYER_TURN_TRANSITION;
 
         ImmutableArray<Entity> playerUnits = engine.getEntitiesFor(playerUnitsFamily);
@@ -647,7 +689,7 @@ public class TacticsScreen extends GameScreen {
 
     public void startTransitionToAiTurn() {
         engine.removeEntity(cursor);
-        timer = 1f;
+        timer = turnTransistionLen;
         curState = TacticsState.AI_TURN_TRANSITION;
     }
 

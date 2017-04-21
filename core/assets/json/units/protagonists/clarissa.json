@@ -5,7 +5,7 @@
   "maxHP": 70,
   "curHP": 70,
   "moveDist": 5,
-  "speed": 0.8,
+  "speed": 0.9,
   "battleFactory": {
     "class": "com.comp460.screens.battle.units.protagonists.clarissa.ClarissaFactory"
   }

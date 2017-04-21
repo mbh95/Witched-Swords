@@ -692,9 +692,11 @@ public class TacticsScreen extends GameScreen {
             cursorPos.col = minPos.col;
         }
         engine.addEntity(cursor);
+        clearSelections();
     }
 
     public void startTransitionToAiTurn() {
+        clearSelections();
         engine.removeEntity(cursor);
         timer = turnTransistionLen;
         curState = TacticsState.AI_TURN_TRANSITION;

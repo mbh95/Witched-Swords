@@ -1,11 +1,11 @@
 {
-  "id": "shellgon",
+  "id": "shelly",
   "name": "Shelly",
   "description": "One tough cookie.",
   "maxHP": 150,
   "curHP": 150,
   "moveDist": 5,
-  "speed": 0.5,
+  "speed": 0.9,
   "battleFactory": {
     "class": "com.comp460.screens.battle.units.enemies.shelly.ShellyFactory"
   }

@@ -38,6 +38,6 @@ public class GhastAi extends AiPlayer {
     }
 
     private float getNewMoveTimer() {
-        return (float) (Math.random() * 2f + .5f);
+        return (float) (Math.random() * 1.5f + .1f);
     }
 }

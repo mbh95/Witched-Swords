@@ -57,19 +57,19 @@ public class ActionMenuFactory {
             }
 
             unit = screen.getMap().getUnitAt(cursorPos.row + 1, cursorPos.col);
-            if (unit != null && playerControlledFamily.matches(unit) && UnitStatsComponent.get(unit).base.curHP < UnitStatsComponent.get(unit).base.maxHP) {
+            if (unit != null && unit != selection && playerControlledFamily.matches(unit) && UnitStatsComponent.get(unit).base.curHP < UnitStatsComponent.get(unit).base.maxHP) {
                 moveComponent.actions.add(ActionMenuSystem.Action.HEAL_UP);
             }
             unit = screen.getMap().getUnitAt(cursorPos.row, cursorPos.col + 1);
-            if (unit != null && playerControlledFamily.matches(unit) && UnitStatsComponent.get(unit).base.curHP < UnitStatsComponent.get(unit).base.maxHP) {
+            if (unit != null && unit != selection && playerControlledFamily.matches(unit) && UnitStatsComponent.get(unit).base.curHP < UnitStatsComponent.get(unit).base.maxHP) {
                 moveComponent.actions.add(ActionMenuSystem.Action.HEAL_RIGHT);
             }
             unit = screen.getMap().getUnitAt(cursorPos.row - 1, cursorPos.col);
-            if (unit != null && playerControlledFamily.matches(unit) && UnitStatsComponent.get(unit).base.curHP < UnitStatsComponent.get(unit).base.maxHP) {
+            if (unit != null && unit != selection && playerControlledFamily.matches(unit) && UnitStatsComponent.get(unit).base.curHP < UnitStatsComponent.get(unit).base.maxHP) {
                 moveComponent.actions.add(ActionMenuSystem.Action.HEAL_DOWN);
             }
             unit = screen.getMap().getUnitAt(cursorPos.row, cursorPos.col - 1);
-            if (unit != null && playerControlledFamily.matches(unit) && UnitStatsComponent.get(unit).base.curHP < UnitStatsComponent.get(unit).base.maxHP) {
+            if (unit != null && unit != selection && playerControlledFamily.matches(unit) && UnitStatsComponent.get(unit).base.curHP < UnitStatsComponent.get(unit).base.maxHP) {
                 moveComponent.actions.add(ActionMenuSystem.Action.HEAL_LEFT);
             }
         }

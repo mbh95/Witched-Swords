@@ -22,6 +22,7 @@ public class TacticsAnimationManager {
             frames = SpriteManager.TACTICS.findRegions(getAnimString(unitID, defaultTacticsAnimID));
         }
         Animation<TextureRegion> anim = new Animation<TextureRegion>(0.25f, frames);
+
         if (animID.equals(defaultTacticsAnimID)) {
             anim.setPlayMode(Animation.PlayMode.LOOP);
         }

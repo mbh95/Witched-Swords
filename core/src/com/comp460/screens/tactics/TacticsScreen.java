@@ -231,7 +231,7 @@ public class TacticsScreen extends GameScreen {
         tacticstext.append("arrow keys: move cursor\n");
         tacticstext.append("Z: select/confirm\n");
         tacticstext.append("X: back/cancel\n");
-        tacticstext.append("Enter: menu\n");
+        tacticstext.append("Esc: menu\n");
         tacticstext.append("\n");
         tacticstext.append("HOW TO PLAY\n");
         tacticstext.append("Strategically move your party around the map and defeat all the enemy units. " +
@@ -343,9 +343,9 @@ public class TacticsScreen extends GameScreen {
                     break;
                 case TACTICS_HELP:
                     if (game.controller.button2JustPressedDestructive()) {
-                        curState = HELP;
-                        curSelectedButton = helpButtons.get(1);
-                        cursorPos = new Vector3(curSelectedButton.pos);
+                        curState = MENU;
+//                        curSelectedButton = helpButtons.get(1);
+//                        cursorPos = new Vector3(curSelectedButton.pos);
                     }
                     break;
             }
@@ -385,10 +385,16 @@ public class TacticsScreen extends GameScreen {
                 renderHelp(delta);
                 break;
             case TACTICS_HELP:
+                int inputHintX = 2;
+                int inputHintY = 2;
+                int inputHintLineHeight = 16;
+
                 dim();
                 uiBatch.begin();
                 BattlePracticeAssets.NP_INFO_BG.draw(uiBatch, width / 4, 20, width / 2, 202);
                 BattlePracticeAssets.FONT_INFO.draw(uiBatch, tacticsHelpLayout, width / 4 + padding, 20 + 202 - padding);
+                uiBatch.draw(game.controller.button2Sprite(), inputHintX, inputHintY);
+                hintFont.draw(uiBatch, "Back", inputHintX + game.controller.button1Sprite().getRegionWidth() + 2, inputHintY + 0 * inputHintLineHeight + 8);
                 uiBatch.end();
                 break;
             case AI_TURN:
@@ -431,8 +437,9 @@ public class TacticsScreen extends GameScreen {
 
             }),
             new TemplateRow("Help", () -> {
-                curState = HELP;
-                curSelectedButton = helpButtons.get(0);
+//                curState = HELP;
+                curState = TACTICS_HELP;
+//                curSelectedButton = helpButtons.get(0);
                 cursorPos = new Vector3(curSelectedButton.pos);
             }),
             new TemplateRow("End turn", () -> {

@@ -2,6 +2,18 @@ apply plugin: "java"
 
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+project.ext.mainClassName = "com.comp460.util.TexturePackerUtil"
+project.ext.assetsDir = new File("../core");
+
+task run(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+}
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 
